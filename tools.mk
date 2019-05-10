@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 19:06:49 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/10 19:38:12 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ gitsave: hey fclean
 	@printf "$(BBLUE)\t GIT AUTO-SAVE ! : commit -m\n$(CLEAR)"
 	@printf "$(BRED)\t COMMIT : \"$(GITCOM)\"$(CLEAR)"
 	@sleep 0.5
-	@git commit -m "$(GITCOM)"
+	@-git commit -m "$(GITCOM)"
 	@git push
 
 ### Norminette ###
