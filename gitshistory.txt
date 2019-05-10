@@ -1,0 +1,34 @@
+
+--
+
+13.08.19 13:08 Thomas
+
+	+ Fonctions sur l'edition de commande + implementation : 
+Ca fonctionne tant que la commande revient pas a la ligne
+	+ Protection sur ft_strdup de la Lib
+	- Sous dossier token du Makefile et j'ai mis quelques lignes des .mk ##
+
+--
+
+commit 8e700cd493b6bacf94dd1f204f10b774e469334e
+Author: Theophile DELMAS <thdelmas@e1r6p14.42.fr>
+Date:   Thu May 2 15:05:28 2019 +0200
+COMMIT : FIX tools.mk for log file
+LOG : here is more info ONLY EDIT THIS FILE FOR MASTER BRANCH !!!
+
+commit c4f9ef5c56046a6b1a84981a0e4a3e81b0f33ad8
+Author: Theophile DELMAS <thdelmas@e1r6p14.42.fr>
+Date:   Thu May 2 16:27:31 2019 +0200
+COMMIT : FIX README.md for log file
+LOG : Ce makefile est vraiment super
+avec des newlines
+yolo
+ps
+backslashn
+
+commit 0796cd78dde8cdcab7621a32bf55d35279cc36bb
+Author: Theophile DELMAS <thdelmas@e2r3p2.42.fr>
+Date:   Sun May 5 22:18:33 2019 +0200
+COMMIT : ADD sh_match_tok_op
+LOG : 
+
