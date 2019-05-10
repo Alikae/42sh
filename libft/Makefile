@@ -1,145 +1,156 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/05 17:21:36 by thdelmas         ###   ########.fr        #
+#    Created: 2018/11/06 11:17:40 by maboye            #+#    #+#              #
+#    Updated: 2019/05/10 18:54:51 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
-PROJECT = LIBFT
+NAME	=	libft.a
 
-### Directories ###
-SRC_DIR = .
-INC_DIR = .
-OBJ_DIR = ./.obj
+HEADER	=	libft.h
 
-###  CC && FLAGS ###
-CC = clang
-CFLAGS = -Wall -Werror -Wextra
+#DIR LIST
+D_LIST	=	./list
+D_MATHS	=	./maths
+D_MEM	=	./mem
+D_PRINT	=	./print
+D_STR	=	./str
+D_TAB	=	./tab
 
-### FILES ###
-C_FILES = ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c \
-		  ft_memchr.c ft_memcmp.c ft_strlen.c ft_strdup.c ft_strndup.c \
-		  ft_strcpy.c ft_strncpy.c ft_strcat.c ft_strncat.c ft_strlcat.c \
-		  ft_strchr.c ft_strrchr.c ft_strstr.c ft_strnstr.c ft_strcmp.c \
-		  ft_strncmp.c ft_atoi.c ft_isalpha.c ft_isdigit.c ft_isalnum.c \
-		  ft_isascii.c ft_isprint.c ft_toupper.c ft_tolower.c ft_memalloc.c \
-		  ft_memdel.c ft_strnew.c ft_strdel.c ft_strclr.c ft_striter.c \
-		  ft_striteri.c ft_strmap.c ft_strmapi.c ft_strequ.c ft_strnequ.c \
-		  ft_strsub.c ft_strjoin.c ft_strtrim.c ft_strsplit.c ft_itoa.c \
-		  ft_putchar.c ft_putchar_fd.c ft_putstr.c ft_putstr_fd.c \
-		  ft_putendl.c ft_putendl_fd.c ft_putnbr.c ft_putnbr_fd.c \
-		  ft_lstnew.c ft_lstdelone.c ft_lstdel.c ft_lstadd.c ft_lstiter.c \
-		  ft_is_prime.c ft_sqrt.c ft_power.c ft_str_dupsize.c ft_factorial.c \
-		  ft_joinfree.c ft_lstmap.c ft_2d_chardup.c ft_free_2d_char.c \
-		  ft_isblank.c ft_isxdigit.c ft_isspace.c
+#SRC LIST
+S_LIST	=	ft_lstaddback.c\
+			ft_lstaddelem.c\
+			ft_lstaddfront.c\
+			ft_lstat.c\
+			ft_lstdel.c\
+			ft_lstmerge.c\
+			ft_lstsize.c
 
-O_FILES = $(C_FILES:%.c=%.o)
+S_MATHS	=	ft_isprime.c\
+			ft_power.c\
+			ft_sqrt.c
 
-H_FILES = libft.h \
+S_MEM	=	ft_memalloc.c\
+			ft_memcpy.c\
+			ft_memccpy.c\
+			ft_memchr.c\
+			ft_memcmp.c\
+			ft_memdel.c\
+			ft_memmove.c\
+			ft_memset.c
 
-### Full Paths ###
-SRC = $(addprefix $(SRC_DIR)/,$(C_FILES))
-OBJ = $(addprefix $(OBJ_DIR)/,$(O_FILES))
-INC = $(addprefix $(INC_DIR)/,$(H_FILES))
+S_PRINT	=	ft_printf.c\
+			ft_putchar.c\
+			ft_putchar_fd.c\
+			ft_putendl.c\
+			ft_putendl_fd.c\
+			ft_putnbr.c\
+			ft_putnbr_fd.c\
+			ft_putstr.c\
+			ft_putstr_fd.c\
+			my_printf.c\
+			my_putchar_fd.c\
+			my_putendl_fd.c\
+			my_putnbr_fd.c\
+			my_putstr_fd.c
 
-### Colors ###
-BRED = \033[0;31;40m
-BGREEN = \033[0;32;40m
-BBLUE = \033[0;36;40m
-WHITE = \033[0m
-CYAN = \033[36m
-GREEN = \033[1m\033[32m
-WRED = \033[96;41m
-WBLUE = \033[31;44m
-YELLOW = \033[33m
-CLEAR = \033[0;0m
+S_STR	=	ft_atoi.c\
+			ft_bzero.c\
+			ft_intlen.c\
+			ft_isalnum.c\
+			ft_isalpha.c\
+			ft_isdigit.c\
+			ft_islower.c\
+			ft_isprint.c\
+			ft_isspace.c\
+			ft_isblank.c\
+			ft_isupper.c\
+			ft_itoa.c\
+			ft_readfile.c\
+			ft_realloc.c\
+			ft_splitwspc.c\
+			ft_strcat.c\
+			ft_strchr.c\
+			ft_strcmp.c\
+			ft_strcpy.c\
+			ft_strdel.c\
+			ft_strdup.c\
+			ft_strndup.c\
+			ft_strfjoin.c\
+			ft_strjoin.c\
+			ft_strlen.c\
+			ft_strncat.c\
+			ft_strncmp.c\
+			ft_strncpy.c\
+			ft_strnew.c\
+			ft_strnstr.c\
+			ft_strrchr.c\
+			ft_strsplit.c\
+			ft_strstr.c\
+			ft_strsub.c\
+			ft_strtrim.c\
+			ft_swap.c\
+			ft_tolower.c\
+			ft_toupper.c\
+			ft_wordcount.c\
+			get_next_line.c
 
-### Phony ###
-.PHONY: all clean fclean re so hey compil
+S_TAB	=	ft_bubblesort.c\
+			ft_quicksort.c\
+			ft_tabcopy.c\
+			ft_tabfree.c\
+			ft_tablen.c\
+			ft_tabprint.c
 
-### Rules ###
-all: hey $(NAME)
-	@printf "$(BBLUE)\t- by THDELMAS -\t$(CLEAR)\n\n"
+SRC		=	$(addprefix $(D_LIST)/,$(S_LIST))\
+			$(addprefix $(D_MATHS)/,$(S_MATHS))\
+			$(addprefix $(D_MEM)/,$(S_MEM))\
+			$(addprefix $(D_PRINT)/,$(S_PRINT))\
+			$(addprefix $(D_STR)/,$(S_STR))\
+			$(addprefix $(D_TAB)/,$(S_TAB))
 
-### Mkdir obj ###
-.ONESHELL:
-$(OBJ_DIR):
-	@printf "$(BRED)\t- - MKDIR $(OBJ_DIR) -  -\t$(CLEAR)\n"
-	@printf "$(BGREEN)"
-	mkdir -p $(OBJ_DIR)
-	@printf "$(CLEAR)"
+OBJ 	=	$(SRC:.c=.o)
 
-### Compilation ###
-.ONESHELL:
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | $(OBJ_DIR) compil
-	@printf "$(GREEN)"
-	$(CC) $(CFLAGS) -I $(INC_DIR) -o $@ -c $(SRC_DIR)/$(patsubst %.o,%.c,$(@F))
-	@printf "$(CLEAR)"
+CC		=	gcc
 
-### Link ###
-.ONESHELL:
-$(NAME): $(OBJ)
-	@printf "$(BRED)\t-  - LINK -  -\t$(CLEAR)\n"
-	@printf "$(GREEN)"
-	ar rc $(NAME) $(OBJ)
-	ranlib $(NAME)
-	@printf "$(CLEAR)"
+CFLAGS	=	-Wall -Wextra -Werror
 
-### Linux ###
-.ONESHELL:
-so:
-	@printf "$(BRED)\t-  - LINUX -  -\t$(CLEAR)\n"
-	@printf "$(GREEN)"
-	cc -shared -o $(patsubst %.a, %.so, $(NAME)) -fPIC $(FILES)
-	@printf "$(CLEAR)"
+INCLUDE	=	-I .
 
-### Clean ###
-.ONESHELL:
+BLACK	=	\033[30m
+RED		=	\033[31m
+GREEN	=	\033[32m
+YELLOW	=	\033[33m
+BLUE	=	\033[34m
+PURPLE	=	\033[35m
+TUR		=	\033[36m
+WHITE	=	\033[37m
+END		=	\033[0m
+
+UP 		=	\033[A
+CUT 	=	\033[K
+
+all:		$(NAME)
+
+%.o:		%.c
+			@echo "${TUR}compiling [$@] ...${END}"
+			@$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
+			@printf "$(UP)$(CUT)"
+
+$(NAME):	$(OBJ) $(HEADER)
+			@ar rcs $(NAME) $(OBJ)
+
 clean:
-	@printf "$(BRED)\t-  - CLEAN -  -\t$(CLEAR)\n"
-	@printf "$(GREEN)"
-	rm -rf $(OBJ_DIR)
-	@printf "$(CLEAR)"
+			@/bin/rm -rf $(OBJ)
 
-.ONESHELL:
-fclean: clean
-	@printf "$(BRED)\t-  - FCLEAN -  -\t$(CLEAR)\n"
-	@printf "$(GREEN)"
-	rm -rf $(NAME)
-	@printf "$(CLEAR)"
+fclean:		clean
+			@/bin/rm -rf $(NAME)
 
-re: hey fclean all
+re:			fclean all
 
-### Tools ###
-hey:
-	@printf "$(BBLUE)\t-  - $(PROJECT) -  - \t$(CLEAR)\n"
-
-compil:
-	@printf "$(BRED)\t-  - COMPIL -  -\t$(CLEAR)\n"
-
-### git-autosave ###
-savegit: gitsave
-gitsave: hey fclean
-	@printf "$(BBLUE)\t-  - GIT SAVE FOR YOU	-  -\t$(CLEAR)\n"
-	@printf "$(BRED)\t-  - SRC INCLUDES LIBFT MAKEFILE	-  -\t$(CLEAR)\n"
-	@printf "$(GREEN)"
-	@git add .
-	@printf "GIT AUTO-SAVE !"
-	@sleep 0.5
-	@git commit -m "auto-save"
-	@printf "$(CLEAR)"
-	@git push
-
-### Norminette ###
-norm:
-	@printf "$(BRED)\t-  - NORM 42	-  -\t$(CLEAR)\n"
-	@printf "$(BRED)\t-  - SRC INCLUDES LIBFT MAKEFILE	-  -\t$(CLEAR)\n"
-	@printf "$(GREEN)"
-	@norminette -R CheckForbiddenSourceHeader $(HEADER) $(SRC_NAME)
-	@printf "$(CLEAR)"
+.PHONY:		all clean fclean re

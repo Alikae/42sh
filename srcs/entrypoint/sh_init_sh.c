@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/04/29 02:53:03 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/10 18:47:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_sh	*sh_init_sh(int ac, const char **av, const char **ev)
 
 	if (!(sh = (t_sh *)malloc(sizeof(t_sh))))
 		return (NULL);
-	sh->env = ft_2d_chardup(ev);
+	sh->env = ft_tabcopy(ev);
 	sh->local = NULL;
 	sh->ln_history = NULL;
 	sh->ln = NULL;

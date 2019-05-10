@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 17:59:08 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/10 19:15:17 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,17 +22,17 @@ C_FILES_entrypoint = \
 C_FILES_command_line = \
 	sh_free_all_ln.c \
 	sh_free_one_ln.c \
-	command_line.c \
+	sh_command_line.c \
 	sh_init_ln.c \
-	command_parse.c \
+	sh_command_parse.c \
 	sh_strsplit_m.c
 
 C_FILES_command_edition = \
-	command_functions.c \
-	reader.c \
-	cursor_motion.c \
-	cursor_motion2.c \
-	cursor_motion_word.c
+	sh_command_functions.c \
+	sh_reader.c \
+	sh_cursor_motion.c \
+	sh_cursor_motion2.c \
+	sh_cursor_motion_word.c
 
 C_FILES_tokenizer = \
 	sh_print_onetok.c \

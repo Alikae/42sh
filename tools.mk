@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 15:55:44 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/10 19:06:49 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ savegit: gitsave
 
 .ONESHELL:
 gitsave: hey fclean
-	@printf "$(BBLUE)\t GIT SAVE FOR YOU$(CLEAR)\n"
+	@printf "\n$(BBLUE)\t GIT SAVE FOR YOU$(CLEAR)\n"
 	@printf "$(BRED)\t $(ADD_TO_GIT)$(CLEAR)\n"
 	@git add $(ADD_TO_GIT)
 	@printf "$(BBLUE)\t GIT AUTO-SAVE ! : commit -m\n$(CLEAR)"
@@ -53,29 +53,29 @@ gitsave: hey fclean
 ### Norminette ###
 .ONESHELL:
 norm:
-	@printf "$(BRED)\t NORM 42$(CLEAR)\n"
+	@printf "\n$(BRED)\t NORM 42$(CLEAR)\n"
 	@printf "$(BRED)\t $(ADD_TO_NORME)$(CLEAR)\n"
 	@norminette -R CheckForbiddenSourceHeader $(HEADER) $(SRC_NAME)
 
 ### Messages rules ###
 hey_msg:
-	@printf "$(BBLUE)\t $(PROJECT)$(CLEAR)\n"
+	@printf "\n$(BBLUE)\t $(PROJECT)$(CLEAR)\n"
 
 bye_msg:
-	@printf "$(BBLUE)\t Made with love by:$(CLEAR)\n"
-	@printf "$(BBLUE)\t $(AUTHORS)$(CLEAR)\n"
+	@printf "\n$(BBLUE)\t Made with love by:$(CLEAR)\n"
+	@printf "$(BBLUE)\t $(AUTHORS)$(CLEAR)\n\n"
 
 compil_msg:
-	@printf "$(BRED)\t COMPIL$(CLEAR)\n"
+	@printf "\n$(BRED)\t COMPIL$(CLEAR)\n"
 
 link_msg:
-	@printf "$(BRED)\t LINK$(CLEAR)\n"
+	@printf "\n$(BRED)\t LINK$(CLEAR)\n"
 
 mkdir_msg:
-	@printf "$(BRED)\t MKDIR : $(OBJ_DIR) $(OBJ_SUB_DIRS)$(CLEAR)\n"
+	@printf "\n$(BRED)\t MKDIR : $(OBJ_DIR) $(OBJ_SUB_DIRS)$(CLEAR)\n"
 
 fclean_msg: hey_msg
-	@printf "$(BRED)\t FCLEAN$(CLEAR)\n"
+	@printf "\n$(BRED)\t FCLEAN$(CLEAR)\n"
 
 clean_msg: hey_msg
-	@printf "$(BRED)\t CLEAN$(CLEAR)\n"
+	@printf "\n$(BRED)\t CLEAN$(CLEAR)\n"
