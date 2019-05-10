@@ -1,9 +1,12 @@
 # 21sh
 ___
 
-- sh [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]... [command_file [argument...]]
-- sh -c [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]... command_string [command_name [argument...]]
-- sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]... [argument...]
+- sh [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
+- [command_file [argument...]]
+- sh -c [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
+- command_string [command_name [argument...]]
+- sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
+- [argument...]
 
 # MAN
 - http://pubs.opengroup.org/onlinepubs/9699919799/
