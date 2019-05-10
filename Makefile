@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 17:52:48 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/10 21:17:36 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,16 +67,13 @@ LFLAGS = -ltermcap \
 		 $(FT_LNK)
 
 
-
-### Phony ###
 .PHONY: all clean fclean re
 
-### Rules ###
 all: hey_msg $(FT_LIB) $(NAME) bye_msg
 
 ### Lib compil ###
-$(FT_LIB):
-	make -C $(FT_DIR)
+$(FT_LIB): lib_msg
+	@make -C $(FT_DIR)
 
 ### Mkdir obj ###
 .ONESHELL:
@@ -93,16 +90,20 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
 	$(CC) $(LFLAGS) $(OBJ) -o $(NAME)
 
+.ONESHELL:
+test: re
+	./$(NAME)
+
 ### Clean ###
 .ONESHELL:
 clean: clean_msg
 	$(RM) -rf $(OBJ_DIR)
-	make -C $(FT_DIR) clean
+	@make -C $(FT_DIR) clean
 
 .ONESHELL:
-fclean: fclean_msg clean
+fclean: clean fclean_msg
 	$(RM) -rf $(NAME)
-	make -C $(FT_DIR) fclean
+	@make -C $(FT_DIR) fclean
 
 re: fclean all
 

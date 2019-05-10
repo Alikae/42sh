@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 19:38:12 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/10 21:18:22 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,9 @@ bye_msg:
 	@printf "\n$(BBLUE)\t Made with love by:$(CLEAR)\n"
 	@printf "$(BBLUE)\t $(AUTHORS)$(CLEAR)\n\n"
 
+lib_msg:
+	@printf "\n$(BRED)\t LIBS$(CLEAR)\n"
+
 compil_msg:
 	@printf "\n$(BRED)\t COMPIL$(CLEAR)\n"
 
@@ -72,7 +75,7 @@ link_msg:
 	@printf "\n$(BRED)\t LINK$(CLEAR)\n"
 
 mkdir_msg:
-	@printf "\n$(BRED)\t MKDIR : $(OBJ_DIR) $(OBJ_SUB_DIRS)$(CLEAR)\n"
+	@printf "\n$(BRED)\t MKDIR$(CLEAR)\n"
 
 fclean_msg: hey_msg
 	@printf "\n$(BRED)\t FCLEAN$(CLEAR)\n"

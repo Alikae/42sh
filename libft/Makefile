@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 11:17:40 by maboye            #+#    #+#              #
-#    Updated: 2019/05/10 18:54:51 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/10 21:18:35 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -144,6 +144,7 @@ all:		$(NAME)
 
 $(NAME):	$(OBJ) $(HEADER)
 			@ar rcs $(NAME) $(OBJ)
+			@printf "$@: Done\n"
 
 clean:
 			@/bin/rm -rf $(OBJ)
