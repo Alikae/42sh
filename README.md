@@ -1,15 +1,9 @@
 # 21sh
 ___
-Made by: Ede-Ram Maboye Tmeyer Thdelmas
----
-sh [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
-[command_file [argument...]]
 
-sh -c [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
-command_string [command_name [argument...]]
-
-sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
-[argument...]
+- sh [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]... [command_file [argument...]]
+- sh -c [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]... command_string [command_name [argument...]]
+- sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]... [argument...]
 
 # MAN
 - http://pubs.opengroup.org/onlinepubs/9699919799/
@@ -31,7 +25,6 @@ sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
 - Do your ~~shit~~ commits
 - merge BranchX to the branch where i am	:	git merge BranchX
 
-### LISTS
 ___
 #### - [ ] Env / Var 
 - [ ] $SHELL 
@@ -154,3 +147,6 @@ ___
 - [ ] Pipe - Blocked
 - [ ] Pipe - Broken
 - [ ] /dev/null
+---
+Made by: Ede-Ram Maboye Tmeyer Thdelmas
+---
