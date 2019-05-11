@@ -6,12 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 22:06:45 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 22:08:19 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 22:26:23 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_TOOLS
-# define SH_TOOLS
+#ifndef SH_TOOLS_H
+# define SH_TOOLS_H
 
 t_envp		    	*lst_addelem(t_envp *next);
 t_envp          	*lst_chr(t_envp *list, char *str);
