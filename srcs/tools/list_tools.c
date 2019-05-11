@@ -6,11 +6,13 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 16:34:51 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 19:57:34 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/11 22:14:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
+#include "libft.h"
+#include "sh_tools.h"
 
 t_envp		    *lst_addelem(t_envp *next)
 {

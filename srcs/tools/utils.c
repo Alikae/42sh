@@ -6,11 +6,12 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 14:31:38 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 16:45:32 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/11 21:57:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
+#include "libft.h"
 
 void        ft_prompt()
 {

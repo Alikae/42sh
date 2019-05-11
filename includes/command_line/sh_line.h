@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_line.h                                     :+:      :+:    :+:   */
+/*   sh_line.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/29 02:25:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 22:01:35 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/11 21:48:28 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/11 22:16:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH21_COMMAND_LINE_H
-# define SH21_COMMAND_LINE_H
+#ifndef SH_LINE
+# define SH_LINE
 
-char	**sh_arguments(void);
-void	sh_error_parse(int ret);
-int		sh_check_str(char *str);
-char	**sh_strsplit_m(char const *s, char c);
-char	*sh_delete_last(char *command, int i);
-char	*sh_insert_char(char *command, char buf[3], int i);
+typedef struct		s_ln
+{
+	char			*line;
+	char			*tok;
+	struct s_ln		*prev;
+	struct s_ln		*next;
+}					t_ln;
+
+void	sh_free_all_ln(t_ln **ln);
+void	sh_free_one_ln(t_ln **ln);
 
 #endif

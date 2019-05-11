@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 11:28:45 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 15:51:16 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/11 21:56:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct	s_list
 	struct s_list	*next;
 }				t_list;
 
-char			**ft_addtotab(char **tab, char *str);
+char			**ft_addtotab(char **tableau, char *str);
 int				ft_atoi(const char *str);
 void			ft_bzero(void *s, size_t n);
 void			ft_bubblesort(void **add, int (*f)());

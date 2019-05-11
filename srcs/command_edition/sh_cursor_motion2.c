@@ -6,13 +6,14 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 08:48:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/10 19:22:22 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 21:58:12 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <unistd.h>
 #include "sh_command_edition.h"
+#include "libft.h"
 
 void		sh_cursor_position(t_pos *cursor)
 {

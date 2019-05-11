@@ -6,10 +6,11 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 11:25:56 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/10 19:27:53 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 21:59:28 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "sh_command_edition.h"
 
 static int	sh_movecursor_down(void)

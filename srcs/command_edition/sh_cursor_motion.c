@@ -6,12 +6,13 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/10 19:31:08 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 21:58:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_command_edition.h"
 #include "sh_command_line.h"
+#include "libft.h"
 
 static int	sh_cursor_forward(int i, int pointer, t_pos cursor, t_term term)
 {

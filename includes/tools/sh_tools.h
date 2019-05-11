@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_line.h                                     :+:      :+:    :+:   */
+/*   sh_tools.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/29 02:25:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 22:01:35 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/11 22:06:45 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/11 22:08:19 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH21_COMMAND_LINE_H
-# define SH21_COMMAND_LINE_H
+#ifndef SH_TOOLS
+# define SH_TOOLS
 
-char	**sh_arguments(void);
-void	sh_error_parse(int ret);
-int		sh_check_str(char *str);
-char	**sh_strsplit_m(char const *s, char c);
-char	*sh_delete_last(char *command, int i);
-char	*sh_insert_char(char *command, char buf[3], int i);
+t_envp		    	*lst_addelem(t_envp *next);
+t_envp          	*lst_chr(t_envp *list, char *str);
+void		    	lst_del(t_envp **list);
+t_envp				*lst_last(t_envp *list);
+size_t				lst_size(t_envp *list);
 
 #endif

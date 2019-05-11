@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/11 20:45:09 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/11 22:11:12 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,12 @@
 C_FILES = \
 	main.c \
 
-C_FILES_entrypoint = \
-	sh_entrypoint.c \
-	sh_free.c \
-	sh_init.c \
-	sh_init_envp.c \
-	sh_loop.c
+C_FILES_command_edition = \
+	sh_command_functions.c \
+	sh_reader.c \
+	sh_cursor_motion.c \
+	sh_cursor_motion2.c \
+	sh_cursor_motion_word.c
 
 C_FILES_command_line = \
 	sh_free_all_ln.c \
@@ -29,12 +29,15 @@ C_FILES_command_line = \
 	sh_command_parse.c \
 	sh_strsplit_m.c
 
-C_FILES_command_edition = \
-	sh_command_functions.c \
-	sh_reader.c \
-	sh_cursor_motion.c \
-	sh_cursor_motion2.c \
-	sh_cursor_motion_word.c
+C_FILES_entrypoint = \
+	sh_entrypoint.c \
+	sh_free.c \
+	sh_init.c \
+	sh_init_envp.c \
+	sh_loop.c
+
+C_FILES_signals = \
+	signals_handler.c
 
 C_FILES_tokenizer = \
 	sh_print_onetok.c \
@@ -43,9 +46,6 @@ C_FILES_tokenizer = \
 	sh_match_tok_op.c \
 	sh_set_toktype.c \
 	sh_tokenizer.c
-
-C_FILES_signals = \
-	signals_handler.c
 
 C_FILES_tools = \
 	envp_tools.c \

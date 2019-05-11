@@ -6,11 +6,14 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 17:31:43 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 19:59:20 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/11 22:16:53 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
+#include "libft.h"
+#include "sh_tools.h"
+#include "sh_entrypoint.h"
 
 static t_envp	*ft_up_shlvl(t_envp *list)
 {

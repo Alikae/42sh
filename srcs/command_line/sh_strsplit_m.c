@@ -6,13 +6,14 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 09:18:30 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/10 19:11:55 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 22:00:04 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include "21sh.h"
+#include "libft.h"
 #include "sh_command_line.h"
 
 static int		move_parenthese(char const *str, int i)

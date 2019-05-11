@@ -6,11 +6,13 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 15:12:05 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 17:20:39 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/11 22:14:18 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
+#include "libft.h"
+#include "sh_tools.h"
 
 void        change_envp_value(t_envp **list, char *key, char *value)
 {

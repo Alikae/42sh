@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 19:15:14 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/11 22:18:31 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,14 +16,19 @@ H_FILES = \
 	libft.h
 
 ### SUB FILES ###
-H_FILES_entrypoint =
+H_FILES_entrypoint = \
+	sh_entrypoint.h
+
+H_FILES_tools = \
+	sh_tools.h
 
 H_FILES_tokenizer = \
 	sh_tokenizer.h \
 	sh_tokens.h
 
 H_FILES_command_line = \
-	sh_command_line.h
+	sh_command_line.h \
+	sh_line.h
 
 H_FILES_command_edition = \
 	sh_command_edition.h
