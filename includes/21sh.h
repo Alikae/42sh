@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/24 15:48:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 17:33:13 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/11 19:24:13 by maboye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ t_envp				*get_envp_value(t_envp *list, char *str);
 t_envp		    	*lst_addelem(t_envp *next);
 t_envp          	*lst_chr(t_envp *list, char *str);
 void		    	lst_del(t_envp **list);
+t_envp				*lst_last(t_envp *list);
 size_t				lst_size(t_envp *list);
 
 #endif

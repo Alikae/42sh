@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 16:34:51 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 16:42:35 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/11 19:57:34 by maboye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,17 @@ void		    lst_del(t_envp **list)
         ft_strdel(&((*list)->value));
 		ft_memdel((void **)list);
 	}
+}
+
+t_envp			*lst_last(t_envp *list)
+{
+	if (!list)
+		return (NULL);
+	if (lst_size(list) == 1)
+		return (list);
+	while (list->next)
+		list = list->next;
+	return (list);
 }
 
 size_t			lst_size(t_envp *list)
