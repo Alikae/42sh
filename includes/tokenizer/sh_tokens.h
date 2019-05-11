@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/10 17:58:35 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 20:45:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef enum	e_toktype
 	SH_RBRACE,
 	SH_BANG,
 	SH_IN,
+	SH_FUNC,
 	SH_LSUBSH,
 	SH_RSUBSH,
 	SH_LSUBSH_EXP,
