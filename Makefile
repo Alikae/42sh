@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 21:17:36 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/11 17:16:26 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
 	$(CC) $(LFLAGS) $(OBJ) -o $(NAME)
 
 .ONESHELL:
-test: re
+test: all
 	./$(NAME)
 
 ### Clean ###

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:47:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/09 18:28:50 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 17:22:25 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ void		sh_print_alltok(t_token *tok)
 	static int lvl = 0;
 	if (!tok)
 		return ;
+	ft_putstr("\nLEVEL ");
 	ft_putnbr(lvl);
-	ft_putendl("LEVEL");
+	ft_putstr(": ");
 	sh_print_onetok(tok);
 	sh_print_alltok(tok->next);
 }

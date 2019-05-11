@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 17:07:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/09 18:13:59 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/11 18:02:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,19 @@
 #include "sh_tokenizer.h"
 #include "libft.h"
 
-t_token		*sh_init_tok(const char *input, t_token *sublst, t_toktype type)
+t_token		*sh_init_tok(const char *input, t_token *parent)
 {
 	t_token	*tok;
+	int		toklen;
+	char	*tmp;
 
-	if ((input && sublst) || !(tok = (t_token *)malloc(sizeof(t_token))))
+	if (!input || !(tok = (t_token *)malloc(sizeof(t_token))))
 		return (NULL);
-	tok->sub.toklst = sublst;
-	if (input)
-	tok->sub.str = ft_strdup(input);
-	tok->type = type;
-	tok->next = NULL;
+	tok->type = SH_EOS;
+	tmp = ft_strtrim(input);
+	toklen = sh_set_toktype(tmp, &(tok->type));
+	tok->sub.str = ft_strndup(tmp, toklen);
+	tok->next = sh_init_tok(tmp + toklen, tok);
+	free(tmp);
 	return (tok);
 }

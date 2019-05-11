@@ -1,12 +1,9 @@
 # 21sh
 ___
 
-- sh [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
- [command_file [argument...]]
-- sh -c [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
- command_string [command_name [argument...]]
-- sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
- [argument...]
+- sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  [script [arg...]]
+- sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  -c [command_name [arg...]]
+- sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  -s [arg...]
 
 # MAN
 - http://pubs.opengroup.org/onlinepubs/9699919799/
@@ -17,9 +14,7 @@ ___
 - make savegit GITCOM="ADD/FIX/RMV file commit"
 ### COMMIT CONVENTION
 - ADD | MAJ | FIX | EDT | RMV
-- file
-- stuff
-- (ex: "FIX list.c new list set to NULL")
+- (ex: "FIX file_name your_stuff")
 - (you can add more in githistory.txt)
 ### **GIT BRANCHING TUTO:**
 - Good tuto: https://learngitbranching.js.org/
