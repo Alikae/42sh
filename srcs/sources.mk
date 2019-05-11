@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    src.mk                                             :+:      :+:    :+:    #
+#    sources.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 19:15:17 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/11 17:31:24 by maboye           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,11 @@ C_FILES = \
 	main.c \
 
 C_FILES_entrypoint = \
-	sh_free_sh.c \
 	sh_entrypoint.c \
-	sh_init_sh.c
+	sh_free.c \
+	sh_init.c \
+	sh_init_envp.c \
+	sh_loop.c
 
 C_FILES_command_line = \
 	sh_free_all_ln.c \
@@ -41,6 +43,14 @@ C_FILES_tokenizer = \
 	sh_match_tok_op.c \
 	sh_get_tok_type.c \
 	sh_tokenizer.c
+
+C_FILES_signals = \
+	signals_handler.c
+
+C_FILES_tools = \
+	envp_tools.c \
+	list_tools.c \
+	utils.c
 
 
 # SUPPA concat loop

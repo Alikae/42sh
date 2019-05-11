@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 11:17:40 by maboye            #+#    #+#              #
-#    Updated: 2019/05/10 21:18:35 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/11 15:21:07 by maboye           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,7 +100,8 @@ S_STR	=	ft_atoi.c\
 			ft_wordcount.c\
 			get_next_line.c
 
-S_TAB	=	ft_bubblesort.c\
+S_TAB	=	ft_addtotab.c\
+			ft_bubblesort.c\
 			ft_quicksort.c\
 			ft_tabcopy.c\
 			ft_tabfree.c\
@@ -144,7 +145,7 @@ all:		$(NAME)
 
 $(NAME):	$(OBJ) $(HEADER)
 			@ar rcs $(NAME) $(OBJ)
-			@printf "$@: Done\n"
+			@printf "$(GREEN)$@: Done$(END)\n"
 
 clean:
 			@/bin/rm -rf $(OBJ)

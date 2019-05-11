@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/10 21:17:36 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/11 14:48:03 by maboye           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,8 @@ OBJ_DIR := ./.obj
 
 ### SUB FILES ###
 SUB_DIRS := \
+	signals \
+	tools \
 	entrypoint \
 	command_line \
 	command_edition \
