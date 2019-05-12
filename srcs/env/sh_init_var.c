@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_env.h                                           :+:      :+:    :+:   */
+/*   sh_set_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 22:16:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 22:29:50 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/12 22:36:07 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/12 22:59:22 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_ENV_H
-# define SH_ENV_H
+#include "21sh.h"
+#include "sh_env.h"
+#include "libft.h"
 
-typedef struct		s_var
+t_var	*sh_init_var(const char *key, const char *value)
 {
-	char			*key;
-	char			*value;
-	struct s_var	*next;
-}					t_var;
-
-typedef struct		s_env
-{
-	t_var	*spe;
-	t_var	*pos;
 	t_var	*var;
-}					t_env;
 
-#endif
+	if (!key || !*key)
+		return ;
+	if ((var = sh_get_var(key)))
+		return (sh_set_value(key, value));
+	if (!(var = (t_var *)malloc(sizeof(t_var))))
+		return (NULL);
+	var->key = ft_strdup(key);
+	var->value = ft_strdup(value);
+	var->next = NULL;
+	return (var);
+}
