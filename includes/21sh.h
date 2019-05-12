@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/24 15:48:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 16:55:17 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/12 19:43:45 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ typedef struct		s_sh
 {
 	t_ln			*ln_history;
 }					t_sh;
+
+t_sh	*sh(void);
 
 #endif

@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_tokenizer.c                                     :+:      :+:    :+:   */
+/*   sh_params.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/01 16:27:02 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 19:14:47 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/12 20:07:07 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/12 20:11:38 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "sh_tokenizer.h"
-#include "sh_tokens.h"
+#ifndef SH_PARAMS_H
+# define SH_PARAMS_H
 
-t_token	*sh_tokenizer(const char *input)
+typedef struct		s_var
 {
-	t_token	*tok;
-	char	*tmp;
-	
-	ft_putendl("TOKENS");
-	if (!(tok = sh_init_tok(tmp, NULL)))
-		return (NULL);
-	free(tmp);
-	return (tok);
-}
+	char	*key;
+	char	*value;
+	t_var	*next;
+}					t_var;
+
+typedef struct		s_params
+{
+	t_var	*spe;
+	t_var	*pos;
+	t_var	*var;
+}					t_params;
+
+#endif

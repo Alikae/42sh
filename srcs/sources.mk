@@ -6,13 +6,14 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 17:55:45 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 20:12:46 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### MAIN FILES ###
 C_FILES = \
 	main.c \
+	sh.c
 
 C_FILES_command_edition = \
 	sh_command_functions.c \
@@ -45,6 +46,8 @@ C_FILES_tokenizer = \
 	sh_match_tok_op.c \
 	sh_set_toktype.c \
 	sh_tokenizer.c
+
+C_FILES_parameters = \
 
 C_FILES_tools = \
 

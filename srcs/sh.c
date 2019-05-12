@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_tokenizer.c                                     :+:      :+:    :+:   */
+/*   sh.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/01 16:27:02 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 19:14:47 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/12 19:58:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "sh_tokenizer.h"
-#include "sh_tokens.h"
+#include "21sh.h"
 
-t_token	*sh_tokenizer(const char *input)
+t_sh	*sh(void)
 {
-	t_token	*tok;
-	char	*tmp;
-	
-	ft_putendl("TOKENS");
-	if (!(tok = sh_init_tok(tmp, NULL)))
-		return (NULL);
-	free(tmp);
-	return (tok);
+	static t_sh *sh = NULL;
+	if (!sh)
+		sh = (t_sh*)malloc(sizeof(t_sh));
+	return (sh);
 }
