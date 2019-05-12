@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 15:08:56 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 18:17:05 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,9 @@ CLEAR = \033[0;0m
 
 GITCOM ?= "Auto-Save"
 GITSTATUS = $(shell git status | sed -n 2p | cut -d' ' -f4)
-ADD_TO_NORME = $(SRC_DIR) $(INC_DIR) $(FT_DIR)
+ADD_TO_NORME = $(SRC_DIR) $(INC_DIR) $(LIB_FT_DIR)
 
-ADD_TO_GIT = $(SRC_DIR) $(INC_DIR) $(FT_DIR) $(GITLOG_FILE) \
+ADD_TO_GIT = $(SRC_DIR) $(INC_DIR) $(LIB_FT_DIR) $(GITLOG_FILE) \
 			 Makefile tools.mk auteur README.md
 
 .PHONY: hey link compil savegit gitsave norm

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/04/24 17:46:26 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/12 17:07:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);
 char			*ft_strnew(size_t size);
 void			ft_strdel(char **as);
+void			ft_tab_strdel(char ***as);
 void			ft_strclr(char *s);
 void			ft_striter(char *s, void (*f)(char*));
 void			ft_striteri(char *s, void (*f)(unsigned int, char*));
@@ -96,6 +97,4 @@ int				ft_is_prime(int nb);
 int				ft_power(int nb, int power);
 int				ft_factorial(int nb);
 char			*ft_str_dupsize(const char *s, size_t size);
-void			ft_free_2d_char(char ***tab);
-char			**ft_2d_chardup(const char **tab);
 #endif

@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 15:38:59 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 17:57:08 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,6 +97,19 @@ C_FILES_str = \
 	ft_strstr.c \
 	ft_strsub.c \
 	ft_strtrim.c
+
+C_FILES_tab_str = \
+	ft_tab_strdel.c
+
+C_FILES_print = \
+	ft_putchar.c \
+	ft_putchar_fd.c \
+	ft_putendl.c \
+	ft_putendl_fd.c \
+	ft_putnbr.c \
+	ft_putnbr_fd.c \
+	ft_putstr.c \
+	ft_putstr_fd.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

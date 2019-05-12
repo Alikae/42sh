@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/12 15:20:07 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 15:51:49 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 17:57:32 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,9 @@ SUB_DIRS := \
 	lst \
 	math \
 	mem \
+	str \
 	print \
-	str
+	tab_str
 
 ### INCLUDE SRC MAKEFILE ###
 include $(SRC_DIR)/sources.mk
@@ -73,7 +74,7 @@ $(OBJ_DIR): mkdir_msg
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)Done : $(@F)$(CLEAR)\n"
+	@printf "$(BBLUE)$(@F)$(CLEAR) "
 
 ### Link ###
 .ONESHELL:
