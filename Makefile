@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 16:43:06 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 18:08:08 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,7 +93,7 @@ $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
 	$(CC) $(LFLAGS) $(OBJ) -o $(NAME)
 
 .ONESHELL:
-test: re
+test: all
 	./$(NAME)
 
 ### Clean ###
