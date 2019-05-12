@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 11:17:40 by maboye            #+#    #+#              #
-#    Updated: 2019/05/11 15:21:07 by maboye           ###   ########.fr        #
+#    Updated: 2019/05/12 14:55:18 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,7 @@ S_STR	=	ft_atoi.c\
 			ft_strndup.c\
 			ft_strfjoin.c\
 			ft_strjoin.c\
+			ft_strclen.c\
 			ft_strlen.c\
 			ft_strncat.c\
 			ft_strncmp.c\

@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 14:31:38 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 21:57:17 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/12 14:54:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,6 @@ void        ft_prompt()
     }
     else
         ft_putstr("$> ");
-}
-
-int         ft_strclen(const char *str, char c)
-{
-    int     i;
-
-    i = -1;
-    while (str && str[++i])
-        if (str[i] == c)
-            return (i);
-    return (0);
 }
 
 int         my_putchar(int c)

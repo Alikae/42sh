@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 11:28:45 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 21:56:43 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/12 14:55:55 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ char			*ft_strndup(const char *src, size_t n);
 char			*ft_strfjoin(const char *s1, const char *s2, int choose);
 char			*ft_strjoin(char const *s1, char const *s2);
 size_t			ft_strlen(const char *str);
+size_t			ft_strclen(const char *str, const char c);
 char			*ft_strncat(char *dest, const char *src, size_t nb);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 char			*ft_strncpy(char *dest, const char *src, size_t n);

@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_entrypoint.h                                    :+:      :+:    :+:   */
+/*   ft_strclen.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/11 21:35:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 14:57:11 by thdelmas         ###   ########.fr       */
+/*   Created: 2018/12/22 20:15:32 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/12 14:56:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_ENTRYPOINT_H
-# define SH_ENTRYPOINT_H
-void				sh_entrypoint(const char *input);
-void				sh_free(t_sh **sh);
-t_envp				*sh_init_envp(const char **env);
-t_sh				*sh_init(const char **env);
-int					sh_loop(void);
+#include "libft.h"
 
-void        		ft_prompt(void);
-int         		my_putchar(int c);
-void				signal_handler(int sig);
+size_t		ft_strclen(const char *s, char c)
+{
+	size_t i;
 
-t_envp				*get_envp_value(t_envp *list, char *str);
-
-#endif
+	i = 0;
+	while (s[i] && s[i] != c)
+		i++;
+	return (i);
+}
