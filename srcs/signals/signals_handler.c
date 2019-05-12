@@ -6,11 +6,13 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 14:48:41 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 14:55:48 by maboye           ###   ########.fr       */
+/*   Updated: 2019/05/12 22:06:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
+#include <stdlib.h>
+#include <sys/ioctl.h>
 
 /*
 ** cd : clear everything under cursor

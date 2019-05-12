@@ -6,24 +6,13 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/24 15:48:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 19:43:45 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/12 22:07:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH21_H
 # define SH21_H
 
-# include <curses.h>
-# include <fcntl.h>
-# include <signal.h>
-# include <stdlib.h>
-# include <sys/ioctl.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <term.h>
-# include <termcap.h>
-# include <termios.h>
-# include <unistd.h>
 
 # include "sh_line.h"
 

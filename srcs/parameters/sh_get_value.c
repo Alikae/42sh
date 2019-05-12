@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init.c                                          :+:      :+:    :+:   */
+/*   sh_get_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 22:08:47 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/12 21:59:25 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/12 22:02:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
-#include <unistd.h>
 
-void	sh_init(const char **env)
+const char	*sh_get_value(const char *key)
 {
-	sh()->ln_history = NULL;
+		
 }
