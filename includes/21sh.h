@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/24 15:48:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 22:22:14 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/12 16:55:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,8 @@
 # define TUR		"\033[36m"
 # define X			"\033[0m"
 
-typedef struct		s_envp
-{
-	char			*key;
-	char			*value;
-	struct s_envp	*next;
-}					t_envp;
-
 typedef struct		s_sh
 {
-	t_envp			*envp;
-	char			**local;
-	t_ln			*ln;
 	t_ln			*ln_history;
 }					t_sh;
 

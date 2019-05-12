@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/11 22:09:43 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 16:43:06 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,30 +52,30 @@ INC = $(addprefix $(INC_DIR)/,$(H_FILES))
 
 
 ### Lib ###
-FT_DIR = ./libft
-FT_LIB = $(addprefix $(FT_DIR)/,libft.a)
-FT_INC = -I ./libft
-FT_LNK = -L ./libft -l ft
+LIB_FT_DIR = ./libft
+LIB_FT = $(addprefix $(LIB_FT_DIR)/,libft.a)
+LIB_FT_INC_DIR = ./libft/includes
+LIB_FT_LNK = -L ./libft -l ft
 
 
 ###  CC && FLAGS ###
 CC = gcc
-CFLAGS = $(FT_INC) \
-		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS)) \
+CFLAGS = \
+		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(LIB_FT_INC_DIR)) \
 		 #-Wall -Werror -Wextra
 
 LFLAGS = -ltermcap \
 		 -lncurses \
-		 $(FT_LNK)
+		 $(LIB_FT_LNK)
 
 
 .PHONY: all clean fclean re
 
-all: hey_msg $(FT_LIB) $(NAME) bye_msg
+all: hey_msg $(LIB_FT) $(NAME) bye_msg
 
 ### Lib compil ###
-$(FT_LIB): lib_msg
-	@make -C $(FT_DIR)
+$(LIB_FT): lib_msg
+	@make -C $(LIB_FT_DIR)
 
 ### Mkdir obj ###
 .ONESHELL:
@@ -100,12 +100,12 @@ test: re
 .ONESHELL:
 clean: clean_msg
 	$(RM) -rf $(OBJ_DIR)
-	@make -C $(FT_DIR) clean
+	@make -C $(LIB_FT_DIR) clean
 
 .ONESHELL:
 fclean: clean fclean_msg
 	$(RM) -rf $(NAME)
-	@make -C $(FT_DIR) fclean
+	@make -C $(LIB_FT_DIR) fclean
 
 re: fclean all
 

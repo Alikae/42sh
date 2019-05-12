@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/11 22:11:12 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 16:56:38 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,6 @@ C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_free.c \
 	sh_init.c \
-	sh_init_envp.c \
 	sh_loop.c
 
 C_FILES_signals = \
@@ -48,9 +47,6 @@ C_FILES_tokenizer = \
 	sh_tokenizer.c
 
 C_FILES_tools = \
-	envp_tools.c \
-	list_tools.c \
-	utils.c
 
 
 # SUPPA concat loop
