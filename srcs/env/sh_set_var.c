@@ -6,9 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 22:53:13 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 23:02:05 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/12 23:24:10 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "21sh.h"
+#include "sh_env.h"
 
 void	sh_set_var(const char *key, const char *value)
 {	

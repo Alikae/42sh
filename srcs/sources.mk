@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 22:17:47 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/12 23:20:54 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,12 @@ C_FILES_tokenizer = \
 	sh_tokenizer.c
 
 C_FILES_env = \
+	sh_init_env.c \
+	sh_init_var.c \
+	sh_get_var.c \
+	sh_set_var.c \
+	sh_set_value.c \
+	sh_get_value.c \
 
 C_FILES_tools = \
 

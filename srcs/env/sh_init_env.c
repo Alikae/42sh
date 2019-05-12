@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_value.c                                     :+:      :+:    :+:   */
+/*   sh_init_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 22:34:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/12 23:29:42 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/12 23:09:36 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/12 23:16:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
 #include "sh_env.h"
-#include "libft.h"
+#include <stdlib.h>
 
-void	sh_set_value(const char *key, const char *value)
+t_env	*sh_init_env(const char **ev)
 {
-	t_var		*var;
-	t_env		*env;
+	t_env	*env;
 
-	if (!key || !*key)
-		return ;
-	if (!(var = sh_get_var(key)))
-		return (sh_set_var(key, value));
-	ft_strdel(&(var->value));
-	var->value = ft_strdup(value);
-		return ;
+	if (!(env = (t_env *)malloc(sizeof(t_env))))
+		return (NULL);
+	env->spe = NULL;
+	env->pos = NULL;
+	env->var = NULL;
+	return (env);
 }
