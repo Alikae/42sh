@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 15:06:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 15:42:49 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 19:28:40 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 void	sh_init_env(const char **env)
 {
 	sh_fill_env(env);
-	sh_set_pwd();
 	sh_set_shlvl();
+	sh_set_pwd();
 }
