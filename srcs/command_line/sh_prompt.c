@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_env_pos.c                                   :+:      :+:    :+:   */
+/*   sh_prompt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:29:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 00:33:05 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/02/25 07:51:30 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/13 15:48:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
-#include "sh_env.h"
+#include "libft.h"
+#include <stdlib.h>
+#include <limits.h>
 
-void	sh_set_env_pos(const char *key, const char *value)
-{	
-	t_var	**var;
-	t_var	*tmp;
+void	sh_prompt(void)
+{
+	char *prompt;
+	char *tmp;
 
-	var = &(sh()->env->pos);
-	tmp = *var;
-	if (!*var)
-		*var = sh_init_var(key, value);
-	else
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = sh_init_var(key, value);
-	}
+	if (!(tmp = ft_strnew(PATH_MAX + 1)))
+		return ;
+	tmp = getcwd(tmp, PATH_MAX);
+	prompt = ft_strjoin("\033[0;31m", tmp);
+	free(tmp);
+	tmp = ft_strjoin(prompt, "\033[0m");
+	free(prompt);
+	prompt = ft_strjoin(tmp, "\033[0;33m c> \033[0m");
+	free(tmp);
+	ft_putstr(prompt);
+	free(prompt);
 }

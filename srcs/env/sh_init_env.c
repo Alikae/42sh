@@ -5,22 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 23:09:36 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 01:46:15 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/13 15:06:20 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/13 15:42:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_env.h"
-#include <stdlib.h>
 
-t_env	*sh_init_env(const char **ev)
+void	sh_init_env(const char **env)
 {
-	t_env	*env;
-
-	if (!(env = (t_env *)malloc(sizeof(t_env))))
-		return (NULL);
-	env->spe = NULL;
-	env->pos = NULL;
-	env->var = NULL;
-	return (env);
+	sh_fill_env(env);
+	sh_set_pwd();
+	sh_set_shlvl();
 }
