@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 16:16:29 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/13 16:54:17 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 19:26:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ int		sh_loop(void)
 	{
 		sh_prompt();
 		ln_tab = NULL;
-		if (!(ln_tab = sh_arguments()))
+		if (!(ln_tab = sh_arguments()) || !*ln_tab)
 			break ;
-		if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
+		if (!ft_strncmp("exit", *ln_tab, 4))
 			break ;
-		else if (!ft_strncmp("env", *ln_tab, 3))
+		if (!ft_strncmp("env", *ln_tab, 3))
 			sh_print_env();
-		else	
+		else
 			while (*ln_tab)
 			{
 				sh_entrypoint(*ln_tab);
