@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 16:16:29 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/13 01:50:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 16:54:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int		sh_loop(void)
 
 	while (42)
 	{
+		sh_prompt();
 		ln_tab = NULL;
 		if (!(ln_tab = sh_arguments()))
 			break ;

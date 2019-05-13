@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 01:11:15 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 01:26:32 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 15:40:57 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ void	sh_set_shlvl(void)
 
 	shlvl = 0;
 	if (!(sh_get_value("SHLVL")))
-		sh_set_env_spe("SHLVL", "1");
+		sh_set_env("SHLVL", "1");
 	else
 	{
 		shlvl = ft_atoi(sh_get_value("SHLVL"));
 		tmp = ft_itoa(shlvl + 1);
-		sh_set_env_spe("SHLVL", tmp);
+		sh_set_env("SHLVL", tmp);
 		ft_strdel(&tmp);
 	}
 }
