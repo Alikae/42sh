@@ -6,12 +6,13 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 16:16:29 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/12 19:26:55 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 01:50:39 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "21sh.h"
 #include "libft.h"
+#include "sh_env.h"
 #include "sh_entrypoint.h"
 #include "sh_command_line.h"
 
@@ -26,11 +27,14 @@ int		sh_loop(void)
 			break ;
 		if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
 			break ;
-		while (*ln_tab)
-		{
-			sh_entrypoint(*ln_tab);
-			ln_tab++;
-		}
+		else if (!ft_strncmp("env", *ln_tab, 3))
+			sh_print_env();
+		else	
+			while (*ln_tab)
+			{
+				sh_entrypoint(*ln_tab);
+				ln_tab++;
+			}
 		ft_tab_strdel(&ln_tab);
 	}
 	return (1);

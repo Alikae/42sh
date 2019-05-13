@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 22:28:20 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/13 01:29:16 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ LIB_FT_LNK = -L ./libft -l ft
 CC = gcc
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(LIB_FT_INC_DIR)) \
-		 #-Wall -Werror -Wextra
+		 -g3 #-Wall -Werror -Wextra
 
 LFLAGS = -ltermcap \
 		 -lncurses \

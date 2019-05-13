@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_value.c                                     :+:      :+:    :+:   */
+/*   ft_tab_strdup.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 22:34:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 00:32:25 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/13 00:38:37 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/13 00:39:11 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
-#include "sh_env.h"
 #include "libft.h"
 
-void	sh_set_value(const char *key, const char *value)
+char	**ft_tab_strdup(char **tab)
 {
-	t_var		*var;
-	t_env		*env;
+	char	**ret;
+	int		i;
 
-	if (!key || !*key)
-		return ;
-	if (!(var = sh_get_var(key)))
-		return (sh_set_env_var(key, value));
-	ft_strdel(&(var->value));
-	var->value = ft_strdup(value);
-		return ;
+	i = 0;
+	ret = NULL;
+	if (tab)
+	{
+		while (tab[i])
+			i++;
+		if (!(ret = (char **)malloc(sizeof(char *) * (i + 1))))
+			return (NULL);
+		i = -1;
+		while (tab[++i])
+			ret[i] = ft_strdup(tab[i]);
+		ret[i] = NULL;
+	}
+	return (ret);
 }

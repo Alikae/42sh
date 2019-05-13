@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_value.c                                     :+:      :+:    :+:   */
+/*   sh_print_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 22:34:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 00:32:25 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/13 00:00:05 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/13 02:17:11 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,26 @@
 #include "sh_env.h"
 #include "libft.h"
 
-void	sh_set_value(const char *key, const char *value)
+static void		sh_print_varlst(t_var *lst)
 {
-	t_var		*var;
-	t_env		*env;
+	while (lst)
+	{
+		ft_putstr(lst->key);
+		ft_putchar('=');
+		ft_putendl(lst->value);
+		lst = lst->next;
+	}
+}
 
-	if (!key || !*key)
-		return ;
-	if (!(var = sh_get_var(key)))
-		return (sh_set_env_var(key, value));
-	ft_strdel(&(var->value));
-	var->value = ft_strdup(value);
-		return ;
+void	sh_print_env(void)
+{
+	t_env	*env;
+
+	env = sh()->env;
+	ft_putendl("\nSpecial Params :");
+	sh_print_varlst(env->spe);
+	ft_putendl("\nPositionnal Params :");
+	sh_print_varlst(env->pos);
+	ft_putendl("\nEnv Vars :");
+	sh_print_varlst(env->var);
 }
