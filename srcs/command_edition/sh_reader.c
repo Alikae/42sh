@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 09:31:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/10 19:37:08 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 13:41:26 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ static char *getcommand(char **command)
 			i = sh_cursor_motion(command, buf, i);
 		else if (BACKWARD_WORD || FORWARD_WORD)
 			i = sh_cursor_motion_word(command, buf, i);
+		else if (LINE_UP || LINE_DOWN)
+			i = sh_cursor_motion_line(command, buf, i);
 		else if (TAB)
 			;
 		else if (ENTER)

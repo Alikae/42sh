@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_cursor_motion_word.c                               :+:      :+:    :+:   */
+/*   sh_cursor_motion_word.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 11:25:56 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/11 21:59:28 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 13:18:53 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	sh_movecursor_down(void)
 	return (1);
 }
 
-static int	sh_forward_word(char **command, int i, t_term term, t_pos cursor)
+static int	sh_forward_word(char **command, int i, t_pos term, t_pos cursor)
 {
 	while (i == -1 || (command[0][i + 1] > 32 && command[0][i + 1] != '\0'))
 	{
@@ -47,7 +47,7 @@ static int	sh_forward_word(char **command, int i, t_term term, t_pos cursor)
 	return (i);
 }
 
-static void	sh_movecursor_up(t_pos *cursor, t_term term)
+static void	sh_movecursor_up(t_pos *cursor, t_pos term)
 {
 	int j;
 
@@ -60,7 +60,7 @@ static void	sh_movecursor_up(t_pos *cursor, t_term term)
 	j = -1;
 }
 
-static int	sh_backward_word(char **command, int i, t_term term, t_pos cursor)
+static int	sh_backward_word(char **command, int i, t_pos term, t_pos cursor)
 {
 	while (i > -1 && command[0][i] <= 32)
 	{
@@ -89,8 +89,8 @@ static int	sh_backward_word(char **command, int i, t_term term, t_pos cursor)
 
 int			sh_cursor_motion_word(char **command, char *buf, int i)
 {
-	t_pos cursor;
-	t_term	term;
+	t_pos	cursor;
+	t_pos	term;
 
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");

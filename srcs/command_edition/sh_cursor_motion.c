@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/11 21:58:49 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/13 15:29:11 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "sh_command_line.h"
 #include "libft.h"
 
-static int	sh_cursor_forward(int i, int pointer, t_pos cursor, t_term term)
+int			sh_cursor_forward(int i, int pointer, t_pos cursor, t_pos term)
 {
 	int k;
 
@@ -38,7 +38,7 @@ static int	sh_cursor_forward(int i, int pointer, t_pos cursor, t_term term)
 	return (pointer);
 }
 
-static int	sh_cursor_backward(int i, int pointer, t_pos cursor, t_term term)
+int			sh_cursor_backward(int i, int pointer, t_pos cursor, t_pos term)
 {
 	int		k;
 	int		j;
@@ -67,7 +67,7 @@ static int	sh_cursor_backward(int i, int pointer, t_pos cursor, t_term term)
 	return (pointer);
 }
 
-static int	sh_backspace(char **command, int i, t_pos cursor, t_term term)
+static int	sh_backspace(char **command, int i, t_pos cursor, t_pos term)
 {
 	if (i == -1)
 		return (i);
@@ -83,7 +83,7 @@ static int	sh_backspace(char **command, int i, t_pos cursor, t_term term)
 int			sh_cursor_motion(char **command, char *buf, int i)
 {
 	t_pos	cursor;
-	t_term	term;
+	t_pos	term;
 
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");
@@ -105,7 +105,7 @@ int			sh_echo_input(char **command, char *buf, int i)
 {
 	t_pos	cursor;
 	t_pos	head;
-	t_term	term;
+	t_pos	term;
 
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");

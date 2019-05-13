@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/13 01:20:31 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/13 14:49:28 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ C_FILES_command_edition = \
 	sh_reader.c \
 	sh_cursor_motion.c \
 	sh_cursor_motion2.c \
-	sh_cursor_motion_word.c
+	sh_cursor_motion_word.c \
+	sh_cursor_motion_line.c
 
 C_FILES_command_line = \
 	sh_free_all_ln.c \
