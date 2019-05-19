@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 16:16:29 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/13 01:50:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/18 19:11:04 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "sh_env.h"
 #include "sh_entrypoint.h"
 #include "sh_command_line.h"
+
+#include <stdio.h>
 
 int		sh_loop(void)
 {
@@ -25,6 +27,9 @@ int		sh_loop(void)
 		ln_tab = NULL;
 		if (!(ln_tab = sh_arguments()))
 			break ;
+		int z = 0;
+		while (ln_tab[z])
+			fprintf(stderr, "[%s]\n", ln_tab[z++]);
 		if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
 			break ;
 		else if (!ft_strncmp("env", *ln_tab, 3))

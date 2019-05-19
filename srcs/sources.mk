@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/13 14:49:28 by tmeyer           ###   ########.fr        #
+#    Updated: 2019/05/18 16:42:30 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ C_FILES_command_line = \
 	sh_command_line.c \
 	sh_init_ln.c \
 	sh_command_parse.c \
+	sh_command_parse2.c \
 	sh_strsplit_m.c
 
 C_FILES_entrypoint = \

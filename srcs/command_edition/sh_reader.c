@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 09:31:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/13 13:41:26 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/05/14 15:51:35 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,17 @@ static char *getcommand(char **command)
 	ft_bzero(buf, BUFFER);
 	while (*command && read(0, buf, BUFFER) > 0)
 	{
+//		int z = 0;
+//		while (buf[z])
+//			fprintf(stderr, "-%c-\n", buf[z++]);
 		if (HOME || END || ARROW_LEFT || ARROW_RIGHT || BACKSPACE)
 			i = sh_cursor_motion(command, buf, i);
 		else if (BACKWARD_WORD || FORWARD_WORD)
 			i = sh_cursor_motion_word(command, buf, i);
 		else if (LINE_UP || LINE_DOWN)
 			i = sh_cursor_motion_line(command, buf, i);
+//		else if (COPY_PASTE)
+//			i = sh_copy_option(command, buf, i);
 		else if (TAB)
 			;
 		else if (ENTER)

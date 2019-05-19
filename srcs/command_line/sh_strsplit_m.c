@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 09:18:30 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/11 22:00:04 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/19 16:03:21 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,15 @@ static int		move_parenthese(char const *str, int i)
 	i++;
 	while (str[i] != '\0' && k != 0)
 	{
-		if ((str[i] == '"' || str[i] == '\'') && (x = str[i]) && i++)
+		if ((str[i] == '"' || str[i] == '\'' || str[i] == '`')
+				&& !sh_ice(str, i) && (x = str[i]) && i++)
 		{
-			while (str[i] != x)
+			while (!(str[i] == x && !sh_ice(str, i)))
 				i++;
 		}
-		if (str[i] == '(')
+		if (str[i] == '(' && !sh_ice(str, i))
 			k++;
-		if (str[i] == ')')
+		if (str[i] == ')' && !sh_ice(str, i))
 			k--;
 		i++;
 	}
@@ -43,13 +44,13 @@ static int		move_pointer(char const *str, int i)
 {
 	char x;
 
-	if (str[i] == '(')
+	if (str[i] == '(' && !sh_ice(str, i))
 		i = move_parenthese(str, i);
-	else if (str[i] == '"' || str[i] == '\'')
+	else if ((str[i] == '"' || str[i] == '\'' || str[i] == '`') && !sh_ice(str, i))
 	{
 		x = str[i];
 		i++;
-		while (str[i] != x)
+		while (!(str[i] == x && !sh_ice(str, i)))
 			i++;
 		i++;
 	}
@@ -67,11 +68,11 @@ static int		count_words(char const *str, char c)
 	k = 0;
 	while (str[i] != '\0')
 	{
-		while (str[i] == c && str[i] != '\0')
+		while (str[i] == c && !sh_ice(str, i))
 			i++;
 		if (str[i] != c && str[i] != '\0')
 			k++;
-		while (str[i] != c && str[i] != '\0')
+		while (str[i] != '\0' && !(!sh_ice(str, i) && str[i] == c))
 			i = move_pointer(str, i);
 	}
 	return (k);
@@ -86,7 +87,7 @@ static int		letters(char const *s, char c, char **tabl, int i[2])
 
 	j = i[0];
 	k = 0;
-	while (s[j] != c && s[j] != '\0')
+	while (s[j] != '\0' && !(!sh_ice(s, j) && s[j] == c))
 	{
 		l = j;
 		l = move_pointer(s, l);
@@ -117,14 +118,14 @@ char			**sh_strsplit_m(char const *s, char c)
 		return (NULL);
 	while (s[i[0]] != '\0')
 	{
-		while (s[i[0]] == c && s[i[0]] != '\0')
+		if (s[i[0]] == c && !sh_ice(s, i[0]))
 			i[0]++;
-		if (s[i[0]] != c && s[i[0]] != '\0')
+		if (s[i[0]] != c)
 		{
 			letters(s, c, tabl, i);
 			i[1]++;
 		}
-		while (s[i[0]] != c && s[i[0]] != '\0')
+		while (s[i[0]] != '\0' && !(!sh_ice(s, i[0]) && s[i[0]] == c))
 			i[0] = move_pointer(s, i[0]);
 	}
 	tabl[i[1]] = NULL;

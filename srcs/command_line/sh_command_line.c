@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 07:36:41 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/13 12:12:29 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/05/19 16:18:54 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "sh_command_line.h"
 #include <unistd.h>
 
-static char		*sh_add_newline(char *line)
+char			*sh_add_newline(char *line)
 {
 	char *tmp;
 
@@ -30,16 +30,21 @@ static char		*sh_add_newline(char *line)
 
 static void		sh_ask_close_quote(char **line, int k, int code, int res)
 {
-	*line = sh_add_newline(*line);
 	if (code == 1)
 	{
 		if (k == 0)
+		{
+			*line = sh_add_newline(*line);
 			write(0, "dquote> ", 8);
+		}
 	}
 	else if (code == 2)
 	{
 		if (k > 0 && res == 1)
+		{
+			*line = sh_add_newline(*line);
 			write (0, "> ", 2);
+		}
 	}
 }
 
@@ -50,16 +55,19 @@ static int		sh_check_sub_shell(char **line, int res)
 	static char	c = 0;
 
 	i = 0;
-	while (res != 0 && line[0][i] != '\0')
+	while (line[0][i] != '\0')
 	{
-		if ((line[0][i] == '"' || line[0][i] == '\'') && (c = line[0][i]) && i++)
+		if ((line[0][i] == '"' || line[0][i] == '\'' || line[0][i] == '`') 
+				&& !sh_ice(*line, i) && (c = line[0][i]) && i++)
 		{
-			while (line[0][i] != c && line[0][i] != '\0')
+			while (line[0][i] != 0 && !(line[0][i] == c && !sh_ice(*line, i)))
 				i++;
+			if (line[0][i] == 0)
+				return (k != 0 ? 0 : 1);
 		}
-		if (line[0][i] == '(')
+		if (line[0][i] == '(' && !sh_ice(*line, i))
 			k++;
-		else if (line[0][i] == ')')
+		if (line[0][i] == ')' && !sh_ice(*line, i))
 			k--;
 		if (k < 0)
 			return (1);
@@ -67,7 +75,7 @@ static int		sh_check_sub_shell(char **line, int res)
 			i++;
 	}
 	sh_ask_close_quote(line, k, 2, res);
-	return (k == 0 ? 1 : 0);
+	return (k != 0 ? 0 : sh_parse_line_escape(line));
 }
 
 static int		sh_check_line(char **line)
@@ -82,8 +90,8 @@ static int		sh_check_line(char **line)
 		return (0);
 	while (line[0][i] != '\0')
 	{
-		if ((line[0][i] == 34 || line[0][i] == 39)
-				&& (c == '\0' || c == line[0][i]))
+		if ((line[0][i] == 34 || line[0][i] == 39 || line[0][i] == 96)
+				&& !sh_ice(*line, i) && (c == 0 || c == line[0][i]))
 		{
 			k = (k == 1 ? 0 : 1);
 			c = (k == 0 ? line[0][i] : '\0');
