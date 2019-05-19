@@ -6,13 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 22:06:45 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 22:59:52 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/19 15:27:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_TOOLS_H
 # define SH_TOOLS_H
 
-int		sh_isquoted(const char *str, int index);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 20:45:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/19 15:28:39 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,10 @@ typedef struct      s_token
 	t_toksub		sub;
 	struct s_token  *next;
 }                   t_token;
+
+t_toktype	sh_match_tok_op(const char *tok_content, int i);
+t_token		*sh_get_tok_sub(const char *tok_content);
+t_token		*sh_tokenizer(const char *input);
+t_token		*sh_init_tok(const char *input, t_token *parent);
 
 #endif
