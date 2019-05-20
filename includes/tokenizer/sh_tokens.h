@@ -6,12 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/19 15:28:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/20 16:45:36 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_TOKENS
 # define SH_TOKENS
+
+# include <unistd.h>
 
 typedef enum	e_toktype
 {
@@ -77,9 +79,12 @@ typedef struct      s_token
 	struct s_token  *next;
 }                   t_token;
 
-t_toktype	sh_match_tok_op(const char *tok_content, int i);
+t_toktype	sh_match_tok_op(const char *tok_content, size_t i);
+t_toktype	sh_get_res(const char *tok_content);
+t_toktype	sh_is_res_word(const char *tok_content, size_t i);
 t_token		*sh_get_tok_sub(const char *tok_content);
 t_token		*sh_tokenizer(const char *input);
 t_token		*sh_init_tok(const char *input, t_token *parent);
+
 
 #endif
