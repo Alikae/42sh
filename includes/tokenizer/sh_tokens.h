@@ -6,16 +6,16 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 20:45:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/01 07:11:59 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_TOKENS
 # define SH_TOKENS
-
 typedef enum	e_toktype
 {
-	SH_EOS = 0,
+	SH_NULL = 0,
+	SH_EOS,
 	SH_EOF,
 	SH_WORD,
 	SH_ASSIGN_WORD,
@@ -61,9 +61,11 @@ typedef enum	e_toktype
 	SH_LPARAM_EXP,
 	SH_RPARAM_EXP,
 	SH_LARITH_EXP,
-	SH_RARITH_EXP
+	SH_RARITH_EXP,
+	SH_GROUP_TOKEN,
+	SH_BRACES
 }				t_toktype;
-
+/*
 typedef union		u_toksub
 {
 	char			*str;
@@ -74,6 +76,14 @@ typedef struct      s_token
 {
 	t_toktype		type;
 	t_toksub		sub;
+	struct s_token  *next;
+}                   t_token;
+*/
+typedef struct      s_token
+{
+	int				type;
+	struct s_token	*sub;
+	char			*content;
 	struct s_token  *next;
 }                   t_token;
 
