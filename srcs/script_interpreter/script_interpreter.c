@@ -11,6 +11,8 @@ typedef struct	s_sh
 	t_toktype	pipeline_separators[2];
 }				t_sh;
 
+int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env);
+
 /*int		is_in_iarray(int i, const int *array)
 {
 	int	n;
@@ -22,7 +24,12 @@ typedef struct	s_sh
 	return (0);
 }*/
 
-t_token	*find_token_by_key_until(t_token *lst, t_token *lst_end, int *type, int (*types)[2])
+t_general_env	*extract_child_env(t_general_env *parent_env, t_token *token_begin, t_token *token_end)
+{
+
+}
+
+t_token	*find_token_by_key_until(t_token *lst, t_token *lst_end, int *type, t_toktype (*types)[2])
 {
 	if (type)
 		*type = 0;
@@ -54,16 +61,18 @@ int		block_wait()
 
 int		exec_path(t_sh *p, char *path, t_general_env *prgm_env)
 {
+	int	ret;
 
 	//fork stuff
 	int child_pid = fork();
 	if (child_pid)
-		block_wait();
+		ret = block_wait();
 	else
 		execve(path, prgm_env->argv, 0/*prgm_env->env is a struct*/);
 	//wait in parent
 	//dup2() for handle redirections
 	//execve in child
+	return (ret); //<-- Return What?
 }
 
 int		can_exec(struct stat *st)
@@ -123,6 +132,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env 
 		//for now
 		char *path = token_begin->content;
 	//
+	int ret;
 	struct stat	st;
 	t_general_env child_env;
 
@@ -133,7 +143,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env 
 		if (can_exec(&st))
 		{
 			construct_child_env(p, token_begin, token_end, &child_env, gen_env); //<--OOPS
-			exec_path(p, path, &child_env);
+			ret = exec_path(p, path, &child_env);
 		}
 		else
 		{
@@ -142,6 +152,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env 
 		}
 	}
 	//	free_path
+	return (ret);
 }
 
 int		exec_built_in(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
@@ -197,7 +208,7 @@ int		exec_compound_if(t_sh *p, t_token *token_if, t_general_env *gen_env)
 	else if (token_if->sub->next->next)
 		return (p->last_cmd_result = exec_script(p, token_if->sub->next->next->sub, 0, gen_env));
 	return (0);
-}
+}//PROTECC NO ELSE
 
 int exec_compound_for(t_sh *p, t_token *token_for, t_general_env *gen_env)
 {
@@ -217,7 +228,7 @@ int exec_compound_for(t_sh *p, t_token *token_for, t_general_env *gen_env)
 	return (p->last_cmd_result = ret);
 }
 
-int		exec_compound_command(t_sh *p, t_token *token_compound, int type, t_general_env *gen_env)
+int		exec_compound_command(t_sh *p, t_token *token_compound, int type, t_general_env *gen_env) //<--More Child_env
 {
 	if (type == SH_WHILE || type == SH_UNTIL)
 		return (exec_compound_while(p, token_compound, gen_env, type));
@@ -227,8 +238,7 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type, t_general
 	{}	//return (exec_compound_case(p, token_compound));
 	else if (type == SH_FOR)
 		return (exec_compound_for(p, token_compound, gen_env));
-	else
-	{}	//return(exec_braces());
+	return(exec_script(p, token_compound->sub, 0, 0/*child_env*/));
 }
 
 int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
@@ -236,7 +246,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end, t_general_e
 	//if (token_begin->type == SH_FUNCTOKEN)
 	//	store_func;
 	//else
-	if (token_begin->type == SH_WHILE || token_begin->type == SH_UNTIL || token_begin->type == SH_IF || token_begin->type == SH_CASE || token_begin->type == SH_FOR || token_begin->type == SH_BRACES)
+	if (token_begin->type == SH_WHILE || token_begin->type == SH_UNTIL || token_begin->type == SH_IF || token_begin->type == SH_CASE || token_begin->type == SH_FOR || token_begin->type == SH_BRACES) //<-- next token who have sens (no redirections...)
 	{
 	//	store potential redirectlst
 		exec_compound_command(p, token_begin, token_begin->type, gen_env);
@@ -259,9 +269,9 @@ int		exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end, t_general_
 	}
 	while (token_begin)
 	{
-		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, p->pipeline_separators);
+		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators);
 		printf("pipeline cut at '%i'\n", p->type);
-		//OPEN PIPE AND USE IT HERE
+		//OPEN PIPE AND SET IT IN GEN_ENV
 		p->last_cmd_result = exec_command(p, token_begin, next_separator, gen_env); // <---- exec_command NON BLOQUANT ICI (new param?)
 		//ONLY THE LAST PIPELINE CMD HAS RETURN ("false | echo $?")
 		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
@@ -280,7 +290,7 @@ int		exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end, t_general_en
 	previous_separator = 0;
 	while (token_begin)
 	{
-		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, p->and_or_separators);
+		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->and_or_separators);
 		printf("and_or cut at '%i'\n", p->type);
 		tmp = p->type;
 		if (!previous_separator || (previous_separator == SH_AND_IF && !p->last_cmd_result) || (previous_separator == SH_OR_IF && p->last_cmd_result))
