@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/20 16:39:04 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/05/24 15:27:49 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,6 @@ C_FILES_tokenizer = \
 	sh_get_res.c \
 	sh_match_tok_op.c \
 	sh_is_res_word.c \
-	sh_set_toktype.c \
 	sh_isquoted.c \
 	sh_tokenizer.c
 

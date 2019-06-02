@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:31:21 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/19 15:28:05 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/05/24 15:28:53 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 void	sh_print_onetok(t_token *tok);
 void	sh_print_alltok(t_token *tok);
 char	*sh_get_tok_content(const char *input);
-size_t		sh_set_toktype(const char *input, t_toktype *type);
 int		sh_isquoted(const char *str, int index);
 
 #endif
