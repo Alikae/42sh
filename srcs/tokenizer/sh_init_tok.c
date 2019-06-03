@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 17:07:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/24 15:28:08 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/03 22:30:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_token		*sh_init_tok(const char *input, size_t i)
 	tok->type = SH_EOS;
 	tmp = ft_strtrim(input);
 	toklen = 0;
-	tok->sub.str = ft_strndup(tmp, toklen);
 	if (toklen > 0)
 		tok->next = sh_init_tok(tmp, i + toklen);
 	else
