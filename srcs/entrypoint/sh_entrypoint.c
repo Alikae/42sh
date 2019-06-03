@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 16:10:48 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 21:15:06 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/03 22:43:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ void	sh_entrypoint(const char *input)
 	ft_putstr("INPUT: ");
 	ft_putendl(input);
 	tok = sh_tokenizer(input);
-	sh_print_alltok(tok);
+	print_all_tokens(tok, 0);
 	return ;
 }

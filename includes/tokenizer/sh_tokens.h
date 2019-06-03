@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/06/03 22:34:38 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/03 22:41:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct      s_token
 	struct s_token  *next;
 }                   t_token;
 
+void		print_all_tokens(t_token *t, int lvl);
 t_toktype	sh_match_tok_op(const char *tok_content, size_t i);
 t_toktype	sh_get_res(const char *tok_content);
 t_toktype	sh_is_res_word(const char *tok_content, size_t i);
