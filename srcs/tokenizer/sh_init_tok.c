@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 17:07:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/06/03 22:30:49 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/03 23:21:26 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_token		*sh_init_tok(const char *input, size_t i)
 
 	if (!input || !(tok = (t_token *)malloc(sizeof(t_token))))
 		return (NULL);
-	tok->type = SH_EOS;
+	tok->type = SH_NULL;
 	tmp = ft_strtrim(input);
 	toklen = 0;
 	if (toklen > 0)
