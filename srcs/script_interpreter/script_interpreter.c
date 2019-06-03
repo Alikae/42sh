@@ -190,6 +190,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		return (p->last_cmd_result = exec_built_in(p, token_begin, token_end));
 	p->last_cmd_result = exec_prgm(p, token_begin, token_end);
 	return (p->last_cmd_result);
+	//KILL CHILD ENV ADDED AT EACH FUNC END
 }
 
 int		exec_compound_while(t_sh *p, t_token *token_while, int type)
