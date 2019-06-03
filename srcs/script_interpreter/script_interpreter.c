@@ -24,11 +24,6 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end, t_general_en
 	return (0);
 }*/
 
-t_general_env	*extract_child_env(t_general_env *parent_env, t_token *token_begin, t_token *token_end)
-{
-
-}
-
 t_token	*find_token_by_key_until(t_token *lst, t_token *lst_end, int *type, t_toktype (*types)[2])
 {
 	if (type)
@@ -107,24 +102,24 @@ void	push_str_to_tab(char ***ptab, char *s)
 	(*ptab)[len + 1] = 0;
 }
 
-t_general_env	*construct_child_env(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env, t_general_env *torefactor)
+t_general_env	*construct_child_env(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *child_env)
 {
-	gen_env->argv = 0;
-	gen_env->env = 0;
+	child_env->argv = 0;
+	child_env->env = 0;
 	while (token_begin && token_begin != token_end)
 	{
 		//stock redirection / assignement is done before
 		if (token_begin->type == SH_WORD)
 		{
 			printf("argv += %s\n", token_begin->content);
-			push_str_to_tab(&gen_env->argv, token_begin->content);
+			push_str_to_tab(&child_env->argv, token_begin->content);
 		}
 		token_begin = token_begin->next;
 	}
 	return (0);
 }
 
-int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
+int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	//foreach $PATH + "/"
 	//	construct path
@@ -142,7 +137,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env 
 	{
 		if (can_exec(&st))
 		{
-			construct_child_env(p, token_begin, token_end, &child_env, gen_env); //<--OOPS
+			construct_child_env(p, token_begin, token_end, &child_env);
 			ret = exec_path(p, path, &child_env);
 		}
 		else
@@ -155,7 +150,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env 
 	return (ret);
 }
 
-int		exec_built_in(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
+int		exec_built_in(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	//TODO
 	printf("exec builtin -%s-\n", token_begin->content);
@@ -172,7 +167,16 @@ int		is_built_in(const char *name)
 	return (0);
 }
 
-int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
+void	stock_redirections_assignements(t_token *token_begin, t_token *token_end, t_env_change *env_ch)
+{
+	while (token_begin && token_begin != token_end)
+	{
+		if ()
+		token_begin = token_begin->next;
+	}
+}
+
+int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 //CREATE ENVIRONNEMENTAL STRUCTURE
 
@@ -183,34 +187,34 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end, t_ge
 	//	token_begin = token_begin->next;
 	//handle no_cmd_name (<auteur)
 	if (is_built_in(token_begin->content))
-		return (p->last_cmd_result = exec_built_in(p, token_begin, token_end, gen_env));
-	p->last_cmd_result = exec_prgm(p, token_begin, token_end, gen_env);
+		return (p->last_cmd_result = exec_built_in(p, token_begin, token_end));
+	p->last_cmd_result = exec_prgm(p, token_begin, token_end);
 	return (p->last_cmd_result);
 }
 
-int		exec_compound_while(t_sh *p, t_token *token_while, t_general_env *gen_env, int type)
+int		exec_compound_while(t_sh *p, t_token *token_while, int type)
 {
 	int ret;
 	int	tmp;
 
 	printf("treating WHILE\n");
 	ret = 0;
-	while (((tmp = exec_script(p, token_while->sub->sub, 0, gen_env)) && type == SH_UNTIL) || (!tmp && type == SH_WHILE))
-		ret = exec_script(p, token_while->sub->next->sub, 0, gen_env);
+	while (((tmp = exec_script(p, token_while->sub->sub, 0)) && type == SH_UNTIL) || (!tmp && type == SH_WHILE))
+		ret = exec_script(p, token_while->sub->next->sub, 0);
 	return (ret);
 }
 
-int		exec_compound_if(t_sh *p, t_token *token_if, t_general_env *gen_env)
+int		exec_compound_if(t_sh *p, t_token *token_if)
 {
 	printf("treating IF\n");
-	if (!exec_script(p, token_if->sub->sub, 0, gen_env))
-		return (p->last_cmd_result = exec_script(p, token_if->sub->next->sub, 0, gen_env));
+	if (!exec_script(p, token_if->sub->sub, 0))
+		return (p->last_cmd_result = exec_script(p, token_if->sub->next->sub, 0));
 	else if (token_if->sub->next->next)
-		return (p->last_cmd_result = exec_script(p, token_if->sub->next->next->sub, 0, gen_env));
+		return (p->last_cmd_result = exec_script(p, token_if->sub->next->next->sub, 0));
 	return (0);
-}//PROTECC NO ELSE
+}
 
-int exec_compound_for(t_sh *p, t_token *token_for, t_general_env *gen_env)
+int exec_compound_for(t_sh *p, t_token *token_for)
 {
 	//for name in yo lala ; do echo $name ; done
 	t_token *ins;
@@ -222,41 +226,42 @@ int exec_compound_for(t_sh *p, t_token *token_for, t_general_env *gen_env)
 	while (ins)
 	{
 		//set $name to ins in child_env
-		ret = exec_script(p, token_for->sub->next->sub, 0, 0/*child_env*/);
+		ret = exec_script(p, token_for->sub->next->sub, 0);
 		ins = ins->next;
 	}
 	return (p->last_cmd_result = ret);
 }
 
-int		exec_compound_command(t_sh *p, t_token *token_compound, int type, t_general_env *gen_env) //<--More Child_env
+int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
 	if (type == SH_WHILE || type == SH_UNTIL)
-		return (exec_compound_while(p, token_compound, gen_env, type));
+		return (exec_compound_while(p, token_compound, type));
 	else if (type == SH_IF)
-		return (exec_compound_if(p, token_compound, gen_env));
+		return (exec_compound_if(p, token_compound));
 	else if (type == SH_CASE)
 	{}	//return (exec_compound_case(p, token_compound));
 	else if (type == SH_FOR)
-		return (exec_compound_for(p, token_compound, gen_env));
-	return(exec_script(p, token_compound->sub, 0, 0/*child_env*/));
+		return (exec_compound_for(p, token_compound));
+	return(exec_script(p, token_compound->sub, 0));
 }
 
-int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
+int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	//if (token_begin->type == SH_FUNCTOKEN)
 	//	store_func;
 	//else
 	if (token_begin->type == SH_WHILE || token_begin->type == SH_UNTIL || token_begin->type == SH_IF || token_begin->type == SH_CASE || token_begin->type == SH_FOR || token_begin->type == SH_BRACES) //<-- next token who have sens (no redirections...)
 	{
+		//pay attention if there is bullshit between token_begin n token_end. Is it Syntax Error?
 	//	store potential redirectlst
-		exec_compound_command(p, token_begin, token_begin->type, gen_env);
+		exec_compound_command(p, token_begin, token_begin->type);
 	}
 	else
-		p->last_cmd_result = exec_simple_command(p, token_begin, token_end, gen_env);
+		p->last_cmd_result = exec_simple_command(p, token_begin, token_end);
 	return (p->last_cmd_result);
 }
 
-int		exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env) //TOWORK
+int		exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int		bang;
 	t_token	*next_separator;
@@ -272,7 +277,7 @@ int		exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end, t_general_
 		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators);
 		printf("pipeline cut at '%i'\n", p->type);
 		//OPEN PIPE AND SET IT IN GEN_ENV
-		p->last_cmd_result = exec_command(p, token_begin, next_separator, gen_env); // <---- exec_command NON BLOQUANT ICI (new param?)
+		p->last_cmd_result = exec_command(p, token_begin, next_separator); // <---- exec_command NON BLOQUANT ICI (new param?)
 		//ONLY THE LAST PIPELINE CMD HAS RETURN ("false | echo $?")
 		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
 	}
@@ -281,7 +286,7 @@ int		exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end, t_general_
 	return (p->last_cmd_result);
 }
 
-int		exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
+int		exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	t_token	*next_separator;
 	int		previous_separator;
@@ -294,14 +299,14 @@ int		exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end, t_general_en
 		printf("and_or cut at '%i'\n", p->type);
 		tmp = p->type;
 		if (!previous_separator || (previous_separator == SH_AND_IF && !p->last_cmd_result) || (previous_separator == SH_OR_IF && p->last_cmd_result))
-			p->last_cmd_result = exec_pipeline(p, token_begin, next_separator, gen_env);
+			p->last_cmd_result = exec_pipeline(p, token_begin, next_separator);
 		previous_separator = tmp;
 		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
 	}
 	return (p->last_cmd_result);
 }
 
-void	exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
+void	exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	child_pid;
 	//fork stuff
@@ -312,11 +317,11 @@ void	exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 	//}
 	//if (!child_pid)
 	//	return ;
-	exec_and_or(p, token_begin, token_end, gen_env);
+	exec_and_or(p, token_begin, token_end);
 	//exit properly
 }
 
-int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *gen_env)
+int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	t_token	*next_separator;
 
@@ -325,9 +330,9 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end, t_general_en
 		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->script_separators); //<-- + newline (echo yo \n echo lala)
 		printf("script cut at '%i'\n", p->type);
 		if (p->type == SH_AND)
-			exec_and_or_in_background(p, token_begin, next_separator, gen_env);
+			exec_and_or_in_background(p, token_begin, next_separator);
 		else
-			p->last_cmd_result = exec_and_or(p, token_begin, next_separator, gen_env);
+			p->last_cmd_result = exec_and_or(p, token_begin, next_separator);
 		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
 	}
 	return (p->last_cmd_result);
