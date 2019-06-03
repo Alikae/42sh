@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/24 15:34:31 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/03 22:33:12 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 typedef enum	e_toktype
 {
-	SH_EOS = 0,
+	SH_NULL = 0,
+	SH_EOS,
 	SH_EOF,
 	SH_WORD,
 	SH_ASSIGN_WORD,
@@ -63,19 +64,16 @@ typedef enum	e_toktype
 	SH_LPARAM_EXP,
 	SH_RPARAM_EXP,
 	SH_LARITH_EXP,
-	SH_RARITH_EXP
+	SH_RARITH_EXP,
+	SH_GROUP_TOKEN,
+	SH_BRACES
 }				t_toktype;
-
-typedef union		u_toksub
-{
-	char			*str;
-	struct s_token  *toklst;
-}					t_toksub;
 
 typedef struct      s_token
 {
-	t_toktype		type;
-	t_toksub		sub;
+	int				type;
+	struct s_token	*sub;
+	char			*content;
 	struct s_token  *next;
 }                   t_token;
 
