@@ -183,12 +183,17 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//simple_cmd:
 	//				*io_redirect-*assignements ?cmd name *io_redirect-*argvs
 	//find_stock_redirections/assignements
+		//push potential redirect_lst
+		//push potential assignements
 	//while (token_begin == redirect | assign)
 	//	token_begin = token_begin->next;
 	//handle no_cmd_name (<auteur)
 	if (is_built_in(token_begin->content))
-		return (p->last_cmd_result = exec_built_in(p, token_begin, token_end));
-	p->last_cmd_result = exec_prgm(p, token_begin, token_end);
+		p->last_cmd_result = exec_built_in(p, token_begin, token_end);
+	else
+		p->last_cmd_result = exec_prgm(p, token_begin, token_end);
+	//pull stored assignements
+	//pull stored redirect_lst
 	return (p->last_cmd_result);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
 }
@@ -246,16 +251,16 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 	return(exec_script(p, token_compound->sub, 0));
 }
 
-int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
+int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end) //generate redirect_lst to pass to exec_compound or exec_simple
 {
 	//if (token_begin->type == SH_FUNCTOKEN)
 	//	store_func;
 	//else
-	if (token_begin->type == SH_WHILE || token_begin->type == SH_UNTIL || token_begin->type == SH_IF || token_begin->type == SH_CASE || token_begin->type == SH_FOR || token_begin->type == SH_BRACES) //<-- next token who have sens (no redirections...)
+	if (token_begin->type == SH_WHILE || token_begin->type == SH_UNTIL || token_begin->type == SH_IF || token_begin->type == SH_CASE || token_begin->type == SH_FOR || token_begin->type == SH_BRACES)
 	{
-		//pay attention if there is bullshit between token_begin n token_end. Is it Syntax Error?
-	//	store potential redirectlst
+		//push potential redirect_lst
 		exec_compound_command(p, token_begin, token_begin->type);
+		//pull stored redirect_lst
 	}
 	else
 		p->last_cmd_result = exec_simple_command(p, token_begin, token_end);
