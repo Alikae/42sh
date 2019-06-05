@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/05 20:35:35 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/06/05 20:44:53 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ H_FILES_command_edition = \
 	sh_command_edition.h
 
 H_FILES_functions = \
+	sh_functions.c
 
 H_FILES_env = \
 	sh_env.h
