@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/05 19:08:36 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/06/05 20:36:08 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,9 @@ C_FILES_tokenizer = \
 	sh_is_res_word.c \
 	sh_isquoted.c \
 	sh_tokenizer.c
+
+
+C_FILES_functions = \
 
 C_FILES_env = \
 	sh_init_env.c \

@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/05 20:24:59 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/06/05 20:36:24 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SUB_DIRS := \
 	signals \
 	tools \
 	entrypoint \
+	functions \
 	command_line \
 	command_edition \
 	env \
