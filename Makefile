@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/05 20:23:08 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/06/05 20:24:59 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ LIB_FT_LNK = -L ./libft -l ft
 
 
 ###  CC && FLAGS ###
-CC = gcc
+CC = clang
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(LIB_FT_INC_DIR)) \
 		 -g3 #-Wall -Werror -Wextra
