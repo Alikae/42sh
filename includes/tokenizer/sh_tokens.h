@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/06/05 16:39:20 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/05 19:08:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void		print_all_tokens(t_token *t, int lvl);
 t_toktype	sh_match_tok_op(const char *tok_content, size_t i);
 t_toktype	sh_get_res(const char *tok_content);
 t_toktype	sh_is_res_word(const char *tok_content, size_t i);
+t_toktype	sh_get_tok_type(const char *in, size_t i);
 t_token		*sh_get_tok_sub(const char *tok_content);
 t_token		*sh_tokenizer(const char *input);
 t_token		*sh_init_tok(t_toktype type, const char *content);

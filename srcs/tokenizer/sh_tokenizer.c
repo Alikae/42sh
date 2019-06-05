@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:27:02 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/06/05 17:28:09 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/05 19:24:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*sh_tokenizer(const char *input)
 	tok = NULL;
 	if (!(tmp = ft_strndup(input, ft_strclen(input, '\n'))))
 		return (NULL);
-	if ((!input || !(tok = sh_init_tok(SH_IF, tmp))))
+	if ((!input || !(tok = sh_init_tok(sh_get_tok_type(tmp, 0), tmp))))
 	{
 		free(tmp);
 		return (NULL);

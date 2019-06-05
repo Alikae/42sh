@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/05 17:18:32 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/06/05 20:15:59 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,10 +93,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 .ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
 	$(CC) $(LFLAGS) $(OBJ) -o $(NAME)
-
-.ONESHELL:
-test: all
-	./$(NAME)
 
 ### Clean ###
 .ONESHELL:
