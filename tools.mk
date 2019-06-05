@@ -6,13 +6,13 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 18:17:05 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/06/05 17:18:56 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ##################################### Tools ####################################
 
-AUTHORS ?= Ede-Ram Tmeyer Thdelmas
+AUTHORS ?= Ede-Ram Tcillard Tmeyer Thdelmas
 
 ### Colors ###
 WHITE = \033[0m
@@ -35,6 +35,8 @@ ADD_TO_GIT = $(SRC_DIR) $(INC_DIR) $(LIB_FT_DIR) $(GITLOG_FILE) \
 
 .PHONY: hey link compil savegit gitsave norm
 
+run: $(NAME)
+	./$(NAME)
 
 ### git-autosave ###
 savegit: gitsave

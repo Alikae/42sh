@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
+#    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/04/16 17:21:54 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/13 01:29:16 by thdelmas         ###   ########.fr        #
+#    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
+#    Updated: 2019/06/05 17:18:32 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := 21sh
-PROJECT := 21SH
+NAME := 42sh
+PROJECT := 42SH
 RM = /bin/rm
 
 ### Directories ###
