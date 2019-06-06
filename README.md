@@ -1,4 +1,4 @@
-# 21sh
+# 42sh
 ___
 
 - sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  [script [arg...]]
@@ -147,5 +147,5 @@ ___
 - [ ] Pipe - Broken
 - [ ] /dev/null
 ---
-Made by: Ede-Ram Maboye Tmeyer Thdelmas
+Made by: Ede-Ram Tcillard Tmeyer Thdelmas
 ---

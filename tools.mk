@@ -6,13 +6,13 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 18:17:05 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/06/05 20:20:13 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ##################################### Tools ####################################
 
-AUTHORS ?= Ede-Ram Tmeyer Thdelmas
+AUTHORS ?= Ede-Ram Tcillard Tmeyer Thdelmas
 
 ### Colors ###
 WHITE = \033[0m
@@ -35,6 +35,8 @@ ADD_TO_GIT = $(SRC_DIR) $(INC_DIR) $(LIB_FT_DIR) $(GITLOG_FILE) \
 
 .PHONY: hey link compil savegit gitsave norm
 
+run: all run_msg
+	./$(NAME)
 
 ### git-autosave ###
 savegit: gitsave
@@ -76,6 +78,9 @@ link_msg:
 
 mkdir_msg:
 	@printf "\n$(BRED)\t MKDIR$(CLEAR)\n"
+
+run_msg:
+	@printf "\n$(GREEN)\t RUN $(PROJECT)$(CLEAR)\n"
 
 fclean_msg: hey_msg
 	@printf "\n$(BRED)\t FCLEAN$(CLEAR)\n"

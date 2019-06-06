@@ -6,22 +6,29 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:47:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 17:22:25 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/03 22:42:03 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "sh_tokens.h"
 #include "sh_tokenizer.h"
 #include "libft.h"
 
-void		sh_print_alltok(t_token *tok)
+void    print_all_tokens(t_token *t, int lvl)
 {
-	static int lvl = 0;
-	if (!tok)
-		return ;
-	ft_putstr("\nLEVEL ");
-	ft_putnbr(lvl);
-	ft_putstr(": ");
-	sh_print_onetok(tok);
-	sh_print_alltok(tok->next);
+	int lvcpy;
+	while (t)
+	{
+		// printf("-%*s", lvl, (lvl) ? " " : "");
+		lvcpy = lvl;
+		while (lvcpy--)
+			printf("%c      ", (lvcpy == 0) ? '|' : ' ');
+		printf("%-10s (%i)\n", t->content, t->type);
+		if (t->sub)
+		{
+			print_all_tokens(t->sub, lvl + 1);
+		}
+		t = t->next;
+	}
 }
