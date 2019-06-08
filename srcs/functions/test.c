@@ -96,10 +96,13 @@ int	main()
 	func_lib = NULL;
 	token = gen_tokens2();
 	store_func(&func_lib, token);
+	printf("---one tkoen---\n");
 	print_func(func_lib);
 	store_func(&func_lib, token);
+	printf("---replace token---\n");
 	print_func(func_lib);
 	token->content = ft_strdup("et un nouveau");
 	store_func(&func_lib, token);
+	printf("---add a toker---\n");
 	print_func(func_lib);
 }
