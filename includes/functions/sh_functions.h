@@ -10,4 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef SH_FUNCTIONS_H
+# define SH_FUNCTIONS_H
 
+typedef struct	s_func
+{
+	char		*name;
+	t_token		*token;
+	struct s_func	*next;
+}		t_func;
+
+#endif
