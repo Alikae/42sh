@@ -6,13 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:25:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/18 18:40:35 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/06/13 07:57:53 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH21_COMMAND_LINE_H
 # define SH21_COMMAND_LINE_H
 
+void	sh_prompt(void);
 char	**sh_arguments(void);
 void	sh_error_parse(int ret);
 int		sh_check_str(char *str);
