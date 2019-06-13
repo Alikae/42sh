@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 17:22:07 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/10 08:58:43 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/05/20 16:40:07 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static t_toktype sh_is_tok_ctrl(const char *s)
 		return (SH_EOS);
 }
 
-t_toktype sh_match_tok_op(const char *s1, int i)
+t_toktype sh_match_tok_op(const char *s1, size_t i)
 {
 	if (i > 2 && sh_is_tok_redir(s1 + i - 2))
 		return (sh_is_tok_redir(s1 + i - 2));

@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/13 07:56:43 by tmeyer           ###   ########.fr        #
+#    Updated: 2019/06/13 07:59:48 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,8 +46,11 @@ C_FILES_tokenizer = \
 	sh_print_onetok.c \
 	sh_print_alltok.c \
 	sh_init_tok.c \
+	sh_get_res.c \
+	sh_get_tok_type.c \
 	sh_match_tok_op.c \
-	sh_set_toktype.c \
+	sh_is_res_word.c \
+	sh_isquoted.c \
 	sh_tokenizer.c
 
 C_FILES_env = \
@@ -63,7 +66,6 @@ C_FILES_env = \
 	sh_fill_env.c \
 
 C_FILES_tools = \
-
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

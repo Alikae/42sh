@@ -6,16 +6,19 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 15:13:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 20:45:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/06/05 19:08:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_TOKENS
 # define SH_TOKENS
 
+# include <unistd.h>
+
 typedef enum	e_toktype
 {
-	SH_EOS = 0,
+	SH_NULL = 0,
+	SH_EOS,
 	SH_EOF,
 	SH_WORD,
 	SH_ASSIGN_WORD,
@@ -61,20 +64,28 @@ typedef enum	e_toktype
 	SH_LPARAM_EXP,
 	SH_RPARAM_EXP,
 	SH_LARITH_EXP,
-	SH_RARITH_EXP
+	SH_RARITH_EXP,
+	SH_GROUP_TOKEN,
+	SH_BRACES,
+	SH_BLANK
 }				t_toktype;
-
-typedef union		u_toksub
-{
-	char			*str;
-	struct s_token  *toklst;
-}					t_toksub;
 
 typedef struct      s_token
 {
 	t_toktype		type;
-	t_toksub		sub;
+	char			*content;
+	struct s_token	*sub;
 	struct s_token  *next;
 }                   t_token;
+
+void		print_all_tokens(t_token *t, int lvl);
+t_toktype	sh_match_tok_op(const char *tok_content, size_t i);
+t_toktype	sh_get_res(const char *tok_content);
+t_toktype	sh_is_res_word(const char *tok_content, size_t i);
+t_toktype	sh_get_tok_type(const char *in, size_t i);
+t_token		*sh_get_tok_sub(const char *tok_content);
+t_token		*sh_tokenizer(const char *input);
+t_token		*sh_init_tok(t_toktype type, const char *content);
+
 
 #endif

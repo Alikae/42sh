@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_toktype.c                                   :+:      :+:    :+:   */
+/*   sh_is_res_word.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/11 19:26:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/11 20:47:58 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/20 14:54:57 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/20 16:49:54 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_tokenizer.h"
+#include "sh_tokens.h"
+#include "libft.h"
 
-size_t		sh_set_toktype(const char *in, t_toktype *type)
+t_toktype	sh_is_res_word(const char *str, size_t index)
 {
-	if ((!in || !*in) && (*type = SH_EOS) == SH_EOS)
-		return (0);
-return (SH_EOS);	
+	char *word;
+	t_toktype type;
+
+	type = SH_EOS;
+	word = ft_strndup(str, index + 1);
+	word = ft_strjoin_free(word, "*", word);
+	type = sh_get_res(word);
+	ft_strdel(&word);
+	return (type);
 }
