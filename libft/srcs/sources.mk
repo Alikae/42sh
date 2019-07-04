@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/13 22:25:00 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/04 18:02:05 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,7 +99,8 @@ C_FILES_str = \
 	ft_strtrim.c
 
 C_FILES_tab_str = \
-	ft_tab_strdel.c
+	ft_tab_strdel.c \
+	ft_free_tabstr.c
 
 C_FILES_print = \
 	ft_putchar.c \

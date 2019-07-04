@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_free_all_ln.c                                   :+:      :+:    :+:   */
+/*   sh_putparams.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 16:52:26 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:18:26 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/04 17:09:34 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/04 17:17:03 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_command_line.h"
+#include "sh_parameters.h"
+#include "libft.h"
 
-void	sh_free_all_ln(t_ln **ln)
+void	sh_putparams(t_param *param)
 {
-	if (ln)
-		if (*ln)
-		{
-			while ((*ln)->prev)
-				*ln = (*ln)->prev;
-			sh_free_one_ln(ln);
-		}
+	while (param)
+	{
+		ft_putstr(param->key);
+		ft_putchar('=');
+		ft_putstr(param->value);
+		param = param->next;
+	}
 }

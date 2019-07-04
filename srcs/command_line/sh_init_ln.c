@@ -6,12 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 15:15:41 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/06 17:23:29 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/04 17:19:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "21sh.h"
+#include "sh.h"
 #include "libft.h"
 
 t_ln	*sh_init_ln(const char *line, t_ln *parent)

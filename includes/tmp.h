@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_free_all_ln.c                                   :+:      :+:    :+:   */
+/*   tmp.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 16:52:26 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:18:26 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/04 17:14:11 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/04 17:14:56 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_command_line.h"
+#ifndef TMP
+# define TMP
 
-void	sh_free_all_ln(t_ln **ln)
-{
-	if (ln)
-		if (*ln)
-		{
-			while ((*ln)->prev)
-				*ln = (*ln)->prev;
-			sh_free_one_ln(ln);
-		}
-}
+void	sh_exec_line(const char *tmp);
+
+#endif

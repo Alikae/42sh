@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_reader.c                                           :+:      :+:    :+:   */
+/*   sh_reader.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 09:31:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/14 15:51:35 by tmeyer           ###   ########.fr       */
+/*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
+/*   Updated: 2019/07/04 17:36:34 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "libft.h"
-#include "21sh.h"
+#include "sh.h"
 #include "sh_command_edition.h"
 #include "sh_command_line.h"
+#include "history.h"
 #include <term.h>
 #include <curses.h>
 #include <stdlib.h>
@@ -59,47 +59,48 @@ void sh_tty_cbreak(int code)
 	res = NULL;
 }
 
-static char *getcommand(char **command)
+static char *getcommand(char **command, t_hist *hist)
 {
 	int		i;
 	char	buf[BUFFER];
 
 	i = -1;
 	ft_bzero(buf, BUFFER);
+	hist->current = ft_strdup("");
 	while (*command && read(0, buf, BUFFER) > 0)
 	{
-//		int z = 0;
-//		while (buf[z])
-//			fprintf(stderr, "-%c-\n", buf[z++]);
 		if (HOME || END || ARROW_LEFT || ARROW_RIGHT || BACKSPACE)
-			i = sh_cursor_motion(command, buf, i);
+			i = sh_cursor_motion(command, buf, i, hist);
 		else if (BACKWARD_WORD || FORWARD_WORD)
 			i = sh_cursor_motion_word(command, buf, i);
 		else if (LINE_UP || LINE_DOWN)
 			i = sh_cursor_motion_line(command, buf, i);
+		else if (ARROW_UP || ARROW_DOWN)
+			i = cursor_history(command, buf, i, hist);
 //		else if (COPY_PASTE)
 //			i = sh_copy_option(command, buf, i);
 		else if (TAB)
 			;
 		else if (ENTER)
 			break ;
-		else if (buf[0] != '\033')
-			i = sh_echo_input(command, buf, i);
+		else if (!ft_strchr(buf, '\033'))
+			i = sh_echo_input(command, buf, i, hist);
 		ft_bzero(buf, BUFFER);
 	}
-	sh_cursor_motion(command, "\033[F", i);
+	sh_cursor_motion(command, "\033[F", i, hist);
 	return (*command);
 }
 
-int		sh_reader(char **command)
+int		sh_reader(char **command, t_hist *hist)
 {
+	hist->index = -1;
 	if (tgetent(NULL, getenv("TERM")) == ERR)
 		exit(0);
 	if (tcgetattr(0, &orig_termios))
 		exit(0);
 	*command = (char*)ft_memalloc(1);
 	sh_tty_cbreak(1);
-	getcommand(command);
+	getcommand(command, hist);
 	write(0, "\n", 1);
 	sh_tty_cbreak(2);
 	return (1);

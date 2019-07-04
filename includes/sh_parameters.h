@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/01 14:34:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:52:24 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/04 17:12:15 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ typedef struct		s_param
 
 t_param	*sh_create_param(char *key, char *value);
 t_param	*sh_env_params(char **env);
+void	sh_putparams(t_param *params);
 
 #endif

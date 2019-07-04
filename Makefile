@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/04 17:01:21 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/04 17:46:45 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,12 @@ OBJ_DIR := ./.obj
 ### SUB FILES ###
 SUB_DIRS := \
 	command_line \
+	command_edition \
 	entrypoint \
 	exitpoint \
+	history \
 	parameters \
+	tokenizer \
 
 
 ### INCLUDE SRC MAKEFILE ###

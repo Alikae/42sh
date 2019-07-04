@@ -6,10 +6,11 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:34:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:36:40 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/04 17:17:20 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "sh_tokens.h"
 #include "libft.h"
 
 void	sh_exec_line(const char *input)

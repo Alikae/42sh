@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_free_all_ln.c                                   :+:      :+:    :+:   */
+/*   sh_prompt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 16:52:26 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:18:26 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/02/25 07:51:30 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/13 15:48:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_command_line.h"
+#include "libft.h"
+#include <stdlib.h>
+#include <limits.h>
 
-void	sh_free_all_ln(t_ln **ln)
+void	sh_prompt(void)
 {
-	if (ln)
-		if (*ln)
-		{
-			while ((*ln)->prev)
-				*ln = (*ln)->prev;
-			sh_free_one_ln(ln);
-		}
+	char *prompt;
+	char *tmp;
+
+	if (!(tmp = ft_strnew(PATH_MAX + 1)))
+		return ;
+	tmp = getcwd(tmp, PATH_MAX);
+	prompt = ft_strjoin("\033[0;31m", tmp);
+	free(tmp);
+	tmp = ft_strjoin(prompt, "\033[0m");
+	free(prompt);
+	prompt = ft_strjoin(tmp, "\033[0;33m c> \033[0m");
+	free(tmp);
+	ft_putstr(prompt);
+	free(prompt);
 }

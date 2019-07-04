@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/20 16:45:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/04 18:02:45 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int				ft_memcmp(const void *s1, const void *s2, size_t n);
 void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);
 
+char			**ft_free_tabstr(char **tabstr);
 void			ft_tab_strdel(char ***as);
 char			*ft_itoa(int n);
 int				ft_atoi(const char *str);

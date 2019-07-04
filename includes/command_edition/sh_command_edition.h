@@ -6,22 +6,24 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/14 14:12:33 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/07/04 17:50:06 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH21_CMD_EDITION_H
 # define SH21_CMD_EDITION_H
 
-# include "21sh.h"
 # include <termios.h>
 # include <term.h>
 # include <curses.h>
 # include <termcap.h>
 # include <sys/ioctl.h>
+# include "history.h"
 
 # define ARROW_LEFT		(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'D')
 # define ARROW_RIGHT 	(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'C')
+# define ARROW_UP	 	(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'A')
+# define ARROW_DOWN 	(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'B')
 # define HOME 			(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'H')
 # define END 			(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'F')
 # define BACKSPACE 		(buf[0] == 127 || buf[0] == 8)
@@ -44,7 +46,7 @@
 # define ALT_DOWN		(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'B')
 # define COPY			(buf[0] == '\033' && buf[1] == '<')
 # define PASTE			(buf[0] == '\033' && buf[1] == '<')
-# define COPY_PASE		(ALT_LEFT || ALT_RIGHT || ALT_UP || ALT_DOWN \
+# define COPY_PASTE		(ALT_LEFT || ALT_RIGHT || ALT_UP || ALT_DOWN \
 	   						|| COPY || PASTE)
 
 
@@ -58,9 +60,9 @@ typedef struct	s_pos
 }				t_pos;
 
 void			sh_cursor_position(t_pos *cursor);
-int				sh_reader(char **command);
+int				sh_reader(char **command, t_hist *hist);
 int				sh_cursor_motion_word(char **command, char *buf, int i);
-int				sh_cursor_motion(char **command, char *buf, int i);
+int				sh_cursor_motion(char **command, char *buf, int i, t_hist *hist);
 int				sh_cursor_motion_line(char **command, char *buf, int i);
 int				sh_copy_option(char **command, char *buf, int i);
 int				sh_cursor_backward(int i, int pointer,
@@ -68,7 +70,7 @@ int				sh_cursor_backward(int i, int pointer,
 int				sh_cursor_forward(int i, int pointer,
 									t_pos cursor, t_pos term);
 int				sh_outc(int c);
-int				sh_echo_input(char **command, char *buf, int i);
+int				sh_echo_input(char **command, char *buf, int i, t_hist *hist);
 void			sh_tty_cbreak(int code);
 
 #endif

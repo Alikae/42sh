@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_free_all_ln.c                                   :+:      :+:    :+:   */
+/*   sh_init_ln.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 16:52:26 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:18:26 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/04/22 15:15:41 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/06 17:23:29 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_command_line.h"
+#include <stdlib.h>
+#include "21sh.h"
+#include "libft.h"
 
-void	sh_free_all_ln(t_ln **ln)
+t_ln	*sh_init_ln(const char *line, t_ln *parent)
 {
-	if (ln)
-		if (*ln)
-		{
-			while ((*ln)->prev)
-				*ln = (*ln)->prev;
-			sh_free_one_ln(ln);
-		}
+	t_ln *ln;
+
+	if (!(ln = (t_ln *)malloc(sizeof(t_ln))))
+		return (NULL);
+	ln->line = ft_strdup(line);
+	ln->next = NULL;
+	ln->prev = parent;
+	if (ln->prev)
+		ln->prev->next = ln;
+	return (ln);
 }

@@ -6,12 +6,12 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 12:41:45 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/13 16:43:20 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/07/04 17:43:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "21sh.h"
+#include "sh.h"
 #include "sh_command_edition.h"
 
 static int	sh_cursor_upper(t_pos cursor, t_pos term, int pointer)

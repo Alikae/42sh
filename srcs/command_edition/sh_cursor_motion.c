@@ -6,10 +6,10 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/13 15:29:11 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/07/02 11:30:43 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include "history.h"
 #include "sh_command_edition.h"
 #include "sh_command_line.h"
 #include "libft.h"
@@ -80,7 +80,7 @@ static int	sh_backspace(char **command, int i, t_pos cursor, t_pos term)
 	return (i);
 }
 
-int			sh_cursor_motion(char **command, char *buf, int i)
+int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 {
 	t_pos	cursor;
 	t_pos	term;
@@ -97,11 +97,15 @@ int			sh_cursor_motion(char **command, char *buf, int i)
 	else if (ARROW_RIGHT && command[0][i + 1] != 0)
 		i = sh_cursor_forward(1, i, cursor, term);
 	else if (BACKSPACE)
+	{
 		i = sh_backspace(command, i, cursor, term);
+		ft_memdel((void**)&(hist->current));
+		hist->current = ft_strdup(*command);
+	}
 	return (i);
 }
 
-int			sh_echo_input(char **command, char *buf, int i)
+int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
 {
 	t_pos	cursor;
 	t_pos	head;
@@ -124,5 +128,7 @@ int			sh_echo_input(char **command, char *buf, int i)
 	else
 		tputs(tgetstr("rc", NULL), 0, sh_outc);
 	i = sh_cursor_forward(ft_strlen(buf), i, cursor, term);
+	ft_memdel((void**)&(hist->current));
+	hist->current = ft_strdup(*command);
 	return (i);
 }

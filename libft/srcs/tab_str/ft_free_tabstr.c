@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_free_all_ln.c                                   :+:      :+:    :+:   */
+/*   ft_free_tabstr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 16:52:26 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:18:26 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/03/07 14:31:50 by tmeyer            #+#    #+#             */
+/*   Updated: 2019/07/04 18:01:27 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_command_line.h"
+#include "libft.h"
+#include <stdlib.h>
 
-void	sh_free_all_ln(t_ln **ln)
+char	**ft_free_tabstr(char **tab)
 {
-	if (ln)
-		if (*ln)
-		{
-			while ((*ln)->prev)
-				*ln = (*ln)->prev;
-			sh_free_one_ln(ln);
-		}
+	int i;
+
+	i = 0;
+	while (tab && tab[i])
+	{
+		free(tab[i]);
+		tab[i++] = NULL;
+	}
+	free(tab);
+	tab = NULL;
+	return (tab);
 }
