@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:34:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:17:20 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/04 18:13:20 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	sh_exec_line(const char *input)
 {
 	t_token *tok;
 
-	ft_putendl("Minishell: startup.c\n---");
+	ft_putendl("Shell: exec_line.c\n---");
 	ft_putstr("INPUT: ");
 	if (input)
 	{
