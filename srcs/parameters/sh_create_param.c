@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_create_param.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:56:41 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/01 14:53:44 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/04 17:03:04 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
+#include "sh_parameters.h"
+#include "libft.h"
 #include <stdlib.h>
 
-t_sh	*sh(void)
+t_param		*sh_create_param(char *key, char *value)
 {
-	static t_sh *sh = NULL;
-	if (!sh)
-		sh = (t_sh*)malloc(sizeof(t_sh));
-	return (sh);
+	t_param *new;
+
+	if (!(new = (t_param *)malloc(sizeof(t_param))))
+		return(NULL);
+	new->key = ft_strdup(key);
+	new->value = ft_strdup(value);
+	new->next = NULL;
+	return (new);
 }

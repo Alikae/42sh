@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_exitpoint.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:56:41 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/04 16:54:23 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/04 16:55:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include <stdlib.h>
+#ifndef SH_EXITPOINT_H
+# define SH_EXITPOINT_H
 
-t_sh	*sh(void)
-{
-	static t_sh *sh = NULL;
-	if (!sh)
-		sh = (t_sh*)malloc(sizeof(t_sh));
-	return (sh);
-}
+void	sh_exitpoint(void);
+
+#endif

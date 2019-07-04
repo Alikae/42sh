@@ -6,13 +6,13 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 22:28:26 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/04 16:53:37 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### MAIN FILES ###
 H_FILES = \
-	21sh.h
+	sh.h
 
 ### SUB FILES ###
 H_FILES_entrypoint = \

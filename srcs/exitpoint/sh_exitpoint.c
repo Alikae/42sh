@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_exitpoint.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:56:41 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/02 20:31:39 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include <stdlib.h>
+#include "libft.h"
 
-t_sh	*sh(void)
+void	sh_exitpoint(void)
 {
-	static t_sh *sh = NULL;
-	if (!sh)
-		sh = (t_sh*)malloc(sizeof(t_sh));
-	return (sh);
+	ft_putendl("Shell: exitpoint.c\n---");
 }

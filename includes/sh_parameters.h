@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_params.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:56:41 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/01 14:34:10 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/04 16:52:24 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include <stdlib.h>
+#ifndef SH_PARAMETERS
+# define SH_PARAMETERS
 
-t_sh	*sh(void)
+typedef struct		s_param
 {
-	static t_sh *sh = NULL;
-	if (!sh)
-		sh = (t_sh*)malloc(sizeof(t_sh));
-	return (sh);
-}
+	char			*key;
+	char			*value;
+	struct s_param	*next;
+}					t_param;
+
+t_param	*sh_create_param(char *key, char *value);
+t_param	*sh_env_params(char **env);
+
+#endif

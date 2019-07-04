@@ -1,22 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_init_params.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:56:41 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/01 14:32:43 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/02 20:37:57 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include <stdlib.h>
-
-t_sh	*sh(void)
+void	sh_init_params(void)
 {
-	static t_sh *sh = NULL;
-	if (!sh)
-		sh = (t_sh*)malloc(sizeof(t_sh));
-	return (sh);
+		
 }

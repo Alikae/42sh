@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   21sh.h                                             :+:      :+:    :+:   */
+/*   sh.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/24 15:48:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/06/03 22:29:13 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/04 16:50:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 # define SH21_H
 
 # include "sh_line.h"
-# include "sh_env.h"
+# include "sh_parameters.h"
 
 typedef struct		s_sh
 {
-	t_env			*env;
-	t_ln			*ln_history;
-	int				last_cmd_result;
+	int				ac;
+	char			**av;
+	char			**ev;
 	int				type; //for recognize tokens
+	int				last_cmd_result;
+	struct s_param	*params;
+	t_ln			*ln_history;
 }					t_sh;
 
 t_sh	*sh(void);

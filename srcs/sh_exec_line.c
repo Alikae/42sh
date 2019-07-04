@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_exec_line.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 16:56:41 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/04 16:34:58 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/04 16:36:40 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include <stdlib.h>
+#include "libft.h"
 
-t_sh	*sh(void)
+void	sh_exec_line(const char *input)
 {
-	static t_sh *sh = NULL;
-	if (!sh)
-		sh = (t_sh*)malloc(sizeof(t_sh));
-	return (sh);
+	t_token *tok;
+
+	ft_putendl("Minishell: startup.c\n---");
+	ft_putstr("INPUT: ");
+	if (input)
+	{
+		ft_putendl(input);
+		tok = sh_tokenizer(input);
+		if (tok)
+			print_all_tokens(tok, 0);
+	}
+	return ;
 }

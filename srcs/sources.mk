@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/13 07:59:48 by tmeyer           ###   ########.fr        #
+#    Updated: 2019/07/04 17:02:42 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,22 @@ C_FILES = \
 	main.c \
 	sh.c
 
+C_FILES_entrypoint = \
+	sh_entrypoint.c \
+
+
+C_FILES_exitpoint = \
+	sh_exitpoint.c \
+
+
+C_FILES_parameters = \
+	sh_env_params.c \
+	sh_create_param.c \
+
+
 C_FILES_command_edition = \
-	sh_command_functions.c \
+	
+	#sh_command_functions.c \
 	sh_reader.c \
 	sh_cursor_motion.c \
 	sh_cursor_motion2.c \
@@ -24,7 +38,8 @@ C_FILES_command_edition = \
 	sh_cursor_motion_line.c
 
 C_FILES_command_line = \
-	sh_prompt.c \
+	
+	#sh_prompt.c \
 	sh_free_all_ln.c \
 	sh_free_one_ln.c \
 	sh_command_line.c \
@@ -33,17 +48,18 @@ C_FILES_command_line = \
 	sh_command_parse2.c \
 	sh_strsplit_m.c
 
-C_FILES_entrypoint = \
-	sh_entrypoint.c \
-	sh_free.c \
+	
+	#sh_free.c \
 	sh_init.c \
 	sh_loop.c
 
 C_FILES_signals = \
-	signals_handler.c
+	
+	#signals_handler.c
 
 C_FILES_tokenizer = \
-	sh_print_onetok.c \
+	
+	#sh_print_onetok.c \
 	sh_print_alltok.c \
 	sh_init_tok.c \
 	sh_get_res.c \
@@ -54,7 +70,8 @@ C_FILES_tokenizer = \
 	sh_tokenizer.c
 
 C_FILES_env = \
-	sh_init_env.c \
+	
+	#sh_init_env.c \
 	sh_init_var.c \
 	sh_get_env.c \
 	sh_set_env.c \

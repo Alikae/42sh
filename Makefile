@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/18 16:45:48 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/04 17:01:21 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,13 +21,11 @@ OBJ_DIR := ./.obj
 
 ### SUB FILES ###
 SUB_DIRS := \
-	signals \
-	tools \
-	entrypoint \
 	command_line \
-	command_edition \
-	env \
-	tokenizer
+	entrypoint \
+	exitpoint \
+	parameters \
+
 
 ### INCLUDE SRC MAKEFILE ###
 include $(SRC_DIR)/sources.mk
