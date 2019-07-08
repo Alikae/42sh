@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sh_basename.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/24 15:49:05 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/08 19:43:43 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/06/19 17:01:47 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/07 17:40:55 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_entrypoint.h"
-#include "sh_exitpoint.h"
-#include "libft.h"
+#include "libshutil.h"
 
-int		main(int ac, char **av, char **ev)
+int		sh_basename(int ac, char **av, t_env **ev)
 {
-	ft_putendl("Shell: main.c\n---");
-	sh_entrypoint(ac, av, ev);
-	sh_loop();
-	sh_exitpoint();
 	return (0);
 }

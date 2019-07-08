@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sh_set.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/24 15:49:05 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/08 19:43:43 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/07 17:42:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_entrypoint.h"
-#include "sh_exitpoint.h"
 #include "libft.h"
+#include "libshutil.h"
 
-int		main(int ac, char **av, char **ev)
+int		sh_set(int ac, char **av, t_env **env)
 {
-	ft_putendl("Shell: main.c\n---");
-	sh_entrypoint(ac, av, ev);
-	sh_loop();
-	sh_exitpoint();
+	t_env *params;
+
+	ft_putendl("Shell: libshutil: sh_set.c\n---");
+	if (!env || !*env)
+		return (1);
+	params = *env;
+	if (ac <= 1)
+		while (params)
+		{
+			ft_putstr(params->key);
+			ft_putchar('=');
+			if (params->value)
+				ft_putstr(params->value);
+			ft_putchar('\n');
+			params = params->next;
+		}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:45:03 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/08 19:51:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int		sh_loop(void)
 	char	**ln_tab;
 	t_hist	*hist;
 
+	ft_putendl("Shell: sh_loop.c\n---");
 	hist = init_history();
 	while (42)
 	{

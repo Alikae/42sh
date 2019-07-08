@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   libshutil.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/24 15:49:05 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/08 19:43:43 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/08 20:43:52 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_entrypoint.h"
-#include "sh_exitpoint.h"
-#include "libft.h"
+#ifndef LIBSHUTIL_H
+# define LIBSHUTIL_H
 
-int		main(int ac, char **av, char **ev)
-{
-	ft_putendl("Shell: main.c\n---");
-	sh_entrypoint(ac, av, ev);
-	sh_loop();
-	sh_exitpoint();
-	return (0);
-}
+#include "../../includes/env/sh_env.h"
+
+int		sh_false(int ac, char **av, t_env **);
+int		sh_set(int ac, char **av, t_env **);
+int		sh_true(int ac, char **av, t_env **);
+
+#endif
