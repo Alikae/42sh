@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 17:23:30 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/07 17:38:23 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/08 20:53:17 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ $(OBJ_DIR): mkdir_msg
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 	@printf "$(BBLUE)$(@F): $(CLEAR)"
-	$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
 	@printf "$(BBLUE)Done !$(CLEAR)\n"
 
 ### Link ###
@@ -91,10 +91,12 @@ test: re
 .ONESHELL:
 clean: clean_msg
 	$(RM) -rf $(OBJ_DIR)
+	@make -C $(FT_DIR) clean
 
 .ONESHELL:
 fclean: clean fclean_msg
 	$(RM) -rf $(NAME)
+	@make -C $(FT_DIR) fclean
 
 re: fclean all
 
