@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/08 20:43:52 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/10 04:35:29 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "../../includes/env/sh_env.h"
 
+int		sh_basename(int ac, char **av, t_env **);
 int		sh_false(int ac, char **av, t_env **);
 int		sh_set(int ac, char **av, t_env **);
 int		sh_true(int ac, char **av, t_env **);

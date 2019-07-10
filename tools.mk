@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/10 04:14:42 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/10 04:40:07 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,10 +67,11 @@ hey_msg:
 	@printf "$(BBBLUE)\t$(PROJECT)$(CLEAR)\n"
 
 bye_msg: | hey_msg
-	@printf "$(BRED)Made with love by: $(CLEAR)$(WHITE)$(AUTHORS)$(CLEAR)\n"
+	@printf "$(BRED)By: $(CLEAR)$(WHITE)$(AUTHORS)$(CLEAR)\n"
 
 run_msg: | hey_msg
 	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)RUN$(CLEAR)\n"
+	@printf "$(BRED)By: $(CLEAR)$(WHITE)$(AUTHORS)$(CLEAR)\n"
 
 lib_msg: | hey_msg
 	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)LIBS$(CLEAR)\n"
