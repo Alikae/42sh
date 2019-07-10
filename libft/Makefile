@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/12 15:20:07 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/10 02:48:41 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/10 03:48:34 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 ### Link ###
 .ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
-	@ar rcs $(NAME) $(OBJ)
+	@$(AR) rcs $(NAME) $(OBJ)
 	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
 
 ### Clean ###

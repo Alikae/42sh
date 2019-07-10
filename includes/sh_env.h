@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_putparams.c                                     :+:      :+:    :+:   */
+/*   sh_env.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/04 17:09:34 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/10 04:30:15 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/10 04:24:54 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/10 04:29:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_env.h"
-#include "libft.h"
+#ifndef SH_ENV_H
+# define SH_ENV_H
 
-void	sh_putparams(t_env *param)
+typedef struct		s_env
 {
-	while (param)
-	{
-		ft_putstr(param->key);
-		ft_putchar('=');
-		ft_putstr(param->value);
-		param = param->next;
-	}
-}
+	char 			*key;
+	char 			*value;
+	int				exported;
+	int				readonly;
+	struct s_env	*next;
+}					t_env;
+
+t_env	*sh_create_param(char *key, char *value);
+t_env	*sh_env_params(char **env);
+void	sh_putparams(t_env *params);
+
+#endif

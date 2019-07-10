@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_putparams.c                                     :+:      :+:    :+:   */
+/*   sh_true.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/04 17:09:34 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/10 04:30:15 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/10 04:09:36 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/10 04:11:38 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_env.h"
-#include "libft.h"
+#include "libshutil.h"
 
-void	sh_putparams(t_env *param)
+int		sh_true(int ac, char **av, t_env **ev)
 {
-	while (param)
-	{
-		ft_putstr(param->key);
-		ft_putchar('=');
-		ft_putstr(param->value);
-		param = param->next;
-	}
+	return (1);
 }

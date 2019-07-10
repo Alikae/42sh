@@ -6,12 +6,14 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 17:23:30 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/10 02:52:00 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/10 03:40:47 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := libshutil.a
 PROJECT := LIBSHUtil
+AUTHORS := Ede-ram Tcillard Thdelmas Tmeyer
+
 RM = /bin/rm
 
 ### Directories ###
@@ -74,12 +76,12 @@ $(OBJ_DIR): | mkdir_msg
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 	@printf "$(BBLUE)$(@F): $(CLEAR)"
 	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)Done !$(CLEAR)\n"
+	@printf "$(BBLUE)Done !$(CLEAR) "
 
 ### Link ###
 .ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
-	@ar rcs $(NAME) $(OBJ)
+	@$(AR) rcs $(NAME) $(OBJ)
 	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
 
 ### Clean ###

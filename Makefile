@@ -6,12 +6,14 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/10 02:58:06 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/10 04:04:58 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := 42sh
 PROJECT := 42SH
+AUTHORS := Ede-ram Tcillard Thdelmas Tmeyer
+
 RM = /bin/rm
 
 ### Directories ###
@@ -80,13 +82,13 @@ LFLAGS = -ltermcap \
 
 .PHONY: all clean fclean re
 
-all: $(FT) $(SHUTIL) $(NAME) bye_msg
+all: $(SHUTIL) $(FT) $(NAME) bye_msg
 
 ### Lib compil ###
 $(FT): | lib_msg
 	@make -C $(FT_DIR)
 
-$(SHUTIL): | lib_msg
+$(SHUTIL): $(FT) | lib_msg
 	@make -C $(SHUTIL_DIR)
 
 ### Mkdir obj ###
@@ -98,7 +100,7 @@ $(OBJ_DIR): | mkdir_msg
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)$(@F)$(CLEAR)"
+	@printf "$(BBLUE)$(@F)$(CLEAR) "
 
 ### Link ###
 .ONESHELL:

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:13:57 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/10 04:23:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct		s_sh
 	char			**ev;
 	int				type; //for recognize tokens
 	int				last_cmd_result;
-	struct s_param	*params;
+	struct s_env	*params;
 	t_ln			*ln_history;
 }					t_sh;
 

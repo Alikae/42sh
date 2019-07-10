@@ -6,14 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/08 19:51:02 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/10 04:30:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "tmp.h"
 #include "libft.h"
-#include "sh_parameters.h"
+#include "sh_env.h"
 #include "sh_entrypoint.h"
 #include "sh_command_line.h"
 #include "history.h"
