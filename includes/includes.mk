@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/04 17:40:01 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/10 21:20:00 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ H_FILES_command_line = \
 H_FILES_command_edition = \
 	sh_command_edition.h
 
-H_FILES_env = \
+H_FILES_parameters = \
 	sh_env.h
 
 # SUPPA concat loop
