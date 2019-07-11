@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/11 01:46:27 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/07/11 05:42:41 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,8 @@ SUB_DIRS := \
 	tokens \
 	error \
 	redirections \
-	debug_mode
+	debug_mode \
+	tools
 
 
 ### INCLUDE SRC MAKEFILE ###

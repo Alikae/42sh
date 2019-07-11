@@ -101,6 +101,7 @@ int     exec_path(t_sh *p, char *path, t_general_env *prgm_env)
 		generate_redirections(p);
 		//printf("lst->out = %d, in = %d\n", p->redirect_lst->out, p->redirect_lst->in);
 		execve(path, prgm_env->argv, 0/*prgm_env->env is a struct*/);
+		exit(1/*EXECVE ERROR*/);
 	}
 	return (ret); //<-- Return What?
 }
@@ -277,7 +278,7 @@ int		stock_redirections_assignements(t_sh *p, t_token *token_begin, t_token *tok
 	int	fd;
 
 	nb_redirections = 0;
-	while (token_begin && is_redirection_operator(token_begin->type) /* || is assignement*/)
+	while (token_begin && is_redirection_operator(token_begin->type) /* || is assignement(contain = )*/)
 	{
 		if ((fd = create_open_file(p, token_begin->sub->content)) > 0)
 		{
@@ -303,6 +304,8 @@ int		stock_redirections_assignements(t_sh *p, t_token *token_begin, t_token *tok
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
+	//if cmd name is func
+	//	replace func
 	int	nb_redirections;
 	int	ret;
 	//simple_cmd:

@@ -61,6 +61,8 @@ t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual)
 
 	forward_blanks(t);
 	word_begin = t->i;
+	//if is io
+	//	->fd
 	if (!read_n_skip_word(t))
 	{
 		printf("GRAMMAR ERROR: expected WORD after redirection_operator at -%.10s\n", t->input + t->i - ((t->i - 4 > -1) ? 4 : 2));
@@ -94,6 +96,57 @@ t_toktype	tokenize_reserved_word(t_tokenize_tool *t, t_token **p_actual, t_tokty
 	return (0);
 }
 
+int			next_is_parenthesis(t_tokenize_tool *t)
+{
+	int	tmp;
+
+	tmp = 0;
+	while (ft_isblank(t->input[t->i + tmp]))
+		tmp++;
+	if (t->input[t->i + tmp++] != '(')
+		return (0);
+	while (ft_isblank(t->input[t->i + tmp]))
+		tmp++;
+	if (t->input[t->i + tmp++] != ')')
+		return (0);
+	return (tmp);
+}
+
+t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_begin)
+{
+	int			word_begin;
+	t_toktype	type;
+
+	forward_blanks_newline(t);
+	if (t->input[t->i] == '{')
+	{
+		type = SH_BRACES;
+		t->i++;
+	}
+	else
+	{
+		word_begin = t->i;
+		read_n_skip_word(t);
+		if (!(type = word_is_reserved(t->input + word_begin, t->i - word_begin)) || !is_compound(type))
+		{
+			printf("SYNTAX ERROR: Function block need to be a compound at %.10s\n", t->input + word_begin);
+			return (SH_SYNTAX_ERROR);
+		}
+	}
+	word_begin = t->i;
+	t->i = name_begin;
+	read_n_skip_word(t);
+	(*p_actual)->next = create_token_n(SH_FUNC, t->input + name_begin, t->i - name_begin);
+	*p_actual = (*p_actual)->next;
+	t->i = word_begin;
+	if (((*p_actual)->sub = tokenize_compound(t, type)) == SH_SYNTAX_ERROR)
+	{
+		//free all
+		return (SH_SYNTAX_ERROR);
+	}
+	return (0);
+}
+
 t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {
 	int			word_begin;
@@ -106,11 +159,15 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 			return (SH_SYNTAX_ERROR);
 		return (0);
 	}
-	//if next is ( )
-	//	treat_function_def
 	word_begin = t->i;
 	if (read_n_skip_word(t))
 	{
+		if ((len = next_is_parenthesis(t)))
+		{
+			t->i += len;
+			return (tokenize_function(t, p_actual, word_begin));
+		}
+		//	treat_function_def
 		if ((type = word_is_actual_terminator(t->input + word_begin, t->i - word_begin, actual_compound)) && t->word_nb == 1)
 			return (type);
 		if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin, t->i - word_begin)))

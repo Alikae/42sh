@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 06:25:07 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/11 09:02:52 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,26 @@
 #include "history.h"
 
 #include <stdio.h>
+
+void    print_all_tokens(t_sh *p, t_token *t, int lvl)
+{
+	int lvcpy;
+	while (t)
+	{
+		lvcpy = lvl;
+		while (lvcpy--)
+			dprintf(p->debug_fd, "%c      ", (lvcpy == 0) ? '|' : ' ');
+		if (t->content)
+			dprintf(p->debug_fd, "%-10s (%i)\n", t->content, t->type);
+		else
+			dprintf(p->debug_fd, "%-10s (%i)\n", "", t->type);
+		if (t->sub)
+		{
+			print_all_tokens(p, t->sub, lvl + 1);
+		}
+		t = t->next;
+	}
+}
 
 static t_hist 	*init_history(void)
 {
@@ -46,7 +66,7 @@ int		sh_loop(void)
 	{
 		sh_prompt();
 		ln_tab = NULL;
-		int dbug = 1;
+		int dbug = 0;
 		if (!dbug)
 		{
 			if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
@@ -56,6 +76,7 @@ int		sh_loop(void)
 		{
 			ln_tab = malloc(2 * sizeof(char*));
 			ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
+			ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
 			ln_tab[1] = 0;
 		}
 		int z = 0;
@@ -66,7 +87,10 @@ int		sh_loop(void)
 		else
 			input = sh_tab_fusion(ln_tab);
 		if (p->ast = tokenize_input(input))//line
+		{
+			print_all_tokens(p, p->ast, 0);
 			exec_script(p, p->ast, 0);
+		}
 		else
 			printf("ERROR\n");
 		ft_tab_strdel(&ln_tab);
