@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/10 21:17:48 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/11 01:46:27 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,11 @@ SUB_DIRS := \
 	history \
 	parameters \
 	tokenizer \
+	executer \
+	tokens \
+	error \
+	redirections \
+	debug_mode
 
 
 ### INCLUDE SRC MAKEFILE ###
@@ -94,7 +99,7 @@ $(SHUTIL): $(FT) | lib_msg
 ### Mkdir obj ###
 .ONESHELL:
 $(OBJ_DIR): | mkdir_msg
-	mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
+	@mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
 
 ### Compilation ###
 .ONESHELL:

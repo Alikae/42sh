@@ -5,7 +5,8 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <errno.h>
+#include <errno.h>//
+#include "sh_env.h"
 
 //ALL THIS FILE IS DULL
 //FORBIDDEN FUNCS

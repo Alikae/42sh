@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/10 04:28:38 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/11 02:28:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 
 	i = -1;
 	ft_putendl("Shell: entrypoint.c\n---");
+	sh_init(sh());
 	sh()->ev = ev;
 	sh()->params = sh_env_params(ev);
 }

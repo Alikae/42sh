@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/10 04:30:42 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/11 02:34:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ int		sh_loop(void)
 {
 	char	**ln_tab;
 	t_hist	*hist;
+	t_sh	*p;
 
+	p = sh();
+	ask_for_extern_terminal(p);
 	ft_putendl("Shell: sh_loop.c\n---");
 	hist = init_history();
 	while (42)
@@ -44,6 +47,9 @@ int		sh_loop(void)
 		ln_tab = NULL;
 		if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
 			break ;
+		//ln_tab = malloc(2 * sizeof(char*));
+		//ln_tab[0] = ft_strdup("/bin/ls >txt");
+		//ln_tab[1] = 0;
 		int z = 0;
 		while (ln_tab[z])
 			fprintf(stderr, "[%s]\n", ln_tab[z++]);
@@ -52,11 +58,12 @@ int		sh_loop(void)
 		if (!ft_strncmp("env", *ln_tab, 3))
 			sh_putparams(sh()->params);
 		else
-			while (*ln_tab)
+			//while (*ln_tab)
 			{
-				sh_exec_line(*ln_tab);
-				ln_tab++;
+				//join_tab;
 			}
+		tokenize_input(p->ast = tokenize_input(*ln_tab));//line
+		exec_script(p, p->ast, 0);
 		ft_tab_strdel(&ln_tab);
 	}
 	push_history(hist);

@@ -6,19 +6,19 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/04 17:46:19 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/11 02:28:44 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### MAIN FILES ###
 C_FILES = \
 	main.c \
-	sh_exec_line.c \
 	sh.c
 
 C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_loop.c \
+	sh_init.c
 
 
 C_FILES_exitpoint = \
@@ -61,15 +61,21 @@ C_FILES_signals = \
 	#signals_handler.c
 
 C_FILES_tokenizer = \
-	sh_print_onetok.c \
-	sh_print_alltok.c \
-	sh_init_tok.c \
-	sh_get_res.c \
-	sh_get_tok_type.c \
-	sh_match_tok_op.c \
-	sh_is_res_word.c \
-	sh_isquoted.c \
-	sh_tokenizer.c
+	t_token.c \
+	tokenize_input.c \
+	compound_tokenizer.c \
+	word_interpreter.c \
+	operator_interpreter.c \
+	opening_chars_handling.c
+
+C_FILES_executer = \
+	exec_script.c \
+	exec_compound.c \
+	exec_simple_command.c \
+	redirections_handler.c
+
+C_FILES_debug_mode = \
+	debug_mode.c
 
 C_FILES_env = \
 	
