@@ -6,12 +6,14 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/08 20:57:38 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/10 21:17:48 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := 42sh
 PROJECT := 42SH
+AUTHORS := Ede-ram Tcillard Thdelmas Tmeyer
+
 RM = /bin/rm
 
 ### Directories ###
@@ -80,18 +82,18 @@ LFLAGS = -ltermcap \
 
 .PHONY: all clean fclean re
 
-all: hey_msg $(FT) $(SHUTIL) $(NAME) bye_msg
+all: $(SHUTIL) $(FT) $(NAME) bye_msg
 
 ### Lib compil ###
-$(FT): lib_msg
+$(FT): | lib_msg
 	@make -C $(FT_DIR)
 
-$(SHUTIL): lib_msg
+$(SHUTIL): $(FT) | lib_msg
 	@make -C $(SHUTIL_DIR)
 
 ### Mkdir obj ###
 .ONESHELL:
-$(OBJ_DIR): mkdir_msg
+$(OBJ_DIR): | mkdir_msg
 	mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
 
 ### Compilation ###
@@ -108,16 +110,29 @@ $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
 
 ### Clean ###
 .ONESHELL:
-clean: clean_msg
-	$(RM) -rf $(OBJ_DIR)
+$(FT)_clean: | lib_msg
 	@make -C $(FT_DIR) clean
+
+.ONESHELL:
+$(SHUTIL)_clean: | lib_msg
 	@make -C $(SHUTIL_DIR) clean
 
 .ONESHELL:
-fclean: clean fclean_msg
-	$(RM) -rf $(NAME)
+clean: $(FT)_clean $(SHUTIL)_clean | clean_msg
+	$(RM) -rf $(OBJ_DIR)
+
+.ONESHELL:
+$(FT)_fclean: | lib_msg
 	@make -C $(FT_DIR) fclean
+
+.ONESHELL:
+$(SHUTIL)_fclean:
 	@make -C $(SHUTIL_DIR) fclean
+
+.ONESHELL:
+fclean: $(FT)_fclean $(SHUTIL)_fclean | fclean_msg
+	$(RM) -rf $(OBJ_DIR)
+	$(RM) -rf $(NAME)
 
 re: fclean all
 

@@ -6,37 +6,36 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/05 20:20:13 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/10 04:40:07 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ##################################### Tools ####################################
 
-AUTHORS ?= Ede-Ram Tcillard Tmeyer Thdelmas
+AUTHORS ?= Thdelmas
 
 ### Colors ###
-WHITE = \033[0m
+WHITE = \033[1;37m
 CYAN = \033[36m
 GREEN = \033[1m\033[32m
 GRED = \033[30;41m
 WRED = \033[96;41m
 BRED = \033[0;31;40m
-BBLUE = \033[0;36;40m
+BBLUE = \033[0;36m
+BBBLUE = \033[1;36m
 WBLUE = \033[31;44m
 YELLOW = \033[33m
 CLEAR = \033[0;0m
 
 GITCOM ?= "Auto-Save"
 GITSTATUS = $(shell git status | sed -n 2p | cut -d' ' -f4)
-ADD_TO_NORME = $(SRC_DIR) $(INC_DIR) $(LIB_FT_DIR)
+ADD_TO_NORME = $(SRC_DIR) $(INC_DIR) $(FT_DIR)
 
-ADD_TO_GIT = $(SRC_DIR) $(INC_DIR) $(LIB_FT_DIR) $(GITLOG_FILE) \
+ADD_TO_GIT = $(SRC_DIR) $(INC_DIR) $(FT_DIR) $(GITLOG_FILE) \
 			 Makefile tools.mk auteur README.md
 
 .PHONY: hey link compil savegit gitsave norm
 
-run: all run_msg
-	./$(NAME)
 
 ### git-autosave ###
 savegit: gitsave
@@ -59,31 +58,36 @@ norm:
 	@printf "$(BRED)\t $(ADD_TO_NORME)$(CLEAR)\n"
 	@norminette -R CheckForbiddenSourceHeader $(HEADER) $(SRC_NAME)
 
+### Test & Launcher ###
+run: $(NAME) | run_msg
+	./$(NAME)
+
 ### Messages rules ###
 hey_msg:
-	@printf "\n$(BBLUE)\t $(PROJECT)$(CLEAR)\n"
+	@printf "$(BBBLUE)\t$(PROJECT)$(CLEAR)\n"
 
-bye_msg:
-	@printf "\n$(BBLUE)\t Made with love by:$(CLEAR)\n"
-	@printf "$(BBLUE)\t $(AUTHORS)$(CLEAR)\n\n"
+bye_msg: | hey_msg
+	@printf "$(BRED)By: $(CLEAR)$(WHITE)$(AUTHORS)$(CLEAR)\n"
 
-lib_msg:
-	@printf "\n$(BRED)\t LIBS$(CLEAR)\n"
+run_msg: | hey_msg
+	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)RUN$(CLEAR)\n"
+	@printf "$(BRED)By: $(CLEAR)$(WHITE)$(AUTHORS)$(CLEAR)\n"
 
-compil_msg:
-	@printf "\n$(BRED)\t COMPIL$(CLEAR)\n"
+lib_msg: | hey_msg
+	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)LIBS$(CLEAR)\n"
 
-link_msg:
-	@printf "\n$(BRED)\t LINK$(CLEAR)\n"
+compil_msg: | hey_msg
+	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)COMPIL$(CLEAR)\n"
 
-mkdir_msg:
-	@printf "\n$(BRED)\t MKDIR$(CLEAR)\n"
+link_msg: | hey_msg
+	@printf "\n$(BRED)$(PROJECT): $(CLEAR)$(WHITE)LINK$(CLEAR)\n"
 
-run_msg:
-	@printf "\n$(GREEN)\t RUN $(PROJECT)$(CLEAR)\n"
+mkdir_msg: | hey_msg
+	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)MKDIR$(CLEAR)\n"
 
-fclean_msg: hey_msg
-	@printf "\n$(BRED)\t FCLEAN$(CLEAR)\n"
+fclean_msg: | hey_msg
+	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)FCLEAN$(CLEAR)\n"
 
-clean_msg: hey_msg
-	@printf "\n$(BRED)\t CLEAN$(CLEAR)\n"
+clean_msg: | hey_msg
+	@printf "\n$(BRED)$(PROJECT): $(CLEAR)$(WHITE)CLEAN$(CLEAR)\n"
+
