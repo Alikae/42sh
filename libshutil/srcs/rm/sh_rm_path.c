@@ -3,12 +3,12 @@ int		sh_rm_last_arg(int opt, char *path)
 	struct stat s;
 	DIR			*dirp;
 
-	stat(path, &s);
+	lstat(path, &s);
 	if ((s.st_mod & IF_DIR) == IF_DIR && !(opt & 1))
 	{
-		if ((opt & 1) && (opt & 2))
+		if (opt & 1)
 			return (sh_rm_directory(path));
-		if (!(opt & 2))
+		else
 		{
 			drp = opendir(path);
 			if (readdir(dirp) == NULL)
@@ -27,12 +27,12 @@ int		sh_rm_path(int opt, char *path, int *error)
 {
 	if (sh_check_path(path, error) == -1)
 	{
-		if (!(opt & 4) && (!(error & NOT_FOUND))
+		if (!(opt & 2) || (!(error & NOT_FOUND))
 			return (1);
 		else
 			return (sh_error_path("rm: ", path, error));
 	}
-	if (opt & 4)
+	if (opt & 2)
 		return (ft_rm_last_arg(opt, path));
 	return (1);
 }

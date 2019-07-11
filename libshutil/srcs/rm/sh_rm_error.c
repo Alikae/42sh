@@ -14,11 +14,3 @@ int		sh_rm_directory(char *path)
 	write(2, ": is a directory\n", 17);
 	return (-1);
 }
-
-int		sh_rm_no_empty(char *path)
-{
-	write(2, "rm: ", 4);
-	ft_putstr_fd(path, 2);
-	write(2, ": Directory not empty\n", 22);
-	return (-1);
-}

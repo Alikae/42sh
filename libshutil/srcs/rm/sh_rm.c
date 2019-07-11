@@ -31,9 +31,13 @@ int		sh_recursive_rm(char *path)
 
 int		sh_remove(int opt, char *path)
 {
+	struct stat	st;
+	
+	st = NULL;
 	if (!(opt & 1))
 		return (ft_recursive_rm(path));
-	else if (!(opt & 2))
+	lstat(path, &st);
+	if (st.st_mode & S_ISDIR == SP_ISDIR)
 		unlink(path);
 	else
 		rmdir(path);
@@ -58,7 +62,7 @@ int		sh_rm(int ac, char **av)
 	{
 		if (sh_rm_path(opt, av[i], &error)
 			ret = sh_remove(opt, av[i]);
-		else
+		else if (opt & 2)
 			ret = -1;
 		i++;
 		if (ret = -1)

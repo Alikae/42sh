@@ -1,21 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sh_check_path.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/10 01:54:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/10 02:05:19 by thdelmas         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libshutil.h"
-#include "libft.h"
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <errno.h>
 
 int		sh_find_error(char *path, char c, int *error)
 {
@@ -25,17 +8,17 @@ int		sh_find_error(char *path, char c, int *error)
 	mode = F_OK | X_OK;
 	if (stat(path, &s) == -1)
 	{
-		*error = ENOENT;
+		*error = NOT_FOUND;
 		return (0);
 	}
 	if (c != '\0' && (s.st_mode & S_IFDIR) != S_IFDIR)
 	{
-		*error = ENOTDIR;
+		*error = NOT_DIR;
 		return (0);
 	}
 	if (c != '\0' && access(path, mode) == -1)
 	{
-		*error = EACCES;
+		*error = NOT_ACCESS;
 		return (0);
 	}
 	return (1);
@@ -47,9 +30,7 @@ int		sh_check_path(char *all_path, int *error)
 	int		i;
 
 	i = 0;
-	// !!!!!!!!strlen, a suprimer !!!!!!!!!!!
 	if (!(path = malloc(sizeof(char) * ft_strlen(all_path) + 1)))
-	//
 		exit(-1);
 	while (all_path[i])
 	{
