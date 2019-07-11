@@ -28,7 +28,7 @@ ___
 - [ ] $SHELL 
 - [ ] $SHLVL 
 - [ ] $PATH 
-- [ ] $PWD 
+- [x] $PWD 
 - [ ] $OLDPWD
 - [ ] $HOME
 - [ ] $USER
