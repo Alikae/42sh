@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 05:29:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/11 06:25:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int		sh_loop(void)
 	char	**ln_tab;
 	t_hist	*hist;
 	t_sh	*p;
+	char	*input;
 
 	p = sh();
 	ask_for_extern_terminal(p);
@@ -45,7 +46,7 @@ int		sh_loop(void)
 	{
 		sh_prompt();
 		ln_tab = NULL;
-		int dbug = 0;
+		int dbug = 1;
 		if (!dbug)
 		{
 			if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
@@ -54,7 +55,7 @@ int		sh_loop(void)
 		else
 		{
 			ln_tab = malloc(2 * sizeof(char*));
-			ln_tab[0] = ft_strdup("&& echo");
+			ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
 			ln_tab[1] = 0;
 		}
 		int z = 0;
@@ -63,11 +64,8 @@ int		sh_loop(void)
 		if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
 			break ;
 		else
-			//while (*ln_tab)
-			{
-				//join_tab;
-			}
-		if (p->ast = tokenize_input(*ln_tab))//line
+			input = sh_tab_fusion(ln_tab);
+		if (p->ast = tokenize_input(input))//line
 			exec_script(p, p->ast, 0);
 		else
 			printf("ERROR\n");

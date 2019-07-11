@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 03:50:11 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/11 05:41:52 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ typedef struct		s_sh
 }					t_sh;
 
 t_sh	*sh(void);
+char	*sh_tab_fusion(char **t);
 
 #endif

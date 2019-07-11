@@ -111,6 +111,15 @@ int			is_redirection_operator(t_toktype type)
 	return (0);
 }
 
+int			operator_cant_be_first(t_toktype type)
+{
+	if (type == SH_AND || type == SH_OR
+			|| type == SH_AND_IF || type == SH_OR_IF
+			|| type == SH_SEMI || type == SH_DSEMI)
+		return (1);
+	return (0);
+}
+
 t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {
 	t_toktype	type;
@@ -123,6 +132,12 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 			return (SH_DSEMI);
 		(*p_actual)->next = create_token(type, 0);
 		*p_actual = (*p_actual)->next;
+		if (t->word_nb == 1 && operator_cant_be_first(type))
+		{
+			//FREEALL
+			printf("SYNTAX ERROR: operator cant be first in command -%.10s\n", t->input + ((t->i > 2) ? t->i - 2 : 0));
+			return (SH_SYNTAX_ERROR);
+		}
 		if (is_newline_separator(type))
 			t->word_nb = 1;
 		if (is_redirection_operator(type))

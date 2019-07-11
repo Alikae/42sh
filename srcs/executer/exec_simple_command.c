@@ -199,7 +199,10 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 		//
 		//
 	if (lstat(path, &st))
-		dprintf(p->debug_fd, "--%s not found\n", path);
+	{
+		printf("--%s not found\n", path);
+		return (127);
+	}
 	else
 	{
 		if (can_exec(&st))
@@ -301,6 +304,7 @@ int		stock_redirections_assignements(t_sh *p, t_token *token_begin, t_token *tok
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
+	int	ret;
 	//simple_cmd:
 	//              *io_redirect-*assignements ?cmd name *io_redirect-*argvs
 	nb_redirections = stock_redirections_assignements(p, token_begin, token_end);
@@ -314,9 +318,9 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//if (is_built_in(token_begin->content))
 	//	p->last_cmd_result = exec_built_in(p, token_begin, token_end);
 	//else
-	p->last_cmd_result = exec_prgm(p, token_begin, token_end);
+	ret = exec_prgm(p, token_begin, token_end);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	//pull stored assignements
 	//KILL CHILD ENV ADDED AT EACH FUNC END
-	return (p->last_cmd_result);//to see
+	return (ret);//to see
 }

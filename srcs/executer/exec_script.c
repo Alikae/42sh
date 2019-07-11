@@ -21,6 +21,7 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
+	int	ret;
 
 	//	if (token_begin->type == SH_FUNC)
 	//		tokenize_func
@@ -28,13 +29,13 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	if (is_compound(token_begin->type))
 	{
 		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end);
-		exec_compound_command(p, token_begin, token_begin->type);
+		ret = exec_compound_command(p, token_begin, token_begin->type);
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	}
 	else
-		p->last_cmd_result = exec_simple_command(p, token_begin, token_end);
+		ret = exec_simple_command(p, token_begin, token_end);
 	//set lastcmdres
-	return (p->last_cmd_result);
+	return (ret);
 }
 
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
@@ -168,7 +169,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	p->lldbug = 1;
 	//
 	p->pipein = next_pipe_fd;
-	exec_command(p, token_begin, token_end);//
+	p->last_cmd_result = exec_command(p, token_begin, token_end);//
 	if (next_pipe_fd)
 		del_n_redirect_lst(&p->redirect_lst, 1);
 	delete_close_all_pipe_lst(p->pipe_lst);
