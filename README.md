@@ -27,7 +27,7 @@ ___
 #### - [ ] Env / Var 
 - [ ] $SHELL 
 - [ ] $SHLVL 
-- [ ] $PATH 
+- [x] $PATH 
 - [x] $PWD 
 - [ ] $OLDPWD
 - [ ] $HOME
