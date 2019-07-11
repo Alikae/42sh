@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 02:34:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/11 03:17:31 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,18 @@ int		sh_loop(void)
 	{
 		sh_prompt();
 		ln_tab = NULL;
-		if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
-			break ;
-		//ln_tab = malloc(2 * sizeof(char*));
-		//ln_tab[0] = ft_strdup("/bin/ls >txt");
-		//ln_tab[1] = 0;
+		int dbug = 0;
+		if (!dbug)
+		{
+			if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
+				break ;
+		}
+		else
+		{
+			ln_tab = malloc(2 * sizeof(char*));
+			ln_tab[0] = ft_strdup("&& echo");
+			ln_tab[1] = 0;
+		}
 		int z = 0;
 		while (ln_tab[z])
 			fprintf(stderr, "[%s]\n", ln_tab[z++]);
@@ -62,8 +69,10 @@ int		sh_loop(void)
 			{
 				//join_tab;
 			}
-		tokenize_input(p->ast = tokenize_input(*ln_tab));//line
-		exec_script(p, p->ast, 0);
+		if (p->ast = tokenize_input(*ln_tab))//line
+			exec_script(p, p->ast, 0);
+		else
+			printf("ERROR\n");
 		ft_tab_strdel(&ln_tab);
 	}
 	push_history(hist);
