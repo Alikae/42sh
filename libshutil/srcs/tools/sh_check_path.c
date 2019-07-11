@@ -1,4 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_check_path.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/11 02:47:34 by ede-ram           #+#    #+#             */
+/*   Updated: 2019/07/11 02:49:34 by ede-ram          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libshutil.h"
+#include "libft.h"
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
 
 int		sh_find_error(char *path, char c, int *error)
 {
@@ -8,17 +25,17 @@ int		sh_find_error(char *path, char c, int *error)
 	mode = F_OK | X_OK;
 	if (stat(path, &s) == -1)
 	{
-		*error = NOT_FOUND;
+		*error = ENOENT;
 		return (0);
 	}
 	if (c != '\0' && (s.st_mode & S_IFDIR) != S_IFDIR)
 	{
-		*error = NOT_DIR;
+		*error = ENOTDIR;
 		return (0);
 	}
 	if (c != '\0' && access(path, mode) == -1)
 	{
-		*error = NOT_ACCESS;
+		*error = EACCES;
 		return (0);
 	}
 	return (1);
