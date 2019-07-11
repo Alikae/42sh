@@ -30,9 +30,7 @@ int		sh_check_path(char *all_path, int *error)
 	int		i;
 
 	i = 0;
-	// !!!!!!!!strlen, a suprimer !!!!!!!!!!!
-	if (!(path = malloc(sizeof(char) * strlen(all_path) + 1)))
-	//
+	if (!(path = malloc(sizeof(char) * ft_strlen(all_path) + 1)))
 		exit(-1);
 	while (all_path[i])
 	{
