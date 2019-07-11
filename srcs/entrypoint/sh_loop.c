@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 03:17:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/11 05:29:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int		sh_loop(void)
 			fprintf(stderr, "[%s]\n", ln_tab[z++]);
 		if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
 			break ;
-		if (!ft_strncmp("env", *ln_tab, 3))
-			sh_putparams(sh()->params);
 		else
 			//while (*ln_tab)
 			{

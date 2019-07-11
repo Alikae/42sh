@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 02:07:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/11 03:50:11 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define SH21_H
 
 # include "sh_line.h"
-# include "sh_parameters.h"
 # include "redirections.h"
 # include "t_token.h"
 
