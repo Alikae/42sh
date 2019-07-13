@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/13 16:52:15 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/13 17:59:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ t_env	*sh_setenv(const char *key, const char *value)
 	if (!key)
 		return (NULL);
 	if (!(env = sh()->params))
-		return (NULL);
-	if (ft_strcmp(env->key, key))
+		sh()->params = sh_create_param(key);
+	else if (ft_strcmp(env->key, key))
 	{
 		while (env->next && ft_strcmp(env->next->key, key))
 			env = env->next;
@@ -31,7 +31,7 @@ t_env	*sh_setenv(const char *key, const char *value)
 			env->next = sh_create_param(key);
 		env = env->next;
 	}
-	if (value)
+	if (value && env)
 	{
 		if (env->value)
 			ft_strdel(&(env->value));

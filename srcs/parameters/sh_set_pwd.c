@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 19:14:54 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/13 17:46:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	sh_set_pwd(void)
 	if ((tmp2 = ft_strnew(PATH_MAX + 1)))
 	{
 		tmp2 = getcwd(tmp2, PATH_MAX);
-		sh_set_env("PWD", tmp2);
+		sh_setenv("PWD", tmp2);
 		ft_strdel(&tmp2);
 	}
 }
