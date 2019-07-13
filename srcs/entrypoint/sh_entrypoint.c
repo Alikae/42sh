@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/13 17:44:53 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/13 18:14:53 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,4 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	sh()->av = av;
 	sh()->ev = ev;	
 	sh_init(sh());
-	sh_putparams(sh()->params);
 }
