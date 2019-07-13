@@ -1,5 +1,6 @@
 #include "sh.h"
 #include "libft.h"
+#include "libshutil.h"
 #include <fcntl.h>
 #include "t_token.h"
 #include <sys/stat.h>
@@ -18,13 +19,13 @@ typedef struct  s_redirection_lst
 	struct s_redirection_lst    *next;
 }               t_redirection_lst;
 /*
-typedef struct      s_env
-{
-	char            *key;
-	char            *value;
-	struct s_env    *next;
-}                   t_env;
-*/
+   typedef struct      s_env
+   {
+   char            *key;
+   char            *value;
+   struct s_env    *next;
+   }                   t_env;
+   */
 typedef struct  s_general_env
 {
 	char                **argv;
@@ -190,15 +191,15 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 	dprintf(p->debug_fd, "[%i] try path--%s\n", getpid(), path);
 	dprintf(p->debug_fd, "with_redirections:\n");
 	print_redirections(p, p->redirect_lst);
-		//
-		//
-		//printf("%s\n", token_begin->content);
-		if (token_begin->content && !ft_strcmp(token_begin->content, "true"))
-			return (0);
-		if (token_begin->content && !ft_strcmp(token_begin->content, "false"))
-			return (1);
-		//
-		//
+	//
+	//
+	//printf("%s\n", token_begin->content);
+	if (token_begin->content && !ft_strcmp(token_begin->content, "true"))
+		return (0);
+	if (token_begin->content && !ft_strcmp(token_begin->content, "false"))
+		return (1);
+	//
+	//
 	if (lstat(path, &st))
 	{
 		printf("--%s not found\n", path);
@@ -302,12 +303,24 @@ int		stock_redirections_assignements(t_sh *p, t_token *token_begin, t_token *tok
 	return (nb_redirections);
 }
 
+int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
+{
+	if (!ft_strcmp(cmd, "true"))
+		return (&sh_true);
+	else if (!ft_strcmp(cmd, "false"))
+		return (&sh_false);
+	else if (!ft_strcmp(cmd, "set"))
+		return (&sh_false);
+	return (NULL);
+}
+
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	//if cmd name is func
 	//	replace func
 	int	nb_redirections;
 	int	ret;
+	int		(*f)(int ac, char **av, t_env **ev);
 	//simple_cmd:
 	//              *io_redirect-*assignements ?cmd name *io_redirect-*argvs
 	nb_redirections = stock_redirections_assignements(p, token_begin, token_end);
@@ -318,7 +331,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//transform all assignements after command name in WORDS
 	//Expand_words+retokenize
 	//handle no_cmd_name (<auteur)
-	//if (is_built_in(token_begin->content))
+	//if ((f = sh_is_builtin(token_begin->content))
 	//	p->last_cmd_result = exec_built_in(p, token_begin, token_end);
 	//else
 	ret = exec_prgm(p, token_begin, token_end);

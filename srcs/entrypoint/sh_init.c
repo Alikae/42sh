@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/13 18:13:06 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/13 20:31:58 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	sh_set_shlvl(void)
 		sh_setenv("SHLVL", "1");
 	else
 	{
-		tmp = ft_itoa(1 + ft_atoi(sh_getenv("SHLVL"));
+		tmp = ft_itoa(1 + ft_atoi(sh_getenv("SHLVL")));
 		sh_setenv("SHLVL", tmp);
 		ft_strdel(&tmp);
 	}
