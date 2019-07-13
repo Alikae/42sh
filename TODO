@@ -10,6 +10,13 @@ Exec
 	assignements
 SIGNALS
 
+
+->->-> Deplacer le truc qui se connecte aux autres tty pour le debug <-<-<-
+->->-> Le mettre le plus tot possible dans le programme \o/ <-<-<-
+->->-> PS: c'est un peu relou dans vim <-<-<-
+
+
+
 Init & Destroy
 Unit tests
 Debug_mode ?
