@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/11 05:38:04 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/07/13 16:51:35 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,8 @@ C_FILES_parameters = \
 	sh_create_param.c \
 	sh_env_params.c \
 	sh_putparams.c \
+	sh_setenv.c \
+	sh_unsetenv.c \
 
 
 C_FILES_command_edition = \
