@@ -1,3 +1,4 @@
+
 Tokenization
 	HERE_DOC
 Exec
@@ -9,5 +10,7 @@ Exec
 	assignements
 SIGNALS
 
-Integrer ENV
+Init & Destroy
+Unit tests
+Debug_mode ?
 Getopt_long pour le main & built-in
