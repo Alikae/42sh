@@ -34,7 +34,6 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	}
 	else
 		ret = exec_simple_command(p, token_begin, token_end);
-	//set lastcmdres
 	return (ret);
 }
 

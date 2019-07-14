@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 09:02:52 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/13 04:21:56 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int		sh_loop(void)
 			ln_tab = malloc(2 * sizeof(char*));
 			ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
 			ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
+			ln_tab[0] = ft_strdup("/bin/cat tet");
 			ln_tab[1] = 0;
 		}
 		int z = 0;

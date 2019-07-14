@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 02:29:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/13 07:57:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 void	sh_init(t_sh *p)
 {
 	p->debug_fd = 2;
-	p->redirect_lst = 0;
 	p->pipe_lst = 0;
 	p->last_cmd_result = 0;
 	p->lldbug = 0;
@@ -29,4 +28,9 @@ void	sh_init(t_sh *p)
 	p->pipeline_separators[1] = 0;
 	p->pipein = 0;
 	p->pipeout = 0;
+	p->child_ac = 0;
+	p->child_argv = 0;
+	p->redirect_lst = 0;
+	p->opened_files = 0;
+	//p->assign_lst = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 05:41:52 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/13 07:57:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 # include "sh_line.h"
 # include "redirections.h"
 # include "t_token.h"
+
+typedef struct		s_open_file
+{
+	char				*name;
+	int					fd;
+	struct s_open_file	*next;
+}					t_open_file;
 
 typedef struct		s_sh
 {
@@ -31,12 +38,16 @@ typedef struct		s_sh
 	int				debug_fd;
 	t_pipe_lst		*pipe_lst;
 	t_redirect_lst	*redirect_lst;
+	//t_assign_lst	*assign_lst;
 	int				pipein;
 	int				pipeout;
 	t_toktype		pipeline_separators[2];
 	t_toktype		script_separators[2];
 	t_toktype		and_or_separators[2];
 	t_token			*ast;
+	int				child_ac;
+	char			**child_argv;
+	t_open_file		*opened_files;
 	
 
 	int	lldbug;

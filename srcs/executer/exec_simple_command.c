@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <errno.h>//
 #include "sh_env.h"
+#include "error.h"
 
 //ALL THIS FILE IS DULL
 //FORBIDDEN FUNCS
@@ -17,14 +18,7 @@ typedef struct  s_redirection_lst
 	int                         out;
 	struct s_redirection_lst    *next;
 }               t_redirection_lst;
-/*
-typedef struct      s_env
-{
-	char            *key;
-	char            *value;
-	struct s_env    *next;
-}                   t_env;
-*/
+
 typedef struct  s_general_env
 {
 	char                **argv;
@@ -44,20 +38,48 @@ int     block_wait(t_sh *p)
 	return (WEXITSTATUS(wait_status));
 }
 
+int		out_already_in_lst_n(int out, t_redirect_lst *origin, t_redirect_lst *end)
+{
+	while (origin && origin != end)
+	{
+		if (origin->out == out)
+			return (origin->in);
+		origin = (origin->next == end) ? 0 : origin->next;
+	}
+	return (-1);
+}
+
 void	generate_redirections(t_sh *p)
 {
+	//REVERSE SENS
 	//PROTECC DUP2
 	//CLOSE EVERYWHW+ERE
 	t_redirect_lst	*lst;
+	t_redirect_lst	*origin;
+	int				out;
 
-	lst = p->redirect_lst;
+	origin = p->redirect_lst;
+	lst = origin;
 	while (lst)
 	{
 		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
 		//close(lst->out) <-- ! see man dup2
+		//if in already
+		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
+		{
+			if ((lst->out = dup(out)) < 0)
+				dprintf(p->debug_fd, "DUPERROR %i, errno %i\n", lst->out, errno);
+			else
+				dprintf(p->debug_fd, "DUPPED %i-> %i\n", out, lst->out);
+		}
 		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
 		if (dup2(lst->out, lst->in) < 0)
+		{
+			//if lst->in is already in lst
+			//dup (old)
+			//else
 			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
+		}
 		int ret = close(lst->out);
 		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
 		lst = lst->next;
@@ -82,7 +104,7 @@ void	close_pipes_parent(t_sh *p)
 		dprintf(p->debug_fd, "[%i] NO PIPEIN\n", getpid());
 }
 
-int     exec_path(t_sh *p, char *path, t_general_env *prgm_env)
+int     exec_path(t_sh *p, char *path)
 {
 	int ret;
 
@@ -91,7 +113,6 @@ int     exec_path(t_sh *p, char *path, t_general_env *prgm_env)
 	if (/*(p->lldbug) ? !child_pid : */child_pid)
 	{
 		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
-		//close();
 		close_pipes_parent(p);
 		ret = block_wait(p);
 	}
@@ -100,60 +121,10 @@ int     exec_path(t_sh *p, char *path, t_general_env *prgm_env)
 		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
 		generate_redirections(p);
 		//printf("lst->out = %d, in = %d\n", p->redirect_lst->out, p->redirect_lst->in);
-		execve(path, prgm_env->argv, 0/*prgm_env->env is a struct*/);
+		execve(path, p->child_argv, 0/*prgm_env->env is a struct*/);
 		exit(1/*EXECVE ERROR*/);
 	}
 	return (ret); //<-- Return What?
-}
-
-void printab(t_sh *p, char **t)
-{
-	if (!t)
-	{
-		dprintf(p->debug_fd, "empty\n");
-		return ;
-	}
-	while (*t)
-	{
-		dprintf(p->debug_fd, "%s\n", *t);
-		t++;
-	}
-}
-
-int     tablen(char **tab)
-{
-	int i = -1;
-	if (!tab)
-		return (0);
-	while (tab[++i])
-		;
-	return (i);
-}
-
-void    push_str_to_tab(char ***ptab, char *s)
-{
-	int len = tablen(*ptab);
-	char **old = *ptab;
-	*ptab = realloc(*ptab, (len + 2) * sizeof(char*));
-	(*ptab)[len] = strdup(s);
-	(*ptab)[len + 1] = 0;
-} 
-
-t_general_env   *construct_child_env(t_sh *p, t_token *token_begin, t_token *token_end, t_general_env *child_env)
-{
-	child_env->argv = 0;
-	child_env->env = 0;
-	while (token_begin && token_begin != token_end)
-	{
-		//stock redirection / assignement is done before
-		if (token_begin->type == SH_WORD)
-		{
-			dprintf(p->debug_fd, "		--- argv += %s\n", token_begin->content);
-			push_str_to_tab(&child_env->argv, token_begin->content);
-		}
-		token_begin = token_begin->next;
-	}
-	return (0);
 }
 
 int		can_exec(struct stat *st)
@@ -178,48 +149,83 @@ void	print_redirections(t_sh *p, t_redirect_lst *origin)
 	}
 }
 
+int		get_next_path(char *path, char *all_paths, int i)
+{
+	//if find next path by :
+	//	concat path / this_zone
+	//else if pile the end
+	//	give actual_path+path
+	//else
+	//	return (0);
+	if (i)
+		return (0);
+		char **real_path = ft_strdup(path);
+	return (real_path);
+}
+
 int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
-{	//TO DO, NOW ITS REALLY BASIC
-	//DOESNT HANDLE NEWLINE
-	char *path = (token_begin) ? token_begin->content : 0;
+{
+	char *path;
 	int ret;
 	struct stat st;
-	t_general_env child_env;
+	char	*real_path;
+	int		nb_paths;
 
-	//foreach path
+	path = (token_begin) ? token_begin->content : 0;
 	dprintf(p->debug_fd, "[%i] try path--%s\n", getpid(), path);
-	dprintf(p->debug_fd, "with_redirections:\n");
-	print_redirections(p, p->redirect_lst);
-		//
-		//
-		//printf("%s\n", token_begin->content);
-		if (token_begin->content && !ft_strcmp(token_begin->content, "true"))
-			return (0);
-		if (token_begin->content && !ft_strcmp(token_begin->content, "false"))
-			return (1);
-		//
-		//
-	if (lstat(path, &st))
+	//dprintf(p->debug_fd, "with_redirections:\n");
+	//print_redirections(p, p->redirect_lst);
+	ret = 0;
+	nb_paths = 0;
+	if (path[0] == '/')
+	{
+		real_path = ft_strdup(path);
+		ret = lstat(path, &st);
+	}
+	else
+		while (real_path = get_next_path(path, 0, nb_paths++ /*path*/))
+			if (!(ret = lstat(path, &st)))
+				break ;
+	if (ret)
 	{
 		printf("--%s not found\n", path);
 		return (127);
 	}
-	else
+	if (!can_exec(&st))
 	{
-		if (can_exec(&st))
-		{
-			construct_child_env(p, token_begin, token_end, &child_env);
-			//printab(p, child_env.argv);
-			ret = exec_path(p, path, &child_env);
-		}
-		else
-		{
-			dprintf(p->debug_fd, "cant exec %s\n", path);
-			return (127);
-		}
+		dprintf(p->debug_fd, "cant exec %s\n", path);
+		return (127);
 	}
-	//  free_path
+	ret = exec_path(p, path);
+	free(path);
 	return (ret);
+}
+
+void	push_to_opened_files(t_sh *p, char *name, int fd)
+{
+	t_open_file	**prev_next;
+
+	prev_next = &p->opened_files;
+	while (*prev_next)
+		prev_next = &((*prev_next)->next);
+	if (!(*prev_next = (t_open_file*)malloc(sizeof(t_open_file))))
+		exit (ERROR_MALLOC);
+	(*prev_next)->name = ft_strdup(name);
+	(*prev_next)->fd = fd;
+}
+
+int		file_is_already_open(t_sh *p, char *name)
+{
+	t_open_file	*f;
+
+	f = p->opened_files;
+	while (f)
+	{
+		if (name && f->name && !ft_strcmp(f->name, name))
+			return (f->fd);
+		f = f->next;
+	}
+	return (-1);
 }
 
 int		create_open_file(t_sh *p, char *path)
@@ -238,6 +244,12 @@ int		create_open_file(t_sh *p, char *path)
 		real_path = ft_strjoin(real_path, path);//<--SAME
 		was_malloc = 1;
 	}
+	if ((fd = file_is_already_open(p, real_path)) > -1)
+	{
+		dprintf(p->debug_fd, "%s already opened : fd %i\n", real_path, fd);
+		return (fd);
+	}
+	//if in opened_files take old fd
 	//	verify_rights of real_path
 	//fd = open(rpath, O_RDWR | O_TRUNC);//<--Depend on redirection?
 	if ((fd = open(real_path, O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) < 0)
@@ -245,6 +257,7 @@ int		create_open_file(t_sh *p, char *path)
 		printf("OPEN ERROR\n");
 		return (-1);
 	}
+	push_to_opened_files(p, real_path, fd); //Whem reinit opened_files?-->when delredirection, check fd?
 	dprintf(p->debug_fd, "open path %s fd %i\n", real_path, fd);
 	if (was_malloc)
 		free(real_path);
@@ -272,58 +285,124 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 	return (nb_redirections);
 }
 
-int		stock_redirections_assignements(t_sh *p, t_token *token_begin, t_token *token_end)
+int		count_argv(t_token *token_begin, t_token *token_end)
+{
+	int	cmd_begin;
+	int	nb;
+
+	cmd_begin = 0;
+	nb = 0;
+	while (token_begin)
+	{
+		if (token_begin->type == SH_WORD && !ft_strchr(token_begin->content, '='))
+			cmd_begin = 1;
+		if (token_begin->type == SH_WORD && cmd_begin)
+			nb++;
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	}
+	return (nb);
+}
+
+int		str_isnum(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+		if (!ft_isdigit(s[i]))
+			return (0);
+	return (1);
+}
+
+void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
+{
+	int	fd_in;
+	int	fd_in2;
+	int	fd_out;
+
+	fd_in2 = 0;
+	if (!token->content)
+	{
+		fd_in = 1;
+		fd_in2 = 2;
+	}
+	else
+		fd_in = ft_atoi(token->content);
+	if (str_isnum(token->sub->content))
+		fd_out = ft_atoi(token->sub->content);
+	else if (!(fd_out = create_open_file(p, token->sub->content)) > 0)
+	{
+		dprintf(p->debug_fd, "redirection error in %s\n", token->content);
+		return ;
+	}
+	push_redirect_lst(&p->redirect_lst, fd_in, fd_out);
+	(*nb_redirections)++;
+	if (fd_in2)
+	{
+		push_redirect_lst(&p->redirect_lst, 2, fd_out);
+		(*nb_redirections)++;
+	}
+}
+
+int		stock_assign(t_sh *p, t_token *token, int *nb_assign)
+{
+	//
+}
+
+int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
 {
 	int	nb_redirections;
 	int	fd;
+	int	cmd_begin;
+	int	ac;
 
+	p->child_ac = count_argv(token_begin, token_end);
+	if (!(p->child_argv = (char**)malloc((p->child_ac + 1) * sizeof(char*))))
+		exit(ERROR_MALLOC);
 	nb_redirections = 0;
-	while (token_begin && is_redirection_operator(token_begin->type) /* || is assignement(contain = )*/)
+	*nb_assign = 0;
+	cmd_begin = 0;
+	ac = 0;
+	while (token_begin)
 	{
-		if ((fd = create_open_file(p, token_begin->sub->content)) > 0)
+		if (is_redirection_operator(token_begin->type))
+			stock_redirection(p, token_begin, &nb_redirections);
+		else if (!cmd_begin && (ft_strchr(token_begin->content, '=') > token_begin->content))
+			stock_assign(p, token_begin, nb_assign);
+		else if (token_begin->type == SH_WORD)
 		{
-			push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
-			nb_redirections++;
+			p->child_argv[(ac)++] = ft_strdup(token_begin->content);
+			cmd_begin = 1;
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
-	while (token_begin && (is_redirection_operator(token_begin->type) || token_begin->type == SH_WORD))
-	{
-		if (token_begin->type != SH_WORD)
-		{
-			if ((fd = create_open_file(p, token_begin->sub->content)) > 0)
-			{
-				push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*, opened fd*/);
-				nb_redirections++;
-			}
-		}
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	}
+	p->child_argv[ac] = 0;
 	return (nb_redirections);
 }
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
+	int	nb_redirections;
+	int	nb_assign;
+	int	ret;
+
+	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
+	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	//if (!token_begin)
+		//no_cmd_name;
+	//Expand_words+retokenize
 	//if cmd name is func
 	//	replace func
-	int	nb_redirections;
-	int	ret;
-	//simple_cmd:
-	//              *io_redirect-*assignements ?cmd name *io_redirect-*argvs
-	nb_redirections = stock_redirections_assignements(p, token_begin, token_end);
-	while (token_begin && is_redirection_operator(token_begin->type) /* || is assignement*/)
-	{
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	}
-	//transform all assignements after command name in WORDS
-	//Expand_words+retokenize
-	//handle no_cmd_name (<auteur)
 	//if (is_built_in(token_begin->content))
-	//	p->last_cmd_result = exec_built_in(p, token_begin, token_end);
+	//	ret = exec_built_in(p, token_begin, token_end);
 	//else
-	ret = exec_prgm(p, token_begin, token_end);
+	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
+	print_redirections(p, p->redirect_lst);
+		ret = exec_prgm(p, token_begin, token_end);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-	//pull stored assignements
+	print_redirections(p, p->redirect_lst);
+	//del_n_assign_lst(&p->redirect_lst, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
-	return (ret);//to see
+	return (ret);
 }

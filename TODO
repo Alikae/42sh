@@ -10,3 +10,6 @@ Exec
 SIGNALS
 
 Integrer ENV
+
+
+cmd = "t" -> SEGV
