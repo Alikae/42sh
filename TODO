@@ -1,3 +1,4 @@
+
 Tokenization
 	HERE_DOC
 Exec
@@ -9,7 +10,29 @@ Exec
 	assignements
 SIGNALS
 
-Integrer ENV
-
-
 cmd = "t" -> SEGV
+
+->->-> Deplacer le truc qui se connecte aux autres tty pour le debug <-<-<-
+->->-> Le mettre le plus tot possible dans le programme \o/ <-<-<-
+->->-> PS: c'est un peu relou dans vim <-<-<-
+
+
+
+Init & Destroy
+Unit tests
+Debug_mode ?
+Getopt_long pour le main & built-in
+
+
+Multi-redirections on same file == redirection type handled by first operator (1>yo 2>>yo) 2 will use >
+
+
+File executer/fd_handler
+
+
+HERE DOCS:
+<< <<-
+operator terminator newline here doc newline terminator newline next_operator
+
+
+REPLACE SH_SYNTAX_ERROR by SH_UNFINISHED_INPUT at places

@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_fill_env.c                                      :+:      :+:    :+:   */
+/*   sh_getenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:34:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 19:10:49 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/13 17:52:27 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/13 17:56:50 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "sh.h"
 #include "sh_env.h"
 #include "libft.h"
 
-void	sh_fill_env(const char **ev)
+static const char *sh_getval(const t_env *handle, const char *key)
 {
-	char *key;
-	char *val;
-	t_env *tmp;
+	while (handle)
+	{
+		if (!ft_strcmp(key, handle->key))
+			return (handle->value);
+		handle = handle->next;
+	}
+	return (NULL);
+}
 
-	if (ev)
-		while (*ev)
-		{
-			key = ft_strndup(*ev, ft_strclen(*ev, '='));
-			val = ft_strdup(ft_strrchr(*ev, '=') + 1);
-				sh_set_env(key, val);
-			ft_strdel(&key);
-			ft_strdel(&val);
-			ev++;
-		}
+const char	*sh_getenv(const char *key)
+{
+	const char	*tmp;
+
+	if (!key || !*key)
+		return (NULL);
+	if ((tmp = sh_getval(sh()->params, key)))
+		return (tmp);
+	return (NULL);
 }

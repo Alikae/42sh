@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_shlvl.c                                     :+:      :+:    :+:   */
+/*   sh_set_pwd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 01:11:15 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 15:40:57 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/13 17:46:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "sh_env.h"
+#include "libft.h"
+#include <limits.h>
 
-void	sh_set_shlvl(void)
+void	sh_set_pwd(void)
 {
-	char *tmp;
-	int shlvl;
+	char	*tmp2;
 
-	shlvl = 0;
-	if (!(sh_get_value("SHLVL")))
-		sh_set_env("SHLVL", "1");
-	else
+	if ((tmp2 = ft_strnew(PATH_MAX + 1)))
 	{
-		shlvl = ft_atoi(sh_get_value("SHLVL"));
-		tmp = ft_itoa(shlvl + 1);
-		sh_set_env("SHLVL", tmp);
-		ft_strdel(&tmp);
+		tmp2 = getcwd(tmp2, PATH_MAX);
+		sh_setenv("PWD", tmp2);
+		ft_strdel(&tmp2);
 	}
 }

@@ -6,31 +6,57 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/13 07:57:29 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/15 00:58:59 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "libft.h"
 #include "sh_env.h"
 #include <unistd.h>
 
-void	sh_init(t_sh *p)
+static void	sh_set_shlvl(void)
 {
-	p->debug_fd = 2;
-	p->pipe_lst = 0;
-	p->last_cmd_result = 0;
-	p->lldbug = 0;
-	p->script_separators[0] = SH_SEMI;
-	p->script_separators[1] = SH_AND;
-	p->and_or_separators[0] = SH_AND_IF;
-	p->and_or_separators[1] = SH_OR_IF;
-	p->pipeline_separators[0] = SH_OR;
-	p->pipeline_separators[1] = 0;
-	p->pipein = 0;
-	p->pipeout = 0;
-	p->child_ac = 0;
-	p->child_argv = 0;
-	p->redirect_lst = 0;
-	p->opened_files = 0;
-	//p->assign_lst = 0;
+	char *tmp;
+	int shlvl;
+
+	shlvl = 0;
+	tmp = NULL;
+	if (!(sh_getenv("SHLVL")))
+		sh_setenv("SHLVL", "1");
+	else
+	{
+		tmp = ft_itoa(1 + ft_atoi(sh_getenv("SHLVL")));
+		sh_setenv("SHLVL", tmp);
+		ft_strdel(&tmp);
+	}
+}
+
+static void	sh_init_env()
+{
+	sh()->params = sh_env_params(sh()->ev);
+	sh_set_shlvl();
+	sh_set_pwd();
+}
+
+void	sh_init(t_sh *shell)
+{
+	sh_init_env();
+	shell->debug_fd = 2;
+	shell->pipe_lst = 0;
+	shell->last_cmd_result = 0;
+	shell->lldbug = 0;
+	shell->script_separators[0] = SH_SEMI;
+	shell->script_separators[1] = SH_AND;
+	shell->and_or_separators[0] = SH_AND_IF;
+	shell->and_or_separators[1] = SH_OR_IF;
+	shell->pipeline_separators[0] = SH_OR;
+	shell->pipeline_separators[1] = 0;
+	shell->pipein = 0;
+	shell->pipeout = 0;
+	shell->child_ac = 0;
+	shell->child_argv = 0;
+	shell->redirect_lst = 0;
+	shell->opened_files = 0;
+	//shell->assign_lst = 0;
 }

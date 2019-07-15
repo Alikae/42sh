@@ -1,27 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_pwd.c                                       :+:      :+:    :+:   */
+/*   sh_unsetenv.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 19:14:54 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/13 16:35:59 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/13 16:53:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "sh.h"
 #include "sh_env.h"
 #include "libft.h"
-#include <limits.h>
+#include <stdlib.h>
 
-void	sh_set_pwd(void)
+void	sh_unsetenv(const char *key)
 {
-	char	*tmp2;
+	t_env	*env;
+	t_env	*old;
 
-	if ((tmp2 = ft_strnew(PATH_MAX + 1)))
+	if (!key)
+		return ;
+	if (!(env = sh()->params))
+		return ;
+	if (ft_strcmp(env->key, key))
 	{
-		tmp2 = getcwd(tmp2, PATH_MAX);
-		sh_set_env("PWD", tmp2);
-		ft_strdel(&tmp2);
+		while (env->next && ft_strcmp(env->next->key, key))
+			env = env->next;
+		if (!env->next)
+			return ;
 	}
+	old = env->next;
+	env->next = old->next;
+	if (old->value)
+		ft_strdel(&(old->value));
+	if (old->key)
+		ft_strdel(&(old->key));
+	free(old);
+	return ;
 }

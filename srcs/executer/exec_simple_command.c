@@ -1,5 +1,6 @@
 #include "sh.h"
 #include "libft.h"
+#include "libshutil.h"
 #include <fcntl.h>
 #include "t_token.h"
 #include <sys/stat.h>
@@ -26,6 +27,15 @@ typedef struct  s_general_env
 	//local env changes?
 	t_redirection_lst   *redirections;
 }               t_general_env;
+
+void	print_redirections(t_sh *p, t_redirect_lst *origin)
+{
+	while (origin)
+	{
+		dprintf(p->debug_fd, "fd %.3i --- to fd %.3i\n", origin->in, origin->out);
+		origin = origin->next;
+	}
+}
 
 int     block_wait(t_sh *p)
 {
@@ -64,7 +74,6 @@ void	generate_redirections(t_sh *p)
 	{
 		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
 		//close(lst->out) <-- ! see man dup2
-		//if in already
 		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
 		{
 			if ((lst->out = dup(out)) < 0)
@@ -74,13 +83,11 @@ void	generate_redirections(t_sh *p)
 		}
 		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
 		if (dup2(lst->out, lst->in) < 0)
-		{
-			//if lst->in is already in lst
-			//dup (old)
-			//else
 			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
-		}
-		int ret = close(lst->out);
+		else
+			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, lst->out);
+		int ret;
+		ret = close(lst->out);
 		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
 		lst = lst->next;
 	}
@@ -140,15 +147,6 @@ int		can_exec(struct stat *st)
 	return (0);
 }
 
-void	print_redirections(t_sh *p, t_redirect_lst *origin)
-{
-	while (origin)
-	{
-		dprintf(p->debug_fd, "fd %.3i --- to fd %.3i\n", origin->in, origin->out);
-		origin = origin->next;
-	}
-}
-
 int		get_next_path(char *path, char *all_paths, int i)
 {
 	//if find next path by :
@@ -193,7 +191,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 	}
 	if (!can_exec(&st))
 	{
-		dprintf(p->debug_fd, "cant exec %s\n", path);
+		printf("cant exec %s\n", path);
 		return (127);
 	}
 	ret = exec_path(p, path);
@@ -212,6 +210,20 @@ void	push_to_opened_files(t_sh *p, char *name, int fd)
 		exit (ERROR_MALLOC);
 	(*prev_next)->name = ft_strdup(name);
 	(*prev_next)->fd = fd;
+	(*prev_next)->next = 0;
+}
+
+void	remove_opened_files(t_sh *p)
+{
+	t_open_file	*tmp;
+
+	while (p->opened_files)
+	{
+		free(p->opened_files->name);
+		tmp = p->opened_files;
+		p->opened_files = p->opened_files->next;
+		free(tmp);
+	}
 }
 
 int		file_is_already_open(t_sh *p, char *name)
@@ -228,7 +240,19 @@ int		file_is_already_open(t_sh *p, char *name)
 	return (-1);
 }
 
-int		create_open_file(t_sh *p, char *path)
+int	open_with_redirection_flags(char *real_path, t_toktype type)
+{
+	if (type == SH_GREAT)
+		return (open(real_path, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR));
+	else if (type == SH_LESS)
+		return (open(real_path, O_CREAT | O_RDONLY, S_IRUSR | S_IWUSR));
+	else if (type == SH_DGREAT)
+		return (open(real_path, O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR));
+	else if (type == SH_LESSGREAT)
+		return (open(real_path, O_CREAT | O_APPEND | O_RDWR, S_IRUSR | S_IWUSR));
+}
+
+int		create_open_file(t_sh *p, char *path, t_toktype type)
 {
 	int		fd;
 	int		was_malloc;
@@ -249,16 +273,15 @@ int		create_open_file(t_sh *p, char *path)
 		dprintf(p->debug_fd, "%s already opened : fd %i\n", real_path, fd);
 		return (fd);
 	}
-	//if in opened_files take old fd
 	//	verify_rights of real_path
 	//fd = open(rpath, O_RDWR | O_TRUNC);//<--Depend on redirection?
-	if ((fd = open(real_path, O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) < 0)
+	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
 		printf("OPEN ERROR\n");
 		return (-1);
 	}
 	push_to_opened_files(p, real_path, fd); //Whem reinit opened_files?-->when delredirection, check fd?
-	dprintf(p->debug_fd, "open path %s fd %i\n", real_path, fd);
+	dprintf(p->debug_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
 	if (was_malloc)
 		free(real_path);
 	return (fd);
@@ -266,6 +289,7 @@ int		create_open_file(t_sh *p, char *path)
 
 int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end)
 {
+	//?
 	int	nb_redirections;
 	int	fd;
 
@@ -274,7 +298,7 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 	{
 		if (is_redirection_operator(token_begin->type))
 		{
-			if ((fd = create_open_file(p, token_begin->sub->content)) > 0)
+			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > 0)
 			{
 				push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
 				nb_redirections++;
@@ -314,34 +338,70 @@ int		str_isnum(char *s)
 	return (1);
 }
 
+int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
+{
+	int	nb_redirections;
+
+	nb_redirections = 0;
+	if (type == SH_GREAT || type == SH_CLOBBER || type == SH_DGREAT)
+	{
+		//if (type == SH_GREAT/*&& is_set(NOCLOBBER)*/)
+		//{
+			//if (file exist
+			//	return (0);
+		//}
+			
+		if (fd_in == -1)
+		{
+			push_redirect_lst(&p->redirect_lst, 1, fd_out);
+			push_redirect_lst(&p->redirect_lst, 2, fd_out);
+			nb_redirections += 2;
+		}
+		else
+		{
+			push_redirect_lst(&p->redirect_lst, fd_in, fd_out);
+			nb_redirections++;
+		}
+	}
+	else if (type == SH_LESS)
+	{
+		if (fd_in == -1)
+		{
+			push_redirect_lst(&p->redirect_lst, 0, fd_out);
+			nb_redirections++;
+		}
+		else
+		{
+			push_redirect_lst(&p->redirect_lst, fd_in, fd_out);
+			nb_redirections++;
+		}
+	}
+	else if (type == SH_LESSGREAT)
+	{
+		
+	}
+	return (nb_redirections);
+}
+
 void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 {
 	int	fd_in;
-	int	fd_in2;
 	int	fd_out;
 
-	fd_in2 = 0;
 	if (!token->content)
 	{
-		fd_in = 1;
-		fd_in2 = 2;
+		fd_in = -1;
 	}
 	else
 		fd_in = ft_atoi(token->content);
 	if (str_isnum(token->sub->content))
 		fd_out = ft_atoi(token->sub->content);
-	else if (!(fd_out = create_open_file(p, token->sub->content)) > 0)
+	else if (!(fd_out = create_open_file(p, token->sub->content, token->type)) > 0)
 	{
 		dprintf(p->debug_fd, "redirection error in %s\n", token->content);
 		return ;
 	}
-	push_redirect_lst(&p->redirect_lst, fd_in, fd_out);
-	(*nb_redirections)++;
-	if (fd_in2)
-	{
-		push_redirect_lst(&p->redirect_lst, 2, fd_out);
-		(*nb_redirections)++;
-	}
+	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
 
 int		stock_assign(t_sh *p, t_token *token, int *nb_assign)
@@ -380,11 +440,23 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 	return (nb_redirections);
 }
 
+int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
+{
+	if (!ft_strcmp(cmd, "true"))
+		return (&sh_true);
+	else if (!ft_strcmp(cmd, "false"))
+		return (&sh_false);
+	else if (!ft_strcmp(cmd, "set"))
+		return (&sh_false);
+	return (NULL);
+}
+
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
 	int	nb_assign;
 	int	ret;
+	int		(*f)(int ac, char **av, t_env **ev);
 
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
@@ -392,15 +464,18 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//if (!token_begin)
 		//no_cmd_name;
 	//Expand_words+retokenize
-	//if cmd name is func
+	//if (token_begin->type == SH_FUNC)
+	//	store_func();
+	//else if cmd name is stored in func
 	//	replace func
-	//if (is_built_in(token_begin->content))
-	//	ret = exec_built_in(p, token_begin, token_end);
+	//if ((f = sh_is_builtin(token_begin->content))
+	//	ret = exec_built_in(p, f);
 	//else
 	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
 	print_redirections(p, p->redirect_lst);
 		ret = exec_prgm(p, token_begin, token_end);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+	remove_opened_files(p);
 	print_redirections(p, p->redirect_lst);
 	//del_n_assign_lst(&p->redirect_lst, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
