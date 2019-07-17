@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/17 02:43:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/17 16:23:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "sh_line.h"
 # include "redirections.h"
 # include "t_token.h"
+# include "sh_opt.h"
 
 typedef struct		s_open_file
 {
@@ -29,6 +30,7 @@ typedef struct		s_sh
 	int				ac;
 	char			**av;
 	char			**ev;
+	t_opt			*opt;
 	t_toktype		type; //for recognize tokens
 	int				last_cmd_result;
 	struct s_env	*params;

@@ -6,13 +6,14 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/15 00:58:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/17 16:24:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "sh_env.h"
+#include "sh_opt.h"
 #include <unistd.h>
 
 static void	sh_set_shlvl(void)
@@ -41,7 +42,9 @@ static void	sh_init_env()
 
 void	sh_init(t_sh *shell)
 {
+	ft_putendl("Shell: sh_init.c\n---");
 	sh_init_env();
+	shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
 	shell->debug_fd = 2;
 	shell->pipe_lst = 0;
 	shell->last_cmd_result = 0;
