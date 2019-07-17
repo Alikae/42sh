@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 02:49:50 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/07/11 02:51:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/17 14:52:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int		sh_error_path(char *cmd, char *path, int error)
 {
 	ft_putstr_fd(cmd, 2);
-	ft_pustr_fd(path, 2);
+	ft_putstr_fd(path, 2);
 	if (error & ENOENT)
 		write(2, ": No such file or directory\n", 28);
 	if (error & ENOTDIR)

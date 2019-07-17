@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   sh_opt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 21:22:05 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/16 17:38:44 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/17 14:47:48 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/17 14:49:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef SH_OPT_H
+# define SH_OPT_H
 
-char	*ft_strdup(const char *src)
-{	
-	char	*dest;
+typedef struct		s_opt
+{
+	char			name;
+	char			*arg;
+	struct s_opt	*next;
+}					t_opt;
 
-	if (!src)
-		return (NULL);
-	if (!(dest = ft_strnew(ft_strlen(src))))
-		return (NULL);
-	ft_strcpy(dest, src);
-	return (dest);
-}
+t_opt	*sh_create_opt(char name, char *content);
+t_opt	*sh_getopt(int *ac, char ***av, char *optstr);
+
+#endif
