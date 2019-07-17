@@ -1,20 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_exitpoint.h                                     :+:      :+:    :+:   */
+/*   sh_free_opts.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/04 16:54:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/18 00:47:38 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/18 00:46:24 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/18 00:49:34 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_EXITPOINT_H
-# define SH_EXITPOINT_H
+#include "sh.h"
+#include "sh_opt.h"
+#include <stdlib.h>
 
-void	sh_exitpoint(void);
-void	sh_free_opts(void);
-void	sh_free_params(void);
-
-#endif
+void	sh_free_opts(void)
+{
+	t_opt *opts;
+	t_opt *tmp;
+	
+	if (!(opts = sh()->opt))
+		return ;
+	while (opts)
+	{
+		tmp = opts->next;
+		if (opts->arg)
+			free(opts->arg);
+		free(opts);
+		opts = tmp;
+	}
+}

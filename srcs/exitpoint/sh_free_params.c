@@ -1,20 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_exitpoint.h                                     :+:      :+:    :+:   */
+/*   sh_free_params.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/04 16:54:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/18 00:47:38 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/18 00:31:39 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/07/18 00:45:06 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_EXITPOINT_H
-# define SH_EXITPOINT_H
+#include "sh.h"
+#include "sh_env.h"
+#include <stdlib.h>
 
-void	sh_exitpoint(void);
-void	sh_free_opts(void);
-void	sh_free_params(void);
-
-#endif
+void	sh_free_params(void)
+{
+	t_env *params;
+	t_env *tmp;
+	
+	if (!(params = sh()->params))
+		return ;
+	while (params)
+	{
+		tmp = params->next;
+		if (params->key)
+			free(params->key);
+		if (params->value)
+			free(params->value);
+		free(params);
+		params = tmp;
+	}
+}

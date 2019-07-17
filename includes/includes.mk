@@ -6,12 +6,13 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/11 01:54:26 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/07/18 00:43:12 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### MAIN FILES ###
 H_FILES = \
+	sh_exitpoint.h \
 	history.h \
 	sh.h
 
