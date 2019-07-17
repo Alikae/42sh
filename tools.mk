@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/10 04:40:07 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/17 14:54:46 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ norm:
 	@norminette -R CheckForbiddenSourceHeader $(HEADER) $(SRC_NAME)
 
 ### Test & Launcher ###
-run: $(NAME) | run_msg
+run: all | run_msg
 	./$(NAME)
 
 ### Messages rules ###
