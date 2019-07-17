@@ -478,6 +478,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))
 		return (&sh_set);
+	else if (!ft_strcmp(cmd, "exit"))
+		sh_exitpoint();
 	return (NULL);
 }
 
