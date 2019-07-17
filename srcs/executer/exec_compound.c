@@ -1,22 +1,58 @@
 #include "t_token.h"
 #include "sh.h"
+#include "sh_env.h"
+
+//FOR
+//NAME
+//WORDLIST?
+//DO
+
+int		exec_compound_case(t_sh *p, t_token *tok)
+{
+	t_token	*case_elem;
+	t_token	*word;
+
+	dprintf(p->debug_fd, "treating CASE\n");
+	case_elem = tok->sub;
+	while (case_elem)
+	{
+		word = case_elem->sub;
+		while (word)
+		{
+			if (!ft_strcmp(tok->content, word->content))
+				return (exec_script(p, tok->sub->sub->sub, 0));
+			word = word->next;
+		}
+		case_elem = case_elem->next;
+	}
+	return (0);
+}
 
 int		exec_compound_for(t_sh *p, t_token *tok)
 {
-	t_token	*ins;
+	t_token		*ins;
+	const char	*tmp;
+	const char	*value;
 
 	dprintf(p->debug_fd, "treating FOR\n");
 	ins = tok->sub->sub;
+	tmp = 0;
+	if ((value = sh_getenv(tok->sub->content)))
+		tmp = ft_strdup(value);
 	while (ins)
 	{
 		if (ins->type == SH_WORD)
 		{
-			//assign var $tok->sub->content to ins->content
+			sh_setenv(tok->sub->content, ins->content);
+			printf("%s\n", tok->sub->sub->sub->content);
 			p->last_cmd_result = exec_script(p, tok->sub->sub->sub, 0);
-			//unassign
 		}
 		ins = ins->next;
 	}
+	sh_unsetenv(tok->sub->content);
+	if (tmp)
+		sh_setenv(tok->sub->content, tmp);
+	free(tmp);
 	return (p->last_cmd_result);
 }
 

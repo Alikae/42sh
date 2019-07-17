@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/15 00:57:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/17 05:18:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "sh_entrypoint.h"
 #include "sh_command_line.h"
 #include "history.h"
+#include "sh_env.h"
 
 #include <stdio.h>
 
@@ -62,39 +63,52 @@ int		sh_loop(void)
 	ask_for_extern_terminal(p);
 	ft_putendl("Shell: sh_loop.c\n---");
 	hist = init_history();
+	int	complete;
 	while (42)
 	{
 		sh_prompt();
 		ln_tab = NULL;
 		int dbug = 0;
-		if (!dbug)
+		complete = 0;
+		input = 0;
+		while (!complete)
 		{
-			if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
-				break ;
+			if (!dbug)
+			{
+				if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
+					break ;
+			}
+			else
+			{
+				ln_tab = malloc(2 * sizeof(char*));
+		//	ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
+		//	ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
+		//	ln_tab[0] = ft_strdup("/bin/cat tet");
+		//	ln_tab[0] = ft_strdup("for lala in po la ka nu ; do /bin/echo $lala ; done");
+		//	ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
+		//	ln_tab[0] = ft_strdup("case yoz in ( lap | yoz ) /bin/echo yes ;esac");
+		//	ln_tab[0] = ft_strdup("  echo ; done");
+				ln_tab[0] = ft_strdup("w");
+				ln_tab[1] = 0;
+			}
+		//	int z = 0;
+		//	while (ln_tab[z])
+		//		fprintf(stderr, "[%s]\n", ln_tab[z++]);
+		//	if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
+		//		break ;
+		//	else
+			input = ft_strjoin_free(input, sh_tab_fusion(ln_tab), input);
+			ft_tab_strdel(&ln_tab);
+			p->unfinished_cmd = 0;
+			if (p->ast = tokenize_input(input))//line
+			{
+				print_all_tokens(p, p->ast, 0);
+				exec_script(p, p->ast, 0);
+			}
+			if (!p->unfinished_cmd)
+				complete = 1;
 		}
-		else
-		{
-			ln_tab = malloc(2 * sizeof(char*));
-			ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
-			ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
-			ln_tab[0] = ft_strdup("/bin/cat tet");
-			ln_tab[1] = 0;
-		}
-		int z = 0;
-		while (ln_tab[z])
-			fprintf(stderr, "[%s]\n", ln_tab[z++]);
-		if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
-			break ;
-		else
-			input = sh_tab_fusion(ln_tab);
-		if (p->ast = tokenize_input(input))//line
-		{
-			print_all_tokens(p, p->ast, 0);
-			exec_script(p, p->ast, 0);
-		}
-		else
-			printf("ERROR\n");
-		ft_tab_strdel(&ln_tab);
+		free(input);
 	}
 	push_history(hist);
 	return (1);

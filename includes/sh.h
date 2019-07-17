@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/13 07:57:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/17 02:43:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct		s_sh
 	char			**child_argv;
 	t_open_file		*opened_files;
 	
+	int				unfinished_cmd;
 
 	int	lldbug;
 }					t_sh;

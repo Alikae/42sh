@@ -11,7 +11,7 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 	else if (type == SH_IF)
 		return (exec_compound_if(p, token_compound));
 	else if (type == SH_CASE)
-		;//	return (exec_compound_case(p, token_compound));
+		return (exec_compound_case(p, token_compound));
 	else if (type == SH_FOR)
 		return (exec_compound_for(p, token_compound));
 	dprintf(p->debug_fd, "treating GROUPING\n");

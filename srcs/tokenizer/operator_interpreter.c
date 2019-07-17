@@ -1,4 +1,7 @@
 #include "t_token.h"
+#include "libft.h"
+#include "error.h"
+#include "sh.h"
 
 t_toktype	read_n_skip_operator_4(t_tokenize_tool *t)
 {
@@ -114,10 +117,42 @@ int			is_redirection_operator(t_toktype type)
 int			operator_cant_be_first(t_toktype type)
 {
 	if (type == SH_AND || type == SH_OR
-			|| type == SH_AND_IF || type == SH_OR_IF
-			|| type == SH_SEMI || type == SH_DSEMI)
+			|| type == SH_AND_IF || type == SH_OR_IF)
 		return (1);
 	return (0);
+}
+//TO TEST
+t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
+{
+	int	word_begin;
+	int	word_len;
+	int	here_doc_begin;
+
+	forward_blanks(t);
+	word_begin = t->i;
+	read_n_skip_word(t);
+	if (word_begin == t->i)
+	{
+		sh()->unfinished_cmd = 1;
+		return (SH_SYNTAX_ERROR);
+	}
+	word_len == t->i - word_begin + 1;
+	forward_blanks_newline(t);
+	here_doc_begin = t->i;
+	while (ft_strncmp(t->input + word_begin, t->input + t->i, word_len) || t->i + word_len != '\n')
+	{
+		printf("yo\n");
+		t->i = ft_strchr(t->input + t->i, '\n') - t->input;
+		if (t->i < 0)
+		{
+			sh()->unfinished_cmd = 1;
+			return (SH_SYNTAX_ERROR);
+		}
+	}
+	if (!((*p_actual)->content = ft_strndup(t->input[here_doc_begin], t->i - here_doc_begin)))
+		exit(ERROR_MALLOC);
+	return (0);
+	//+ was_quoted + was_dashed
 }
 
 t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
@@ -141,10 +176,7 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 		if (is_newline_separator(type))
 			t->word_nb = 1;
 		if (is_redirection_operator(type))
-		{
-			if (fill_redirection(t, p_actual) == SH_SYNTAX_ERROR)
-				return (SH_SYNTAX_ERROR);
-		}
+			return (fill_redirection(t, p_actual, type));
 	}
 	return (0);
 }

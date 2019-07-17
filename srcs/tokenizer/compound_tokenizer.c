@@ -6,12 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/07/07 08:39:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/17 02:03:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_token.h"
 #include "error.h"
+#include "sh.h"
 
 //PROTECC ALL RECURSIVETOKENIZER FROM SYNTAXERROR
 //FREE CREATED TOKS WHEN ERROR
@@ -81,6 +82,7 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 		return (handle_syntax_error(t, "unexpected ESAC in CASE: expected WORD after '('", compound));
 	}
 	t->i = word_begin;
+	t_token	**previous_next = &(actual->sub);
 	while (1)
 	{
 		forward_blanks(t);
@@ -88,8 +90,9 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 		read_n_skip_word(t);
 		if (t->i != word_begin && ft_strncmp(t->input + word_begin, ")", t->i - word_begin))
 		{
-			actual->next = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
-			actual = actual->next;
+			(*previous_next) = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
+			dprintf(sh()->debug_fd, "case WORD : %s\n", (*previous_next)->content);
+			previous_next = &((*previous_next)->next);
 		}
 		else
 			t->i = word_begin;
@@ -114,7 +117,7 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 	actual = origin;
 	if (!tokenize_case_pattern(t, next_separator, actual, compound))
 		return (0);
-	if (!origin->next)
+	if (!origin->sub)
 		return (handle_syntax_error(t, "PATTERN missing in CASE", compound));
 	forward_blanks_newline(t);
 	word_begin = t->i;
@@ -124,12 +127,13 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 	else
 	{
 		t->i = word_begin;
-		if (!(origin->next->sub = recursive_tokenizer(t, SH_CASE, next_separator)) && *next_separator != SH_ESAC && *next_separator != SH_DSEMI)
+		if (!(origin->sub->sub = recursive_tokenizer(t, SH_CASE, next_separator)) && *next_separator != SH_ESAC && *next_separator != SH_DSEMI)
+		{
+			printf("%i ", *next_separator);
 			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
+		}
 	}
-	actual = origin->next;
-	delete_token(origin);
-	return (actual);
+	return (origin);
 }
 
 int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token)
@@ -172,7 +176,10 @@ int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *c
 		if (esac_finded || next_separator == SH_ESAC)
 			break ;
 		if (next_separator != SH_DSEMI)
+		{
+			printf("%i ", next_separator);
 			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
+		}
 		previous_next = &((*previous_next)->next);
 	}
 	return (1);
@@ -185,10 +192,11 @@ t_token	*tokenize_case(t_tokenize_tool *t)
 
 	if (!tokenize_case_name(t, &compound_token))
 		return (handle_syntax_error(t, "Invalid WORD in CASE", 0));
+	dprintf(sh()->debug_fd, "case name : %s\n", compound_token->content);
 	forward_blanks_newline(t);
 	if (!read_n_skip_in(t))
 		return (handle_syntax_error(t, "missing IN in CASE", compound_token));
-	if (!tokenize_case_lists(t, &compound_token->sub, compound_token))
+	if (!tokenize_case_lists(t, &(compound_token->sub), compound_token))
 		return (0);
 	return (compound_token);
 	//CASE(WORD)

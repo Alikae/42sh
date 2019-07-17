@@ -28,6 +28,18 @@ typedef struct  s_general_env
 	t_redirection_lst   *redirections;
 }               t_general_env;
 
+int		tablen(char **tab)
+{
+	int	l;
+
+	l = 0;
+	if (!tab)
+		return (0);
+	while (tab[l])
+		l++;
+	return (l);
+}
+
 void	print_redirections(t_sh *p, t_redirect_lst *origin)
 {
 	while (origin)
@@ -147,18 +159,34 @@ int		can_exec(struct stat *st)
 	return (0);
 }
 
-int		get_next_path(char *path, char *all_paths, int i)
+char	*get_next_path(char *path, char **all_paths, int i)
 {
+	char	*cwd;
+	char	*next_path;
+
+	if (i > tablen(all_paths))
+		return (0);
+	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])
+	{
+		cwd = getcwd(0, 0);
+		next_path = ft_strjoin_free(cwd, "/", cwd);
+		return (ft_strjoin_free(next_path, path, next_path));
+	}
+	else if (path[0] == '/')
+	{
+		if (i)
+			return (0);
+		return (ft_strdup(path));
+	}
+	next_path = ft_strjoin(all_paths[i], "/");
+	next_path = ft_strjoin_free(next_path, path, next_path);
 	//if find next path by :
 	//	concat path / this_zone
 	//else if pile the end
 	//	give actual_path+path
 	//else
 	//	return (0);
-	if (i)
-		return (0);
-		char **real_path = ft_strdup(path);
-	return (real_path);
+	return (next_path);
 }
 
 int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
@@ -168,22 +196,25 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 	struct stat st;
 	char	*real_path;
 	int		nb_paths;
+	char	**paths;
 
 	path = (token_begin) ? token_begin->content : 0;
 	dprintf(p->debug_fd, "[%i] try path--%s\n", getpid(), path);
+	if (!path)
+		return (0);
 	//dprintf(p->debug_fd, "with_redirections:\n");
 	//print_redirections(p, p->redirect_lst);
 	ret = 0;
 	nb_paths = 0;
-	if (path[0] == '/')
+	if (!(paths = ft_strsplit(sh_getenv("PATH"), ':')))
+		printf("$PATH not found\n");
+	while (real_path = get_next_path(path, paths, nb_paths++))
 	{
-		real_path = ft_strdup(path);
-		ret = lstat(path, &st);
+		dprintf(p->debug_fd, "try path %s\n", real_path);
+		if (!(ret = lstat(real_path, &st)))
+			break ;
+		//dprintf(p->debug_fd, "path error %i\n", errno);
 	}
-	else
-		while (real_path = get_next_path(path, 0, nb_paths++ /*path*/))
-			if (!(ret = lstat(path, &st)))
-				break ;
 	if (ret)
 	{
 		printf("--%s not found\n", path);
@@ -194,8 +225,8 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 		printf("cant exec %s\n", path);
 		return (127);
 	}
-	ret = exec_path(p, path);
-	free(path);
+	ret = exec_path(p, real_path);
+	free(real_path);
 	return (ret);
 }
 
@@ -274,13 +305,12 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 		return (fd);
 	}
 	//	verify_rights of real_path
-	//fd = open(rpath, O_RDWR | O_TRUNC);//<--Depend on redirection?
 	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
 		printf("OPEN ERROR\n");
 		return (-1);
 	}
-	push_to_opened_files(p, real_path, fd); //Whem reinit opened_files?-->when delredirection, check fd?
+	push_to_opened_files(p, real_path, fd);
 	dprintf(p->debug_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
 	if (was_malloc)
 		free(real_path);

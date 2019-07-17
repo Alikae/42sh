@@ -20,7 +20,10 @@ void	del_n_redirect_lst(t_redirect_lst **p_origin, int n)
 
 	while (n-- && *p_origin)
 	{
-		close((*p_origin)->out);
+		if ((*p_origin)->out > 2)
+			close((*p_origin)->out);
+		if ((*p_origin)->in > 2)
+			close((*p_origin)->in);
 		tmp = *p_origin;
 		*p_origin = (*p_origin)->next;
 		free(tmp);

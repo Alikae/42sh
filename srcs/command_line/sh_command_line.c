@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 07:36:41 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:42:58 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/16 06:29:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char		**sh_arguments(t_hist *hist)
 		ft_memdel((void**)&line);
 	}
 	hist = put_in_history(hist, str);
-	if (str && ft_strcmp(str, "") && (ret = sh_check_str(str)) == 1)
+	if (str && ft_strcmp(str, "") /*&& (ret = sh_check_str(str)) == 1*/)
 		command = sh_strsplit_m(str, ';');
 	ft_memdel((void**)&str);
 	sh_error_parse(ret);

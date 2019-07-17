@@ -56,40 +56,40 @@ t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_
 
 t_toktype	word_is_reserved_2(const char *word, int len)
 {
-	if (!ft_strncmp(word, "for", len))
+	if (len == 3 && !ft_strncmp(word, "for", len))
 		return (SH_FOR);
-	else if (!ft_strncmp(word, "!", len))
+	else if (len == 1 && !ft_strncmp(word, "!", len))
 		return (SH_BANG);
-	else if (!ft_strncmp(word, "in", len))
+	else if (len == 2 && !ft_strncmp(word, "in", len))
 		return (SH_IN);
-	else if (!ft_strncmp(word, "{", len))
+	else if (len == 1 && !ft_strncmp(word, "{", len))
 		return (SH_BRACES);
 	return (0);
 }
 
 t_toktype	word_is_reserved(const char *word, int len)
 {
-	if (!ft_strncmp(word, "while", len))
+	if (len == 5 && !ft_strncmp(word, "while", len))
 		return (SH_WHILE);
-	else if (!ft_strncmp(word, "if", len))
+	else if (len == 2 && !ft_strncmp(word, "if", len))
 		return (SH_IF);
-	else if (!ft_strncmp(word, "then", len))
+	else if (len == 4 && !ft_strncmp(word, "then", len))
 		return (SH_THEN);
-	else if (!ft_strncmp(word, "elif", len))
+	else if (len == 4 && !ft_strncmp(word, "elif", len))
 		return (SH_ELIF);
-	else if (!ft_strncmp(word, "else", len))
+	else if (len == 4 && !ft_strncmp(word, "else", len))
 		return (SH_ELSE);
-	else if (!ft_strncmp(word, "fi", len))
+	else if (len == 2 && !ft_strncmp(word, "fi", len))
 		return (SH_FI);
-	else if (!ft_strncmp(word, "do", len))
+	else if (len == 2 && !ft_strncmp(word, "do", len))
 		return (SH_DO);
-	else if (!ft_strncmp(word, "done", len))
+	else if (len == 4 && !ft_strncmp(word, "done", len))
 		return (SH_DONE);
-	else if (!ft_strncmp(word, "case", len))
+	else if (len == 4 && !ft_strncmp(word, "case", len))
 		return (SH_CASE);
-	else if (!ft_strncmp(word, "esac", len))
+	else if (len == 4 && !ft_strncmp(word, "esac", len))
 		return (SH_ESAC);
-	else if (!ft_strncmp(word, "until", len))
+	else if (len == 5 && !ft_strncmp(word, "until", len))
 		return (SH_UNTIL);
 	return (word_is_reserved_2(word, len));
 }

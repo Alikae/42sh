@@ -1,5 +1,6 @@
 #include "t_token.h"
 #include "libft.h"
+#include "sh.h"
 
 int			is_word_char(char c) // exhaustive? all operators
 {
@@ -55,17 +56,23 @@ int			is_io_nb(t_tokenize_tool *t)
 	return (0);
 }
 
-t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual)
+t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 {
 	int	word_begin;
 
+	if (type == SH_DLESS || type == SH_DLESSDASH)
+		return (read_here_doc(t, p_actual, type)); //can also be detected in treat_word
 	forward_blanks(t);
 	word_begin = t->i;
 	//if is io
 	//	->fd
 	if (!read_n_skip_word(t))
 	{
-		printf("GRAMMAR ERROR: expected WORD after redirection_operator at -%.10s\n", t->input + t->i - ((t->i - 4 > -1) ? 4 : 2));
+		printf("%s\n", t->input + t->i);
+		if (!t->input[t->i])
+			sh()->unfinished_cmd = 1;
+		else
+			printf("GRAMMAR ERROR: expected WORD after redirection_operator at -%.10s\n", t->input + t->i - ((t->i - 4 > -1) ? 4 : 2));
 		return (SH_SYNTAX_ERROR);
 	}
 	(*p_actual)->sub = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
@@ -81,7 +88,7 @@ t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len)
 	type = read_n_skip_operator(t);
 	*p_actual = (*p_actual)->next;
 	(*p_actual)->type = type;
-	return (fill_redirection(t, p_actual));
+	return (fill_redirection(t, p_actual, type));
 }
 
 t_toktype	tokenize_reserved_word(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
@@ -129,7 +136,10 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 		read_n_skip_word(t);
 		if (!(type = word_is_reserved(t->input + word_begin, t->i - word_begin)) || !is_compound(type))
 		{
-			printf("SYNTAX ERROR: Function block need to be a compound at %.10s\n", t->input + word_begin);
+			if (!t->input[t->i])
+				sh()->unfinished_cmd = 1;
+			else
+				printf("SYNTAX ERROR: Function block need to be a compound at %.10s\n", t->input + word_begin);
 			return (SH_SYNTAX_ERROR);
 		}
 	}
@@ -144,6 +154,18 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 		//free all
 		return (SH_SYNTAX_ERROR);
 	}
+	//tokenize optional IO to exec when executing the func (yo() {echo yo } 1>/dev/null;)
+	return (0);
+}
+
+int			word_out_of_context(t_toktype type)
+{
+	if (type == SH_DONE || type == SH_IN
+			|| type == SH_THEN || type == SH_ELIF
+			|| type == SH_ELSE || type == SH_FI
+			|| type == SH_DO || type == SH_DONE
+			|| type == SH_ESAC)
+		return (1);
 	return (0);
 }
 
@@ -172,6 +194,11 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 			return (type);
 		if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin, t->i - word_begin)))
 		{
+			if (word_out_of_context(type))
+			{
+				printf("Unexpected token at -%s\n", t->input + word_begin);
+				return (SH_SYNTAX_ERROR);
+			}
 			if (tokenize_reserved_word(t, p_actual, type) == SH_SYNTAX_ERROR)
 				return (SH_SYNTAX_ERROR);
 		}
@@ -198,7 +225,7 @@ void	treat_input(t_tokenize_tool *t, t_toktype actual_compound, t_toktype *termi
 	if (!(*terminator = treat_operator(t, p_actual, actual_compound)))
 		*terminator = treat_word(t, p_actual, actual_compound);
 }
-
+int lstp(){}
 t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_toktype *terminator)
 {
 	t_token	*origin;
@@ -211,13 +238,13 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		treat_input(t, actual_compound, terminator, &actual);
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
+		//printf("yo\n");
+		lstp();
 		//free all
 		return (0);
 	}
 	actual = origin->next;
 	delete_token(origin);
-//	if (!actual)
-//		return (create_token(0, 0));
 	return (actual);
 }
 
