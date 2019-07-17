@@ -477,8 +477,14 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 	else if (!ft_strcmp(cmd, "false"))
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))
-		return (&sh_false);
+		return (&sh_set);
 	return (NULL);
+}
+
+int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
+{
+	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
+	return (f(p->child_ac, p->child_argv, &(p->params)));
 }
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
@@ -498,11 +504,11 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//	store_func();
 	//else if cmd name is stored in func
 	//	replace func
-	//if ((f = sh_is_builtin(token_begin->content))
-	//	ret = exec_built_in(p, f);
-	//else
 	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
 	print_redirections(p, p->redirect_lst);
+	if ((f = sh_is_builtin(token_begin->content)))
+		ret = exec_builtin(p, f);
+	else
 		ret = exec_prgm(p, token_begin, token_end);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	remove_opened_files(p);
