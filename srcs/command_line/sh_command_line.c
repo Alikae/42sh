@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 07:36:41 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/16 06:29:23 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/18 09:25:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ static int		sh_check_line(char **line)
 	return (k == 0 ? k : j);
 }
 
-char		**sh_arguments(t_hist *hist)
+char		*sh_arguments(t_hist *hist)
 {
 	int		ret;
 	char	*str;
@@ -126,9 +126,9 @@ char		**sh_arguments(t_hist *hist)
 		ft_memdel((void**)&line);
 	}
 	hist = put_in_history(hist, str);
-	if (str && ft_strcmp(str, "") /*&& (ret = sh_check_str(str)) == 1*/)
-		command = sh_strsplit_m(str, ';');
-	ft_memdel((void**)&str);
-	sh_error_parse(ret);
-	return (command);
+//	if (str && ft_strcmp(str, "") /*&& (ret = sh_check_str(str)) == 1*/)
+//		command = sh_strsplit_m(str, ';');
+//	ft_memdel((void**)&str);
+//	sh_error_parse(ret);
+	return (str);
 }

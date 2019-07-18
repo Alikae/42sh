@@ -10,7 +10,6 @@
 #include "sh_env.h"
 #include "error.h"
 
-//ALL THIS FILE IS DULL
 //FORBIDDEN FUNCS
 
 typedef struct  s_redirection_lst

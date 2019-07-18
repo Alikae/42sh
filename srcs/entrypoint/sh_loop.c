@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/17 16:20:56 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/18 09:50:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@ void    print_all_tokens(t_sh *p, t_token *t, int lvl)
 	{
 		lvcpy = lvl;
 		while (lvcpy--)
-			dprintf(p->debug_fd, "%c      ", (lvcpy == 0) ? '|' : ' ');
-		if (t->content)
-			dprintf(p->debug_fd, "%-10s (%i)\n", t->content, t->type);
-		else
-			dprintf(p->debug_fd, "%-10s (%i)\n", "", t->type);
+		{
+			if (!lvcpy && lvl > 1)
+				dprintf(p->debug_fd, "‾‾‾‾‾‾");
+			dprintf(p->debug_fd, "%c", (lvcpy == 0) ? '|' : ' ');
+			if (lvcpy < lvl - 1 || lvl == 1)
+				dprintf(p->debug_fd, "      ");
+		}
+		dprintf(p->debug_fd, "%-15s (%i)\n", (t->content) ? t->content : "o", t->type);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);
@@ -54,7 +57,7 @@ static t_hist 	*init_history(void)
 
 int		sh_loop(void)
 {
-	char	**ln_tab;
+	char	*ln_tab;//RENAME
 	t_hist	*hist;
 	t_sh	*p;
 	char	*input;
@@ -75,12 +78,12 @@ int		sh_loop(void)
 		{
 			if (!dbug)
 			{
-				if (!(ln_tab = sh_arguments(hist)) || !*ln_tab)
+				if (!(ln_tab = sh_arguments(hist)))
 					break ;
 			}
 			else
 			{
-				ln_tab = malloc(2 * sizeof(char*));
+		//		ln_tab = malloc(2 * sizeof(char*));
 		//	ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
 		//	ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
 		//	ln_tab[0] = ft_strdup("/bin/cat tet");
@@ -88,8 +91,8 @@ int		sh_loop(void)
 		//	ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
 		//	ln_tab[0] = ft_strdup("case yoz in ( lap | yoz ) /bin/echo yes ;esac");
 		//	ln_tab[0] = ft_strdup("  echo ; done");
-				ln_tab[0] = ft_strdup("w");
-				ln_tab[1] = 0;
+		//		ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ; esac");
+				ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
 			}
 		//	int z = 0;
 		//	while (ln_tab[z])
@@ -97,14 +100,21 @@ int		sh_loop(void)
 		//	if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
 		//		break ;
 		//	else
-			input = ft_strjoin_free(input, sh_tab_fusion(ln_tab), input);
-			ft_tab_strdel(&ln_tab);
+			if (input)
+				input = ft_strjoin_free(input, "\n", input);
+			input = ft_strjoin_free(input, ln_tab, input);
+			printf("%i - %s -\n", strlen(input), input);
+			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
+			free (ln_tab);
 			p->unfinished_cmd = 0;
+			p->invalid_cmd = 0;
 			if (p->ast = tokenize_input(input))//line
 			{
 				print_all_tokens(p, p->ast, 0);
 				exec_script(p, p->ast, 0);
 			}
+			if (p->invalid_cmd)
+				break;
 			if (!p->unfinished_cmd)
 				complete = 1;
 		}

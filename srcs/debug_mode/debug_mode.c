@@ -14,7 +14,7 @@ void	ask_for_extern_terminal(t_sh *p)
 
 	p->debug_fd = 2;
 	n = 0;
-	while (n < 20)
+	while (n < 10)
 	{
 		printf("testing term %i :\ny = accept\nn = next terminal\nq = set to current terminal\n", n);
 		nc = ft_itoa(n);

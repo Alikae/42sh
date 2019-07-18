@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/17 16:23:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/18 04:32:55 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct		s_sh
 	t_open_file		*opened_files;
 	
 	int				unfinished_cmd;
+	int				invalid_cmd;
 
 	int	lldbug;
 }					t_sh;

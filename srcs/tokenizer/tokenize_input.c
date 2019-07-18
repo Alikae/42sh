@@ -197,6 +197,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 			if (word_out_of_context(type))
 			{
 				printf("Unexpected token at -%s\n", t->input + word_begin);
+				sh()->invalid_cmd = 1;
 				return (SH_SYNTAX_ERROR);
 			}
 			if (tokenize_reserved_word(t, p_actual, type) == SH_SYNTAX_ERROR)

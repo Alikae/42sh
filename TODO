@@ -7,7 +7,6 @@ Tokenization
 Exec
 	assignements
 	funcs
-	Paths
 	fork
 	simple_cmd
 	assignements
@@ -35,7 +34,7 @@ REPLACE SH_SYNTAX_ERROR by SH_UNFINISHED_INPUT at places
 case yolo in yola) echo ;; yali | yolo) loul;;(po)tu esac
 
 
-REPARER CASE :'(
+REPARER CASE + FUNC :'(
 
 
 
@@ -43,3 +42,6 @@ REPARER CASE :'(
 
 THOMAS M
 	renvoyer une chaine et pas un split ';'
+
+
+p->invalid_cmd

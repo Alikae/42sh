@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/07/17 02:03:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/18 08:13:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,46 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type)
 	compound_token = create_token(type, 0);
 	compound_token->sub = create_token(SH_GROUP, 0);
 	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_WHILE, &next_separator)))
+	{
+		printf("a\n");
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;//free everywhere
+			return (0);
+		}
 		return (handle_syntax_error(t, "missing condition in WHILE", compound_token));
+	}
 	if (next_separator != SH_DO)
+	{
+		printf("b\n");
+		if (!t->input[t->i])
+		{
+			printf("b2\n");
+			sh()->unfinished_cmd = 1;//free everywhere
+			return (0);
+		}
 		return (handle_syntax_error(t, "missing DO in WHILE", compound_token));
+	}
 	if (!(compound_token->sub->next = recursive_tokenizer(t, SH_DO, &next_separator)))
+	{
+		printf("c\n");
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;//free everywhere
+			return (0);
+		}
 		return (handle_syntax_error(t, "missing execution block in WHILE", compound_token));
+	}
 	if (next_separator != SH_DONE)
+	{
+		printf("d\n");
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;//free everywhere
+			return (0);
+		}
 		return (handle_syntax_error(t, "missing DONE in WHILE", compound_token));
+	}
 	return (compound_token);
 }
 
@@ -79,6 +112,7 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 			*next_separator = SH_ESAC;
 			return (0);
 		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "unexpected ESAC in CASE: expected WORD after '('", compound));
 	}
 	t->i = word_begin;
@@ -101,8 +135,16 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 			break ;
 		t->i++;
 	}
+	if (!t->input[t->i])
+	{
+		sh()->unfinished_cmd = 1;
+		return (0);
+	}
 	if (t->input[t->i] != ')')
+	{
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "UNEXPECTED char in CASE: expected ')' after WORDLIST", compound));
+	}
 	t->i++;
 	return (1);
 }
@@ -116,9 +158,21 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 	origin = create_token(0, 0);
 	actual = origin;
 	if (!tokenize_case_pattern(t, next_separator, actual, compound))
+	{
+		if (!t->input[t->i])
+			sh()->unfinished_cmd = 1;
 		return (0);
+	}
 	if (!origin->sub)
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "PATTERN missing in CASE", compound));
+	}
 	forward_blanks_newline(t);
 	word_begin = t->i;
 	read_n_skip_word(t);
@@ -129,7 +183,9 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 		t->i = word_begin;
 		if (!(origin->sub->sub = recursive_tokenizer(t, SH_CASE, next_separator)) && *next_separator != SH_ESAC && *next_separator != SH_DSEMI)
 		{
-			printf("%i ", *next_separator);
+			//printf("%i ", *next_separator);
+			if (!t->input[t->i])
+				sh()->unfinished_cmd = 1;
 			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
 		}
 	}
@@ -157,7 +213,10 @@ int		read_n_skip_in(t_tokenize_tool *t)
 	word_begin = t->i;
 	read_n_skip_word(t);
 	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "in", t->i - word_begin))
+	{
+		t->i = word_begin;
 		return (0);
+	}
 	return (1);
 }
 
@@ -177,6 +236,12 @@ int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *c
 			break ;
 		if (next_separator != SH_DSEMI)
 		{
+			if (next_separator == SH_NULL)
+			{
+				sh()->unfinished_cmd = 1;
+				return (0);
+			}
+			sh()->invalid_cmd = 1;
 			printf("%i ", next_separator);
 			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
 		}
@@ -191,11 +256,23 @@ t_token	*tokenize_case(t_tokenize_tool *t)
 	int			word_begin;
 
 	if (!tokenize_case_name(t, &compound_token))
+	{
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "Invalid WORD in CASE", 0));
+	}
 	dprintf(sh()->debug_fd, "case name : %s\n", compound_token->content);
 	forward_blanks_newline(t);
 	if (!read_n_skip_in(t))
+	{
+		printf("-%c-\n", t->input[t->i]);
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing IN in CASE", compound_token));
+	}
 	if (!tokenize_case_lists(t, &(compound_token->sub), compound_token))
 		return (0);
 	return (compound_token);
@@ -216,23 +293,71 @@ t_token *tokenize_if(t_tokenize_tool *t)
 	compound_token = create_token(SH_IF, 0);
 	compound_token->sub = create_token(SH_GROUP, 0);
 	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_IF, &next_separator)))
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing condition in IF", compound_token));
+	}
+	if (!next_separator)
+	{
+		sh()->unfinished_cmd = 1;
+		return (0);
+	}
 	if (next_separator != SH_THEN)
+	{
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing THEN in IF", compound_token));
+	}
 	compound_token->sub->next = create_token(SH_GROUP, 0);
 	if (!(compound_token->sub->next->sub = recursive_tokenizer(t, SH_THEN, &next_separator)))
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing exec block in IF", compound_token));
+	}
+	if (!next_separator)
+	{
+		sh()->unfinished_cmd = 1;
+		return (0);
+	}
 	if (next_separator != SH_ELIF && next_separator != SH_ELSE && next_separator != SH_FI)
+	{
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing ELIF/ELSE/FI in IF THEN", compound_token));
+	}
 	if (next_separator == SH_ELIF)
 	{
 		if (!(compound_token->sub->next->next = tokenize_if(t)))
+		{
+			if (!t->input[t->i])
+			{
+				sh()->unfinished_cmd = 1;
+				return (0);
+			}
+			sh()->invalid_cmd = 1;
 			return (handle_syntax_error(t, "missing exec block in ELIF", compound_token));
+		}
 	}
 	else if (next_separator == SH_ELSE)
 	{
 		if (!(compound_token->sub->next->next = recursive_tokenizer(t, SH_ELSE, &next_separator)))
+		{
+			if (!t->input[t->i])
+			{
+				sh()->unfinished_cmd = 1;
+				return (0);
+			}
+			sh()->invalid_cmd = 1;
 			return (handle_syntax_error(t, "missing exec block in ELSE", compound_token));
+		}
 	}
 	return (compound_token);
 }
@@ -276,9 +401,25 @@ t_token	*tokenize_for_do_group(t_tokenize_tool *t, t_token *compound)
 	t_toktype	next_separator;
 
 	if (!(do_group = recursive_tokenizer(t, SH_DO, &next_separator)))
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing DO group in for", compound));
+	}
 	if (next_separator != SH_DONE)
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing DONE in for", compound));
+	}
 	return (do_group);
 }
 
@@ -334,18 +475,45 @@ t_token	*tokenize_for(t_tokenize_tool *t)
 
 	compound_token = create_token(SH_FOR, 0);
 	if (!tokenize_for_name(t, compound_token))
+	{
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing NAME in for", compound_token));
+	}
 	forward_blanks_newline(t);
 	if (!tokenize_for_in(t, compound_token))
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing WORD in FOR IN", compound_token));
+	}
 	forward_blanks(t);
 	if (t->input[t->i] == ';')
 		t->i++;
 	else if (compound_token->sub->sub && t->input[t->i] != '\n')
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing separator (';' or NEWLINE) before DO in FOR", compound_token));
+	}
 	forward_blanks_newline(t);
 	if (!tokenize_for_do(t, compound_token))
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (0);
+	}
 	return (compound_token);
 }
 
@@ -356,9 +524,25 @@ t_token	*tokenize_braces(t_tokenize_tool *t)
 
 	compound = create_token(SH_BRACES, 0);
 	if (!(compound->sub = recursive_tokenizer(t, SH_BRACES, &terminator)))
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing exec block in BRACES", compound));
+	}
 	if (terminator != SH_BRACES)
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing ending BRACE", compound));
+	}
 	return (compound);
 
 }
