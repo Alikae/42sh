@@ -16,3 +16,4 @@ Empty command:			OK
 Spaced command:			OK
 Escaped newline:		KO
 Cmd separator ';':		OK
+';':					SEGFAULT
