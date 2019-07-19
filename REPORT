@@ -1,0 +1,18 @@
+Bad command name:		OK
+Absolute path bin exec:	OK
+Relative path bin exec:	OK
+ARGV to child forked:	OK
+ENV to child forked:	KO
+Built-in exit:			OK
+Built-in echo |
+	'echo It Works':	KO
+Built-in cd |
+	PWD:				KO
+	OLDPWD:				KO
+	'cd ':				KO
+	'cd -':				KO
+Vim || Emacs:			OK
+Empty command:			OK
+Spaced command:			OK
+Escaped newline:		KO
+Cmd separator ';':		OK
