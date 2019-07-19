@@ -1,6 +1,14 @@
-->->-> Deplacer le truc qui se connecte aux autres tty pour le debug <-<-<-
-->->-> Le mettre le plus tot possible dans le programme \o/ <-<-<-
-->->-> PS: c'est un peu relou dans vim <-<-<-
+->->-> 
+->->-> POUR TOUS
+->->->
+
+Init & Destroy
+Unit tests -> logs in REPORT
+
+->->-> 
+->->-> POUR EDE-RAM
+->->->
+
 
 Tokenization
 	HERE_DOC
@@ -12,37 +20,40 @@ Exec
 	assignements
 SIGNALS
 
-cmd = "t" -> SEGV
-
-Init & Destroy
-Unit tests
 Debug_mode ?
+cmd = "t" -> SEGV
 
 Multi-redirections on same file == redirection type handled by first operator (1>yo 2>>yo) 2 will use >
 
-
 File executer/fd_handler
-
 
 HERE DOCS:
 << <<-
 operator terminator newline here doc newline terminator newline next_operator
 
-
 REPLACE SH_SYNTAX_ERROR by SH_UNFINISHED_INPUT at places
 
 case yolo in yola) echo ;; yali | yolo) loul;;(po)tu esac
 
-
 REPARER CASE + FUNC :'(
-
-
-
-
-
-THOMAS M
-	renvoyer une chaine et pas un split ';'
-
 
 p->invalid_cmd
 
+->->-> 
+->->-> POUR TCILLARD
+->->->
+
+->->-> 
+->->-> POUR THDELMAS
+->->->
+
+Matching Pattern Notation / PATHNAME EXPANSION
+Readonly
+Export
+Set
+
+->->-> 
+->->-> POUR TMEYER
+->->->
+
+renvoyer une chaine et pas un split ';'
