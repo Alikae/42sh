@@ -4,7 +4,7 @@ pipe=~/goinfre/testpipe
 ptofail=~/goinfre/pipefail
 pref=~/goinfre/piperef
 shtofail=./42sh
-shref=/bin/bash
+shref=/bin/sh
 
 
 if [[ ! -p $pipe ]]; then
