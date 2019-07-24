@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/17 14:54:46 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/24 22:41:15 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,9 @@ norm:
 run: all | run_msg
 	./$(NAME)
 
+test: all | test_msg
+	./unit_tests/utester.sh
+
 ### Messages rules ###
 hey_msg:
 	@printf "$(BBBLUE)\t$(PROJECT)$(CLEAR)\n"
@@ -72,6 +75,9 @@ bye_msg: | hey_msg
 run_msg: | hey_msg
 	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)RUN$(CLEAR)\n"
 	@printf "$(BRED)By: $(CLEAR)$(WHITE)$(AUTHORS)$(CLEAR)\n"
+
+test_msg: | hey_msg
+	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)TEST$(CLEAR)\n"
 
 lib_msg: | hey_msg
 	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)LIBS$(CLEAR)\n"
