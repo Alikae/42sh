@@ -1,24 +1,18 @@
 #!/bin/sh
 
-pipe=~/goinfre/testpipe
-ptofail=~/goinfre/pipefail
-pref=~/goinfre/piperef
+pipe=./testpipe
+ptofail=./pipefail
+pref=./piperef
 shtofail=./42sh
 shref=/bin/sh
 
+cmd[0]='env'
+cmd[1]='ls'
+cmd[2]='ls /'
 
-if [[ ! -p $pipe ]]; then
-	mkfifo $pipe
-fi
-if [[ ! -p $ptofail ]]; then
-	mkfifo $ptofail
-fi
-if [[ ! -p $pref ]]; then
-	mkfifo $pref
-fi
+mkfifo $pipe $ptofail $pref
 
 ## Tests
-set -o noclobber
 $shref <$pipe &
 
 testy () {
@@ -26,8 +20,9 @@ testy () {
 	echo "$1" > $pipe
 }
 
-testy "env"
-testy "ls /"
-testy "ls"
+for i in "${cmd[@]}"
+do
+testy "$i"
+done
 
 rm -f $pipe $pref $ptofail
