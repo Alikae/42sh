@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/18 09:50:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/24 22:44:45 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int		sh_loop(void)
 	t_sh	*p;
 	char	*input;
 
-	ft_putendl("Shell: sh_loop.c\n---");
 	p = sh();
 	ask_for_extern_terminal(p);
 	hist = init_history();

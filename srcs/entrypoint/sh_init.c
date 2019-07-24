@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/17 16:24:41 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/24 22:45:16 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static void	sh_init_env()
 
 void	sh_init(t_sh *shell)
 {
-	ft_putendl("Shell: sh_init.c\n---");
 	sh_init_env();
 	shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
 	shell->debug_fd = 2;
