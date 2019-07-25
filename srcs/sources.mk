@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/18 00:47:55 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/25 20:27:54 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ C_FILES = \
 C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_loop.c \
+	sh_script.c \
 	sh_init.c
 
 C_FILES_exitpoint = \
