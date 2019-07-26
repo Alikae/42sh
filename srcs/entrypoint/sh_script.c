@@ -6,11 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/25 20:57:00 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/26 21:46:27 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "libft.h"
 #include "t_token.h"
 #include <fcntl.h>
 #include <stdlib.h>
@@ -33,15 +34,26 @@ int		sh_script(const char *path)
 		return (fd);
 	if (read(fd, buff, 0) != 0)
 		return (-1);
-	while (read(fd, buff, 1) > 0)
+	while (read(fd, buff, 4096) > 0)
 	{
-		ft_putendl(buff);
+		if (input)
+			input = ft_strjoin_free(input, buff, input);
+		else
+			if (!(input = ft_strdup(buff)))
+				return (0);
+		ft_strclr(buff);
+	}
+	if (p->debug)
+	{
+		ft_putstr("SCRIPT FILE: ");
+		ft_putendl(path);
+		ft_putendl(input);
 	}
 	close(fd);
-	//if (p->ast = tokenize_input(input))//line
-	//{
-	//	print_all_tokens(p, p->ast, 0);
-	//	exec_script(p, p->ast, 0);
-	//}
+	if (p->ast = tokenize_input(input))//line
+	{
+		print_all_tokens(p, p->ast, 0);
+		exec_script(p, p->ast, 0);
+	}
 	return (1);
 }

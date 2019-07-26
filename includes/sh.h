@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/18 04:32:55 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/26 21:47:44 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct		s_sh
 	char			**av;
 	char			**ev;
 	t_opt			*opt;
+	int				debug;
 	t_toktype		type; //for recognize tokens
 	int				last_cmd_result;
 	struct s_env	*params;
