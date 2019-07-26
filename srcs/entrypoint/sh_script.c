@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/26 21:50:22 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/26 21:57:01 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int		sh_script(const char *path)
 		ft_putendl(input);
 	}
 	close(fd);
-	if (p->ast = tokenize_input(input))//line
+	if (input && *input && (p->ast = tokenize_input(input)))//line
 	{
 		print_all_tokens(p, p->ast, 0);
 		exec_script(p, p->ast, 0);
