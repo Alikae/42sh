@@ -1,13 +1,11 @@
-->->-> 
 ->->-> POUR TOUS
-->->->
+
 
 Init & Destroy
 Unit tests -> logs in REPORT
 
-->->-> 
+
 ->->-> POUR EDE-RAM
-->->->
 
 
 Tokenization
@@ -39,21 +37,23 @@ REPARER CASE + FUNC :'(
 
 p->invalid_cmd
 
-->->-> 
+
 ->->-> POUR TCILLARD
-->->->
 
-->->-> 
+
 ->->-> POUR THDELMAS
-->->->
 
+
+script -> check if file exist
 Matching Pattern Notation / PATHNAME EXPANSION
 Readonly
 Export
 Set
 
-->->-> 
+
 ->->-> POUR TMEYER
-->->->
+
 
 renvoyer une chaine et pas un split ';'
+
+

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/26 21:57:01 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/07/26 23:12:06 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int     exec_script(t_sh *p, t_token *token_begin, t_token *token_end);
 
-int		sh_script(const char *path)
+static	int		sh_script(const char *path)
 {
 	t_sh *p;
 	char	*buff;
@@ -55,5 +55,17 @@ int		sh_script(const char *path)
 		print_all_tokens(p, p->ast, 0);
 		exec_script(p, p->ast, 0);
 	}
+	return (1);
+}
+
+int		sh_script_arg()
+{
+	t_sh	*p;
+	int		i;
+
+	p = sh();
+	i = 0;
+	while (++i < p->ac)
+		sh_script(p->av[i]);
 	return (1);
 }
