@@ -7,7 +7,10 @@ ptofail=./pipefail
 pref=./piperef
 shtofail=./42sh
 shref=/bin/sh
-test_script=
+custom_script=
+ut_scripts=(\
+	'./unit_tests/sh_test_env.sh'\
+	)
 
 cmd=(\
 	'foo'\
@@ -36,6 +39,7 @@ testy () {
 }
 
 test_minishell () {
+	echo '[ Testing Minishell ]'
 	mkfifo $logref $logfail $ptofail $pref
 
 	## Tests
@@ -50,15 +54,12 @@ test_minishell () {
 	diff $logref $logfail > $log_file
 	cat $log_file
 
+
 	rm -f $logref $logfail $pref $ptofail
 }
 
 test_script_sh () {
 	mkfifo $logref $logfail $ptofail $pref
-	if [ -z $test_script ] ; then
-		printf "Enter shell script's path: "
-		read test_script
-	fi
 	$shtofail $test_script >>$logfail 2>&1 &
 	$shref $test_script >>$logref 2>&1 &
 
@@ -67,17 +68,50 @@ test_script_sh () {
 	rm -f $logref $logfail $pref $ptofail
 }
 
+test_custom_script () {
+	echo '[ Testing Custom Script  ]'
+	if [ -z $1 ] ; then
+		printf "Enter shell script's path: "
+		read custom_script
+		if [ -r $1 ] ; then
+			test_script_sh "$custom_script"
+		else
+			echo 'No such script.\n'
+		fi
+	fi
+}
+
+sh_unit_tests () {
+	ls
+}
+
 while [ -z $user_in ] ; do
-	echo 'Test Minishell - 1'
-	echo 'Test Script Mode - 2'
-	printf "Choose testing mode: "
-	read user_in
 	clear
+	echo '\033[0;31;40m[\o/] [ SHELL U-TESTER ]\033[0;0m'
+	echo '[ 0 ] [ Exit ]'
+	echo '[ 1 ] [ Test Minishell ]'
+	echo '[ 2 ] [ Test 21sh ]'
+	echo '[ 3 ] [ Test 42sh ]'
+	echo '[ 4 ] [ Test custom script ]'
+	echo '[ 5 ] [ Run unit tests ]'
+	printf '\033[0;31;40m[/o\] [ Choose wisely: \033[0;0m'
+	read user_in
 done
-if [ "$user_in" -eq "1" ] ; then
+
+if [[ "$user_in" -eq "1" ]] ; then
 	test_minishell
-elif [ "$user_in" -eq "2" ] ; then
-	test_script_sh
+elif [[ "$user_in" -eq "2" ]] ; then
+	echo '[ Testing 21sh ]'
+	test_21sh
+elif [[ "$user_in" -eq "3" ]] ; then
+	echo '[ Testing 42sh ]'
+	test_42sh
+elif [[ "$user_in" -eq "4" ]] ; then
+	test_custom_script $custom_script
+elif [[ "$user_in" -eq "5" ]] ; then
+	echo '[ Unit Tests ]'
+	sh_unit_tests
 else
-	echo 'bad input'
+	echo '[ Exit ]'
 fi
+
