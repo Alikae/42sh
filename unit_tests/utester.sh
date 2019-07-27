@@ -29,12 +29,16 @@ test_custom_cmds () {
 		)
 
 	## Tests
-	$sh_tgt <$pipe_in_tgt 2>$err_file_tgt | tee $out_file_tgt &
-	$sh_ref <$pipe_in_ref 2>$err_file_ref | tee $out_file_ref &
+	$sh_tgt <$pipe_in_tgt >>$out_file_tgt 2>>$err_file_tgt &
+	$sh_ref <$pipe_in_ref >>$out_file_ref 2>>$err_file_ref &
 	for i in "${cmd[@]}"
 	do
-		echo "[ Sending command: "$i" to "$sh_tgt"... ]" | tee -a $out_file_tgt
-		echo "[ Sending command: "$i" to "$sh_ref"... ]" | tee -a $out_file_ref
+		echo "[ Sending command: "$i" to "$sh_tgt"... ]"
+		echo "echo \'[ Sending command: "$i" to "$sh_tgt"... ]\'" >> $pipe_in_tgt
+		echo "$i" >> $pipe_in_tgt
+		echo "[ Sending command: "$i" to "$sh_ref"... ]"
+		echo "echo \'[ Sending command: "$i" to "$sh_tgt"... ]\'" >> $pipe_in_ref
+		echo "$i" >> $pipe_in_ref
 	done
 
 	diff $out_file_ref $out_file_tgt > $log_file
@@ -60,23 +64,6 @@ test_minishell () {
 		'ls'\
 		'exit'\
 		)
-
-	## Tests
-	$sh_tgt <$pipe_in_tgt 2>$err_file_tgt &
-	$sh_ref <$pipe_in_ref 2>$err_file_ref &
-	for i in "${cmd[@]}"
-	do
-		echo "[ Sending command: "$i" to "$sh_tgt"... ]" | tee -a $out_file_tgt
-		echo "$i" >> $pipe_in_tgt
-		echo "[ Sending command: "$i" to "$sh_ref"... ]" | tee -a $out_file_ref
-		echo "$i" >> $pipe_in_ref
-	done
-
-	diff $out_file_ref $out_file_tgt > $log_file
-	cat $log_file
-
-
-	rm -f $out_file_ref $out_file_tgt $pipe_in_ref $pipe_in_tgt
 }
 
 test_script_arg () {
@@ -112,8 +99,12 @@ if [ ! -d "$log_dir" ]; then
 	mkdir "$log_dir"
 	touch $out_file_ref $out_file_tgt $err_file_ref $err_file_tgt
 fi
+#CLEAR
 rm -f $pipe_in_ref $pipe_in_tgt
 mkfifo $pipe_in_tgt $pipe_in_ref
+echo -n '' > $out_file_ref
+echo -n '' > $out_file_tgt
+#
 while [ -z $user_in ] ; do
 	clear
 	echo '\033[0;31;40m[\o/] [ SHELL U-TESTER ]\033[0;0m'
