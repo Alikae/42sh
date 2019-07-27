@@ -1,90 +1,119 @@
 #!/bin/sh
 
-log_file=./ulogs
-logref=./logref
-logfail=./logfail
-ptofail=./pipefail
-pref=./piperef
-shtofail=./42sh
-shref=/bin/sh
-custom_script=
+log_dir="./unit_tests/logs"
+log_file="./ulogs"
+sh_ref="/bin/bash"
+sh_tgt="/bin/sh"
+
+err_file_ref="$log_dir/err_ref.report"
+err_file_tgt="$log_dir/err_tgt.report"
+out_file_ref="$log_dir/out_ref.report"
+out_file_tgt="$log_dir/out_tgt.report"
+
+pipe_in_ref="$log_dir/pipe_in_ref"
+pipe_in_tgt="$log_dir/pipe_in_tgt"
+
 ut_scripts=(\
 	'./unit_tests/sh_test_env.sh'\
 	)
 
-cmd=(\
-	'foo'\
-	'/bin/ls'\
-	'/bin/ls -laF'\
-	'/bin/ls -l -a -F'\
-	'echo iT works'\
-	'pwd'\
-	'cd /tmp'\
-	'pwd'\
-	'cd ..'\
-	'pwd'\
-	'cd '\
-	'pwd'\
-	'cd -'\
-	'pwd'\
-	'ls'\
-	'exit'\
-	)
 
-testy () {
-	echo "echo '\n''UT: $shtofail: $1'" > $ptofail
-	echo "$1" > $ptofail
-	echo "echo '\n''UT: $shref: $1'" > $pref
-	echo "$1" > $pref
+
+test_custom_cmds () {
+	echo '[ Testing custom commands ]'
+	#Insert your commands here
+	cmd=(\
+		'foo'\
+		'ls'\
+		'exit'\
+		)
+
+	## Tests
+	$sh_tgt <$pipe_in_tgt 2>$err_file_tgt | tee $out_file_tgt &
+	$sh_ref <$pipe_in_ref 2>$err_file_ref | tee $out_file_ref &
+	for i in "${cmd[@]}"
+	do
+		echo "[ Sending command: "$i" to "$sh_tgt"... ]" | tee -a $out_file_tgt
+		echo "[ Sending command: "$i" to "$sh_ref"... ]" | tee -a $out_file_ref
+	done
+
+	diff $out_file_ref $out_file_tgt > $log_file
 }
 
 test_minishell () {
 	echo '[ Testing Minishell ]'
-	mkfifo $logref $logfail $ptofail $pref
+	cmd=(\
+		'foo'\
+		'/bin/ls'\
+		'/bin/ls -laF'\
+		'/bin/ls -l -a -F'\
+		'echo iT works'\
+		'pwd'\
+		'cd /tmp'\
+		'pwd'\
+		'cd ..'\
+		'pwd'\
+		'cd '\
+		'pwd'\
+		'cd -'\
+		'pwd'\
+		'ls'\
+		'exit'\
+		)
 
 	## Tests
-	$shtofail <$ptofail >>$logfail 2>&1 &
-	$shref <$pref >>$logref 2>&1 &
-
+	$sh_tgt <$pipe_in_tgt 2>$err_file_tgt &
+	$sh_ref <$pipe_in_ref 2>$err_file_ref &
 	for i in "${cmd[@]}"
 	do
-		testy "$i"
+		echo "[ Sending command: "$i" to "$sh_tgt"... ]" | tee -a $out_file_tgt
+		echo "$i" >> $pipe_in_tgt
+		echo "[ Sending command: "$i" to "$sh_ref"... ]" | tee -a $out_file_ref
+		echo "$i" >> $pipe_in_ref
 	done
 
-	diff $logref $logfail > $log_file
+	diff $out_file_ref $out_file_tgt > $log_file
 	cat $log_file
 
 
-	rm -f $logref $logfail $pref $ptofail
+	rm -f $out_file_ref $out_file_tgt $pipe_in_ref $pipe_in_tgt
 }
 
-test_script_sh () {
-	mkfifo $logref $logfail $ptofail $pref
-	$shtofail $test_script >>$logfail 2>&1 &
-	$shref $test_script >>$logref 2>&1 &
+test_script_arg () {
+	mkfifo $out_file_ref $out_file_tgt $pipe_in_tgt $pipe_in_ref
+	$sh_tgt $test_script >>$out_file_tgt 2>&1 &
+	$sh_ref $test_script >>$out_file_ref 2>&1 &
 
-	diff $logref $logfail > $log_file
+	diff $out_file_ref $out_file_tgt > $log_file
 	cat $log_file
-	rm -f $logref $logfail $pref $ptofail
 }
 
 test_custom_script () {
 	echo '[ Testing Custom Script  ]'
-	if [ -z $1 ] ; then
+	while [ ! -r "$custom_script" ]
+	do
 		printf "Enter shell script's path: "
 		read custom_script
-		if [ -r $1 ] ; then
-			test_script_sh "$custom_script"
+		if [ "$custom_script" = "exit" ] ; then
+			break ;
+		elif [ -r "$custom_script" ] ; then
+			test_script_arg "$custom_script"
 		else
-			echo 'No such script.\n'
+			echo "No such script. Type 'exit' to quit."
 		fi
-	fi
+	done
 }
 
 sh_unit_tests () {
 	ls
 }
 
+if [ ! -d "$log_dir" ]; then
+	mkdir "$log_dir"
+	touch $out_file_ref $out_file_tgt $err_file_ref $err_file_tgt
+fi
+rm -f $pipe_in_ref $pipe_in_tgt
+mkfifo $pipe_in_tgt $pipe_in_ref
 while [ -z $user_in ] ; do
 	clear
 	echo '\033[0;31;40m[\o/] [ SHELL U-TESTER ]\033[0;0m'
@@ -93,7 +122,8 @@ while [ -z $user_in ] ; do
 	echo '[ 2 ] [ Test 21sh ]'
 	echo '[ 3 ] [ Test 42sh ]'
 	echo '[ 4 ] [ Test custom script ]'
-	echo '[ 5 ] [ Run unit tests ]'
+	echo '[ 5 ] [ Test custom commands ]'
+	echo '[ 6 ] [ Run unit tests ]'
 	printf '\033[0;31;40m[/o\] [ Choose wisely: \033[0;0m'
 	read user_in
 done
@@ -109,9 +139,10 @@ elif [[ "$user_in" -eq "3" ]] ; then
 elif [[ "$user_in" -eq "4" ]] ; then
 	test_custom_script $custom_script
 elif [[ "$user_in" -eq "5" ]] ; then
+	test_custom_cmds
+elif [[ "$user_in" -eq "6" ]] ; then
 	echo '[ Unit Tests ]'
 	sh_unit_tests
-else
-	echo '[ Exit ]'
 fi
-
+rm -f $pipe_in_ref $pipe_in_tgt
+echo '[ Exit ]'
