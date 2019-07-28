@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/28 10:12:06 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/28 12:01:52 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -32,6 +32,7 @@ pipe_in_tgt="$log_dir/pipe_in_tgt"
 #Externs Files
 . "$ut_dir/utester_tools.sh"
 . "$ut_dir/utester_msh.sh"
+. "$ut_dir/utest_env.sh"
 
 test_custom_cmds () {
 	echo '[ Testing custom commands ]'
@@ -53,6 +54,8 @@ test_custom_cmds () {
 		echo "[ Sending command: "$i" to "$sh_ref"... ]"
 		echo "echo [ Sending command: "$i" to "$sh_tgt"... ]" >> $pipe_in_ref
 		echo "$i" >> $pipe_in_ref
+		echo "exit" >> $pipe_in_tgt
+		echo "exit" >> $pipe_in_ref
 	done
 }
 
@@ -125,8 +128,7 @@ elif [[ "$user_in" -eq "4" ]] ; then
 elif [[ "$user_in" -eq "5" ]] ; then
 	test_custom_cmds
 elif [[ "$user_in" -eq "6" ]] ; then
-	echo '[ Unit Tests ]'
-	sh_unit_tests
+	utest_env
 fi
 diff $out_file_ref $out_file_tgt > $out_file_diff
 diff $err_file_ref $err_file_tgt > $err_file_diff

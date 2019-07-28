@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 09:09:16 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/28 10:10:35 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/28 12:07:53 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -22,9 +22,13 @@ ask_for_out () {
 		echo '[ 4 ] [ Stderr Tgt Shell ]'
 		echo '[ 5 ] [ Stderr Ref Shell ]'
 		echo '[ 6 ] [ Stderr Diff ]'
+		echo '[ 7 ] [ Next ]'
 		printf '\033[0;31;40m[/o\] [ Choose wisely: \033[0;0m'
 		read user_in
-		if [[ "$user_in" -eq "1" ]] ; then
+		if [[ "$user_in" -eq "0" ]] ; then
+			clear
+			exit
+		elif [[ "$user_in" -eq "1" ]] ; then
 			clear
 			echo "[ 1 ] [ Stdout Tgt Shell: $out_file_tgt ]"
 			cat "$out_file_tgt"
