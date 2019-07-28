@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:55:34 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/28 09:52:45 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/28 13:07:38 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -44,4 +44,7 @@ utest_minishell () {
 		echo "echo [ Sending command: "$i" to "$sh_ref"... ]" >> $pipe_in_ref
 		echo "$i" >> $pipe_in_ref
 	done
+	diff $out_file_ref $out_file_tgt > $out_file_diff
+	diff $err_file_ref $err_file_tgt > $err_file_diff
+	ask_for_out
 }

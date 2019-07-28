@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/28 12:01:52 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/07/28 13:22:55 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -57,6 +57,9 @@ test_custom_cmds () {
 		echo "exit" >> $pipe_in_tgt
 		echo "exit" >> $pipe_in_ref
 	done
+diff $out_file_ref $out_file_tgt > $out_file_diff
+diff $err_file_ref $err_file_tgt > $err_file_diff
+ask_for_out
 }
 
 
@@ -74,7 +77,7 @@ test_custom_script () {
 		read custom_script
 		if [ "$custom_script" = "exit" ] ; then
 			break ;
-		else
+		elif [ ! -e "$custom_script" ] ; then
 			echo "No such script. Type 'exit' to quit."
 		fi
 	done
@@ -87,6 +90,9 @@ test_custom_script () {
 		echo "exit" >> $pipe_in_ref
 	fi
 	echo '[ Done ]'
+diff $out_file_ref $out_file_tgt > $out_file_diff
+diff $err_file_ref $err_file_tgt > $err_file_diff
+ask_for_out
 }
 
 
@@ -130,8 +136,5 @@ elif [[ "$user_in" -eq "5" ]] ; then
 elif [[ "$user_in" -eq "6" ]] ; then
 	utest_env
 fi
-diff $out_file_ref $out_file_tgt > $out_file_diff
-diff $err_file_ref $err_file_tgt > $err_file_diff
-ask_for_out
 rm -f $pipe_in_ref $pipe_in_tgt
 echo '[ Exit ]'
