@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/06 23:33:04 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/08 15:32:33 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,6 +91,7 @@ C_FILES_builtins = \
 	sh_true.c
 
 C_FILES_tools = \
+	sh_tab_fusion.c \
 	sh_are_you_sur.c \
 	sh_check_path.c \
 	sh_error_path.c \
@@ -110,9 +111,6 @@ C_FILES_env = \
 	sh_set_shlvl.c \
 	sh_print_env.c \
 	sh_fill_env.c \
-
-C_FILES_tools = \
-	sh_tab_fusion.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))
