@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/24 22:39:11 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/06 23:32:48 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SUB_DIRS := \
 	command_line \
 	command_edition \
 	entrypoint \
+	builtins \
 	exitpoint \
 	history \
 	parameters \
@@ -76,19 +77,19 @@ SHUTIL_LNK = -L$(SHUTIL_DIR) -l$(SHUTIL)
 CC = clang
 DEBUG_FLAGS = -g3
 CFLAGS = \
-		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR) $(SHUTIL_INC_DIR)) \
+		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
 		 $(DEBUG_FLAGS) \
 		 #-Wall -Werror -Wextra
 
 LFLAGS = -ltermcap \
 		 -lncurses \
 		 $(FT_LNK) \
-		 $(SHUTIL_LNK)
+
 
 
 .PHONY: all clean fclean re
 
-all: $(SHUTIL) $(FT) $(NAME) bye_msg
+all: $(FT) $(NAME) bye_msg
 
 ### Lib compil ###
 $(FT): | lib_msg

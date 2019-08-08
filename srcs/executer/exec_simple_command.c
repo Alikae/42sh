@@ -1,6 +1,6 @@
 #include "sh.h"
 #include "libft.h"
-#include "libshutil.h"
+#include "sh_builtins.h"
 #include <fcntl.h>
 #include "t_token.h"
 #include <sys/stat.h>
@@ -473,6 +473,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 {
 	if (!ft_strcmp(cmd, "true"))
 		return (&sh_true);
+	else if (!ft_strcmp(cmd, "cd"))
+		return (&sh_cd);
 	else if (!ft_strcmp(cmd, "false"))
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))

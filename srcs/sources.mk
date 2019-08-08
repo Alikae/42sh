@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/25 20:27:54 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/06 23:33:04 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,6 +81,22 @@ C_FILES_executer = \
 
 C_FILES_debug_mode = \
 	debug_mode.c
+
+
+C_FILES_builtins = \
+	sh_basename.c \
+	sh_false.c \
+	sh_set.c \
+	sh_cd.c \
+	sh_true.c
+
+C_FILES_tools = \
+	sh_are_you_sur.c \
+	sh_check_path.c \
+	sh_error_path.c \
+	sh_getopt.c
+	#sh_find_law.c
+	#sh_add_to_path.c
 
 C_FILES_env = \
 	
