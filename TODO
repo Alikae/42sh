@@ -43,17 +43,11 @@ p->invalid_cmd
 
 ->->-> POUR THDELMAS
 
-
-script -> check if file exist
-Matching Pattern Notation / PATHNAME EXPANSION
-Readonly
-Export
-Set
-
+Cd: leaks
+Cd: flags
+Unit-tests
 
 ->->-> POUR TMEYER
 
 
 renvoyer une chaine et pas un split ';'
-
-
