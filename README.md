@@ -29,7 +29,7 @@ ___
 - [ ] $SHLVL 
 - [x] $PATH 
 - [x] $PWD 
-- [ ] $OLDPWD
+- [X] $OLDPWD
 - [ ] $HOME
 - [ ] $USER
 - [ ] $PPID
@@ -68,73 +68,13 @@ ___
 - [x] --noediting 
 - [x] --posix 
 
-#### - [ ] Built-in
-___
-- [ ] !
-- [ ] %
-- [ ] .
-- [ ] :
-- [ ] @
-- [ ] {
-- [ ] }
-- [ ] alias
-- [ ] bg
-- [ ] bind
-- [ ] break
-- [ ] builtin
-- [ ] case
-- [ ] cd
-- [ ] chdir
-- [ ] command
-- [ ] continue
-- [ ] do
-- [ ] done
-- [ ] echo
-- [ ] echotc
-- [ ] elif
-- [ ] else
-- [ ] env
-- [ ] esac
-- [ ] eval
-- [ ] exec
-- [ ] exit
-- [ ] export
-- [ ] false
-- [ ] fc
-- [ ] fg
-- [ ] fi
-- [ ] for
-- [ ] foreach
-- [ ] getopts
-- [ ] hash
-- [ ] if
-- [ ] jobid
-- [ ] jobs
-- [ ] local
-- [ ] pwd
-- [ ] read
-- [ ] readonly
-- [ ] return
-- [ ] set
-- [ ] setenv
-- [ ] setvar
-- [ ] shift
-- [ ] test
-- [ ] then
-- [ ] times
-- [ ] trap
-- [ ] true
-- [ ] type
-- [ ] ulimit
-- [ ] umask
-- [ ] unalias
-- [ ] unset
-- [ ] unsetenv
-- [ ] until
-- [ ] wait
-- [ ] where
-- [ ] which
-- [ ] while
+#### - Built-in
+
+|		STATUS     		| NAME |
+|_______________________|_______________|
+|	:heavy_check_mark:	| True |
+|	:heavy_check_mark:	| False |
+|	:zap:				| Cd |
 
 #### - [ ] Fd
 ___
