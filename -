@@ -1,0 +1,14 @@
+ls              (1)
+o               (38)
+		x script cut at '0'
+		x and_or cut at '0'
+		x pipeline cut at '0'
+0 redirections
+[95109] try path--ls
+try path /usr/bin/ls
+try path /bin/ls
+[95109] FORK
+[95109] NO PIPEOUT
+[95109] NO PIPEIN
+[95110] FORKED
+		o Wait finish

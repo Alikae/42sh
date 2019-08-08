@@ -1,0 +1,4 @@
+1c1
+< [ Sending command: foo to /bin/bash... ]
+---
+> [ Sending command: foo to /bin/sh... ]
