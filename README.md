@@ -71,7 +71,7 @@ ___
 #### - Built-in
 
 |		STATUS     		| NAME |
-|_______________________|_______________|
+|-----------------------|----------|
 |	:heavy_check_mark:	| True |
 |	:heavy_check_mark:	| False |
 |	:zap:				| Cd |
