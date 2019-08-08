@@ -12,6 +12,7 @@ libshutil
 srcs
 t_env_change.h
 t_redirection.h
+<<<<<<< HEAD
 test
 test1.sh
 tools.mk
@@ -63,6 +64,50 @@ drwxr-xr-x   21 thdelmas  2018_paris     714 Jul 26 23:17 srcs/
 -rw-r--r--    1 thdelmas  2018_paris    3037 Jul 25 21:00 tools.mk
 -rw-r--r--    1 thdelmas  2018_paris       0 Jul 28 09:42 ulogs
 drwxr-xr-x    8 thdelmas  2018_paris     272 Jul 28 13:24 unit_tests/
+=======
+tools.mk
+unit_tests
+[ Sending command: /bin/ls -laF to /bin/bash... ]
+total 272
+drwxr-xr-x   18 thdelmas  2018_paris     612 Aug  8 21:45 ./
+drwxr-xr-x  107 thdelmas  2018_paris    3706 Aug  8 21:45 ../
+drwxr-xr-x   16 thdelmas  2018_paris     544 Aug  8 21:45 .git/
+drwxr-xr-x   17 thdelmas  2018_paris     578 Aug  8 21:45 .obj/
+-rwxr-xr-x    1 thdelmas  2018_paris  102480 Aug  8 21:45 42sh*
+-rw-r--r--    1 thdelmas  2018_paris    3343 Aug  8 21:45 Makefile
+-rw-r--r--    1 thdelmas  2018_paris    2277 Aug  8 21:45 README.md
+-rw-r--r--    1 thdelmas  2018_paris     374 Jul 25 21:00 REPORT
+-rw-r--r--    1 thdelmas  2018_paris     804 Aug  8 21:45 TODO
+-rw-r--r--    1 thdelmas  2018_paris      33 Jul 25 21:00 auteur
+drwxr-xr-x   19 thdelmas  2018_paris     646 Aug  8 21:45 includes/
+drwxr-xr-x   10 thdelmas  2018_paris     340 Aug  8 21:45 libft/
+drwxr-xr-x   10 thdelmas  2018_paris     340 Aug  8 21:45 libshutil/
+drwxr-xr-x   21 thdelmas  2018_paris     714 Aug  8 21:45 srcs/
+-rw-r--r--    1 thdelmas  2018_paris     154 Jul 25 21:00 t_env_change.h
+-rw-r--r--    1 thdelmas  2018_paris     165 Jul 25 21:00 t_redirection.h
+-rw-r--r--    1 thdelmas  2018_paris    3037 Jul 25 21:00 tools.mk
+drwxr-xr-x    7 thdelmas  2018_paris     238 Aug  8 21:45 unit_tests/
+[ Sending command: /bin/ls -l -a -F to /bin/bash... ]
+total 272
+drwxr-xr-x   18 thdelmas  2018_paris     612 Aug  8 21:45 ./
+drwxr-xr-x  107 thdelmas  2018_paris    3706 Aug  8 21:45 ../
+drwxr-xr-x   16 thdelmas  2018_paris     544 Aug  8 21:45 .git/
+drwxr-xr-x   17 thdelmas  2018_paris     578 Aug  8 21:45 .obj/
+-rwxr-xr-x    1 thdelmas  2018_paris  102480 Aug  8 21:45 42sh*
+-rw-r--r--    1 thdelmas  2018_paris    3343 Aug  8 21:45 Makefile
+-rw-r--r--    1 thdelmas  2018_paris    2277 Aug  8 21:45 README.md
+-rw-r--r--    1 thdelmas  2018_paris     374 Jul 25 21:00 REPORT
+-rw-r--r--    1 thdelmas  2018_paris     804 Aug  8 21:45 TODO
+-rw-r--r--    1 thdelmas  2018_paris      33 Jul 25 21:00 auteur
+drwxr-xr-x   19 thdelmas  2018_paris     646 Aug  8 21:45 includes/
+drwxr-xr-x   10 thdelmas  2018_paris     340 Aug  8 21:45 libft/
+drwxr-xr-x   10 thdelmas  2018_paris     340 Aug  8 21:45 libshutil/
+drwxr-xr-x   21 thdelmas  2018_paris     714 Aug  8 21:45 srcs/
+-rw-r--r--    1 thdelmas  2018_paris     154 Jul 25 21:00 t_env_change.h
+-rw-r--r--    1 thdelmas  2018_paris     165 Jul 25 21:00 t_redirection.h
+-rw-r--r--    1 thdelmas  2018_paris    3037 Jul 25 21:00 tools.mk
+drwxr-xr-x    7 thdelmas  2018_paris     238 Aug  8 21:45 unit_tests/
+>>>>>>> utester
 [ Sending command: echo iT works to /bin/bash... ]
 iT works
 [ Sending command: pwd to /bin/bash... ]
@@ -83,7 +128,10 @@ iT works
 [ Sending command: ls to /bin/bash... ]
 Applications
 Library
+<<<<<<< HEAD
 LibraryPreferences
+=======
+>>>>>>> utester
 Network
 System
 Users
