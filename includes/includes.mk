@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/18 00:43:12 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/06 23:34:10 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@
 H_FILES = \
 	sh_exitpoint.h \
 	history.h \
+	sh_opt.h \
+	sh_builtins.h \
 	sh.h
 
 ### SUB FILES ###

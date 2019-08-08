@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_pwd.c                                       :+:      :+:    :+:   */
+/*   sh_opt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 23:31:46 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/17 14:47:48 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/06 23:33:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_env.h"
-#include "libft.h"
-#include <limits.h>
+#ifndef SH_OPT_H
+# define SH_OPT_H
 
-void	sh_set_pwd(void)
+typedef struct		s_opt
 {
-	char	*tmp2;
+	char			name;
+	char			*arg;
+	struct s_opt	*next;
+}					t_opt;
 
-	if ((tmp2 = ft_strnew(PATH_MAX + 1)))
-	{
-		tmp2 = getcwd(tmp2, PATH_MAX);
-		sh_setenv("PWD", tmp2);
-		ft_strdel(&tmp2);
-	}
-}
+t_opt	*sh_create_opt(char name, char *content);
+t_opt	*sh_getopt(int *ac, char ***av, char *optstr);
+
+#endif
