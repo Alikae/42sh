@@ -1,27 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_pwd.c                                       :+:      :+:    :+:   */
+/*   sh_get_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 23:31:46 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/12 22:32:19 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/06 01:33:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "21sh.h"
 #include "sh_env.h"
 #include "libft.h"
-#include <limits.h>
 
-void	sh_set_pwd(void)
+static t_env *sh_getvar(t_env *handle, const char *key)
 {
-	char	*tmp2;
-
-	if ((tmp2 = ft_strnew(PATH_MAX + 1)))
+	while (handle)
 	{
-		tmp2 = getcwd(tmp2, PATH_MAX);
-		sh_setenv("PWD", tmp2);
-		ft_strdel(&tmp2);
+		if (!ft_strcmp(key, handle->key))
+			return (handle);
+		handle = handle->next;
 	}
+	return (NULL);
+}
+
+t_env	*sh_get_env(const char *key)
+{
+	t_env		*tmp;
+
+	if (!key || !*key)
+		return (NULL);
+	if ((tmp = sh_getvar(sh()->env, key)))
+		return (tmp);
+	return (NULL);
 }

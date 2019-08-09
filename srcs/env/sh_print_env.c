@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_pwd.c                                       :+:      :+:    :+:   */
+/*   sh_print_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 23:31:46 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/13 00:00:05 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/13 19:28:24 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "21sh.h"
 #include "sh_env.h"
 #include "libft.h"
-#include <limits.h>
 
-void	sh_set_pwd(void)
+void	sh_print_env(void)
 {
-	char	*tmp2;
+	t_env *lst;
 
-	if ((tmp2 = ft_strnew(PATH_MAX + 1)))
+	lst = sh()->env;
+	while (lst)
 	{
-		tmp2 = getcwd(tmp2, PATH_MAX);
-		sh_setenv("PWD", tmp2);
-		ft_strdel(&tmp2);
+		ft_putstr(lst->key);
+		ft_putchar('=');
+		ft_putendl(lst->value);
+		lst = lst->next;
 	}
 }

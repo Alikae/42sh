@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/23 05:12:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/10 00:31:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ void	init_signals_handling(t_sh *p)
 
 void	sh_init(t_sh *shell)
 {
-	ft_putendl("Shell: sh_init.c\n---");
 	sh_init_env();
 	shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
+	shell->debug = 1;
 	shell->debug_fd = 2;
 	shell->pipe_lst = 0;
 	shell->last_cmd_result = 0;

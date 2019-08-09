@@ -1,0 +1,59 @@
+<<<<<<< HEAD
+1,2c1,2
+< [ Sending command: foo to /bin/bash... ]
+< [ Sending command: /bin/ls to /bin/bash... ]
+---
+> [ Sending command: foo to /bin/sh... ]
+> [ Sending command: /bin/ls to /bin/sh... ]
+20c20
+< [ Sending command: /bin/ls -laF to /bin/bash... ]
+---
+> [ Sending command: /bin/ls -laF to /bin/sh... ]
+43c43
+< [ Sending command: /bin/ls -l -a -F to /bin/bash... ]
+---
+> [ Sending command: /bin/ls -l -a -F to /bin/sh... ]
+66c66
+< [ Sending command: echo iT works to /bin/bash... ]
+---
+> [ Sending command: echo iT works to /bin/sh... ]
+68c68
+< [ Sending command: pwd to /bin/bash... ]
+---
+> [ Sending command: pwd to /bin/sh... ]
+70,71c70,71
+< [ Sending command: cd /tmp to /bin/bash... ]
+< [ Sending command: pwd to /bin/bash... ]
+---
+> [ Sending command: cd /tmp to /bin/sh... ]
+> [ Sending command: pwd to /bin/sh... ]
+73,74c73,74
+< [ Sending command: cd .. to /bin/bash... ]
+< [ Sending command: pwd to /bin/bash... ]
+---
+> [ Sending command: cd .. to /bin/sh... ]
+> [ Sending command: pwd to /bin/sh... ]
+76,77c76,77
+< [ Sending command: cd to /bin/bash... ]
+< [ Sending command: pwd to /bin/bash... ]
+---
+> [ Sending command: cd to /bin/sh... ]
+> [ Sending command: pwd to /bin/sh... ]
+79c79
+< [ Sending command: cd - to /bin/bash... ]
+---
+> [ Sending command: cd - to /bin/sh... ]
+81c81
+< [ Sending command: pwd to /bin/bash... ]
+---
+> [ Sending command: pwd to /bin/sh... ]
+83c83
+< [ Sending command: ls to /bin/bash... ]
+---
+> [ Sending command: ls to /bin/sh... ]
+=======
+1c1
+< [ Sending command: foo to /bin/bash... ]
+---
+> [ Sending command: foo to /bin/sh... ]
+>>>>>>> utester

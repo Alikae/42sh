@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_pwd.c                                       :+:      :+:    :+:   */
+/*   sh_set_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 23:31:46 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/05/12 22:36:07 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/05/13 19:10:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "21sh.h"
 #include "sh_env.h"
 #include "libft.h"
-#include <limits.h>
 
-void	sh_set_pwd(void)
+t_env	*sh_init_var(const char *key, const char *value)
 {
-	char	*tmp2;
+	t_env	*var;
 
-	if ((tmp2 = ft_strnew(PATH_MAX + 1)))
+	if (!key || !*key)
+		return (NULL);
+	if ((var = sh_get_env(key)))
 	{
-		tmp2 = getcwd(tmp2, PATH_MAX);
-		sh_setenv("PWD", tmp2);
-		ft_strdel(&tmp2);
+			sh_set_value(var->key, value);
+		return (var);
 	}
+		if (!(var = (t_env *)malloc(sizeof(t_env))))
+		return (NULL);
+	var->key = ft_strdup(key);
+	var->value = ft_strdup(value);
+	var->next = NULL;
+	return (var);
 }

@@ -6,7 +6,11 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2019/07/22 02:55:26 by ede-ram          ###   ########.fr        #
+=======
+#    Updated: 2019/08/08 15:32:33 by thdelmas         ###   ########.fr        #
+>>>>>>> 10ad739915151c171d0ebb41d8b81ad727a2f44d
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +22,7 @@ C_FILES = \
 C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_loop.c \
+	sh_script.c \
 	sh_init.c
 
 C_FILES_exitpoint = \
@@ -81,6 +86,23 @@ C_FILES_executer = \
 C_FILES_debug_mode = \
 	debug_mode.c
 
+
+C_FILES_builtins = \
+	sh_basename.c \
+	sh_false.c \
+	sh_set.c \
+	sh_cd.c \
+	sh_true.c
+
+C_FILES_tools = \
+	sh_tab_fusion.c \
+	sh_are_you_sur.c \
+	sh_check_path.c \
+	sh_error_path.c \
+	sh_getopt.c
+	#sh_find_law.c
+	#sh_add_to_path.c
+
 C_FILES_env = \
 	
 	#sh_init_env.c \
@@ -93,9 +115,6 @@ C_FILES_env = \
 	sh_set_shlvl.c \
 	sh_print_env.c \
 	sh_fill_env.c \
-
-C_FILES_tools = \
-	sh_tab_fusion.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))
