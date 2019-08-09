@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/18 04:32:55 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/22 02:40:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ typedef struct		s_sh
 	int				debug_fd;
 	t_pipe_lst		*pipe_lst;
 	t_redirect_lst	*redirect_lst;
-	//t_assign_lst	*assign_lst;
+	struct s_env	*assign_lst;
+	struct s_env	*tmp_assign_lst;
 	int				pipein;
 	int				pipeout;
 	t_toktype		pipeline_separators[2];

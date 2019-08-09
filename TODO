@@ -56,4 +56,16 @@ Set
 ->->-> POUR TMEYER
 ->->->
 
-renvoyer une chaine et pas un split ';'
+
+
+
+case yolo in yola ) echo ;; yali | yolo ) loul ;; ( po ) tu ; esac
+
+
+For stock cmd in jobs:
+stock position in script separators
+retrieve each time
+
+Signals :
+	What to do while builtins?
+	Do ctrl-c / z are valid for 1 pipeline or 1 script?
