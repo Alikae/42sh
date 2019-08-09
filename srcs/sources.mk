@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/08 15:32:33 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/09 22:59:14 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,7 +95,6 @@ C_FILES_tools = \
 	sh_are_you_sur.c \
 	sh_check_path.c \
 	sh_error_path.c \
-	sh_getopt.c
 	#sh_find_law.c
 	#sh_add_to_path.c
 

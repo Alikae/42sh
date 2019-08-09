@@ -1,39 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_getopt.c                                        :+:      :+:    :+:   */
+/*   ft_getopt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/09 23:08:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/09 23:30:07 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "libft.h"
-#include "sh_opt.h"
 
-t_opt	*sh_create_opt(char *name, char *content)
+t_opt	*ft_create_opt(char *name, char *content)
 {
 	t_opt *tmp;
 
 	tmp = NULL;
 	if (!(tmp = (t_opt*)malloc(sizeof(t_opt))))
 		return (NULL);
-	tmp->name = ft_strdup(name);
+	tmp->name = name;
 	tmp->arg = ft_strdup(content);
 	tmp->next = NULL;
 	return (tmp);
 }
 
-t_opt	*sh_getopt(int *ac, char ***av, char *optstr)
+t_opt	*ft_getopt(int *ac, char ***av, char *optstr)
 {
 	int		i;
 	t_opt	*tmp;
 	t_opt	*optlst;
 	char	*trgt;
 	char	*arg;
+	// Passe argv 0 Static
+	// Si argv
+	// If -
+		// If opt no arg
+		// If opt has arg
+	// Else if --
+		// If opt no arg
+		// If opt has arg
+	// Else
 
 	if (!(*ac - 1 && *av + 1) || (*av)[1][0] != '-')
 		return (NULL);
@@ -58,13 +66,13 @@ t_opt	*sh_getopt(int *ac, char ***av, char *optstr)
 		}
 		if (!tmp)
 		{
-			if (!(tmp = sh_create_opt((**av)[i], arg)))
+			if (!(tmp = ft_create_opt((**av), arg)))
 				return (NULL);
 			optlst = tmp;
 		}
 		else
 		{
-			if (!(tmp->next = sh_create_opt((**av)[i], arg)))
+			if (!(tmp->next = ft_create_opt((**av), arg)))
 				break;
 			tmp = tmp->next;
 		}
@@ -74,6 +82,6 @@ t_opt	*sh_getopt(int *ac, char ***av, char *optstr)
 		(*ac)--;
 		(*av)++;
 	}
-	tmp->next = sh_getopt(ac, av, optstr);
+	tmp->next = ft_getopt(ac, av, optstr);
 	return (optlst);
 }

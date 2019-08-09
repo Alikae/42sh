@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/07/18 08:13:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/09 22:58:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 	forward_blanks(t);
 	word_begin = t->i;
 	read_n_skip_word(t);
-	if (word_begin != t->i && !ft_strncmp(t->input + word_begin, "esac"))
+	if (word_begin != t->i && !ft_strncmp(t->input + word_begin, "esac", t->i - word_begin))
 	{
 		if (!forbidden_esac)
 		{
