@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/12 15:20:07 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/09 23:00:06 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/11 17:57:49 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,8 +56,11 @@ INC = $(addprefix $(INC_DIR)/,$(H_FILES))
 
 ###  CC && FLAGS ###
 CC = clang
+DEBUG_FLAGS= -g3
 CFLAGS = $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS)) \
+		 $(DEBUG_FLAGS) \
 		 -Wall -Werror -Wextra
+
 
 LFLAGS = \
 

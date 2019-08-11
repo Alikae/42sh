@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/09 23:14:42 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/11 18:21:31 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	sh_init_env()
 void	sh_init(t_sh *shell)
 {
 	sh_init_env();
-	shell->opt = ft_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
+	shell->opt = ft_getopt(&(shell->ac), &(shell->av), "a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix");
 	shell->debug = 1;
 	shell->debug_fd = 2;
 	shell->pipe_lst = 0;
