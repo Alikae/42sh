@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/11 21:52:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/11 22:34:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int		ft_check_opt(char *name, size_t size_name, char *optstr)
 	{
 		oldtmp = tmp;
 		if (ft_strnequ(tmp + 1, name, size_name))
+			if (tmp[1 + size_name] == ':' || tmp[1 + size_name] == '|'
+					|| !tmp[1 + size_name])
 			return ((*(tmp + size_name + 1) == ':') + 1);
 	}
 	if (!(tmp = ft_strchr(optstr, '|')))
@@ -99,12 +101,12 @@ t_opt	*ft_get_dopt(int *ac, char ***av, char *optstr)
 	char *tmp;
 
 	optmp = NULL;
-	check = ft_check_opt((**av), ft_strlen(**av), optstr);
+	check = ft_check_opt((**av) + 2, ft_strlen(**av + 2), optstr);
 	if (check == 1)
-		optmp = ft_create_dopt((**av), NULL);
+		optmp = ft_create_dopt((**av + 2), NULL);
 	else if (check == 2 && (tmp = ft_strchr(**av, '=')))
 		optmp = ft_get_sopt_arg(ac, av, tmp - **av);
-	else if (check == 2)
+	else if (check == 2 && *ac > 0)
 		optmp = ft_get_sopt_arg(ac, av, ft_strlen(**av) - 1);
 	else
 		;//ft_perror
@@ -148,15 +150,17 @@ t_opt	*ft_getopt(int *ac, char ***av, char *optstr)
 {
 	static int avi = 0;
 	t_opt		*tmp;
+	t_opt		*optlst;
 
 	tmp = NULL;
-	if (!(*ac - 1))
-		return (NULL);
+	optlst = NULL;
 	if (!avi)
 	{
 		(*ac)--;
 		(*av)++;	
 	}
+	if (!(*ac > 0))
+		return (NULL);
 	if ((**av)[0] == '-' && (**av)[1] == '-' && (**av)[2])
 		tmp = ft_get_dopt(ac, av, optstr);
 	else if ((**av)[0] == '-' && (**av)[1] == '-' && !(**av)[2])
@@ -165,9 +169,14 @@ t_opt	*ft_getopt(int *ac, char ***av, char *optstr)
 		tmp = ft_get_sopt(ac, av, optstr);
 	else
 		return (NULL);
-	(*ac)--;
-	(*av)++;
 	if (tmp)
+	{
+		optlst = tmp;
+		while (tmp->next)
+			tmp = tmp->next;
 		tmp->next = ft_getopt(ac, av, optstr);
-	return (tmp);
+		(*ac)--;
+		(*av)++;
+	}
+	return (optlst);
 }
