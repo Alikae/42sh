@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 16:53:14 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 17:51:20 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	sh()->ev = ev;	
 	sh_init(sh());
 	if (ft_fetch_opt("c", 1, sh()->opt))
-		ft_putendl("sh_exec_arg()");
-		//sh_exec_arg();
+		sh_exec_arg();
 	else if (sh()->ac >= 1)
-		ft_putendl("sh_exec_file()");
-		//sh_exec_file();
+		sh_exec_file();
 	else if (!isatty(0))
 		sh_exec_stdin();
 	else
