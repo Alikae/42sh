@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sh_executer.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/24 15:49:05 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 13:40:28 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/12 13:55:26 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_entrypoint.h"
-#include "sh_exitpoint.h"
-#include "libft.h"
+#ifndef SH_EXECUTER_H
+# define SH_EXECUTER_H
 
-int		main(int ac, char **av, char **ev)
-{
-	sh_entrypoint(ac, av, ev);
-	sh_exitpoint();
-	return (0);
-}
+int		sh_exec_stdin(void);
+int		sh_exec_file(void);
+int		sh_exec_arg(void);
+#endif

@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sh_exec_arg.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/24 15:49:05 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 13:40:28 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/12 14:06:25 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/12 16:31:34 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
-#include "sh_entrypoint.h"
-#include "sh_exitpoint.h"
 #include "libft.h"
+#include "t_token.h"
+#include "stdlib.h"
+#include <fcntl.h>
 
-int		main(int ac, char **av, char **ev)
+int	sh_exec_arg(void)
 {
-	sh_entrypoint(ac, av, ev);
-	sh_exitpoint();
-	return (0);
+	t_opt	*opt;
+	char	*ret;
+
+	ret = NULL;
+	opt = NULL;
+	ft_putendl("sh_exec_arg");
+	if (NULL != (opt = ft_fetch_opt("c", 1, sh()->opt)) && opt->arg)
+		ret = opt->arg;
+	ft_putendl("sh_exec_arg");
+	if (ret && *ret && (sh()->ast = tokenize_input(ret)))//line
+	{
+		print_all_tokens(sh(), sh()->ast, 0);
+		exec_script(sh(), sh()->ast, 0);
+	}
 }

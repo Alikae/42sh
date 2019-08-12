@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 21:35:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/26 23:11:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 13:52:48 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void				sh_exec_line(const char *input);
 void				sh_free(t_sh **sh);
 void				sh_init(const char **env);
 int					sh_loop(void);
-int					sh_script_arg(void);
+int					sh_exec_script(void);
 void        		sh_prompt(void);
 void				signal_handler(int sig);
 

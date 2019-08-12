@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/26 23:12:06 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 16:14:39 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static	int		sh_script(const char *path)
 	return (1);
 }
 
-int		sh_script_arg()
+int		sh_exec_file()
 {
 	t_sh	*p;
 	int		i;

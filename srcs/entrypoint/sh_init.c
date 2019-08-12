@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 13:33:12 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 15:29:09 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ void	sh_init(t_sh *shell)
 	shell->redirect_lst = 0;
 	shell->opened_files = 0;
 	//shell->assign_lst = 0;
+
 	ft_print_opt(shell->opt);
 }

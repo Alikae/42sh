@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/09 22:59:14 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/12 13:56:11 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ C_FILES = \
 C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_loop.c \
-	sh_script.c \
 	sh_init.c
 
 C_FILES_exitpoint = \
@@ -74,6 +73,9 @@ C_FILES_tokenizer = \
 	opening_chars_handling.c
 
 C_FILES_executer = \
+	sh_exec_file.c \
+	sh_exec_stdin.c \
+	sh_exec_arg.c \
 	exec_script.c \
 	exec_compound.c \
 	exec_simple_command.c \

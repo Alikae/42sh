@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 13:38:30 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 16:25:57 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@
 
 t_opt	*ft_fetch_opt(char *name, size_t size, t_opt *optlst)
 {
+	if (!name)
+		return (NULL);
 	while (optlst && !ft_strnequ(name, optlst->name, size))
+	{
 		optlst = optlst->next;
+	}
 	return (optlst);
 }
 
@@ -179,7 +183,7 @@ int ft_getopt(int *ac, char ***av, char *optstr, t_opt **optlst)
 		return (-1);
 	if (tmp)
 	{
-		if (!*optlst)
+		if (optlst && !*optlst)
 			*optlst = tmp; 
 		else
 			opttmp = tmp;
@@ -189,12 +193,13 @@ int ft_getopt(int *ac, char ***av, char *optstr, t_opt **optlst)
 			while (tmp && tmp->next)
 				tmp = tmp->next;
 			tmp->next = opttmp;
-			while (tmp && tmp->next)
-				tmp = tmp->next;
-			ft_getopt(ac, av, optstr, optlst);
+			if (*ac > 0 && ft_getopt(ac, av, optstr, optlst) > 0)
+			{
+				(*ac)--;
+				(*av)++;
+				return (1);
+			}
 		}
-		(*ac)--;
-		(*av)++;
 	}
 	return (0);
 }
