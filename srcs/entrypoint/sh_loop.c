@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/25 20:05:09 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/10 00:31:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int		sh_loop(void)
 		input = 0;
 		while (!complete)
 		{
+			//swap_signals_to_prompter
 			if (!dbug)
 			{
 				if (!(ln_tab = sh_arguments(hist)))
@@ -91,7 +92,8 @@ int		sh_loop(void)
 		//	ln_tab[0] = ft_strdup("case yoz in ( lap | yoz ) /bin/echo yes ;esac");
 		//	ln_tab[0] = ft_strdup("  echo ; done");
 		//		ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ; esac");
-				ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
+			//	ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
+				ln_tab = ft_strdup("LSCOLORS=lala ls -g");
 			}
 		//	int z = 0;
 		//	while (ln_tab[z])
@@ -102,7 +104,7 @@ int		sh_loop(void)
 			if (input)
 				input = ft_strjoin_free(input, "\n", input);
 			input = ft_strjoin_free(input, ln_tab, input);
-			printf("%i - %s -\n", strlen(input), input);
+			//printf("%i - %s -\n", strlen(input), input);
 			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
 			free (ln_tab);
 			p->unfinished_cmd = 0;

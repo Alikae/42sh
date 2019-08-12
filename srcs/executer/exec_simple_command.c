@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>//
+#include <signal.h>//
 #include "sh_env.h"
 #include "error.h"
 
@@ -48,15 +49,54 @@ void	print_redirections(t_sh *p, t_redirect_lst *origin)
 	}
 }
 
-int     block_wait(t_sh *p)
+void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 {
-	int	wait_status;
+	sigfillset(sigset);
+	sigprocmask(SIG_BLOCK, sigset, 0);
+}
 
-	//wait(&wait_status);
-	while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
-		;
+int     block_wait(t_sh *p, int child_pid)
+{
+	int			status;
+	sigset_t	sigset;
+
+	swap_to_signals_exec(p, &sigset);
+	if (waitpid(child_pid, &status, WUNTRACED) < 0)
+	{
+		dprintf(p->debug_fd, "WAIT ERROR\n");
+		return (0);
+	}
+	dprintf(p->debug_fd, "waited\n");
+	if (WIFSTOPPED(status))
+	{
+	dprintf(p->debug_fd, "waited2\n");
+		if (WSTOPSIG(status) == SIGTSTP)
+		{
+			printf("\nChild_process [%i] suspended\n", child_pid);
+			//create_job
+			//{
+			//	extract cmd
+			//	create_job(cmd, pid)
+			//}
+		}
+	}
+	else if (WIFSIGNALED(status))
+	{
+		handle_signal(WTERMSIG(status));
+		/*
+	dprintf(p->debug_fd, "waited3\n");
+		if (WTERMSIG(status) == SIGSEGV)
+		{
+			printf("\n[%i] aborted: Segmentation Fault\n", child_pid);
+		}
+		*/
+	}
+	sigprocmask(SIG_UNBLOCK, &sigset, 0);
+	////wait(&wait_status);
+	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
+	//	;
 	dprintf(p->debug_fd, "		o Wait finish\n");
-	return (WEXITSTATUS(wait_status));
+	return (WEXITSTATUS(status));
 }
 
 int		out_already_in_lst_n(int out, t_redirect_lst *origin, t_redirect_lst *end)
@@ -132,7 +172,7 @@ int     exec_path(t_sh *p, char *path)
 	{
 		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
 		close_pipes_parent(p);
-		ret = block_wait(p);
+		ret = block_wait(p, child_pid);
 	}
 	else
 	{
@@ -179,12 +219,6 @@ char	*get_next_path(char *path, char **all_paths, int i)
 	}
 	next_path = ft_strjoin(all_paths[i], "/");
 	next_path = ft_strjoin_free(next_path, path, next_path);
-	//if find next path by :
-	//	concat path / this_zone
-	//else if pile the end
-	//	give actual_path+path
-	//else
-	//	return (0);
 	return (next_path);
 }
 
@@ -425,7 +459,7 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		fd_in = ft_atoi(token->content);
 	if (str_isnum(token->sub->content))
 		fd_out = ft_atoi(token->sub->content);
-	else if (!(fd_out = create_open_file(p, token->sub->content, token->type)) > 0)
+	else if (!(fd_out = create_open_file(p, token->sub->content, token->type) > 0))
 	{
 		dprintf(p->debug_fd, "redirection error in %s\n", token->content);
 		return ;
@@ -433,9 +467,32 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
 
-int		stock_assign(t_sh *p, t_token *token, int *nb_assign)
+void	del_n_assign_lst(t_sh *p, int n)
 {
-	//
+	t_env	*tmp;
+
+	while (n-- && p->assign_lst)
+	{
+		free(p->assign_lst->key);
+		free(p->assign_lst->value);
+		tmp = p->assign_lst->next;
+		free(p->assign_lst);
+		p->assign_lst = tmp;
+	}
+}
+
+void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
+{
+	t_env	*tmp;
+	char	*equal;
+
+	tmp = p->assign_lst;
+	equal = ft_strchr(token->content, '=');
+	*equal = 0;
+	p->assign_lst = sh_create_param(token->content);
+	*equal = '=';
+	p->assign_lst->value = ft_strdup(equal + 1);
+	p->assign_lst->next = tmp;
 }
 
 int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
@@ -486,8 +543,66 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
+	//handle redirections/signals
 	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
 	return (f(p->child_ac, p->child_argv, &(p->params)));
+}
+
+void	handle_assigns(t_sh *p)
+{
+	//reverse sens
+	t_env	*assign;
+	t_env	*tmp;
+
+	assign = p->assign_lst;
+	while (assign)
+	{
+		if (sh_isset(assign->key))
+		{
+			tmp = p->tmp_assign_lst;
+			p->tmp_assign_lst = sh_create_param(assign->key);
+			p->tmp_assign_lst->value = ft_strdup(sh_getenv(assign->key));
+			p->tmp_assign_lst->next = tmp;
+		}
+		sh_setenv(assign->key, assign->value);
+		assign = assign->next;
+	}
+}
+
+void	restore_before_assigns(t_sh *p)
+{
+	t_env	*assign;
+	t_env	*tmp;
+
+	assign = p->assign_lst;
+	while (assign)
+	{
+		sh_unsetenv(assign->key);
+		assign = assign->next;
+	}
+	assign = p->tmp_assign_lst;
+	while (assign)
+	{
+		sh_setenv(assign->key, assign->value);
+		tmp = assign;
+		assign = assign->next;
+		free(tmp->key);
+		free(tmp->value);
+		free(tmp);
+	}
+	p->tmp_assign_lst = 0;
+}
+
+void	print_assign(t_sh *p)
+{
+	t_env	*a;
+
+	a = p->assign_lst;
+	while (a)
+	{
+		printf("%s=%s\n", a->key, a->value);
+		a = a->next;
+	}
 }
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
@@ -503,6 +618,9 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//if (!token_begin)
 		//no_cmd_name;
 	//Expand_words+retokenize
+	//if (!token_begin)//(after retok)
+		//no_cmd_name;
+	handle_assigns(p);
 	//if (token_begin->type == SH_FUNC)
 	//	store_func();
 	//else if cmd name is stored in func
@@ -516,7 +634,9 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	remove_opened_files(p);
 	print_redirections(p, p->redirect_lst);
-	//del_n_assign_lst(&p->redirect_lst, nb_assign);
+	print_assign(p);
+	restore_before_assigns(p);
+	del_n_assign_lst(p, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
 	return (ret);
 }

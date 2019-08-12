@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 22:16:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/13 17:53:44 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 16:45:11 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct		s_env
 	struct s_env	*next;
 }					t_env;
 
+int			sh_isset(const char *key);
 void		sh_set_pwd(void);
 void		sh_print_env(void);
 void		sh_fill_env(const char **env);

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 16:14:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 16:52:22 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static	int		sh_script(const char *path)
 
 	p = sh();
 	input = NULL;
-	if (! (buff = ft_strnew(BUFF_SIZE)))
+	if (!(buff = ft_strnew(BUFF_SIZE)))
 		return (-1);
 	if ((fd = open(path, O_RDONLY)) < 0)
 		return (fd);

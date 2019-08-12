@@ -1,37 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_entrypoint.c                                    :+:      :+:    :+:   */
+/*   sh_isset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 16:53:14 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/12 16:40:26 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/12 16:46:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "sh.h"
 #include "sh_env.h"
-#include "sh_entrypoint.h"
+#include "libft.h"
+#include <stdlib.h>
 
-void	sh_entrypoint(int ac, char **av, char **ev)
+int		sh_isset(const char *key)
 {
-	int i;
+	t_env *tmp;
 
-	i = -1;
-	sh()->ac = ac;
-	sh()->av = av;
-	sh()->ev = ev;	
-	sh_init(sh());
-	if (ft_fetch_opt("c", 1, sh()->opt))
-		ft_putendl("sh_exec_arg()");
-		//sh_exec_arg();
-	else if (sh()->ac >= 1)
-		ft_putendl("sh_exec_file()");
-		//sh_exec_file();
-	else if (!isatty(0))
-		sh_exec_stdin();
-	else
-		sh_loop();
+	tmp = sh()->params;
+	if (!key || !*key)
+		return (0);
+	while (tmp && !ft_strequ(key, tmp->key))
+		tmp = tmp->next;
+	return (tmp != NULL);
 }
