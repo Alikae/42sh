@@ -6,13 +6,16 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 04:32:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 23:29:50 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:13:51 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_builtins.h"
 
-int		sh_false(int ac, char **av, t_env **env)
+int		sh_false(int ac, char **av, t_env **ev)
 {
+	(void)ac;
+	(void)av;
+	(void)ev;
 	return (1);
 }

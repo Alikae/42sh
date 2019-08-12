@@ -6,13 +6,15 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/09 22:58:43 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:38:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_token.h"
 #include "error.h"
 #include "sh.h"
+#include "sh_executer.h"
+#include <stdio.h>
 
 //PROTECC ALL RECURSIVETOKENIZER FROM SYNTAXERROR
 //FREE CREATED TOKS WHEN ERROR
@@ -35,6 +37,8 @@ void	forward_blanks(t_tokenize_tool *t)
 
 t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free)
 {
+	(void)t;
+	(void)to_free;
 	//freeall(to_free);
 	printf("SYNTAX_ERROR: %s\n", s);
 	return (0);
@@ -113,7 +117,7 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "unexpected ESAC in CASE: expected WORD after '('", compound));
+		return ((int)handle_syntax_error(t, "unexpected ESAC in CASE: expected WORD after '('", compound));
 	}
 	t->i = word_begin;
 	t_token	**previous_next = &(actual->sub);
@@ -143,7 +147,7 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 	if (t->input[t->i] != ')')
 	{
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "UNEXPECTED char in CASE: expected ')' after WORDLIST", compound));
+		return ((int)handle_syntax_error(t, "UNEXPECTED char in CASE: expected ')' after WORDLIST", compound));
 	}
 	t->i++;
 	return (1);
@@ -243,7 +247,7 @@ int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *c
 			}
 			sh()->invalid_cmd = 1;
 			printf("%i ", next_separator);
-			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
+			return ((int)handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
 		}
 		previous_next = &((*previous_next)->next);
 	}
@@ -253,7 +257,6 @@ int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *c
 t_token	*tokenize_case(t_tokenize_tool *t)
 {
 	t_token		*compound_token;
-	int			word_begin;
 
 	if (!tokenize_case_name(t, &compound_token))
 	{
@@ -460,7 +463,7 @@ int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
 	word_begin = t->i;
 	read_n_skip_word(t);
 	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i - word_begin))
-		return (handle_syntax_error(t, "missing DO in for", compound));
+		return ((int)handle_syntax_error(t, "missing DO in for", compound));
 	if (!compound->sub->sub)
 		compound->sub->sub = create_token(0, 0);
 	if (!(compound->sub->sub->sub = tokenize_for_do_group(t, compound)))
@@ -471,7 +474,6 @@ int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
 t_token	*tokenize_for(t_tokenize_tool *t)
 {
 	t_token		*compound_token;
-	t_toktype	next_separator;
 
 	compound_token = create_token(SH_FOR, 0);
 	if (!tokenize_for_name(t, compound_token))
@@ -550,7 +552,6 @@ t_token	*tokenize_braces(t_tokenize_tool *t)
 t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type)
 {
 	t_token		*compound;
-	t_toktype	terminator;
 	int			tmp;
 
 	tmp = t->word_nb;

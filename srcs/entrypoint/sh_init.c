@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 16:34:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:11:44 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "sh_env.h"
 #include "sh_opt.h"
 #include <unistd.h>
+#include <stdio.h>
 
 static void	sh_set_shlvl(void)
 {
@@ -65,7 +66,7 @@ void	handle_signal(int sig)
 		;//return to last job
 }
 
-void	init_signals_handling(t_sh *p)
+void	init_signals_handling()
 {
 	signal(SIGINT, &handle_signal);
 	signal(SIGSEGV, &handle_signal);
@@ -125,5 +126,5 @@ void	sh_init(t_sh *shell)
 	//shell->assign_lst = 0;
 
 	ft_print_opt(shell->opt);
-	init_signals_handling(shell);
+	//init_signals_handling(shell);
 }

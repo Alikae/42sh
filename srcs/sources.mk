@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/12 16:44:55 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/12 18:12:10 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,7 +86,6 @@ C_FILES_debug_mode = \
 
 
 C_FILES_builtins = \
-	sh_basename.c \
 	sh_false.c \
 	sh_set.c \
 	sh_cd.c \

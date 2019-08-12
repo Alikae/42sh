@@ -1,8 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_script.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/12 18:51:18 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "t_token.h"
-#include <unistd.h>
+#include "sh_executer.h"
 #include "redirections.h"
 #include "sh.h"
 #include "errno.h"
+#include <unistd.h>
+#include <stdio.h>
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {

@@ -6,13 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:56:39 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 14:11:22 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:42:32 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "t_token.h"
+#include "sh_executer.h"
 #include <fcntl.h>
 
 int	sh_exec_stdin(void)
@@ -38,4 +39,5 @@ int	sh_exec_stdin(void)
 		exec_script(sh(), sh()->ast, 0);
 	}
 	free(ret);
+	return (0);
 }

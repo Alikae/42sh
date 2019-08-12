@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 16:25:57 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:02:27 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ t_opt	*ft_fetch_opt(char *name, size_t size, t_opt *optlst)
 {
 	if (!name)
 		return (NULL);
-	while (optlst && !ft_strnequ(name, optlst->name, size))
+	while (optlst)
 	{
+		if (ft_strnequ(name, optlst->name, size))
+			return (optlst);
 		optlst = optlst->next;
 	}
-	return (optlst);
+	return (NULL);
 }
 
 int		ft_check_opt(char *name, size_t size_name, char *optstr, t_opt *opts)

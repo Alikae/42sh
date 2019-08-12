@@ -89,5 +89,12 @@ t_token		*tokenize_for(t_tokenize_tool *t);
 t_token		*tokenize_if(t_tokenize_tool *t);
 t_token		*tokenize_case(t_tokenize_tool *t);
 t_token		*tokenize_while(t_tokenize_tool *t, t_toktype type);
+t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type);
+void		forward_blanks_newline(t_tokenize_tool *t);
+void		forward_blanks(t_tokenize_tool *t);
+t_toktype	read_n_skip_operator(t_tokenize_tool *t);
+int			read_n_skip_word(t_tokenize_tool *t);
+t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free);
 
+t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype type);
 #endif

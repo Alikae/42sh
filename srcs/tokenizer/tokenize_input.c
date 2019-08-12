@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize_input.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/12 18:31:56 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "t_token.h"
 #include "libft.h"
 #include "sh.h"
+#include <stdio.h>
 
 int			is_word_char(char c) // exhaustive? all operators
 {
@@ -149,7 +162,7 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	(*p_actual)->next = create_token_n(SH_FUNC, t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
 	t->i = word_begin;
-	if (((*p_actual)->sub = tokenize_compound(t, type)) == SH_SYNTAX_ERROR)
+	if (((int)((*p_actual)->sub = tokenize_compound(t, type))) == SH_SYNTAX_ERROR)
 	{
 		//free all
 		return (SH_SYNTAX_ERROR);
@@ -226,7 +239,7 @@ void	treat_input(t_tokenize_tool *t, t_toktype actual_compound, t_toktype *termi
 	if (!(*terminator = treat_operator(t, p_actual, actual_compound)))
 		*terminator = treat_word(t, p_actual, actual_compound);
 }
-int lstp(){}
+
 t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_toktype *terminator)
 {
 	t_token	*origin;
@@ -240,7 +253,6 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
 		//printf("yo\n");
-		lstp();
 		//free all
 		return (0);
 	}

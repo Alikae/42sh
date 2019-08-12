@@ -6,21 +6,22 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 23:30:19 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:14:53 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "sh_builtins.h"
 
-int		sh_set(int ac, char **av, t_env **env)
+int		sh_set(int ac, char **av, t_env **ev)
 {
 	t_env *params;
 
+	(void)av;
 	ft_putendl("Shell: sh_builtins: sh_set.c\n---");
-	if (!env || !*env)
+	if (!ev || !*ev)
 		return (1);
-	params = *env;
+	params = *ev;
 	if (ac <= 1)
 		while (params)
 		{

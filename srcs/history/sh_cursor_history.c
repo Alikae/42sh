@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 07:30:23 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:53:02 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:23:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 #include "libft.h"
 #include "sh_command_edition.h"
 #include "history.h"
-
+/*
 static int	check(void)
 {
 	write(2, "TEST\n", 5);
 	return (1);
 }
-
+*/
 static int	history_up(char **command, t_hist *hist, char *current)
 {
 	char	**prev;

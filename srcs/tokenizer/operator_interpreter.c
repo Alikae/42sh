@@ -1,7 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   operator_interpreter.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/12 18:43:03 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "t_token.h"
 #include "libft.h"
 #include "error.h"
 #include "sh.h"
+
+#include <stdio.h>
 
 t_toktype	read_n_skip_operator_4(t_tokenize_tool *t)
 {
@@ -128,6 +142,8 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 	int	word_len;
 	int	here_doc_begin;
 
+	(void)type;
+	word_len = 0;
 	forward_blanks(t);
 	word_begin = t->i;
 	read_n_skip_word(t);
@@ -136,7 +152,7 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 		sh()->unfinished_cmd = 1;
 		return (SH_SYNTAX_ERROR);
 	}
-	word_len == t->i - word_begin + 1;
+	word_len = t->i - word_begin + 1;
 	forward_blanks_newline(t);
 	here_doc_begin = t->i;
 	while (ft_strncmp(t->input + word_begin, t->input + t->i, word_len) || t->i + word_len != '\n')
@@ -149,7 +165,7 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 			return (SH_SYNTAX_ERROR);
 		}
 	}
-	if (!((*p_actual)->content = ft_strndup(t->input[here_doc_begin], t->i - here_doc_begin)))
+	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i - here_doc_begin)))
 		exit(ERROR_MALLOC);
 	return (0);
 	//+ was_quoted + was_dashed
