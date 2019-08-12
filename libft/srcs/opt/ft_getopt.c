@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/11 22:34:08 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 13:38:30 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,21 @@
 #include <stdlib.h>
 #include "libft.h"
 
-int		ft_check_opt(char *name, size_t size_name, char *optstr)
+t_opt	*ft_fetch_opt(char *name, size_t size, t_opt *optlst)
+{
+	while (optlst && !ft_strnequ(name, optlst->name, size))
+		optlst = optlst->next;
+	return (optlst);
+}
+
+int		ft_check_opt(char *name, size_t size_name, char *optstr, t_opt *opts)
 {
 	char *tmp;
 	char *oldtmp;	
 
 	tmp = optstr;
+	if (opts && ft_fetch_opt(name, size_name, opts))
+		return (0);
 	if (ft_strnequ(optstr, name, size_name))
 		return ((*(tmp + size_name + 1) == ':') + 1);
 	while ((tmp = ft_strchr(tmp + 1, '|')))
@@ -28,7 +37,7 @@ int		ft_check_opt(char *name, size_t size_name, char *optstr)
 		if (ft_strnequ(tmp + 1, name, size_name))
 			if (tmp[1 + size_name] == ':' || tmp[1 + size_name] == '|'
 					|| !tmp[1 + size_name])
-			return ((*(tmp + size_name + 1) == ':') + 1);
+				return ((*(tmp + size_name + 1) == ':') + 1);
 	}
 	if (!(tmp = ft_strchr(optstr, '|')))
 		tmp = optstr + ft_strlen(optstr) - 1;
@@ -94,14 +103,14 @@ t_opt	*ft_get_sopt_arg(int *ac, char ***av, int i)
 	return (optmp);
 }
 
-t_opt	*ft_get_dopt(int *ac, char ***av, char *optstr)
+t_opt	*ft_get_dopt(int *ac, char ***av, char *optstr, t_opt *optlst)
 {
 	int check;
 	t_opt *optmp;
 	char *tmp;
 
 	optmp = NULL;
-	check = ft_check_opt((**av) + 2, ft_strlen(**av + 2), optstr);
+	check = ft_check_opt((**av) + 2, ft_strlen(**av + 2), optstr, optlst);
 	if (check == 1)
 		optmp = ft_create_dopt((**av + 2), NULL);
 	else if (check == 2 && (tmp = ft_strchr(**av, '=')))
@@ -113,17 +122,16 @@ t_opt	*ft_get_dopt(int *ac, char ***av, char *optstr)
 	return (optmp);
 }
 
-t_opt	*ft_get_sopt(int *ac, char ***av, char *optstr)
+t_opt	*ft_get_sopt(int *ac, char ***av, char *optstr, t_opt *optlst)
 {
 	int i;
 	int check;
-	t_opt *optlst;
 	t_opt *optmp;
 
 	i = 1;
 	optlst = NULL;
 	optmp = NULL;
-	while ((**av)[i] && (check = ft_check_opt((**av) + i, 1, optstr)) == 1 )
+	while ((**av)[i] && (check = ft_check_opt((**av) + i, 1, optstr, optlst)) == 1 )
 	{
 		if (!optmp)
 			optmp = ft_create_sopt((**av)[i], NULL);
@@ -146,37 +154,47 @@ t_opt	*ft_get_sopt(int *ac, char ***av, char *optstr)
 	return (optlst);
 }
 
-t_opt	*ft_getopt(int *ac, char ***av, char *optstr)
+int ft_getopt(int *ac, char ***av, char *optstr, t_opt **optlst)
 {
 	static int avi = 0;
 	t_opt		*tmp;
-	t_opt		*optlst;
+	t_opt		*opttmp;
 
 	tmp = NULL;
-	optlst = NULL;
+	opttmp = NULL;
 	if (!avi)
 	{
 		(*ac)--;
 		(*av)++;	
 	}
 	if (!(*ac > 0))
-		return (NULL);
+		return (0);
 	if ((**av)[0] == '-' && (**av)[1] == '-' && (**av)[2])
-		tmp = ft_get_dopt(ac, av, optstr);
+		tmp = ft_get_dopt(ac, av, optstr, *optlst);
 	else if ((**av)[0] == '-' && (**av)[1] == '-' && !(**av)[2])
 		tmp = NULL;
 	else if ((**av)[0] == '-' && (**av)[1])
-		tmp = ft_get_sopt(ac, av, optstr);
+		tmp = ft_get_sopt(ac, av, optstr, *optlst);
 	else
-		return (NULL);
+		return (-1);
 	if (tmp)
 	{
-		optlst = tmp;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = ft_getopt(ac, av, optstr);
+		if (!*optlst)
+			*optlst = tmp; 
+		else
+			opttmp = tmp;
+		if (optlst && *optlst)
+		{
+			tmp = *optlst;
+			while (tmp && tmp->next)
+				tmp = tmp->next;
+			tmp->next = opttmp;
+			while (tmp && tmp->next)
+				tmp = tmp->next;
+			ft_getopt(ac, av, optstr, optlst);
+		}
 		(*ac)--;
 		(*av)++;
 	}
-	return (optlst);
+	return (0);
 }

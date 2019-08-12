@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/11 22:28:51 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 13:33:12 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ static void	sh_init_env()
 
 void	sh_init(t_sh *shell)
 {
+	char *opts;
+	
+	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug");
 	sh_init_env();
-	shell->opt = ft_getopt(&(shell->ac), &(shell->av), "a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug");
+	shell->opt = NULL;
+	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
 	shell->debug = 1;
 	shell->debug_fd = 2;
 	shell->pipe_lst = 0;
