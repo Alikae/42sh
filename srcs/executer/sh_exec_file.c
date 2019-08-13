@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 17:53:23 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/13 16:17:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,6 @@ static	int		sh_script(const char *path)
 			if (!(input = ft_strdup(buff)))
 				return (0);
 		ft_strclr(buff);
-	}
-	if (p->debug)
-	{
-		ft_putstr("SCRIPT FILE: ");
-		ft_putendl(path);
-		ft_putendl(input);
 	}
 	close(fd);
 	if (input && *input && (p->ast = tokenize_input(input)))//line

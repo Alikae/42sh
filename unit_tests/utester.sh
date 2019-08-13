@@ -6,33 +6,34 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/13 12:47:17 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/13 16:07:07 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
 
-ut_dir="./unit_tests"
-log_dir="$ut_dir/logs"
-log_file="./ulogs"
-sh_ref="/bin/bash"
-sh_tgt="/bin/sh"
+export UT_dir="./unit_tests"
+export UT_log_dir="$UT_dir/logs"
+export UT_log_file="./ulogs"
+export UT_sh_tgt="./42sh"
+export UT_sh_ref="/bin/sh"
 
 #(I/)O REPORT FILES
-err_file_ref="$log_dir/err_ref.report"
-err_file_tgt="$log_dir/err_tgt.report"
-err_file_diff="$log_dir/err_diff.report"
-out_file_diff="$log_dir/out_diff.report"
-out_file_ref="$log_dir/out_ref.report"
-out_file_tgt="$log_dir/out_tgt.report"
+UT_err_file_ref="$UT_log_dir/err_ref.report"
+UT_err_file_tgt="$UT_log_dir/err_tgt.report"
+UT_err_file_diff="$UT_log_dir/err_diff.report"
+UT_out_file_diff="$UT_log_dir/out_diff.report"
+UT_out_file_ref="$UT_log_dir/out_ref.report"
+UT_out_file_tgt="$UT_log_dir/out_tgt.report"
 
 #I(/O) PIPE
-pipe_in_ref="$log_dir/pipe_in_ref"
-pipe_in_tgt="$log_dir/pipe_in_tgt"
+pipe_in_ref="$UT_log_dir/pipe_in_ref"
+pipe_in_tgt="$UT_log_dir/pipe_in_tgt"
 
 #Externs Files
-. "$ut_dir/utester_tools.sh"
-. "$ut_dir/utester_msh.sh"
-. "$ut_dir/utest_env.sh"
+. "$UT_dir/shell_utests.sh"
+. "$UT_dir/utester_tools.sh"
+. "$UT_dir/utester_msh.sh"
+. "$UT_dir/utest_env.sh"
 
 test_custom_cmds () {
 	echo '[ Testing custom commands ]'
@@ -44,22 +45,22 @@ test_custom_cmds () {
 		)
 
 	## Tests
-	$sh_tgt <$pipe_in_tgt >$out_file_tgt 2>$err_file_tgt &
-	$sh_ref <$pipe_in_ref >$out_file_ref 2>$err_file_ref &
+	$UT_sh_tgt <$pipe_in_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt &
+	$UT_sh_ref <$pipe_in_ref >$UT_out_file_ref 2>$UT_err_file_ref &
 	for i in "${cmd[@]}"
 	do
-		echo "[ Sending command: "$i" to "$sh_tgt"... ]"
-		echo "echo [ Sending command: "$i" to "$sh_tgt"... ]" >> $pipe_in_tgt
+		echo "[ Sending command: "$i" to "$UT_sh_tgt"... ]"
+		echo "echo [ Sending command: "$i" to "$UT_sh_tgt"... ]" >> $pipe_in_tgt
 		echo "$i" >> $pipe_in_tgt
-		echo "[ Sending command: "$i" to "$sh_ref"... ]"
-		echo "echo [ Sending command: "$i" to "$sh_tgt"... ]" >> $pipe_in_ref
+		echo "[ Sending command: "$i" to "$UT_sh_ref"... ]"
+		echo "echo [ Sending command: "$i" to "$UT_sh_tgt"... ]" >> $pipe_in_ref
 		echo "$i" >> $pipe_in_ref
 		echo "exit" >> $pipe_in_tgt
 		echo "exit" >> $pipe_in_ref
 	done
-diff $out_file_ref $out_file_tgt > $out_file_diff
-diff $err_file_ref $err_file_tgt > $err_file_diff
-ask_for_out
+	diff $UT_out_file_ref $UT_out_file_tgt > $UT_out_file_diff
+	diff $UT_err_file_ref $UT_err_file_tgt > $UT_err_file_diff
+	ask_for_out
 }
 
 
@@ -82,30 +83,30 @@ test_custom_script () {
 		fi
 	done
 	if [ -r "$custom_script" ] ; then
-		$sh_tgt <$pipe_in_tgt >$out_file_tgt 2>$err_file_tgt &
+		$UT_sh_tgt <$pipe_in_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt &
 		cat $custom_script >> $pipe_in_tgt
-		$sh_ref <$pipe_in_ref >$out_file_ref 2>$err_file_ref &
+		$UT_sh_ref <$pipe_in_ref >$UT_out_file_ref 2>$UT_err_file_ref &
 		cat $custom_script >> $pipe_in_ref
 		echo "exit" >> $pipe_in_tgt
 		echo "exit" >> $pipe_in_ref
 	fi
 	echo '[ Done ]'
-diff $out_file_ref $out_file_tgt > $out_file_diff
-diff $err_file_ref $err_file_tgt > $err_file_diff
-ask_for_out
+	diff $UT_out_file_ref $UT_out_file_tgt > $UT_out_file_diff
+	diff $UT_err_file_ref $UT_err_file_tgt > $UT_err_file_diff
+	ask_for_out
 }
 
 
-if [ ! -d "$log_dir" ]; then
-	mkdir "$log_dir"
-	touch $out_file_ref $out_file_tgt $err_file_ref $err_file_tgt
-	touch $out_file_diff $err_file_diff
+if [ ! -d "$UT_log_dir" ]; then
+	mkdir "$UT_log_dir"
+	touch $UT_out_file_ref $UT_out_file_tgt $UT_err_file_ref $UT_err_file_tgt
+	touch $UT_out_file_diff $UT_err_file_diff
 fi
 #CLEAR
 rm -f $pipe_in_ref $pipe_in_tgt
 mkfifo $pipe_in_tgt $pipe_in_ref
-echo -n '' > $out_file_ref
-echo -n '' > $out_file_tgt
+echo -n '' > $UT_out_file_ref
+echo -n '' > $UT_out_file_tgt
 #
 while [ -z $user_in ] ; do
 	clear
@@ -134,7 +135,7 @@ elif [[ "$user_in" -eq "4" ]] ; then
 elif [[ "$user_in" -eq "5" ]] ; then
 	test_custom_cmds
 elif [[ "$user_in" -eq "6" ]] ; then
-	utest_env
+	shell_utests
 fi
 rm -f $pipe_in_ref $pipe_in_tgt
 echo '[ Exit ]'
