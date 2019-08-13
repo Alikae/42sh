@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 09:09:16 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/13 15:58:36 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/13 16:46:19 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -59,15 +59,24 @@ ask_for_out () {
 }
 
 print_kook () {
-	if [ "$1" = 'ok' ]
+	if [ "$1" -eq '0' ] && [ "$2" -eq '0' ]
 	then
-		echo "\033[0;36;40m[ Testing: $2 ] \033[0;32;40m[ OK ]\033[0;0m"
-	elif [ "$1" = 'ko' ]
+		echo "\033[0;36;40m[ Testing: $3 ] \033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m"
+	elif [ "$1" -eq '1' ] && [ "$2" -eq '0' ]
 	then
-		echo "\033[0;36;40m[ Testing: $2 ] \033[0;31;40m[ KO ]\033[0;0m"
+		echo "\033[0;36;40m[ Testing: $3 ] \033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m"
 		echo "[ Stdout REPORT ]\nYour shell: $UT_sh_tgt\nRef shell: $UT_sh_ref"
 		cat "$UT_out_file_diff"
-		echo "[ Stderr REPORT ]\nYour shell: $UT_sh_tgt\nRef shell: $UT_sh_ref"
-		cat "$UT_err_file_diff"
+	elif [ "$1" -eq '0' ] && [ "$2" -eq '1' ]
+	then
+		echo "\033[0;36;40m[ Testing: $3 ] \033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
+		#echo "[ Stderr REPORT ]\nYour shell: $UT_sh_tgt\nRef shell: $UT_sh_ref"
+		#cat "$UT_err_file_diff"
+	else
+		echo "\033[0;36;40m[ Testing: $3 ] \033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
+		echo "[ Stdout REPORT ]\nYour shell: $UT_sh_tgt\nRef shell: $UT_sh_ref"
+		cat "$UT_out_file_diff"
+		#echo "[ Stderr REPORT ]\nYour shell: $UT_sh_tgt\nRef shell: $UT_sh_ref"
+		#cat "$UT_err_file_diff"
 	fi
 }

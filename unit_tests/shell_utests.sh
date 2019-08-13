@@ -18,6 +18,8 @@ cd -
 pwd
 ls
 exit'
+ret1=
+ret2=
 
 shell_utests_stdin ()
 {
@@ -26,12 +28,14 @@ do
 	echo "$i" | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
 	echo "$i" | $UT_sh_ref >$UT_out_file_ref 2>$UT_err_file_ref
 	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
+	ret1=$?
 	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
+	ret2=$?
 	if [ -z "$(cat $UT_out_file_diff)" ]
 	then
-		print_kook ok "$i"
+		print_kook $ret1 $ret2 "$i"
 	else
-		print_kook ko "$i"
+		print_kook $ret1 $ret2 "$i"
 	fi
 done	
 }
@@ -44,12 +48,14 @@ do
 	$UT_sh_tgt $test_file >$UT_out_file_tgt 2>$UT_err_file_tgt
 	$UT_sh_ref $test_file >$UT_out_file_ref 2>$UT_err_file_ref
 	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
+	ret1=$?
 	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
+	ret2=$?
 	if [ -z "$(cat $UT_out_file_diff)" ]
 	then
-		print_kook ok "$i"
+		print_kook $ret1 $ret2 "$i"
 	else
-		print_kook ko "$i"
+		print_kook $ret1 $ret2 "$i"
 	fi
 done	
 rm $test_file
@@ -62,12 +68,14 @@ do
 	$UT_sh_tgt -c "$i" >$UT_out_file_tgt 2>$UT_err_file_tgt
 	$UT_sh_ref -c "$i" >$UT_out_file_ref 2>$UT_err_file_ref
 	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
+	ret1=$?
 	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
+	ret2=$?
 	if [ -z "$(cat $UT_out_file_diff)" ]
 	then
-		print_kook ok "$i"
+		print_kook $ret1 $ret2 "$i"
 	else
-		print_kook ko "$i"
+		print_kook $ret1 $ret2 "$i"
 	fi
 done	
 }
@@ -75,9 +83,9 @@ done
 shell_utests ()
 {
 	utests_base='
-	something unkown
-	ls
-	pwd'
+something unkown
+ls
+pwd'
 	stdin='false'
 	arg='false'
 	script_file='false'
@@ -92,10 +100,11 @@ shell_utests ()
 			echo \'$i\' | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
 			echo \'$i\' | $UT_sh_ref >$UT_out_file_ref 2>$UT_err_file_ref
 			diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
+			ret2=$?
 			diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-			if [ "$?" -eq '0' ]
+			ret1=$?
+			if [ $ret1 -eq '0' ] || [ $ret2 -eq '0' ]
 			then
-				print_kook ok Stdin
 				stdin='true'
 				shell_utests_stdin
 			fi
@@ -106,10 +115,11 @@ shell_utests ()
 			$UT_sh_tgt -c \'$i\' >$UT_out_file_tgt 2>$UT_err_file_tgt
 			$UT_sh_ref -c \'$i\' >$UT_out_file_ref 2>$UT_err_file_ref
 			diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
+			ret2=$?
 			diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-			if [ "$?" -eq '0' ]
+			ret1=$?
+			if [ $ret1 -eq '0' ] || [ $ret2 -eq '0' ]
 			then
-				print_kook ok '-c input'
 				arg='true'
 				shell_utests_arg
 			fi
@@ -121,10 +131,11 @@ shell_utests ()
 			$UT_sh_tgt $test_file >$UT_out_file_tgt 2>$UT_err_file_tgt
 			$UT_sh_ref $test_file >$UT_out_file_ref 2>$UT_err_file_ref
 			diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
+			ret2=$?
 			diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-			if [ "$?" -eq '0' ]
+			ret1=$?
+			if [ $ret1 -eq '0' ] || [ $ret2 -eq '0' ]
 			then
-				print_kook ok 'File input'
 				script_file='true'
 				shell_utests_file
 			fi
@@ -137,15 +148,15 @@ shell_utests ()
 	done
 	if [ "$stdin" = 'false' ]
 	then
-		print_kook ko Stdin
+		echo "\033[0;36;40m[ Testing: Stdin ] \033[0;31;40m[ KO ]\033[0;0m"
 	fi
 	if [ "$arg" = 'false' ]
 	then
-		print_kook ko '-c input'
+		echo "\033[0;36;40m[ Testing: Arg ] \033[0;31;40m[ KO ]\033[0;0m"
 	fi
 	if [ "$script_file" = 'false' ]
 	then
-		print_kook ko 'File input'
+		echo "\033[0;36;40m[ Testing: File ] \033[0;31;40m[ KO ]\033[0;0m"
 	fi
-	rm $test_file 2>&-
+	rm $test_file $cmd_file $cmd_file_base 2>> "$UT_log_file"
 }
