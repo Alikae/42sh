@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:56:39 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 18:42:32 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/13 13:04:36 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	sh_exec_stdin(void)
 
 	ret = NULL;
 	buff = ft_strnew(1024);
-	ft_putendl("...");
 	while (buff && read(0, buff, 1024) > 0)
 	{
 		if (!ret)
