@@ -3,7 +3,7 @@
 		x and_or cut at '0'
 		x pipeline cut at '0'
 0 redirections
-[75799] try path--'pwd'
+[85822] try path--'pwd'
 try path /Users/thdelmas/.brew/bin/'pwd'
 try path /usr/bin/'pwd'
 try path /bin/'pwd'
