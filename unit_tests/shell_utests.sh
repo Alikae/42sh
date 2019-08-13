@@ -23,6 +23,7 @@ ret2=
 
 shell_utests_stdin ()
 {
+	echo "\033[0;36;40m[ Testing: Stdin mode ] \033[0;32;40m[ OK ]\033[0;0m"
 	cat $cmd_file | while read i
 do
 	echo "$i" | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
@@ -42,6 +43,7 @@ done
 
 shell_utests_file ()
 {
+	echo "\033[0;36;40m[ Testing: File mode ] \033[0;32;40m[ OK ]\033[0;0m"
 	cat $cmd_file | while read i
 do
 	echo "$i" > $test_file
@@ -63,6 +65,7 @@ rm $test_file
 
 shell_utests_arg ()
 {
+	echo "\033[0;36;40m[ Testing: -c mode ] \033[0;32;40m[ OK ]\033[0;0m"
 	cat $cmd_file | while read i
 do
 	$UT_sh_tgt -c "$i" >$UT_out_file_tgt 2>$UT_err_file_tgt
@@ -82,14 +85,15 @@ done
 
 shell_utests ()
 {
-	utests_base='
-something unkown
-ls
-pwd'
+	
 	stdin='false'
 	arg='false'
 	script_file='false'
 	test_file=./unit_tests/test_file
+	utests_base='
+something unkown
+ls
+pwd'
 
 	echo "$utests_base" > $cmd_file_base
 	echo "$utests" > $cmd_file
@@ -100,10 +104,9 @@ pwd'
 			echo \'$i\' | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
 			echo \'$i\' | $UT_sh_ref >$UT_out_file_ref 2>$UT_err_file_ref
 			diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-			ret2=$?
-			diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-			ret1=$?
-			if [ $ret1 -eq '0' ] || [ $ret2 -eq '0' ]
+			ret2=$(cat $UT_err_file_tgt)
+			ret1=$(cat $UT_out_file_tgt)
+			if [ "$ret1" != '' ] || [ "$ret2" != '' ]
 			then
 				stdin='true'
 				shell_utests_stdin
@@ -114,11 +117,9 @@ pwd'
 		then
 			$UT_sh_tgt -c \'$i\' >$UT_out_file_tgt 2>$UT_err_file_tgt
 			$UT_sh_ref -c \'$i\' >$UT_out_file_ref 2>$UT_err_file_ref
-			diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-			ret2=$?
-			diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-			ret1=$?
-			if [ $ret1 -eq '0' ] || [ $ret2 -eq '0' ]
+			ret2=$(cat $UT_err_file_tgt)
+			ret1=$(cat $UT_out_file_tgt)
+			if [ "$ret1" != '' ] || [ "$ret2" != '' ]
 			then
 				arg='true'
 				shell_utests_arg
@@ -130,11 +131,9 @@ pwd'
 		then
 			$UT_sh_tgt $test_file >$UT_out_file_tgt 2>$UT_err_file_tgt
 			$UT_sh_ref $test_file >$UT_out_file_ref 2>$UT_err_file_ref
-			diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-			ret2=$?
-			diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-			ret1=$?
-			if [ $ret1 -eq '0' ] || [ $ret2 -eq '0' ]
+			ret2=$(cat $UT_err_file_tgt)
+			ret1=$(cat $UT_out_file_tgt)
+			if [ "$ret1" != '' ] || [ "$ret2" != '' ]
 			then
 				script_file='true'
 				shell_utests_file
