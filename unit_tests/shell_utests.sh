@@ -22,6 +22,12 @@ unsetenv
 unset
 unset PATH ; ls
 foo
+echo $#
+ls ; echo $!
+ls ; echo $?
+ls fail ; echo $?
+ls ; echo $_
+ls ; echo $#
 ls
 ls -laF
 ls -l -a -F
