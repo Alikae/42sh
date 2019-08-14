@@ -6,25 +6,25 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/14 15:34:32 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/14 17:17:15 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
 
-export UT_dir="./unit_tests"
-export UT_log_dir="$UT_dir/logs"
-export UT_log_file="./ulogs"
-export UT_sh_tgt="./42sh"
-export UT_sh_ref="/bin/sh"
+readonly UT_dir="./unit_tests"
+readonly UT_log_dir="$UT_dir/logs"
+readonly UT_log_file="./ulogs"
+readonly UT_sh_tgt="../msh/minishell"
+readonly UT_sh_ref="/bin/sh"
 
 #(I/)O REPORT FILES
-UT_err_file_ref="$UT_log_dir/err_ref.report"
-UT_err_file_tgt="$UT_log_dir/err_tgt.report"
-UT_err_file_diff="$UT_log_dir/err_diff.report"
-UT_out_file_diff="$UT_log_dir/out_diff.report"
-UT_out_file_ref="$UT_log_dir/out_ref.report"
-UT_out_file_tgt="$UT_log_dir/out_tgt.report"
-UT_res_file="$UT_log_dir/unit_tests.report"
+readonly UT_err_file_ref="$UT_log_dir/err_ref.report"
+readonly UT_err_file_tgt="$UT_log_dir/err_tgt.report"
+readonly UT_err_file_diff="$UT_log_dir/err_diff.report"
+readonly UT_out_file_diff="$UT_log_dir/out_diff.report"
+readonly UT_out_file_ref="$UT_log_dir/out_ref.report"
+readonly UT_out_file_tgt="$UT_log_dir/out_tgt.report"
+readonly UT_res_file="$UT_log_dir/unit_tests.report"
 
 #I(/O) PIPE
 pipe_in_ref="$UT_log_dir/pipe_in_ref"

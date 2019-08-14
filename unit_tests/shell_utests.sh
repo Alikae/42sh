@@ -4,19 +4,64 @@ cmd_file=$UT_log_dir/cmd_file
 cmd_file_base=$UT_log_dir/cmd_file_bae
 utests='
 pwd
-ls
 /usr/bin/env
 env
+setenv
+set YOLO bar ; /usr/bin/env
+set YOLO=bar ; /usr/bin/env
+setenv FOO=bar ; /usr/bin/env
+setenv FOO bar ; /usr/bin/env
+unsetenv FOO ; env
+setenv PATH "/bin:/usr/bin"; ls ; echo yolo
+setenv PATH="/bin:/usr/bin"; ls ; echo yolo
+set PATH="/bin:/usr/bin"; ls ; echo yolo
+set PATH "/bin:/usr/bin"; ls ; echo yolo
+set
+unsetenv PATH ; ls
+unsetenv
+unset
+unset PATH ; ls
 foo
+ls
+ls -laF
+ls -l -a -F
+ls
+ls /bin /boot /sbin /dev /home
+ls | cat -e
+ls | sort | cat -e
+base64 /dev/urandom | head -c 1000 | grep 42 | wc -l | sed -e 's/1/Yes/g' -e 's/0/No/g'
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; wc -c < /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+PATH="" ; ls
+ls something || ls
+ls || ls something
+ls -1; touch test_file; ls -1; rm test_file
+ls -l && ls
 /bin/ls
 /bin/ls -laF
 /bin/ls -l -a -F
+/bin/ls
+/bin/ls /bin /boot /sbin /dev /home
 echo iT works
 cd /tmp && pwd
 cd .. && pwd
 cd && pwd
 cd - && pwd
+rm nosuchfile 2>&-
+ls nosuchfile 2>&-
+ls >&-
+rm nosuchfile 2>&1 | cat -e
 ls
+ls *
+ls ./*
+ls */*
+echo "No dollar character" 1>&2 | cat -e
+echo `ls -l`
+cd
+cd /path/to/dir
+mkdir test ; cd test ; ls -a ; ls | cat | wc -c > fifi ; cat fifi
+mkdir test ; cd test ; ls -a ; ls | cat | wc -c > fifi ; cat fifi; ls; rm -rf test; ls
 exit'
 ret1=
 ret2=
@@ -41,7 +86,7 @@ shell_utests_stdin ()
 		else
 			print_kook $ret1 $ret2 "$i"
 		fi
-		if [ $ret1 -eq '0' ] && [ $ret2 -eq '0' ]
+		if [ $ret1 -eq '0' ]
 		then
 			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
 		fi
@@ -68,7 +113,7 @@ shell_utests_file ()
 		else
 			print_kook $ret1 $ret2 "$i"
 		fi
-		if [ $ret1 -eq '0' ] && [ $ret2 -eq '0' ]
+		if [ $ret1 -eq '0' ]
 		then
 			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
 		fi
@@ -95,7 +140,7 @@ shell_utests_arg ()
 		else
 			print_kook $ret1 $ret2 "$i"
 		fi
-		if [ $ret1 -eq '0' ] && [ $ret2 -eq '0' ]
+		if [ $ret1 -eq '0' ]
 		then
 			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
 		fi
