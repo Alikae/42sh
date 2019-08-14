@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/13 16:20:10 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/14 15:34:32 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -24,6 +24,7 @@ UT_err_file_diff="$UT_log_dir/err_diff.report"
 UT_out_file_diff="$UT_log_dir/out_diff.report"
 UT_out_file_ref="$UT_log_dir/out_ref.report"
 UT_out_file_tgt="$UT_log_dir/out_tgt.report"
+UT_res_file="$UT_log_dir/unit_tests.report"
 
 #I(/O) PIPE
 pipe_in_ref="$UT_log_dir/pipe_in_ref"
@@ -99,14 +100,16 @@ test_custom_script () {
 
 if [ ! -d "$UT_log_dir" ]; then
 	mkdir "$UT_log_dir"
-	touch $UT_out_file_ref $UT_out_file_tgt $UT_err_file_ref $UT_err_file_tgt
-	touch $UT_out_file_diff $UT_err_file_diff
 fi
 #CLEAR
 rm -f $pipe_in_ref $pipe_in_tgt
 mkfifo $pipe_in_tgt $pipe_in_ref
 echo -n '' > $UT_out_file_ref
 echo -n '' > $UT_out_file_tgt
+echo -n '' > $UT_err_file_tgt
+echo -n '' > $UT_err_file_ref
+echo -n '' > $UT_log_file
+echo -n '' > $UT_res_file
 #
 while [ -z $user_in ] ; do
 	clear
