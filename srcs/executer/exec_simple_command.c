@@ -532,6 +532,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_true);
 	else if (!ft_strcmp(cmd, "cd"))
 		return (&sh_cd);
+	else if (!ft_strcmp(cmd, "env"))
+		return (&sh_env);
 	else if (!ft_strcmp(cmd, "false"))
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))

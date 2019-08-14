@@ -7,6 +7,7 @@ pwd
 /usr/bin/env
 env
 setenv
+ls ; ls
 set YOLO bar ; /usr/bin/env
 set YOLO=bar ; /usr/bin/env
 setenv FOO=bar ; /usr/bin/env
