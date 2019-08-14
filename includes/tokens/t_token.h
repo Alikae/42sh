@@ -96,5 +96,6 @@ t_toktype	read_n_skip_operator(t_tokenize_tool *t);
 int			read_n_skip_word(t_tokenize_tool *t);
 t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free);
 
+int			is_redirection_operator(t_toktype type);
 t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype type);
 #endif

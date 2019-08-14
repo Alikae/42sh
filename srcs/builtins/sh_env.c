@@ -6,11 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 21:59:02 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:09:53 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/14 23:06:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_env.h"
+#include "libft.h"
 
 int		sh_env(int ac, char **av, t_env **ev)
 {

@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:18:52 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/14 22:37:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	sh_init(t_sh *shell)
 	shell->opt = NULL;
 	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
 	shell->debug = NULL != ft_fetch_opt("debug", 5, sh()->opt);
-	shell->debug_fd = 2;
+	shell->debug_fd = 3;
 	shell->pipe_lst = 0;
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 18:53:06 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/14 23:14:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 typedef struct s_token t_token;
 typedef struct s_sh t_sh;
 typedef struct s_env t_env;
+typedef struct s_pipe_lst t_pipe_lst;
 
 int		sh_exec_stdin(void);
 int		sh_exec_file(void);
@@ -42,5 +43,10 @@ int		sh_exec_stdin(void);
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end);
+int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end);
+void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections);
+int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign);
+void	push_pipe_lst(t_pipe_lst **p_origin, int pipe[2]);
+void	close_pipes_parent(t_sh *p);
 
 #endif

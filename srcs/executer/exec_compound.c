@@ -1,6 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_compound.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/14 23:17:39 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "t_token.h"
 #include "sh.h"
 #include "sh_env.h"
+#include "sh_executer.h"
+#include <stdio.h>
 
 //FOR
 //NAME
@@ -31,7 +45,7 @@ int		exec_compound_case(t_sh *p, t_token *tok)
 int		exec_compound_for(t_sh *p, t_token *tok)
 {
 	t_token		*ins;
-	const char	*tmp;
+	char	*tmp;
 	const char	*value;
 
 	dprintf(p->debug_fd, "treating FOR\n");
