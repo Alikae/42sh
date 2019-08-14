@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/14 22:02:25 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/14 23:38:36 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ C_FILES_command_edition = \
 	sh_cursor_motion.c \
 	sh_cursor_motion2.c \
 	sh_cursor_motion_word.c \
-	sh_cursor_motion_line.c
+	sh_cursor_motion_line.c \
+	sh_copy_option.c
 
 C_FILES_command_line = \
 	sh_prompt.c \
