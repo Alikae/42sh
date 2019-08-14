@@ -8,6 +8,12 @@ ___
 # MAN
 - http://pubs.opengroup.org/onlinepubs/9699919799/
 
+### UNIT TESTS
+- Placed here: './yourproject/unit_tests'
+- 'make test' to run unit test ( then select 6 to be speed )
+- Or run with: './unit_tests/utester.sh'
+- Find your result in: './unit_tests/logs/unit_tests.report'
+
 ### COMMIT CONVENTION
 - ADD | MAJ | FIX | EDT | RMV
 - (ex: "FIX file_name your_stuff")
