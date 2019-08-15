@@ -49,7 +49,7 @@ ___
 |-----------------------|----------|
 |		:cyclone:		|	a	|
 |		:cyclone:		|	b	|
-|		:cyclone:		|	c	|
+|	:heavy_check_mark:	|	c	|
 |		:cyclone:		|	C	|
 |		:cyclone:		|	e	|
 |		:cyclone:		|	f	|
