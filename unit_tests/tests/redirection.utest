@@ -1,0 +1,9 @@
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; wc -c < /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+rm nosuchfile 2>&-
+ls nosuchfile 2>&-
+ls >&-
+rm nosuchfile 2>&1 | cat -e
+mkdir test ; cd test ; ls -a ; ls | cat | wc -c > fifi ; cat fifi
+mkdir test ; cd test ; ls -a ; ls | cat | wc -c > fifi ; cat fifi; ls; rm -rf test; ls

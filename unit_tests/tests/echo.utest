@@ -1,0 +1,76 @@
+echo
+echo $!
+echo $#
+echo 'youpi'
+echo $#
+echo $OLDPWD $PWD ; cd / ; echo $OLDPWD $PWD
+echo $PWD ; unsetenv PWD ; echo $PWD ; cd ../
+echo $OLDPWD ; unsetenv OLDPWD ; echo $OLDPWD ; cd - or echo $HOME ; unsetenv HOME ; echo $HOME ; cd
+echo $SHLVL
+echo \ 1
+echo 1 2 3\4
+echo "123'rrr
+ls ; unsetenv PATH ; ls
+mkdir exe ; cp /bin/ls exe/. ; chmod 0 exe ; setenv PATH $PWD/exe ; ls -l
+$erere
+ls ; echo $!
+ls ; echo $?
+ls fail ; echo $?
+ls ; echo $_
+ls ; echo $#
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; echo "Testing redirections," > /tmp/test.txt ; cat /tmp/test.txt ; wc -c < /tmp/test.txt ; rm /tmp/test.txt ; ls /tmp
+echo iT works
+echo "No dollar character" 1>&2 | cat -e
+echo `ls -l`
+setenv
+ls ; ls
+set YOLO bar ; /usr/bin/env
+set YOLO=bar ; /usr/bin/env
+setenv FOO=bar ; /usr/bin/env
+setenv FOO bar ; /usr/bin/env
+unsetenv FOO ; env
+setenv PATH "/bin:/usr/bin"; ls ; echo yolo
+setenv PATH="/bin:/usr/bin"; ls ; echo yolo
+set PATH="/bin:/usr/bin"; ls ; echo yolo
+set PATH "/bin:/usr/bin"; ls ; echo yolo
+set
+unsetenv PATH ; ls
+unsetenv
+unset
+unset PATH ; ls
+foo
+echo $#
+ls ; echo $!
+ls ; echo $?
+ls fail ; echo $?
+ls ; echo $_
+ls ; echo $#
+ls
+ls -laF
+ls -l -a -F
+ls
+ls /bin /boot /sbin /dev /home
+ls | cat -e
+ls | sort | cat -e
+base64 /dev/urandom | head -c 1000 | grep 42 | wc -l | sed -e s/1/Yes/g -e s/0/No/g
+PATH="" ; ls
+ls something || ls
+ls || ls something
+ls -1; touch test_file; ls -1; rm test_file
+ls -l && ls
+/bin/ls
+/bin/ls -laF
+/bin/ls -l -a -F
+/bin/ls
+/bin/ls /bin /boot /sbin /dev /home
+echo iT works
+cd /tmp && pwd
+cd .. && pwd
+cd && pwd
+cd - && pwd
+ls
+ls *
+ls ./*
+ls */*
