@@ -79,7 +79,6 @@ sh_utests_tests ()
 		then
 			shell_utests_stdin "$i"
 		fi
-		echo
 		if [ $ret1 -eq '0' ]
 		then
 			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
