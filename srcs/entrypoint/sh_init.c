@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:37:41 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/15 17:47:22 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "libft.h"
 #include "sh_env.h"
 #include "sh_opt.h"
+#include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
 
@@ -104,9 +105,7 @@ void	sh_init(t_sh *shell)
 	sh_init_env();
 	shell->opt = NULL;
 	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
-	shell->debug = NULL != ft_fetch_opt("debug", 5, sh()->opt);
-	shell->debug_fd = 3;
-	shell->pipe_lst = 0;
+		shell->pipe_lst = 0;
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;
 	shell->script_separators[0] = SH_SEMI;
@@ -125,4 +124,14 @@ void	sh_init(t_sh *shell)
 	shell->opened_files = 0;
 	//shell->assign_lst = 0;
 	//init_signals_handling(shell);
+	if (ft_fetch_opt("debug", 5, sh()->opt))
+	{
+		shell->debug = 1; 
+		shell->debug_fd = 2;
+	}
+	else
+	{
+		shell->debug = 0; 
+		shell->debug_fd = open("/dev/null", 0);
+	}
 }
