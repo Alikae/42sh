@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 09:09:16 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/15 18:01:25 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/15 18:21:53 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -59,39 +59,37 @@ ask_for_out () {
 }
 
 print_kook () {
-	if [ "$1" -eq '0' ] && [ "$2" -eq '0' ]
+	diff "$UT_out_file_tgt" "$UT_out_file_ref" >/dev/null
+	UT_a="$?"
+	diff "$UT_err_file_tgt" "$UT_err_file_ref" >/dev/null
+	UT_b="$?"
+	if [ "$UT_a" -eq '0' ] && [ "$UT_b" -eq '0' ]
 	then
 		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m"
 		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m" >> $UT_res_file
-	elif [ "$1" -eq '0' ] && [ "$2" -eq '0' ]
+	elif [ "$UT_a" -eq '0' ] && [ "$UT_b" -eq '0' ]
 	then
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m"
-		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m\n\033[0;36;40m[ Stdout REPORT ]\033[0;0m" >> $UT_res_file
-		echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
-		cat "$UT_out_file_diff" >> $UT_res_file
-	elif [ "$1" -eq '1' ] && [ "$2" -eq '1' ]
+		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m" >> $UT_res_file
+	elif [ "$UT_a" -eq '1' ] && [ "$UT_b" -eq '1' ]
 	then
 		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
-		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m\n\033[0;36;40m[ Stderr REPORT ]\033[0;0m" >> $UT_res_file
-		echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
-		cat "$UT_err_file_diff" >> $UT_res_file
-	elif [ "$1" -eq '1' ] && [ "$2" -eq '1' ]
+		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m" >> $UT_res_file
+	elif [ "$UT_a" -eq '1' ] && [ "$UT_b" -eq '1' ]
 	then
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
-		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m\n\033[0;36;40m[ Stdout REPORT ]\033[0;0m" >> $UT_res_file
-		echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
-		cat "$UT_out_file_diff" >> $UT_res_file
-		echo "\033[0;36;40m[ Stderr REPORT ]\033[0;0m" >> $UT_res_file
-		cat "$UT_err_file_diff" >> $UT_res_file
+		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m" >> $UT_res_file
 	else 
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
-		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m\n\033[0;36;40m[ Stdout REPORT ]\033[0;0m" >> $UT_res_file
+		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m" >> $UT_res_file
+	fi
+		echo "\033[0;36;40m[ Stdout REPORT ]\033[0;0m" >> $UT_res_file && cat "$UT_err_file_diff" >> $UT_res_file
 		echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
 		cat "$UT_out_file_diff" >> $UT_res_file
-		echo "\033[0;36;40m[ Stderr REPORT ]\033[0;0m" >> $UT_res_file
+		echo "\033[0;36;40m[ Stderr REPORT ]\033[0;0m" >> $UT_res_file && cat "$UT_err_file_diff" >> $UT_res_file
+		echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
 		cat "$UT_err_file_diff" >> $UT_res_file
-	fi
-		if [ $ret1 -eq '0' ]
+		if [ $UT_a -eq '0' ]
 		then
 			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
 		fi

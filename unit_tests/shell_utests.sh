@@ -31,8 +31,7 @@ shell_utests_stdin ()
 	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
 	ret1=$?
 	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-	ret2=$?
-	print_kook $ret1 $ret2
+	print_kook $ret1 $?
 }
 
 shell_utests_file ()
@@ -45,8 +44,7 @@ shell_utests_file ()
 	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
 	ret1=$?
 	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-	ret2=$?
-	print_kook $ret1 $ret2
+	print_kook $ret1 $?
 }
 
 shell_utests_arg ()
@@ -58,8 +56,7 @@ shell_utests_arg ()
 	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
 	ret1=$?
 	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-	ret2=$?
-	print_kook $ret1 $ret2
+	print_kook $ret1 $?
 }
 
 sh_utests_tests ()
