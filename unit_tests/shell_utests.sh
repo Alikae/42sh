@@ -64,6 +64,8 @@ shell_utests_arg ()
 
 sh_utests_tests ()
 {
+	echo "\n\033[0;36;40m[ File: $1 ]\033[0;0m"
+	echo "\n\033[0;36;40m[ File: $1 ]\033[0;0m" >> $UT_res_file
 	while read i
 	do
 		printf "\n"
@@ -79,11 +81,6 @@ sh_utests_tests ()
 		then
 			shell_utests_stdin "$i"
 		fi
-		if [ $ret1 -eq '0' ]
-		then
-			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
-		fi
-		UT_test_num="$( expr "$UT_test_num" + 1 )"
 	done <$1
 }
 

@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 09:09:16 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/15 16:46:45 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/15 18:01:25 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -91,4 +91,9 @@ print_kook () {
 		echo "\033[0;36;40m[ Stderr REPORT ]\033[0;0m" >> $UT_res_file
 		cat "$UT_err_file_diff" >> $UT_res_file
 	fi
+		if [ $ret1 -eq '0' ]
+		then
+			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
+		fi
+		UT_test_num="$( expr "$UT_test_num" + 1 )"
 	}
