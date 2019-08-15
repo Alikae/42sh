@@ -62,6 +62,7 @@ ___
 |		:cyclone:		|	u	|
 |		:cyclone:		|	v	|
 |		:cyclone:		|	x	|
+|	:heavy_check_mark:	|	debug	|
 |		:cyclone:		|	noediting	|
 |		:cyclone:		|	poisx	|
 
