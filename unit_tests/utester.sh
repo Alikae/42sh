@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/14 23:55:45 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/16 15:08:57 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -14,7 +14,7 @@
 readonly UT_dir="./unit_tests"
 readonly UT_log_dir="$UT_dir/logs"
 readonly UT_log_file="$UT_dir/u.log"
-readonly UT_sh_tgt="./42sh"
+readonly UT_sh_tgt="../msh/minishell"
 readonly UT_sh_ref="/bin/sh"
 
 #(I/)O REPORT FILES
@@ -129,10 +129,10 @@ if [[ "$user_in" -eq "1" ]] ; then
 	utest_minishell
 elif [[ "$user_in" -eq "2" ]] ; then
 	echo '[ Testing 21sh ]'
-	test_21sh
+	utest_21sh
 elif [[ "$user_in" -eq "3" ]] ; then
 	echo '[ Testing 42sh ]'
-	test_42sh
+	utest_42sh
 elif [[ "$user_in" -eq "4" ]] ; then
 	test_custom_script $1
 elif [[ "$user_in" -eq "5" ]] ; then
