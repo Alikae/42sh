@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 07:30:23 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/12 18:23:08 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/16 04:14:49 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	history_up(char **command, t_hist *hist, char *current)
 
 	index = hist->index;
 	prev = hist->prev;
-	fprintf(stderr, "current: [%s]\ncommand: [%s]\n", current, *command);
+	//fprintf(stderr, "current: [%s]\ncommand: [%s]\n", current, *command);
 	while (prev[++index] && (ft_strncmp(current, prev[index],
 				ft_strlen(current)) || !ft_strcmp(prev[index], current)))
 		;
@@ -47,7 +47,7 @@ static int	history_down(char **command, t_hist *hist, char *current)
 
 	index = hist->index;
 	prev = hist->prev;
-	fprintf(stderr, "current: [%s]\ncommand: [%s]\n", current, *command);
+	//fprintf(stderr, "current: [%s]\ncommand: [%s]\n", current, *command);
 	if (index == 0)
 	{
 		index--;
@@ -78,6 +78,6 @@ int			cursor_history(char **command, char *buf, int i, t_hist *hist)
 	sh_cursor_motion(command, "\033[H", j, hist);
 	tputs(tgetstr("cd", NULL), 0, sh_outc);
 	write(0, *command, ft_strlen(*command));
-	fprintf(stderr, "INDEX: %d\n\n", hist->index);
+	//fprintf(stderr, "INDEX: %d\n\n", hist->index);
 	return (i);
 }

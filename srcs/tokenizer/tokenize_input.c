@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 18:31:56 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/16 04:10:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,6 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		treat_input(t, actual_compound, terminator, &actual);
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
-		//printf("yo\n");
 		//free all
 		return (0);
 	}

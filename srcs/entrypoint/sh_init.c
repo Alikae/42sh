@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/15 17:47:22 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/16 04:16:17 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	handle_signal(int sig)
 	else if (sig == SIGINT)
 	{
 		printf("\nTerminated\n");
-		//retrun to prompt
+		sh()->abort_cmd = 1;
 	}
 	else if (sig == SIGSEGV)
 		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
@@ -103,9 +103,17 @@ void	sh_init(t_sh *shell)
 	
 	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug");
 	sh_init_env();
+	/*shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
+	shell->abort_cmd = 0;
+	shell->debug = 1;
+	shell->debug_fd = 2;
+	shell->pipe_lst = 0;
+	*/
+	//MERGE?
 	shell->opt = NULL;
 	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
 		shell->pipe_lst = 0;
+		//
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;
 	shell->script_separators[0] = SH_SEMI;

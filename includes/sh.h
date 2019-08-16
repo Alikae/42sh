@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 23:12:53 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/16 04:17:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct		s_sh
 	
 	int				unfinished_cmd;
 	int				invalid_cmd;
+	int				abort_cmd;
 
 	int	lldbug;
 }					t_sh;

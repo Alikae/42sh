@@ -53,6 +53,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
+	//SIG gestion
 	int pid = fork();
 	if (pid)
 	{
@@ -71,60 +72,6 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	//	exec_command(p, token_begin, token_end);
 	//	exit(0); ?
 }
-
-/*
-void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
-{
-	int		bang;
-	int		result;
-	t_token	*next_separator;
-	int		pipe_in[2];
-	int		pipe_out[2];
-	t_pipe_lst	*pipe_lst;
-	t_pipe_lst	*actual_pipe_lst;
-
-	result = 0;
-	if (!(next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) || next_separator->type != SH_OR)
-	{
-		dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
-		p->last_cmd_result = exec_command(p, token_begin, next_separator);
-		if (bang)
-			p->last_cmd_result = (p->last_cmd_result) ? 0 : 1;
-		return ;
-	}
-	dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
-	pipe(pipe_out);
-	pipe_lst = create_pipe_lst(pipe_out);
-	actual_pipe_lst = pipe_lst;
-	push_redirect_lst(&p->redirect_lst, 1, pipe_out[1]);
-	exec_command_in_background(p, token_begin, next_separator);
-	close(pipe_out[1]);
-	dprintf(p->debug_fd, "close %i\n", pipe_out[1]);
-	token_begin = next_separator->next;
-	del_n_redirect_lst(&p->redirect_lst, 1);
-	while (token_begin && (next_separator = find_token_by_key_until(token_begin->next, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
-	{
-		dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
-		pipe_in[0] = pipe_out[0];
-		pipe_in[1] = pipe_out[1];
-		pipe(pipe_out);
-		actual_pipe_lst->next = create_pipe_lst(pipe_out);
-		actual_pipe_lst = actual_pipe_lst->next;
-		push_redirect_lst(&p->redirect_lst, 0, pipe_in[0]);
-		push_redirect_lst(&p->redirect_lst, 1, pipe_out[1]);
-		exec_command_in_background(p, token_begin, next_separator);
-		close(pipe_out[1]);
-		token_begin = next_separator->next;
-		del_n_redirect_lst(&p->redirect_lst, 2);
-	}
-	dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
-	push_redirect_lst(&p->redirect_lst, 0, pipe_out[0]);
-	p->last_cmd_result = exec_command(p, token_begin, next_separator);
-	del_n_redirect_lst(&p->redirect_lst, 1);
-	delete_close_all_pipe_lst(pipe_lst);
-	if (bang)
-		p->last_cmd_result = (p->last_cmd_result) ? 0 : 1;
-}*/
 
 int		exec_command_to_pipe(t_sh *p, t_token *token_begin, t_token *token_end, int pipe_in_fd)
 {
@@ -169,7 +116,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 
 	handle_bang(&token_begin, &bang);
 	next_pipe_fd = 0;
-	while (token_begin && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
+	while (token_begin && !p->abort_cmd && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
 	{
 		dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
 		next_pipe_fd = exec_command_to_pipe(p, token_begin, next_separator, next_pipe_fd);//
@@ -199,7 +146,7 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_toktype	tmp;
 
 	prev_separator = 0;
-	while (token_begin)
+	while (token_begin && !p->abort_cmd)
 	{
 		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->and_or_separators);
 		dprintf(p->debug_fd, "		x and_or cut at '%i'\n", p->type);
@@ -253,7 +200,7 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	t_token	*next_separator;
 
-	while (token_begin)
+	while (token_begin && !p->abort_cmd)
 	{
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;

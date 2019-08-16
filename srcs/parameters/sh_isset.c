@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   sh_isset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 16:40:26 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 16:46:21 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/22 02:44:52 by ede-ram           #+#    #+#             */
+/*   Updated: 2019/08/16 04:12:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_env.h"
-#include "libft.h"
-#include <stdlib.h>
 
-int		sh_isset(const char *key)
+int	sh_isset(const char *key)
 {
-	t_env *tmp;
+	t_env	*env;
 
-	tmp = sh()->params;
-	if (!key || !*key)
-		return (0);
-	while (tmp && !ft_strequ(key, tmp->key))
-		tmp = tmp->next;
-	return (tmp != NULL);
+	env = sh()->params;
+	while (env)
+	{
+		if (!ft_strcmp(key, env->key))
+			return (1);
+		env = env->next;
+	}
+	return (0);
 }

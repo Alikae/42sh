@@ -28,7 +28,7 @@ int		exec_compound_case(t_sh *p, t_token *tok)
 
 	dprintf(p->debug_fd, "treating CASE\n");
 	case_elem = tok->sub;
-	while (case_elem)
+	while (case_elem && !p->abort_cmd)
 	{
 		word = case_elem->sub;
 		while (word)
@@ -53,7 +53,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	tmp = 0;
 	if ((value = sh_getenv(tok->sub->content)))
 		tmp = ft_strdup(value);
-	while (ins)
+	while (ins && !p->abort_cmd)
 	{
 		if (ins->type == SH_WORD)
 		{
@@ -77,7 +77,7 @@ int     exec_compound_while(t_sh *p, t_token *tok, t_toktype type)
 
 	dprintf(p->debug_fd, "treating WHILE\n");
 	ret = 0;
-	while (((tmp = exec_script(p, tok->sub->sub, 0)) && type == SH_UNTIL) || (!tmp && type == SH_WHILE))
+	while (!p->abort_cmd && (((tmp = exec_script(p, tok->sub->sub, 0)) && type == SH_UNTIL) || (!tmp && type == SH_WHILE)) && !p->abort_cmd)
 	{
 		dprintf(p->debug_fd, "WHILE condition true\n");
 		ret = exec_script(p, tok->sub->next, 0);
@@ -89,13 +89,13 @@ int     exec_compound_while(t_sh *p, t_token *tok, t_toktype type)
 int     exec_compound_if(t_sh *p, t_token *tok)
 {
 	dprintf(p->debug_fd, "treating IF\n");
-	if (!exec_script(p, tok->sub->sub, 0))
+	if (!exec_script(p, tok->sub->sub, 0) && !p->abort_cmd)
 	{
 		dprintf(p->debug_fd, "IF true\n");
 		return (p->last_cmd_result = exec_script(p, tok->sub->next->sub, 0));
 	}
 	dprintf(p->debug_fd, "IF false\n");
-	if (tok->sub->next->next)
+	if (tok->sub->next->next && !p->abort_cmd)
 		return (p->last_cmd_result = exec_script(p, tok->sub->next->next, 0));
 	return (0);
 }

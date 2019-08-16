@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/12 14:02:39 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/16 04:16:59 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,11 @@ void sh_tty_cbreak(int code)
 		cbreak = orig_termios;
 		cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
 		cbreak.c_cc[VMIN] = 1;
-		if (tcsetattr(ttyfd, TCSANOW, &cbreak) < 0)
-			exit(0);
+		if (tcsetattr(0, TCSANOW, &cbreak) < 0)
+		{
+			printf("tcsetattr error\n");//
+			//exit(0);
+		}
 		res = tgetstr("im", &bufptr);
 		tputs(res, ttyfd, sh_outc);
 	}
