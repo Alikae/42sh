@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 16:39:55 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/16 16:45:28 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -14,8 +14,8 @@
 readonly UT_dir="./unit_tests"
 readonly UT_log_dir="$UT_dir/logs"
 readonly UT_log_file="$UT_dir/u.log"
-#readonly UT_sh_tgt="./42sh"
-readonly UT_sh_tgt="../goinfre/42sh/42sh"
+readonly UT_sh_tgt="./42sh"
+#readonly UT_sh_tgt="../goinfre/42sh/42sh"
 readonly UT_sh_ref="/bin/sh"
 
 #(I/)O REPORT FILES
