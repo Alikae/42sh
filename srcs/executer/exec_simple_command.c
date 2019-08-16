@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 23:33:47 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/16 16:16:45 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -606,7 +606,7 @@ void	generate_redirections_builtins(t_sh *p)
 		dup2(old, old);
 		olds = olds->next;
 	}
-}
+}*/
 
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
