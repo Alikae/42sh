@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/10 00:30:50 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/08/14 23:54:48 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,12 +74,12 @@ SHUTIL_INC_DIR = $(SHUTIL_DIR)/includes
 SHUTIL_LNK = -L$(SHUTIL_DIR) -l$(SHUTIL)
 
 ###  CC && FLAGS ###
-CC = clang
+CC = gcc
 DEBUG_FLAGS = -g3
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
 		 $(DEBUG_FLAGS) \
-		 #-Wall -Werror -Wextra
+		 -Wall -Werror -Wextra
 
 LFLAGS = -ltermcap \
 		 -lncurses \
@@ -111,7 +111,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 
 ### Link ###
 .ONESHELL:
-$(NAME): $(OBJ_DIR) $(OBJ) | link_msg
+$(NAME): $(OBJ_DIR) $(OBJ) $(INC) Makefile $(FT_DIR)/libft.a | link_msg
 	$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
 	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
 

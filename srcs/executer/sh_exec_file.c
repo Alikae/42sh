@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/26 23:12:06 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/13 16:17:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static	int		sh_script(const char *path)
 
 	p = sh();
 	input = NULL;
-	if (! (buff = ft_strnew(BUFF_SIZE)))
+	if (!(buff = ft_strnew(BUFF_SIZE)))
 		return (-1);
 	if ((fd = open(path, O_RDONLY)) < 0)
 		return (fd);
@@ -43,12 +43,6 @@ static	int		sh_script(const char *path)
 				return (0);
 		ft_strclr(buff);
 	}
-	if (p->debug)
-	{
-		ft_putstr("SCRIPT FILE: ");
-		ft_putendl(path);
-		ft_putendl(input);
-	}
 	close(fd);
 	if (input && *input && (p->ast = tokenize_input(input)))//line
 	{
@@ -58,14 +52,14 @@ static	int		sh_script(const char *path)
 	return (1);
 }
 
-int		sh_script_arg()
+int		sh_exec_file()
 {
 	t_sh	*p;
 	int		i;
 
 	p = sh();
 	i = 0;
-	while (++i < p->ac)
-		sh_script(p->av[i]);
+	while (i < p->ac)
+		sh_script(p->av[i++]);
 	return (1);
 }

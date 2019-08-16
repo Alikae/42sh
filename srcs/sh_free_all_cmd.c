@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_fill_env.c                                      :+:      :+:    :+:   */
+/*   sh_free_all_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:34:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:14:33 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/04/22 16:44:47 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/04/29 02:53:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_env.h"
-#include "libft.h"
+#include "21sh.h"
 
-void	sh_fill_env(const char **ev)
+void	sh_free_all_cmd(t_cmd **cmd)
 {
-	char *key;
-	char *val;
-	t_env *tmp;
-
-	if (ev)
-		while (*ev)
+	if (cmd)
+		if (*cmd)
 		{
-			key = ft_strndup(*ev, ft_strclen(*ev, '='));
-			val = ft_strdup(ft_strrchr(*ev, '=') + 1);
-			sh_set_env(key, val);
-			ft_strdel(&key);
-			ft_strdel(&val);
-			ev++;
+			while ((*cmd)->parent)
+				*cmd = (*cmd)->parent;
+			sh_free_one_cmd(cmd);
 		}
 }

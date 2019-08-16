@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_fill_env.c                                      :+:      :+:    :+:   */
+/*   sh_init_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:34:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:14:33 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/04/22 16:13:30 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/04/29 02:52:27 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_env.h"
+#include <stdlib.h>
+#include "21sh.h"
 #include "libft.h"
 
-void	sh_fill_env(const char **ev)
+t_cmd	*sh_init_cmd(const char *line, t_cmd *parent)
 {
-	char *key;
-	char *val;
-	t_env *tmp;
+	t_cmd *cmd;
 
-	if (ev)
-		while (*ev)
-		{
-			key = ft_strndup(*ev, ft_strclen(*ev, '='));
-			val = ft_strdup(ft_strrchr(*ev, '=') + 1);
-			sh_set_env(key, val);
-			ft_strdel(&key);
-			ft_strdel(&val);
-			ev++;
-		}
+	if (!(cmd = (t_cmd *)malloc(sizeof(t_cmd))))
+		return (NULL);
+	cmd->line = ft_strdup(line);
+	cmd->parent = parent;
+	cmd->sub = NULL;
+	cmd->next_true = NULL;
+	cmd->next_false = NULL;
+	if (cmd->parent)
+		cmd->parent->sub = cmd;
+	return (cmd);
 }

@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_fill_env.c                                      :+:      :+:    :+:   */
+/*   sh_exec_arg.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:34:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:14:33 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/12 14:06:25 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/13 16:17:20 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_env.h"
+#include "sh.h"
+#include "sh_executer.h"
 #include "libft.h"
+#include "t_token.h"
+#include "stdlib.h"
+#include <fcntl.h>
 
-void	sh_fill_env(const char **ev)
+int	sh_exec_arg(void)
 {
-	char *key;
-	char *val;
-	t_env *tmp;
+	t_opt	*opt;
+	char	*ret;
 
-	if (ev)
-		while (*ev)
-		{
-			key = ft_strndup(*ev, ft_strclen(*ev, '='));
-			val = ft_strdup(ft_strrchr(*ev, '=') + 1);
-			sh_set_env(key, val);
-			ft_strdel(&key);
-			ft_strdel(&val);
-			ev++;
-		}
+	ret = NULL;
+	opt = ft_fetch_opt("c", 1, sh()->opt);
+	if (opt && opt->arg)
+		ret = opt->arg;
+	if (ret && *ret && (sh()->ast = tokenize_input(ret)))//line
+	{
+		print_all_tokens(sh(), sh()->ast, 0);
+		exec_script(sh(), sh()->ast, 0);
+	}
+	return (0);
 }

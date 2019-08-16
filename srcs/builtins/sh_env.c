@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_fill_env.c                                      :+:      :+:    :+:   */
+/*   sh_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:34:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:14:33 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/14 21:59:02 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/14 23:06:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_env.h"
 #include "libft.h"
 
-void	sh_fill_env(const char **ev)
+int		sh_env(int ac, char **av, t_env **ev)
 {
-	char *key;
-	char *val;
-	t_env *tmp;
+	t_env *params;
 
-	if (ev)
-		while (*ev)
+	(void)av;
+	if (!ev || !*ev)
+		return (1);
+	params = *ev;
+	if (ac <= 1)
+		while (params)
 		{
-			key = ft_strndup(*ev, ft_strclen(*ev, '='));
-			val = ft_strdup(ft_strrchr(*ev, '=') + 1);
-			sh_set_env(key, val);
-			ft_strdel(&key);
-			ft_strdel(&val);
-			ev++;
+			if (params->exported)
+			{
+				ft_putstr(params->key);
+				ft_putchar('=');
+				if (params->value)
+					ft_putstr(params->value);
+				ft_putchar('\n');
+			}
+			params = params->next;
 		}
+	return (0);
 }

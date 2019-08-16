@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 23:34:49 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/09 23:08:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include "libft.h"
 #include "sh_opt.h"
 
-t_opt	*sh_create_opt(char name, char *content)
+t_opt	*sh_create_opt(char *name, char *content)
 {
 	t_opt *tmp;
 
 	tmp = NULL;
 	if (!(tmp = (t_opt*)malloc(sizeof(t_opt))))
 		return (NULL);
-	tmp->name = name;
+	tmp->name = ft_strdup(name);
 	tmp->arg = ft_strdup(content);
 	tmp->next = NULL;
 	return (tmp);

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/10 03:49:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/16 04:15:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "tmp.h"
 #include "libft.h"
 #include "sh_env.h"
+#include "sh_executer.h"
 #include "sh_entrypoint.h"
 #include "sh_command_line.h"
 #include "history.h"
@@ -109,7 +110,7 @@ int		sh_loop(void)
 			free (ln_tab);
 			p->unfinished_cmd = 0;
 			p->invalid_cmd = 0;
-			if (p->ast = tokenize_input(input))//line
+			if ((p->ast = tokenize_input(input)))//line
 			{
 				print_all_tokens(p, p->ast, 0);
 				p->abort_cmd = 0;

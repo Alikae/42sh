@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 17:52:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/22 02:45:34 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/16 04:12:55 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "sh_env.h"
 #include "libft.h"
 
-static const char *sh_getval(const t_env *handle, const char *key)
+static char *sh_getval(const t_env *handle, const char *key)
 {
 	while (handle)
 	{
@@ -25,9 +25,9 @@ static const char *sh_getval(const t_env *handle, const char *key)
 	return (NULL);
 }
 
-const char	*sh_getenv(const char *key)
+char	*sh_getenv(const char *key)
 {
-	const char	*tmp;
+	char	*tmp;
 
 	if (!key || !*key)
 		return (NULL);

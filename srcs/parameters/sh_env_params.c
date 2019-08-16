@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/01 14:42:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/11 03:53:57 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/14 22:15:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_env		*sh_env_params(char **ev)
 		if (!(params = sh_create_param(s1)))
 			return (NULL);
 		params->value = ft_strdup(*ev + i + 1);
+		params->exported = 1;
 		free(s1);
 		params->next = sh_env_params(ev + 1);
 		return (params);

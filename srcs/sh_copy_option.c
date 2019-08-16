@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/14 13:56:07 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/14 23:40:07 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/08 05:20:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static int	sh_cursor_forward_u(char **command, t_cursors cursors, int i)
 	char	c;
 	int		len;
 
-	(void)cursors;
 	len = (buselect ? ft_strlen(buselect) : 0);
 	tputs(tgetstr("us", NULL), 0, sh_outc);
 	if (command[0][i + 1])

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/10 00:51:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/16 04:17:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "sh_line.h"
 # include "redirections.h"
 # include "t_token.h"
-# include "sh_opt.h"
+# include "libft.h"
 
 typedef struct		s_open_file
 {

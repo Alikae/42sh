@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:52:20 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:21:01 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ t_hist			*command_history(t_hist *hist)
 {
 	int		fd;
 	char	*line;
-	char	*file;
 	char 	**history;
 
 	hist->size_r = 0;

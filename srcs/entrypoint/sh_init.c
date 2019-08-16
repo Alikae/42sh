@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/10 03:48:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/16 04:16:17 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 #include "libft.h"
 #include "sh_env.h"
 #include "sh_opt.h"
+#include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static void	sh_set_shlvl(void)
 {
@@ -65,7 +67,7 @@ void	handle_signal(int sig)
 		;//return to last job
 }
 
-void	init_signals_handling(t_sh *p)
+void	init_signals_handling()
 {
 	signal(SIGINT, &handle_signal);
 	signal(SIGSEGV, &handle_signal);
@@ -97,12 +99,21 @@ void	init_signals_handling(t_sh *p)
 
 void	sh_init(t_sh *shell)
 {
+	char *opts;
+	
+	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug");
 	sh_init_env();
-	shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
+	/*shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
 	shell->abort_cmd = 0;
 	shell->debug = 1;
 	shell->debug_fd = 2;
 	shell->pipe_lst = 0;
+	*/
+	//MERGE?
+	shell->opt = NULL;
+	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
+		shell->pipe_lst = 0;
+		//
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;
 	shell->script_separators[0] = SH_SEMI;
@@ -120,5 +131,15 @@ void	sh_init(t_sh *shell)
 	shell->tmp_assign_lst = 0;
 	shell->opened_files = 0;
 	//shell->assign_lst = 0;
-	init_signals_handling(shell);
+	//init_signals_handling(shell);
+	if (ft_fetch_opt("debug", 5, sh()->opt))
+	{
+		shell->debug = 1; 
+		shell->debug_fd = 2;
+	}
+	else
+	{
+		shell->debug = 0; 
+		shell->debug_fd = open("/dev/null", 0);
+	}
 }

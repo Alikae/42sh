@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 18:02:45 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:20:18 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,15 @@ typedef	struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
+
+typedef	struct	s_opt
+{
+	char			*name;
+	char			*arg;
+	struct s_opt	*next;
+}				t_opt;
+
+char			**ft_free_tabstr(char **tab_tofree);
 
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *s);
@@ -79,7 +88,6 @@ int				ft_memcmp(const void *s1, const void *s2, size_t n);
 void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);
 
-char			**ft_free_tabstr(char **tabstr);
 void			ft_tab_strdel(char ***as);
 char			*ft_itoa(int n);
 int				ft_atoi(const char *str);
@@ -105,4 +113,9 @@ int				ft_sqrt(int nb);
 int				ft_is_prime(int nb);
 int				ft_power(int nb, int power);
 int				ft_factorial(int nb);
+
+void			ft_print_opt(t_opt *optlst);
+t_opt			*ft_create_opt(char *name, char *content);
+int				ft_getopt(int *ac, char ***av, char *optstr, t_opt **optlst);
+t_opt			*ft_fetch_opt(char *name, size_t size, t_opt *optlst);
 #endif

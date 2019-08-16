@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/10 00:33:28 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/08/16 04:10:53 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ C_FILES = \
 C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_loop.c \
-	sh_script.c \
 	sh_init.c
 
 C_FILES_exitpoint = \
@@ -34,7 +33,7 @@ C_FILES_parameters = \
 	sh_getenv.c \
 	sh_unsetenv.c \
 	sh_set_pwd.c \
-	sh_isset.c
+	sh_isset.c \
 
 C_FILES_command_edition = \
 	sh_command_functions.c \
@@ -42,7 +41,8 @@ C_FILES_command_edition = \
 	sh_cursor_motion.c \
 	sh_cursor_motion2.c \
 	sh_cursor_motion_word.c \
-	sh_cursor_motion_line.c
+	sh_cursor_motion_line.c \
+	sh_copy_option.c
 
 C_FILES_command_line = \
 	sh_prompt.c \
@@ -74,6 +74,9 @@ C_FILES_tokenizer = \
 	opening_chars_handling.c
 
 C_FILES_executer = \
+	sh_exec_file.c \
+	sh_exec_stdin.c \
+	sh_exec_arg.c \
 	exec_script.c \
 	exec_compound.c \
 	exec_simple_command.c \
@@ -84,7 +87,7 @@ C_FILES_debug_mode = \
 
 
 C_FILES_builtins = \
-	sh_basename.c \
+	sh_env.c \
 	sh_false.c \
 	sh_set.c \
 	sh_cd.c \
@@ -95,7 +98,6 @@ C_FILES_tools = \
 	sh_are_you_sur.c \
 	sh_check_path.c \
 	sh_error_path.c \
-	sh_getopt.c
 	#sh_find_law.c
 	#sh_add_to_path.c
 

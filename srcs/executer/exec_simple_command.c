@@ -1,7 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_simple_command.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/14 23:33:47 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 #include "libft.h"
+#include "sh_exitpoint.h"
+#include "sh_entrypoint.h"
 #include "sh_builtins.h"
+#include "sh_executer.h"
 #include <fcntl.h>
+#include <stdio.h>
 #include "t_token.h"
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -51,6 +67,7 @@ void	print_redirections(t_sh *p, t_redirect_lst *origin)
 
 void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 {
+	(void)p;
 	sigfillset(sigset);
 	sigprocmask(SIG_BLOCK, sigset, 0);
 }
@@ -231,6 +248,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 	int		nb_paths;
 	char	**paths;
 
+	(void)token_end;
 	path = (token_begin) ? token_begin->content : 0;
 	dprintf(p->debug_fd, "[%i] try path--%s\n", getpid(), path);
 	if (!path)
@@ -241,7 +259,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 	nb_paths = 0;
 	if (!(paths = ft_strsplit(sh_getenv("PATH"), ':')))
 		printf("$PATH not found\n");
-	while (real_path = get_next_path(path, paths, nb_paths++))
+	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
 		dprintf(p->debug_fd, "try path %s\n", real_path);
 		if (!(ret = lstat(real_path, &st)))
@@ -314,6 +332,7 @@ int	open_with_redirection_flags(char *real_path, t_toktype type)
 		return (open(real_path, O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR));
 	else if (type == SH_LESSGREAT)
 		return (open(real_path, O_CREAT | O_APPEND | O_RDWR, S_IRUSR | S_IWUSR));
+	return (-1);
 }
 
 int		create_open_file(t_sh *p, char *path, t_toktype type)
@@ -486,6 +505,7 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	t_env	*tmp;
 	char	*equal;
 
+	(void)nb_assign;
 	tmp = p->assign_lst;
 	equal = ft_strchr(token->content, '=');
 	*equal = 0;
@@ -498,7 +518,6 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
 {
 	int	nb_redirections;
-	int	fd;
 	int	cmd_begin;
 	int	ac;
 
@@ -532,6 +551,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_true);
 	else if (!ft_strcmp(cmd, "cd"))
 		return (&sh_cd);
+	else if (!ft_strcmp(cmd, "env"))
+		return (&sh_env);
 	else if (!ft_strcmp(cmd, "false"))
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))

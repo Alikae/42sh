@@ -1,4 +1,0 @@
-1c1
-< /bin/bash: line 2: foo: command not found
----
-> /bin/sh: line 2: foo: command not found
