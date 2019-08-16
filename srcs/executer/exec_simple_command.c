@@ -541,11 +541,64 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 	return (NULL);
 }
 
+void	generate_redirections_builtins(t_sh *p)
+{
+	//REVERSE SENS
+	//PROTECC DUP2
+	//CLOSE EVERYWHW+ERE
+	t_redirect_lst	*lst;
+	t_redirect_lst	*origin;
+	//t_redirect_lst olds
+	int				out;
+
+	origin = p->redirect_lst;
+	lst = origin;
+	while (lst)
+	{
+		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
+		//close(lst->out) <-- ! see man dup2
+		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
+		{
+			if ((lst->out = dup(out)) < 0)
+				dprintf(p->debug_fd, "DUPERROR %i, errno %i\n", lst->out, errno);
+			else
+				dprintf(p->debug_fd, "DUPPED %i-> %i\n", out, lst->out);
+		}
+		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
+		//old = dup(lst->out)
+		if (dup2(lst->out, lst->in) < 0)
+			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
+		else
+			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, lst->out);
+		int ret;
+		ret = close(lst->out);
+		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
+		lst = lst->next;
+	}
+	//return olds
+}
+
+/*void	restore_redirections(t_redirect_lst *olds)
+{
+	while (olds)
+	{
+		dup2(old, old);
+		olds = olds->next;
+	}
+}
+
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
+	int ret;
+	//t_redirect_lst olds;
+
 	//handle redirections/signals
+	/*olds = */generate_redirections_builtins(p);
 	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
-	return (f(p->child_ac, p->child_argv, &(p->params)));
+	ret = f(p->child_ac, p->child_argv, &(p->params));
+	//restore_redirections(olds);
+	//freeall (olds);
+	return (ret);
 }
 
 void	handle_assigns(t_sh *p)
@@ -633,7 +686,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_prgm(p, token_begin, token_end);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	remove_opened_files(p);
-	print_redirections(p, p->redirect_lst);
+	////print_redirections(p, p->redirect_lst);
 	print_assign(p);
 	restore_before_assigns(p);
 	del_n_assign_lst(p, nb_assign);

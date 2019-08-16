@@ -239,8 +239,6 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		treat_input(t, actual_compound, terminator, &actual);
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
-		//printf("yo\n");
-		lstp();
 		//free all
 		return (0);
 	}

@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/10 00:31:23 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/10 03:48:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	handle_signal(int sig)
 	else if (sig == SIGINT)
 	{
 		printf("\nTerminated\n");
-		//retrun to prompt
+		sh()->abort_cmd = 1;
 	}
 	else if (sig == SIGSEGV)
 		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
@@ -99,6 +99,7 @@ void	sh_init(t_sh *shell)
 {
 	sh_init_env();
 	shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
+	shell->abort_cmd = 0;
 	shell->debug = 1;
 	shell->debug_fd = 2;
 	shell->pipe_lst = 0;

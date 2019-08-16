@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/07/18 08:13:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/07/21 22:28:41 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@
 
 //PROTECC ALL RECURSIVETOKENIZER FROM SYNTAXERROR
 //FREE CREATED TOKS WHEN ERROR
-//
-//
-//
-//HANDLE IN/DO DIRECTLY IN CASE/FOR
 
 void	forward_blanks_newline(t_tokenize_tool *t)
 {

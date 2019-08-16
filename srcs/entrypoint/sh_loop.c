@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/10 00:31:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/10 03:49:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int		sh_loop(void)
 			if (p->ast = tokenize_input(input))//line
 			{
 				print_all_tokens(p, p->ast, 0);
+				p->abort_cmd = 0;
 				exec_script(p, p->ast, 0);
 			}
 			if (p->invalid_cmd)

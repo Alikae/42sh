@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:36:34 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/10 03:38:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ void sh_tty_cbreak(int code)
 		cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
 		cbreak.c_cc[VMIN] = 1;
 		if (tcsetattr(0, TCSANOW, &cbreak) < 0)
-			exit(0);
+		{
+			printf("tcsetattr error\n");//
+			//exit(0);
+		}
 		res = tgetstr("im", &bufptr);
 		tputs(res, 0, sh_outc);
 	}
@@ -97,7 +100,10 @@ int		sh_reader(char **command, t_hist *hist)
 	if (tgetent(NULL, getenv("TERM")) == ERR)
 		exit(0);
 	if (tcgetattr(0, &orig_termios))
-		exit(0);
+	{
+		printf("tcgetattr error\n");//
+		//exit(0);
+	}
 	*command = (char*)ft_memalloc(1);
 	sh_tty_cbreak(1);
 	getcommand(command, hist);
