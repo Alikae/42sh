@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 04:10:53 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/08/16 23:07:41 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,6 +89,7 @@ C_FILES_debug_mode = \
 C_FILES_builtins = \
 	sh_env.c \
 	sh_false.c \
+	sh_unset.c \
 	sh_set.c \
 	sh_cd.c \
 	sh_true.c

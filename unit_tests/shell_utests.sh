@@ -28,10 +28,7 @@ shell_utests_stdin ()
 	printf "\033[0;36;40m[ Stdin: $1 ] \033[0;0m" >> $UT_res_file
 	echo "$1" | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
 	echo "$1" | $UT_sh_ref >$UT_out_file_ref 2>$UT_err_file_ref
-	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-	ret1=$?
-	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-	print_kook $ret1 $?
+	print_kook
 }
 
 shell_utests_file ()
@@ -41,10 +38,7 @@ shell_utests_file ()
 	echo "$1" > $test_file
 	$UT_sh_tgt $test_file >$UT_out_file_tgt 2>$UT_err_file_tgt
 	$UT_sh_ref $test_file >$UT_out_file_ref 2>$UT_err_file_ref
-	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-	ret1=$?
-	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-	print_kook $ret1 $?
+	print_kook
 }
 
 shell_utests_arg ()
@@ -53,10 +47,7 @@ shell_utests_arg ()
 	printf "\033[0;36;40m[ -c: $1 ] \033[0;0m" >> $UT_res_file
 	$UT_sh_tgt -c "$1" >$UT_out_file_tgt 2>$UT_err_file_tgt
 	$UT_sh_ref -c "$1" >$UT_out_file_ref 2>$UT_err_file_ref
-	diff "$UT_out_file_tgt" "$UT_out_file_ref" > $UT_out_file_diff
-	ret1=$?
-	diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-	print_kook $ret1 $?
+	print_kook
 }
 
 sh_utests_tests ()
@@ -149,6 +140,13 @@ shell_utests ()
 	tests_fd_lst="$(ls $UT_dir/tests/ | grep .utest)"
 	for i in ${tests_fd_lst[@]}
 	do
+		if [ "$i" = "minishell.utest" ]
+		then
+			continue
+		elif [ "$i" = "21sh.utest" ]
+		then
+			continue
+		fi
 		sh_utests_tests "$UT_dir/tests/$i"
 	done
 	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m"
