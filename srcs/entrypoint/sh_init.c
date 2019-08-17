@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 04:16:17 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/17 17:16:00 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,46 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
+
+static void	sh_set_shppid(void)
+{
+	char *tmp;
+
+	tmp = NULL;
+	tmp = ft_itoa((int)getppid());
+	sh_setenv("PPID", tmp);
+	sh_get_env("PPID")->exported = 1;
+	ft_strdel(&tmp);
+}
+static void	sh_set_shpid(void)
+{
+	char *tmp;
+
+	tmp = NULL;
+	tmp = ft_itoa((int)getpid());
+	sh_setenv("$", tmp);
+	ft_strdel(&tmp);
+}
+static void	sh_set_ps(void)
+{
+	if (!(sh_getenv("PS1")))
+		sh_setenv("PS1", "$ ");
+	if (!(sh_getenv("PS2")))
+		sh_setenv("PS2", "> ");
+	if (!(sh_getenv("PS4")))
+		sh_setenv("PS4", "+ ");
+}
+static void	sh_set_script_name()
+{
+	if (!(sh_getenv("0")))
+	sh_setenv("0", ft_strdup(sh()->av[0]));
+}
+
+static void	sh_set_ifs(void)
+{
+	if (!(sh_getenv("IFS")))
+		sh_setenv("IFS", " \t\n");
+}
 
 static void	sh_set_shlvl(void)
 {
@@ -33,12 +73,25 @@ static void	sh_set_shlvl(void)
 		sh_setenv("SHLVL", tmp);
 		ft_strdel(&tmp);
 	}
+	sh_get_env("SHLVL")->exported = 1;
+}
+
+
+
+static void	sh_set_special_params()
+{
+	sh_set_shpid();
+	sh_set_shppid();
+	sh_set_script_name();
 }
 
 static void	sh_init_env()
 {
 	sh()->params = sh_env_params(sh()->ev);
+	sh_set_special_params();
 	sh_set_shlvl();
+	sh_set_ifs();
+	sh_set_ps();
 	sh_set_pwd();
 }
 

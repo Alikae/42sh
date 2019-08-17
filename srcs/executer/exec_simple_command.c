@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 23:18:19 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/17 16:56:24 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -613,15 +613,26 @@ void	generate_redirections_builtins(t_sh *p)
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
 	int ret;
-	//t_redirect_lst olds;
 
-	//handle redirections/signals
-	/*olds = */generate_redirections_builtins(p);
+	//fork stuff
+	int child_pid = fork();
+	if (/*(p->lldbug) ? !child_pid : */child_pid)
+	{
+		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
+		close_pipes_parent(p);
+		ret = block_wait(p, child_pid);
+	}
+	else
+	{
+		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
+		generate_redirections(p);
 	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
 	ret = f(p->child_ac, p->child_argv, &(p->params));
+		exit(1/*EXECVE ERROR*/);
+	}
 	//restore_redirections(olds);
 	//freeall (olds);
-	return (ret);
+	return (ret); //<-- Return What?
 }
 
 void	handle_assigns(t_sh *p)

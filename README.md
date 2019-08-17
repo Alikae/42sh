@@ -20,25 +20,23 @@ ___
 - (you can add more in githistory.txt)
 
 #### - [ ] Env / Var 
-- [ ] $SHELL 
-- [ ] $SHLVL 
+- [X] $SHLVL 
 - [x] $PATH 
 - [x] $PWD 
 - [X] $OLDPWD
 - [ ] $HOME
-- [ ] $USER
-- [ ] $PPID
+- [X] $PPID
 - [ ] $
 - [ ] $_
 - [ ] $*
 - [ ] $-
-- [ ] $0
+- [X] $0
 - [ ] $n
 - [ ] $# 
 - [ ] $@
 - [ ] $? 
 - [ ] $!
-- [ ] $$
+- [X] $$
 - [ ] ${}
 - [ ] ${#}
 - [ ] /dev/random
@@ -64,7 +62,7 @@ ___
 |		:cyclone:		|	x	|
 |	:heavy_check_mark:	|	debug	|
 |		:cyclone:		|	noediting	|
-|		:cyclone:		|	poisx	|
+|		:cyclone:		|	posix	|
 
 #### - Built-in
 |		STATUS     		| NAME |
@@ -111,7 +109,7 @@ ___
 |		:cyclone:		|	du	|
 |		:cyclone:		|	echo	|
 |		:cyclone:		|	ed	|
-|		:zap:			|	env	|
+|	:heavy_check_mark:	|	env	|
 |		:cyclone:		|	eval	|
 |		:cyclone:		|	ex	|
 |		:cyclone:		|	exec	|
