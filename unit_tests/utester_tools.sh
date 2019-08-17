@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 09:09:16 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 22:56:49 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/17 14:26:31 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -77,19 +77,19 @@ print_kook () {
 	then
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m" >> $UT_res_file
-	else 
-		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
-		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m" >> $UT_res_file
 	fi
+	echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
+	if [ -s "$UT_out_file_diff" ]
+	then
 		echo "\033[0;36;40m[ Stdout REPORT ]\033[0;0m" >> $UT_res_file && cat "$UT_err_file_diff" >> $UT_res_file
-		echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
 		cat "$UT_out_file_diff" >> $UT_res_file
+	else
+		UT_test_ok="$( expr "$UT_test_ok" + 1 )"
+	fi
+	if [ -s "$UT_err_file_diff" ]
+	then
 		echo "\033[0;36;40m[ Stderr REPORT ]\033[0;0m" >> $UT_res_file && cat "$UT_err_file_diff" >> $UT_res_file
-		echo "<Your shell: $UT_sh_tgt\n>Ref shell: $UT_sh_ref" >> $UT_res_file
 		cat "$UT_err_file_diff" >> $UT_res_file
-		if [ ! -s "$UT_out_file_diff" ]
-		then
-			UT_test_ok="$( expr "$UT_test_ok" + 1 )"
-		fi
-		UT_test_num="$( expr "$UT_test_num" + 1 )"
-	}
+	fi
+	UT_test_num="$( expr "$UT_test_num" + 1 )"
+}

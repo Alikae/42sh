@@ -1,3 +1,16 @@
-echo yolo
-echo $#
-echo $!
+/bin/echo yolo
+/bin/echo $HOME
+/bin/echo $SHLVL
+/bin/echo '/bin/echo $SHLVL' | ./42sh
+ls ; /bin/echo $! ; ls ; /bin/echo $!
+ls ; /bin/echo $?
+ls yololololo ; /bin/echo $?
+ls && ls ; /bin/echo $?
+ls yololololo && ls ; /bin/echo $?
+ls || ls ; /bin/echo $?
+ls || ls yoloylololo ; /bin/echo $?
+ls yololololo || ls ; /bin/echo $?
+/bin/echo $0
+/bin/echo $#
+/bin/echo $@
+/bin/echo $*

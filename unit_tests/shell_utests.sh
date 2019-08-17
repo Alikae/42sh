@@ -22,13 +22,25 @@ ret2=
 UT_test_ok="0"
 UT_test_num="0"
 
+shell_seg ()
+{
+	exit	
+}
+
+trap shell_seg SIGKILL
+trap shell_seg SIGCHLD
+trap shell_seg SIGSEGV
+
 shell_utests_stdin ()
 {
 	printf "\033[0;36;40m[ Stdin: $1 ] \033[0;0m"
 	printf "\033[0;36;40m[ Stdin: $1 ] \033[0;0m" >> $UT_res_file
-	echo "$1" | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
 	echo "$1" | $UT_sh_ref >$UT_out_file_ref 2>$UT_err_file_ref
-	print_kook
+	echo "$1" | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
+	if [ "$?" = "0" ]
+	then
+		print_kook
+	fi
 }
 
 shell_utests_file ()
@@ -36,18 +48,24 @@ shell_utests_file ()
 	printf "\033[0;36;40m[ File: $1 ] \033[0;0m"
 	printf "\033[0;36;40m[ File: $1 ] \033[0;0m" >> $UT_res_file
 	echo "$1" > $test_file
-	$UT_sh_tgt $test_file >$UT_out_file_tgt 2>$UT_err_file_tgt
 	$UT_sh_ref $test_file >$UT_out_file_ref 2>$UT_err_file_ref
-	print_kook
+	$UT_sh_tgt $test_file >$UT_out_file_tgt 2>$UT_err_file_tgt
+	if [ "$?" = "0" ]
+	then
+		print_kook
+	fi
 }
 
 shell_utests_arg ()
 {
 	printf "\033[0;36;40m[ -c: $1 ] \033[0;0m"
 	printf "\033[0;36;40m[ -c: $1 ] \033[0;0m" >> $UT_res_file
-	$UT_sh_tgt -c "$1" >$UT_out_file_tgt 2>$UT_err_file_tgt
 	$UT_sh_ref -c "$1" >$UT_out_file_ref 2>$UT_err_file_ref
-	print_kook
+	$UT_sh_tgt -c "$1" >$UT_out_file_tgt 2>$UT_err_file_tgt
+	if [ "$?" = "0" ]
+	then
+		print_kook
+	fi
 }
 
 sh_utests_tests ()
