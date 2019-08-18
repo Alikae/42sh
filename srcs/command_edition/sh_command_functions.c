@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 14:05:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/08 00:38:09 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/16 00:51:52 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 void	reset_selection(char **command, int i, t_hist *hist)
 {
-	ft_memdel((void**)&buselect);
+	ft_memdel((void**)&g_buselect);
 	tputs(tgetstr("sc", NULL), 0, sh_outc);
 	sh_cursor_motion(command, "\033[H", i, hist);
 	ft_putstr_fd(*command, 0);
@@ -64,9 +64,9 @@ char	*sh_insert_char(char *command, char *buf, int i)
 		command[i + 1] = '\0';
 		begin = ft_strjoin(command, buf);
 		command[i + 1] = tmp;
-		new = ft_strjoin(begin, &command[i + 1]); 
+		new = ft_strjoin(begin, &command[i + 1]);
 		ft_memdel((void**)&begin);
 	}
-		ft_memdel((void**)&command);
+	ft_memdel((void**)&command);
 	return (new);
 }

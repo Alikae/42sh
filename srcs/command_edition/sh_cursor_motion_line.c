@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 12:41:45 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/08 00:20:29 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/16 00:55:29 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ static int	sh_cursor_upper(t_pos cursor, t_pos term, int pointer)
 	return (pointer);
 }
 
-static int	sh_cursor_lower(char *command, t_pos cursor, t_pos term, int pointer)
+static int	sh_cursor_lower(char *command, t_pos cursor,
+			t_pos term, int pointer)
 {
 	int k;
 
@@ -67,7 +68,8 @@ static int	sh_cursor_lower(char *command, t_pos cursor, t_pos term, int pointer)
 	return (pointer);
 }
 
-int			sh_cursor_motion_line(char **command, char *buf, int i, t_hist *hist)
+int			sh_cursor_motion_line(char **command, char *buf,
+			int i, t_hist *hist)
 {
 	t_pos	cursor;
 	t_pos	term;
@@ -76,13 +78,15 @@ int			sh_cursor_motion_line(char **command, char *buf, int i, t_hist *hist)
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");
 	term.col = tgetnum("co");
-	if (buselect)
+	if (g_buselect)
 		reset_selection(command, i, hist);
 	if ((len = ft_strlen(*command)) < term.col - PROMPT_LENGTH)
 		return (i);
-	if (LINE_DOWN && i == -1 && (int)ft_strlen(*command) > term.col - cursor.col)
+	if (LINE_DOWN && i == -1
+			&& (int)ft_strlen(*command) > term.col - cursor.col)
 		i = sh_cursor_lower(*command, cursor, term, i);
-	else if (LINE_DOWN && (int)ft_strlen(&command[0][i]) > term.col - cursor.col)
+	else if (LINE_DOWN
+			&& (int)ft_strlen(&command[0][i]) > term.col - cursor.col)
 		i = sh_cursor_lower(*command, cursor, term, i);
 	else if (LINE_UP && i + 1 + PROMPT_LENGTH >= term.col)
 		i = sh_cursor_upper(cursor, term, i);

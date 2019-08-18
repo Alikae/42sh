@@ -6,35 +6,40 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/12 18:21:01 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/18 04:04:19 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <fcntl.h>
-# include <sys/wait.h>
-# include <sys/time.h>
-# include <sys/resource.h>
-# include <dirent.h>
-# include <termios.h>
-# include <term.h>
-# include <curses.h>
-# include <termcap.h>
-# include <sys/ioctl.h>
-# include <sgtty.h>
-# include <stdio.h>
-# include <signal.h>
-# include <pwd.h>
-
-
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <dirent.h>
+#include <termios.h>
+#include <term.h>
+#include <curses.h>
+#include <termcap.h>
+#include <sys/ioctl.h>
+#include <sgtty.h>
+#include <stdio.h>
+#include <signal.h>
+#include <pwd.h>
 #include "sh.h"
 #include "libft.h"
 #include "history.h"
 
-char	*find_path(void) //USE FOR TESTS ONLY. TO BE REMOVED
+void			sh_switch_history(t_hist *hist, char **command)
 {
-	struct passwd *pass;
-	char	*line;
-	char	*path;	
+	ft_memdel((void**)&hist->current);
+	hist->current = ft_strdup(*command);
+	hist->index = -1;
+}
+
+char			*find_path(void) //USE FOR TESTS ONLY. TO BE REMOVED
+{
+	struct passwd	*pass;
+	char			*line;
+	char			*path;
 
 	pass = getpwuid(getuid());
 	line = ft_strjoin("/Users/", pass->pw_name);
@@ -61,7 +66,7 @@ static char		**ft_reverse_tab(char **history)
 	{
 		temp = history[j];
 		history[j++] = history[i];
-		history[i--] = temp;	
+		history[i--] = temp;
 	}
 	temp = NULL;
 	return (history);
@@ -82,11 +87,20 @@ static char		**tab_insert(char **history, char *line)
 	return (history);
 }
 
+static	void	init_history(t_hist *hist, char **history)
+{
+	if (hist->size_r > hist->size_l)
+		hist->size_r = hist->size_l;
+	hist->topush = 0;
+	hist->prev = ft_reverse_tab(history);
+	hist->index = -1;
+}
+
 t_hist			*command_history(t_hist *hist)
 {
 	int		fd;
 	char	*line;
-	char 	**history;
+	char	**history;
 
 	hist->size_r = 0;
 	history = NULL;
@@ -95,7 +109,7 @@ t_hist			*command_history(t_hist *hist)
 		hist->prev = NULL;
 		return (hist);
 	}
-	if (!(fd = open(hist->path , O_RDONLY | O_CREAT | O_SYNC, 0600)))
+	if (!(fd = open(hist->path, O_RDONLY | O_CREAT | O_SYNC, 0600)))
 		return (0);
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -106,12 +120,7 @@ t_hist			*command_history(t_hist *hist)
 		ft_memdel((void**)&line);
 		hist->size_r += 1;
 	}
-	if (hist->size_r > hist->size_l)
-		hist->size_r = hist->size_l;
-	//	history[i] = NULL;
-	hist->topush = 0;
-	hist->prev = ft_reverse_tab(history);
-	hist->index = -1;
+	init_history(hist, history);
 	close(fd);
 	return (hist);
 }
@@ -140,9 +149,6 @@ void			push_history(t_hist *hist)
 					O_WRONLY | O_CREAT | O_SYNC | O_APPEND, 0600)))
 		return ;
 	while (i >= 0)
-	{
-		//		write(fd, ":42:", 4);
 		ft_putendl_fd(hist->prev[i--], fd);
-	}
 	close(fd);
 }
