@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:35:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 23:18:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/17 23:59:31 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,12 @@
 void	sh_unsetenv(const char *key)
 {
 	t_env	*env;
-	t_env	*old;
+	t_env	*tgt;
 
-	if (!key || !*key)
-		return ;
-	if (!(env = sh()->params))
-		return ;
-	if (ft_strcmp(env->key, key))
-	{
-		while (env->next && ft_strcmp(env->next->key, key))
-		{
+	env = sh()->params;
+	tgt = NULL;
+	if ((tgt = sh_get_env("key")))
+		while (env != tgt)
 			env = env->next;
-		}
-			if (!env->next)
-			return ;
-	}
-	old = env->next;
-	env->next = old->next;
-	if (old->value)
-		ft_strdel(&(old->value));
-	if (old->key)
-		ft_strdel(&(old->key));
-	free(old);
 	return ;
 }

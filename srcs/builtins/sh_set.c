@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 21:58:53 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/17 23:47:56 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 
 int		sh_set(int ac, char **av, t_env **ev)
 {
-	t_env *params;
+	t_env	*params;
+	int 	i;
+	char	*tmp;
+	char	*tmp2;
 
-	(void)av;
+	i = 0;
+	tmp = NULL;
+	tmp2 = NULL;
 	if (!ev || !*ev)
 		return (1);
 	params = *ev;
@@ -31,5 +36,18 @@ int		sh_set(int ac, char **av, t_env **ev)
 			ft_putchar('\n');
 			params = params->next;
 		}
+	else
+	{
+		if ((tmp = ft_strchr(av[i], '=') + 1))
+			tmp2 = ft_strndup(av[i], tmp - av[i]);
+		else
+		{
+			tmp2 = av[i];
+			if (i + 1 < ac)
+				tmp = av[i + 1];
+
+		}
+		sh_setenv(tmp2, tmp);
+	}
 	return (0);
 }

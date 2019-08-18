@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 23:04:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 23:19:49 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/17 23:51:23 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int			sh_unset(int ac, char **av, t_env **env)
 	i = 0;
 	(void)env;
 	while (++i < ac)
+	{
 		sh_unsetenv(av[i]);
+	}
 	return (0);
 }
