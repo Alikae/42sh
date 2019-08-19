@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/17 23:50:29 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/18 16:33:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -615,21 +615,21 @@ int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 	int ret;
 
 	//fork stuff
-	int child_pid = fork();
-	if (/*(p->lldbug) ? !child_pid : */child_pid)
-	{
-		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
-		close_pipes_parent(p);
-		ret = block_wait(p, child_pid);
-	}
-	else
-	{
-		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
-		generate_redirections(p);
+	//int child_pid = fork();
+	//if (/*(p->lldbug) ? !child_pid : */child_pid)
+	//{
+//		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
+//		close_pipes_parent(p);
+//		ret = block_wait(p, child_pid);
+//	}
+//	else
+//	{
+//		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
+//		generate_redirections(p);
 	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
 	ret = f(p->child_ac, p->child_argv, &(p->params));
-		exit(1/*EXECVE ERROR*/);
-	}
+//		exit(1/*EXECVE ERROR*/);
+//	}
 	//restore_redirections(olds);
 	//freeall (olds);
 	return (ret); //<-- Return What?
@@ -664,7 +664,7 @@ void	restore_before_assigns(t_sh *p)
 	assign = p->assign_lst;
 	while (assign)
 	{
-		sh_unsetenv(assign->key);
+		sh_unsetenv(assign->key, &(sh()->params));
 		assign = assign->next;
 	}
 	assign = p->tmp_assign_lst;

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 23:17:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/18 16:26:45 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 		}
 		ins = ins->next;
 	}
-	sh_unsetenv(tok->sub->content);
+	sh_unsetenv(tok->sub->content, &(sh()->params));
 	if (tmp)
 		sh_setenv(tok->sub->content, tmp);
 	free(tmp);
