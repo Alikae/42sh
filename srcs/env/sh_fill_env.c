@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 00:34:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:14:59 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 15:24:50 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 void	sh_fill_env(const char **ev)
 {
-	char *key;
-	char *val;
-	t_env *tmp;
+	char	*key;
+	char	*val;
+	t_env	*tmp;
 
 	if (ev)
 		while (*ev)

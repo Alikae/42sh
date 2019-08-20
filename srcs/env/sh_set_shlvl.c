@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 01:11:15 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/13 15:40:57 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 15:27:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 void	sh_set_shlvl(void)
 {
-	char *tmp;
-	int shlvl;
+	char	*tmp;
+	int		shlvl;
 
 	shlvl = 0;
 	if (!(sh_get_value("SHLVL")))

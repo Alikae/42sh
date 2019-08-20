@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set_env.c                                   :+:      :+:    :+:   */
+/*   sh_set_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 00:29:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/06 01:36:48 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/20 15:27:18 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/20 15:27:32 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	sh_add_var(const char *key, const char *value)
 }
 
 void	sh_set_env(const char *key, const char *value)
-{	
+{
 	t_env	**var;
 
 	var = &(sh()->env);
