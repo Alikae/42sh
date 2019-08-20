@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 23:07:41 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/20 23:11:44 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,6 +91,7 @@ C_FILES_builtins = \
 	sh_false.c \
 	sh_unset.c \
 	sh_set.c \
+	sh_test.c \
 	sh_cd.c \
 	sh_true.c
 
@@ -103,8 +104,6 @@ C_FILES_tools = \
 	#sh_add_to_path.c
 
 C_FILES_env = \
-	
-	#sh_init_env.c \
 	sh_init_var.c \
 	sh_get_env.c \
 	sh_set_env.c \
