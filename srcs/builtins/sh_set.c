@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/18 15:59:51 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 13:26:31 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int		sh_set(int ac, char **av, t_env **ev)
 		}
 	else
 	{
-		if ((tmp = ft_strchr(av[i], '=') + 1))
-			tmp2 = ft_strndup(av[i], tmp - av[i]);
+		if ((tmp = ft_strchr(av[i], '=')))
+			tmp2 = ft_strndup(av[i], ++tmp - av[i]);
 		else
 		{
 			tmp2 = av[i];

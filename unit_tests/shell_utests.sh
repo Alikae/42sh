@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 stdin='false'
 arg='false'
@@ -25,6 +25,34 @@ UT_test_num="0"
 shell_trap ()
 {
 	echo "$?"
+}
+
+display_result () {
+	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m"
+	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
+	read -p "Display result ? (y/n): " ans
+	if [ "$ans" = 'y' ]
+	then
+		cat $UT_res_file
+	fi
+	rm $test_file $cmd_file_1 $cmd_file_0 2>> "$UT_log_file"
+}
+
+shell_utests_fifo () 
+{
+	trap shell_trap 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+	printf "\033[0;36;40m[ Fifo: $* ] \033[0;0m"
+	printf "\033[0;36;40m[ Fifo: $* ] \033[0;0m" >> "$UT_res_file"
+	"$UT_sh_tgt" <"$pipe_in_tgt" >"$UT_out_file_tgt" 2>"$UT_err_file_tgt" & 
+	TGT_PID="$*"
+	"$UT_sh_ref" <"$pipe_in_ref" >"$UT_out_file_ref" 2>"$UT_err_file_ref" &
+	REF_PID="$*"
+	echo "$*" >> "$pipe_in_tgt"
+	echo "$*" >> "$pipe_in_ref"
+	echo "exit" >> "$pipe_in_tgt"
+	echo "exit" >> "$pipe_in_ref"
+	wait "$TGT_PID"
+	print_kook
 }
 
 shell_utests_stdin ()
@@ -86,7 +114,8 @@ sh_utests_tests ()
 		then
 			shell_utests_stdin "$i"
 		fi
-	done <$1
+			#shell_utests_fifo "$i"
+	done <"$1"
 }
 
 shell_utests ()
@@ -166,12 +195,5 @@ shell_utests ()
 		fi
 		sh_utests_tests "$UT_dir/tests/$i"
 	done
-	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m"
-	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
-	read -p "Display result ? (y/n): " ans
-	if [ "$ans" = 'y' ]
-	then
-		cat $UT_res_file
-	fi
-	rm $test_file $cmd_file_1 $cmd_file_0 2>> "$UT_log_file"
+	display_result
 }
