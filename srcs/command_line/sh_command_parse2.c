@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/18 15:37:30 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:19:28 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 15:19:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int		check(void)
 	write(2, "OK\n", 3);
 	return (1);
 }
-
 
 int		sh_ice(const char *str, int index)
 {
@@ -44,8 +43,8 @@ int		sh_ice(const char *str, int index)
 
 int		sh_parse_line_escape(char **line)
 {
-	int		i;
-	
+	int	i;
+
 	i = 0;
 	while (line[0][i] != '\0')
 		i++;

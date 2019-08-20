@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/14 09:18:30 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:20:04 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 15:22:54 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,17 @@ static int		move_parenthese(char const *str, int i)
 	return (i);
 }
 
-static int		move_pointer(char const *str, int i)
+static int		move_pointer(char const *s, int i)
 {
 	char x;
 
-	if (str[i] == '(' && !sh_ice(str, i))
-		i = move_parenthese(str, i);
-	else if ((str[i] == '"' || str[i] == '\'' || str[i] == '`') && !sh_ice(str, i))
+	if (s[i] == '(' && !sh_ice(s, i))
+		i = move_parenthese(s, i);
+	else if ((s[i] == '"' || s[i] == '\'' || s[i] == '`') && !sh_ice(s, i))
 	{
-		x = str[i];
+		x = s[i];
 		i++;
-		while (!(str[i] == x && !sh_ice(str, i)))
+		while (!(s[i] == x && !sh_ice(s, i)))
 			i++;
 		i++;
 	}
