@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 18:17:07 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 14:50:54 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ int			sh_cd(int ac, char **av, t_env **ev)
 	char	*pwd;
 	char	*np;
 	char	*olddir;
+	t_env	*tmp;
 
 	(void)ac;
 	(void)ev;
+	tmp = NULL;
 	pwd = sh_getenv("PWD");
 	if (av)
 	{
@@ -49,8 +51,10 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		}
 		if ((np = ft_strnew(PATH_MAX + 1)))
 			np = getcwd(np, PATH_MAX);
-		sh_setenv("PWD", np);
-		sh_setenv("OLDPWD", olddir);
+		if ((tmp = sh_setenv("PWD", np)))
+			tmp->exported = 1;
+		if ((tmp = sh_setenv("OLDPWD", olddir)))
+			tmp->exported = 1;
 		free(olddir);
 	}
 	return (0);
