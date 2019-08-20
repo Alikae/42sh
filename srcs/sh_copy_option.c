@@ -6,13 +6,13 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/14 13:56:07 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/08 05:20:59 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/20 15:06:07 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_command_edition.h"
 
-static int	sh_cursor_backward_u(char **command, t_cursors cursors, int i)
+static int		sh_cursor_backward_u(char **command, t_cursors cursors, int i)
 {
 	int		j;
 
@@ -37,7 +37,7 @@ static int	sh_cursor_backward_u(char **command, t_cursors cursors, int i)
 	return (--i);
 }
 
-static int	sh_cursor_forward_u(char **command, t_cursors cursors, int i)
+static int		sh_cursor_forward_u(char **command, t_cursors cursors, int i)
 {
 	char	*buf;
 	char	c;
@@ -61,14 +61,13 @@ static int	sh_cursor_forward_u(char **command, t_cursors cursors, int i)
 	return (i);
 }
 
-int 		sh_copy_option(char **command, char *buf, int i, t_hist *hist)
+int				sh_copy_option(char **command, char *buf, int i, t_hist *hist)
 {
 	t_cursors	cursors;
 
 	sh_cursor_position(&cursors.cursor);
 	cursors.term.rows = tgetnum("li");
 	cursors.term.col = tgetnum("co");
-
 	if (ALT_RIGHT)
 		i = sh_cursor_forward_u(command, cursors, i);
 	else if (ALT_LEFT && buselect && ft_strcmp(buselect, ""))
@@ -79,7 +78,7 @@ int 		sh_copy_option(char **command, char *buf, int i, t_hist *hist)
 		bucopy = ft_strdup(buselect);
 	}
 	else if (PASTE && bucopy)
-		i = sh_echo_input(command, bucopy, i, hist); 
+		i = sh_echo_input(command, bucopy, i, hist);
 //	fprintf(stderr, "buffer: [%s]\n", buselect);
-	return (i);         
+	return (i);
 }

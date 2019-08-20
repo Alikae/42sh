@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 08:48:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/11 21:58:12 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 15:04:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		sh_cursor_position(t_pos *cursor)
 	ttyfd = open("/dev/tty", O_RDWR);
 	k = 0;
 	ft_bzero(temp, 20);
-	ft_putstr_fd("\033[6n", ttyfd); 
+	ft_putstr_fd("\033[6n", ttyfd);
 	while ((ret = read(ttyfd, &temp, 10)) < 4 && k == 0)
 	{
 		if (temp[0] == '\033' && temp[1] == '[' && ft_isdigit(temp[2]))

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 06:34:20 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/20 15:09:52 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 
 #include <stdio.h>
 
-void    print_all_tokens(t_sh *p, t_token *t, int lvl)
+void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 {
 	int lvcpy;
+
 	while (t)
 	{
 		lvcpy = lvl;
@@ -45,12 +46,12 @@ void    print_all_tokens(t_sh *p, t_token *t, int lvl)
 	}
 }
 
-static t_hist 	*init_history(void)
+static t_hist	*init_history(void)
 {
 	t_hist *hist;
 
 	hist = malloc(sizeof(t_hist));
- 	hist->path = find_path();
+	hist->path = find_path();
 	hist->size_l = 200;
 	hist = command_history(hist);
 	return (hist);
@@ -84,24 +85,24 @@ int		sh_loop(void)
 			}
 			else
 			{
-		//		ln_tab = malloc(2 * sizeof(char*));
-		//	ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
-		//	ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
-		//	ln_tab[0] = ft_strdup("/bin/cat tet");
-		//	ln_tab[0] = ft_strdup("for lala in po la ka nu ; do /bin/echo $lala ; done");
-		//	ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
-		//	ln_tab[0] = ft_strdup("case yoz in ( lap | yoz ) /bin/echo yes ;esac");
-		//	ln_tab[0] = ft_strdup("  echo ; done");
-		//		ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ; esac");
-			//	ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
+				//		ln_tab = malloc(2 * sizeof(char*));
+				//	ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
+				//	ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
+				//	ln_tab[0] = ft_strdup("/bin/cat tet");
+				//	ln_tab[0] = ft_strdup("for lala in po la ka nu ; do /bin/echo $lala ; done");
+				//	ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
+				//	ln_tab[0] = ft_strdup("case yoz in ( lap | yoz ) /bin/echo yes ;esac");
+				//	ln_tab[0] = ft_strdup("  echo ; done");
+				//		ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ; esac");
+				//	ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
 				ln_tab = ft_strdup("LSCOLORS=lala ls -g");
 			}
-		//	int z = 0;
-		//	while (ln_tab[z])
-		//		fprintf(stderr, "[%s]\n", ln_tab[z++]);
-		//	if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
-		//		break ;
-		//	else
+			//	int z = 0;
+			//	while (ln_tab[z])
+			//		fprintf(stderr, "[%s]\n", ln_tab[z++]);
+			//	if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
+			//		break ;
+			//	else
 			if (input)
 				input = ft_strjoin_free(input, "\n", input);
 			input = ft_strjoin_free(input, ln_tab, input);

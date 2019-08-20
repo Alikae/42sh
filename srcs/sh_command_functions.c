@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 14:05:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/08 00:38:09 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/20 15:04:34 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ char	*sh_insert_char(char *command, char *buf, int i)
 		command[i + 1] = '\0';
 		begin = ft_strjoin(command, buf);
 		command[i + 1] = tmp;
-		new = ft_strjoin(begin, &command[i + 1]); 
+		new = ft_strjoin(begin, &command[i + 1]);
 		ft_memdel((void**)&begin);
 	}
-		ft_memdel((void**)&command);
+	ft_memdel((void**)&command);
 	return (new);
 }
