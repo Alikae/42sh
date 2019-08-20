@@ -1,0 +1,13 @@
+set
+set PWD=yolo
+set PWD yala
+set PWD=yolo
+set PWD yala
+set PWD=yolo ; set
+set PWD yala ; set
+set PWD=yolo ; set
+set PWD yala ; set
+set PWD=yolo ; set | grep PWD
+set PWD yala ; set | grep PWD
+set PWD=yolo ; set | grep PWD
+set PWD yala ; set | grep PWD

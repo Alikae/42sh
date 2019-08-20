@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/19 16:16:22 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/20 13:45:30 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/bash
@@ -131,18 +131,18 @@ test_custom_script () {
 		echo "\033[0;36;40m[ Testing: File ] \033[0;31;40m[ KO ]\033[0;0m" >> $UT_res_file
 	fi
 	sh_utests_tests "$cmd_file_1"
-	PS3='Choose Wisely: '
+	PS3='Choose your cmd file: '
 	tests_fd_lst="$(ls $UT_dir/tests/ | grep .utest) exit"
 	select i in $tests_fd_lst
 	do
+		echo "\033[0;36;40m[ $i ]\033[0;0m"
 		if [ "$i" = 'exit' ] ; then
-			break ;
-		else
-			echo "You choose: $UT_dir/tests/$i"
-			sh_utests_tests "$UT_dir/tests/$i"
+			exit ;
 		fi
+		sh_utests_tests "$UT_dir/tests/$i"
 		echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m"
 		echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
+		break ;
 	done
 	read -p "Display result ? (y/n): " ans
 	if [ "$ans" = 'y' ]
