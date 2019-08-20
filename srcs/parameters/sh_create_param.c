@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/01 14:53:44 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 15:11:24 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 15:00:38 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env		*sh_create_param(const char *key)
 	t_env *new;
 
 	if (!(new = (t_env *)malloc(sizeof(t_env))))
-		exit(1/*ERROR_MALLOC*/);
+		exit(1);
 	new->key = ft_strdup(key);
 	new->value = NULL;
 	new->exported = 0;

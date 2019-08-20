@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/24 15:49:05 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 06:16:14 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/20 14:56:12 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
 int		main(int ac, char **av, char **ev)
 {
 	sh_entrypoint(ac, av, ev);
-	/*??????if (sh()->ac < 2)
-		sh_loop();
-	else
-		sh_script_arg();
-		*/
 	sh_exitpoint();
 	return (0);
 }
