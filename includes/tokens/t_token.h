@@ -56,6 +56,7 @@ typedef enum	e_toktype
 typedef struct	s_token
 {
 	t_toktype		type;
+	unsigned int	index;
 	char			*content;
 	struct s_token	*sub;
 	struct s_token	*next;
@@ -72,8 +73,8 @@ typedef struct s_tokenize_tool
 typedef struct s_sh t_sh;
 void		print_all_tokens(t_sh *p, t_token *t, int lvl);
 //FOR DEBUG
-t_token		*create_token(t_toktype type, const char *content);
-t_token		*create_token_n(t_toktype type, const char *content, int n);
+t_token		*create_token(t_toktype type, int index, const char *content);
+t_token		*create_token_n(t_toktype type, int index, const char *content, int n);
 void		delete_token(t_token *token);
 t_token		*tokenize_input(const char *input);
 t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_toktype *terminator);
@@ -81,14 +82,14 @@ t_toktype	word_is_reserved(const char *word, int len);
 t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_compound);
 t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound);
 int			is_compound(t_toktype type);
-t_token		*tokenize_compound(t_tokenize_tool *t, t_toktype type);
+t_token		*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin);
 t_toktype	read_skip_opening_char(t_tokenize_tool *t);
 void		skip_ending_char(t_tokenize_tool *t, t_toktype type);
 t_token		*find_token_by_key_until(t_token *tok_begin, t_token *tok_end, t_toktype *type, t_toktype (*types)[2]);
-t_token		*tokenize_for(t_tokenize_tool *t);
-t_token		*tokenize_if(t_tokenize_tool *t);
-t_token		*tokenize_case(t_tokenize_tool *t);
-t_token		*tokenize_while(t_tokenize_tool *t, t_toktype type);
+t_token		*tokenize_for(t_tokenize_tool *t, int word_begin);
+t_token		*tokenize_if(t_tokenize_tool *t, int word_begin);
+t_token		*tokenize_case(t_tokenize_tool *t, int word_begin);
+t_token		*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin);
 t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type);
 void		forward_blanks_newline(t_tokenize_tool *t);
 void		forward_blanks(t_tokenize_tool *t);

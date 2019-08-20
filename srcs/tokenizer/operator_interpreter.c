@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 18:43:03 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 06:09:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,14 +174,16 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {
 	t_toktype	type;
+	int			op_begin;
 
+	op_begin = t->i;
 	if ((type = read_n_skip_operator(t)))
 	{
 		//if SH_AND && next is redirection
 		//	treat_redirection
 		if (actual_compound == SH_CASE && type == SH_DSEMI)
 			return (SH_DSEMI);
-		(*p_actual)->next = create_token(type, 0);
+		(*p_actual)->next = create_token(type, op_begin, 0);
 		*p_actual = (*p_actual)->next;
 		if (t->word_nb == 1 && operator_cant_be_first(type))
 		{

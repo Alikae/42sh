@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/18 16:33:02 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 13:28:35 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -614,6 +614,7 @@ int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
 	int ret;
 
+	//NO FORK!!!!!!!!!
 	//fork stuff
 	//int child_pid = fork();
 	//if (/*(p->lldbug) ? !child_pid : */child_pid)

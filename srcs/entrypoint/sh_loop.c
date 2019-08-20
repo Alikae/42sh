@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 04:15:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/20 06:34:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void    print_all_tokens(t_sh *p, t_token *t, int lvl)
 			if (lvcpy < lvl - 1 || lvl == 1)
 				dprintf(p->debug_fd, "      ");
 		}
-		dprintf(p->debug_fd, "%-15s (%i)\n", (t->content) ? t->content : "o", t->type);
+		dprintf(p->debug_fd, "%-15s (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);
@@ -110,6 +110,7 @@ int		sh_loop(void)
 			free (ln_tab);
 			p->unfinished_cmd = 0;
 			p->invalid_cmd = 0;
+			p->cmd = input;
 			if ((p->ast = tokenize_input(input)))//line
 			{
 				print_all_tokens(p, p->ast, 0);
