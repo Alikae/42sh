@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 04:10:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/20 06:33:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype ty
 			printf("GRAMMAR ERROR: expected WORD after redirection_operator at -%.10s\n", t->input + t->i - ((t->i - 4 > -1) ? 4 : 2));
 		return (SH_SYNTAX_ERROR);
 	}
-	(*p_actual)->sub = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
+	(*p_actual)->sub = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 	return (0);
 }
 
@@ -96,7 +96,7 @@ t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len)
 {
 	t_toktype	type;
 
-	(*p_actual)->next = create_token_n(0, t->input + t->i, len);
+	(*p_actual)->next = create_token_n(0, t->i, t->input + t->i, len);
 	t->i += len;
 	type = read_n_skip_operator(t);
 	*p_actual = (*p_actual)->next;
@@ -104,15 +104,15 @@ t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len)
 	return (fill_redirection(t, p_actual, type));
 }
 
-t_toktype	tokenize_reserved_word(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
+t_toktype	tokenize_reserved_word(t_tokenize_tool *t, t_token **p_actual, t_toktype type, int word_begin)
 {
 	if (is_compound(type))
 	{
-		if (!((*p_actual)->next = tokenize_compound(t, type)))
+		if (!((*p_actual)->next = tokenize_compound(t, type, word_begin)))
 			return (SH_SYNTAX_ERROR);
 	}
 	else
-		(*p_actual)->next = create_token(type, 0);
+		(*p_actual)->next = create_token(type, word_begin, 0);
 	return (0);
 }
 
@@ -159,10 +159,10 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	word_begin = t->i;
 	t->i = name_begin;
 	read_n_skip_word(t);
-	(*p_actual)->next = create_token_n(SH_FUNC, t->input + name_begin, t->i - name_begin);
+	(*p_actual)->next = create_token_n(SH_FUNC, name_begin, t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
 	t->i = word_begin;
-	if (((int)((*p_actual)->sub = tokenize_compound(t, type))) == SH_SYNTAX_ERROR)
+	if (((int)((*p_actual)->sub = tokenize_compound(t, type, word_begin))) == SH_SYNTAX_ERROR)
 	{
 		//free all
 		return (SH_SYNTAX_ERROR);
@@ -213,12 +213,12 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 				sh()->invalid_cmd = 1;
 				return (SH_SYNTAX_ERROR);
 			}
-			if (tokenize_reserved_word(t, p_actual, type) == SH_SYNTAX_ERROR)
+			if (tokenize_reserved_word(t, p_actual, type, word_begin) == SH_SYNTAX_ERROR)
 				return (SH_SYNTAX_ERROR);
 		}
 		else
 		{
-			(*p_actual)->next = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
+			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 			t->word_nb++;
 		}
 		*p_actual = (*p_actual)->next;
@@ -231,9 +231,9 @@ void	treat_input(t_tokenize_tool *t, t_toktype actual_compound, t_toktype *termi
 	forward_blanks(t);
 	while (t->input[t->i] == '\n')
 	{
-		t->i++;
-		(*p_actual)->next = create_token(SH_NEWLINE, 0);
+		(*p_actual)->next = create_token(SH_NEWLINE, t->i, 0);
 		*p_actual = (*p_actual)->next;
+		t->i++;
 		t->word_nb = 1;
 	}
 	if (!(*terminator = treat_operator(t, p_actual, actual_compound)))
@@ -245,7 +245,7 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 	t_token	*origin;
 	t_token	*actual;
 
-	origin = create_token(0, 0);
+	origin = create_token(0, 0, 0);
 	actual = origin;
 	*terminator = 0;
 	while (!*terminator && t->input[t->i])

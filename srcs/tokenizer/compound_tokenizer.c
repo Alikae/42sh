@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/16 04:10:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/20 06:21:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free
 	return (0);
 }
 
-t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type)
+t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 {
 	t_token		*compound_token;
 	t_toktype	next_separator;
 
-	compound_token = create_token(type, 0);
-	compound_token->sub = create_token(SH_GROUP, 0);
+	compound_token = create_token(type, word_begin, 0);
+	compound_token->sub = create_token(SH_GROUP, 0, 0);
 	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_WHILE, &next_separator)))
 	{
 		printf("a\n");
@@ -124,7 +124,7 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 		read_n_skip_word(t);
 		if (t->i != word_begin && ft_strncmp(t->input + word_begin, ")", t->i - word_begin))
 		{
-			(*previous_next) = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
+			(*previous_next) = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 			dprintf(sh()->debug_fd, "case WORD : %s\n", (*previous_next)->content);
 			previous_next = &((*previous_next)->next);
 		}
@@ -155,7 +155,7 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 	t_token		*actual;
 	int			word_begin;
 
-	origin = create_token(0, 0);
+	origin = create_token(0, 0, 0);
 	actual = origin;
 	if (!tokenize_case_pattern(t, next_separator, actual, compound))
 	{
@@ -192,7 +192,7 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 	return (origin);
 }
 
-int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token)
+int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token, int case_index)
 {
 	int	word_begin;
 
@@ -201,7 +201,7 @@ int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token)
 	read_n_skip_word(t);
 	if (t->i == word_begin)
 		return (0);
-	*compound_token = create_token_n(SH_CASE, t->input + word_begin, t->i - word_begin);
+	*compound_token = create_token_n(SH_CASE, case_index, t->input + word_begin, t->i - word_begin);
 	//VERIFY UNICITY OF NAME
 	return (1);
 }
@@ -250,11 +250,11 @@ int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *c
 	return (1);
 }
 
-t_token	*tokenize_case(t_tokenize_tool *t)
+t_token	*tokenize_case(t_tokenize_tool *t, int word_begin)
 {
 	t_token		*compound_token;
 
-	if (!tokenize_case_name(t, &compound_token))
+	if (!tokenize_case_name(t, &compound_token, word_begin))
 	{
 		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "Invalid WORD in CASE", 0));
@@ -284,13 +284,13 @@ t_token	*tokenize_case(t_tokenize_tool *t)
 	//Exec			Exec
 }
 	
-t_token *tokenize_if(t_tokenize_tool *t)
+t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 {
 	t_token		*compound_token;
 	t_toktype	next_separator;
 
-	compound_token = create_token(SH_IF, 0);
-	compound_token->sub = create_token(SH_GROUP, 0);
+	compound_token = create_token(SH_IF, word_begin, 0);
+	compound_token->sub = create_token(SH_GROUP, word_begin, 0);
 	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_IF, &next_separator)))
 	{
 		if (!t->input[t->i])
@@ -311,7 +311,7 @@ t_token *tokenize_if(t_tokenize_tool *t)
 		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing THEN in IF", compound_token));
 	}
-	compound_token->sub->next = create_token(SH_GROUP, 0);
+	compound_token->sub->next = create_token(SH_GROUP, word_begin, 0);
 	if (!(compound_token->sub->next->sub = recursive_tokenizer(t, SH_THEN, &next_separator)))
 	{
 		if (!t->input[t->i])
@@ -334,7 +334,7 @@ t_token *tokenize_if(t_tokenize_tool *t)
 	}
 	if (next_separator == SH_ELIF)
 	{
-		if (!(compound_token->sub->next->next = tokenize_if(t)))
+		if (!(compound_token->sub->next->next = tokenize_if(t, 0)))
 		{
 			if (!t->input[t->i])
 			{
@@ -368,7 +368,7 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 	t_token	*actual;
 	int		word_begin;
 
-	origin = create_token(0, 0);
+	origin = create_token(0, 0, 0);
 	actual = origin;
 	word_begin = t->i + 1;
 	while (t->input[t->i] != ';' && t->input[t->i] != '\n' && (word_begin != t->i))
@@ -378,7 +378,7 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 		read_n_skip_word(t);
 		if (t->i != word_begin)
 		{
-			actual->next = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
+			actual->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 			actual = actual->next;
 		}
 	}
@@ -431,7 +431,7 @@ int		tokenize_for_name(t_tokenize_tool *t, t_token *compound_token)
 	read_n_skip_word(t);
 	if (t->i == word_begin)
 		return (0);
-	compound_token->sub = create_token_n(SH_WORD, t->input + word_begin, t->i - word_begin);
+	compound_token->sub = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 	//VERIFY UNICITY OF NAME
 	return (1);
 }
@@ -461,17 +461,17 @@ int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
 	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i - word_begin))
 		return ((int)handle_syntax_error(t, "missing DO in for", compound));
 	if (!compound->sub->sub)
-		compound->sub->sub = create_token(0, 0);
+		compound->sub->sub = create_token(0, 0, 0);
 	if (!(compound->sub->sub->sub = tokenize_for_do_group(t, compound)))
 		return (0);
 	return (1);
 }
 
-t_token	*tokenize_for(t_tokenize_tool *t)
+t_token	*tokenize_for(t_tokenize_tool *t, int word_begin)
 {
 	t_token		*compound_token;
 
-	compound_token = create_token(SH_FOR, 0);
+	compound_token = create_token(SH_FOR, word_begin, 0);
 	if (!tokenize_for_name(t, compound_token))
 	{
 		sh()->invalid_cmd = 1;
@@ -515,12 +515,12 @@ t_token	*tokenize_for(t_tokenize_tool *t)
 	return (compound_token);
 }
 
-t_token	*tokenize_braces(t_tokenize_tool *t)
+t_token	*tokenize_braces(t_tokenize_tool *t, int word_begin)
 {
 	t_token		*compound;
 	t_toktype	terminator;
 
-	compound = create_token(SH_BRACES, 0);
+	compound = create_token(SH_BRACES, word_begin, 0);
 	if (!(compound->sub = recursive_tokenizer(t, SH_BRACES, &terminator)))
 	{
 		if (!t->input[t->i])
@@ -545,7 +545,7 @@ t_token	*tokenize_braces(t_tokenize_tool *t)
 
 }
 
-t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type)
+t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
 {
 	t_token		*compound;
 	int			tmp;
@@ -553,15 +553,15 @@ t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type)
 	tmp = t->word_nb;
 	t->word_nb = 1;
 	if (type == SH_WHILE || type == SH_UNTIL)
-		compound = tokenize_while(t, type);
+		compound = tokenize_while(t, type, word_begin);
 	else if (type == SH_IF)
-		compound = tokenize_if(t);
+		compound = tokenize_if(t, word_begin);
 	else if (type == SH_CASE)
-		compound = tokenize_case(t);
+		compound = tokenize_case(t, word_begin);
 	else if (type == SH_FOR)
-		compound = tokenize_for(t);
+		compound = tokenize_for(t, word_begin);
 	else
-		compound = tokenize_braces(t);
+		compound = tokenize_braces(t, word_begin);
 	t->word_nb = tmp + 1;
 	return (compound);
 }

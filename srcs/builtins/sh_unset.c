@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init_ln.c                                       :+:      :+:    :+:   */
+/*   sh_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 15:15:41 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/06 17:23:29 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/16 23:04:22 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/16 23:19:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "21sh.h"
+#include "sh_env.h"
 #include "libft.h"
 
-t_ln	*sh_init_ln(const char *line, t_ln *parent)
+int			sh_unset(int ac, char **av, t_env **env)
 {
-	t_ln *ln;
+	int i;
 
-	if (!(ln = (t_ln *)malloc(sizeof(t_ln))))
-		return (NULL);
-	ln->line = ft_strdup(line);
-	ln->next = NULL;
-	ln->prev = parent;
-	if (ln->prev)
-		ln->prev->next = ln;
-	return (ln);
+	i = 0;
+	(void)env;
+	while (++i < ac)
+		sh_unsetenv(av[i]);
+	return (0);
 }

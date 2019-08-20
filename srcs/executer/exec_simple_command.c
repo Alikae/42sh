@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 04:23:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/20 04:53:22 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -557,6 +557,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))
 		return (&sh_set);
+	else if (!ft_strcmp(cmd, "unset"))
+		return (&sh_unset);
 	else if (!ft_strcmp(cmd, "exit"))
 		sh_exitpoint();
 	return (NULL);
@@ -611,15 +613,27 @@ void	generate_redirections_builtins(t_sh *p)
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
 	int ret;
-	//t_redirect_lst olds;
 
-	//handle redirections/signals
-	/*olds = */generate_redirections_builtins(p);
+	//NO FORK!!!!!!!!!
+	//fork stuff
+	int child_pid = fork();
+	if (/*(p->lldbug) ? !child_pid : */child_pid)
+	{
+		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
+		close_pipes_parent(p);
+		ret = block_wait(p, child_pid);
+	}
+	else
+	{
+		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
+		generate_redirections(p);
 	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
 	ret = f(p->child_ac, p->child_argv, &(p->params));
+		exit(1/*EXECVE ERROR*/);
+	}
 	//restore_redirections(olds);
 	//freeall (olds);
-	return (ret);
+	return (ret); //<-- Return What?
 }
 
 void	handle_assigns(t_sh *p)

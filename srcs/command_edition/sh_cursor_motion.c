@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_cursor_motion.c                                    :+:      :+:    :+:   */
+/*   sh_cursor_motion.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/12 14:02:40 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/18 01:04:16 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "history.h"
 #include "sh_command_edition.h"
 #include "sh_command_line.h"
@@ -74,14 +75,14 @@ static int	sh_backspace(char **command, int i, t_pos cursor, t_pos term)
 	j = -1;
 	if (i == -1)
 		return (i);
-	if (buselect && ft_strcmp(buselect, ""))
+	if (g_buselect && ft_strcmp(g_buselect, ""))
 	{
-		while (buselect[++j] != '\0')
+		while (g_buselect[++j] != '\0')
 		{
 			*command = sh_delete_last(*command, i);
 			i = sh_cursor_backward(1, i, cursor, term);
 		}
-		ft_memdel((void**)&buselect);	
+		ft_memdel((void**)&g_buselect);
 	}
 	else
 	{
@@ -103,7 +104,7 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");
 	term.col = tgetnum("co");
-	if (buselect && !BACKSPACE)
+	if (g_buselect && !BACKSPACE)
 		reset_selection(command, i, hist);
 	if (HOME)
 		i = sh_cursor_backward(i + 1, i, cursor, term);
@@ -116,8 +117,7 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 	else if (BACKSPACE)
 	{
 		i = sh_backspace(command, i, cursor, term);
-		ft_memdel((void**)&(hist->current));
-		hist->current = ft_strdup(*command);
+		sh_switch_history(hist, command);
 	}
 	return (i);
 }
@@ -125,12 +125,12 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
 {
 	t_cursors	c;
-	t_pos	head;
-		
+	t_pos		head;
+
 	sh_cursor_position(&c.cursor);
 	c.term.rows = tgetnum("li");
 	c.term.col = tgetnum("co");
-	if (buselect)
+	if (g_buselect)
 		reset_selection(command, i, hist);
 	*command = sh_insert_char(*command, buf, i);
 	tputs(tgetstr("sc", NULL), 0, sh_outc);
@@ -146,7 +146,6 @@ int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
 	else
 		tputs(tgetstr("rc", NULL), 0, sh_outc);
 	i = sh_cursor_forward(ft_strlen(buf), i, c.cursor, c.term);
-	ft_memdel((void**)&(hist->current));
-	hist->current = ft_strdup(*command);
+	sh_switch_history(hist, command);
 	return (i);
 }

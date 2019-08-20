@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 11:25:56 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/08 00:23:06 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/16 00:55:13 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ static int	sh_backward_word(char **command, int i, t_pos term, t_pos cursor)
 	return (i);
 }
 
-int			sh_cursor_motion_word(char **command, char *buf, int i, t_hist *hist)
+int			sh_cursor_motion_word(char **command, char *buf,
+			int i, t_hist *hist)
 {
 	t_pos	cursor;
 	t_pos	term;
@@ -95,7 +96,7 @@ int			sh_cursor_motion_word(char **command, char *buf, int i, t_hist *hist)
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");
 	term.col = tgetnum("co");
-	if (buselect)
+	if (g_buselect)
 		reset_selection(command, i, hist);
 	if (FORWARD_WORD)
 		i = sh_forward_word(command, i, term, cursor);

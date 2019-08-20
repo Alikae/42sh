@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/08 05:20:55 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/16 01:33:08 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ typedef struct	s_cursors
 	t_pos term;
 }				t_cursors;
 
-extern char		*buselect;
-extern char		*bucopy;
+extern char		*g_buselect;
+extern char		*g_bucopy;
 
 void			sh_cursor_position(t_pos *cursor);
 int				sh_reader(char **command, t_hist *hist);
@@ -81,7 +81,7 @@ int				sh_cursor_forward(int i, int pointer,
 									t_pos cursor, t_pos term);
 int				sh_outc(int c);
 int				sh_echo_input(char **command, char *buf, int i, t_hist *hist);
-void			sh_tty_cbreak(int code);
+void			sh_tty_cbreak(int code, struct termios orig_termios);
 void			reset_selection(char **commmand, int i, t_hist *hist);
 char			*sh_delete_last(char *command, int i);
 char			*sh_insert_char(char *command, char *buf, int i);

@@ -39,7 +39,7 @@ t_token	*find_token_by_key_until(t_token *tok_begin, t_token *tok_end, t_toktype
 	return ((tok_begin) ? tok_begin : 0);
 }
 
-t_token	*create_token(t_toktype type, const char *content)
+t_token	*create_token(t_toktype type, int index, const char *content)
 {
 	t_token	*tok;
 
@@ -50,12 +50,13 @@ t_token	*create_token(t_toktype type, const char *content)
 	if (!(tok->content = dupfilsdup(content)) && content)
 		exit(ERROR_MALLOC);
 	tok->type = type;
+	tok->index = index;
 	tok->sub = 0;
 	tok->next = 0;
 	return (tok);	
 }
 
-t_token	*create_token_n(t_toktype type, const char *content, int n)
+t_token	*create_token_n(t_toktype type, int index, const char *content, int n)
 {
 	t_token	*tok;
 
@@ -64,6 +65,7 @@ t_token	*create_token_n(t_toktype type, const char *content, int n)
 	if (!(tok->content = ft_strndup(content, n)))
 		exit(ERROR_MALLOC);
 	tok->type = type;
+	tok->index = index;
 	tok->sub = 0;
 	tok->next = 0;
 	return (tok);	
