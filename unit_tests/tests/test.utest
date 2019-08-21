@@ -1,0 +1,64 @@
+test -z '' ; echo $?
+test -z 'alala' ; echo $?
+test -d '/tmp' ; echo $?
+test -d '/tmp/johnsnow' ; echo $?
+test -e '/tmp' ; echo $?
+test -e '/tmp/hghgghfhgfhgcb' ; echo $?
+test -f '/tmp' ; echo $?
+test -f '/tmp/hghgghfhgfhgcb' ; echo $?
+test -b '/tmp' ; echo $?
+test -b '/tmp/hghgghfhgfhgcb' ; echo $?
+test -f '/tmp' ; echo $?
+test -f '/tmp/hghgghfhgfhgcb' ; echo $?
+test 'abc' = 'abc' ; echo $?
+test 'abcd' = 'abc' ; echo $?
+test 'abc' != 'abc' ; echo $?
+test 'abcd' != 'abc' ; echo $?
+test 42 -eq 42 ; echo $?
+test 101 -eq 42 ; echo $?
+test 42 -ne 42 ; echo $?
+test 101 -ne 42 ; echo $?
+test 42 -ge 42 ; echo $?
+test 101 -ge 42 ; echo $?
+test 19 -ge 42 ; echo $?
+test 42 -gt 42 ; echo $?
+test 101 -gt 42 ; echo $?
+test 19 -gt 42 ; echo $?
+test 42 -le 42 ; echo $?
+test 101 -le 42 ; echo $?
+test 19 -le 42 ; echo $?
+test 42 -lt 42 ; echo $?
+test 101 -lt 42 ; echo $?
+test 19 -lt 42 ; echo $?
+test ! -z '' ; echo $?
+test ! -z 'alala' ; echo $?
+test ! -d '/tmp' ; echo $?
+test ! -d '/tmp/johnsnow' ; echo $?
+test ! -e '/tmp' ; echo $?
+test ! -e '/tmp/hghgghfhgfhgcb' ; echo $?
+test ! -f '/tmp' ; echo $?
+test ! -f '/tmp/hghgghfhgfhgcb' ; echo $?
+test ! -b '/tmp' ; echo $?
+test ! -b '/tmp/hghgghfhgfhgcb' ; echo $?
+test ! -f '/tmp' ; echo $?
+test ! -f '/tmp/hghgghfhgfhgcb' ; echo $?
+test ! 'abc' = 'abc' ; echo $?
+test ! 'abcd' = 'abc' ; echo $?
+test ! 'abc' != 'abc' ; echo $?
+test ! 'abcd' != 'abc' ; echo $?
+test ! 42 -eq 42 ; echo $?
+test ! 101 -eq 42 ; echo $?
+test ! 42 -ne 42 ; echo $?
+test ! 101 -ne 42 ; echo $?
+test ! 42 -ge 42 ; echo $?
+test ! 101 -ge 42 ; echo $?
+test ! 19 -ge 42 ; echo $?
+test ! 42 -gt 42 ; echo $?
+test ! 101 -gt 42 ; echo $?
+test ! 19 -gt 42 ; echo $?
+test ! 42 -le 42 ; echo $?
+test ! 101 -le 42 ; echo $?
+test ! 19 -le 42 ; echo $?
+test ! 42 -lt 42 ; echo $?
+test ! 101 -lt 42 ; echo $?
+test ! 19 -lt 42 ; echo $?
