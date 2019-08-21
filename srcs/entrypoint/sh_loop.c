@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 15:09:52 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/22 00:56:40 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ int		sh_loop(void)
 	//ask_for_extern_terminal(p);
 	hist = init_history();
 	int	complete;
-	while (42)
+	p->exit = 0;
+	while (!p->exit)
 	{
 		sh_prompt();
 		ln_tab = NULL;

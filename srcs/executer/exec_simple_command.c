@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/21 05:27:43 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/22 00:55:14 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -564,7 +564,11 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 	else if (!ft_strcmp(cmd, "unalias"))
 		return (&sh_unalias);
 	else if (!ft_strcmp(cmd, "exit"))
-		sh_exitpoint();
+	{
+		sh()->abort_cmd = 1;
+		sh()->exit = 1;
+		//return what?
+	}
 	return (NULL);
 }
 
