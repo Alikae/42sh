@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 23:07:41 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/21 04:31:44 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,6 @@ C_FILES_command_line = \
 
 C_FILES_history = \
 	sh_get_next_line.c \
-	sh_tab_realloc.c \
 	sh_21_history.c \
 	sh_cursor_history.c \
 	sh_strnjoin.c
@@ -92,7 +91,9 @@ C_FILES_builtins = \
 	sh_unset.c \
 	sh_set.c \
 	sh_cd.c \
-	sh_true.c
+	sh_true.c \
+	sh_alias.c \
+	sh_unalias.c
 
 C_FILES_tools = \
 	sh_tab_fusion.c \

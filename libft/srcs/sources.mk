@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/09 23:13:42 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/21 05:25:39 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,7 +100,9 @@ C_FILES_str = \
 
 C_FILES_tab_str = \
 	ft_tab_strdel.c \
-	ft_free_tabstr.c
+	ft_free_tabstr.c \
+	sh_tab_realloc.c \
+	ft_tab_strdup.c
 
 C_FILES_print = \
 	ft_putchar.c \
