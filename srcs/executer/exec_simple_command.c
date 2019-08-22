@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 00:55:14 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/22 04:43:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,6 +382,7 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 		{
 			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > 0)
 			{
+				if (token_begin->content[0] ==)
 				push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
 				nb_redirections++;
 			}
@@ -620,6 +621,7 @@ void	generate_redirections_builtins(t_sh *p)
 
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
+	//Special signals stuff?
 	int ret;
 
 	//NO FORK!!!!!!!!!
@@ -689,6 +691,7 @@ void	restore_before_assigns(t_sh *p)
 	p->tmp_assign_lst = 0;
 }
 
+//!!debug
 void	print_assign(t_sh *p)
 {
 	t_env	*a;
@@ -701,6 +704,20 @@ void	print_assign(t_sh *p)
 	}
 }
 
+int		handle_no_cmd_name(t_sh *p)
+{
+	t_env	*assign;
+
+	assign = p->assign_lst;
+	while (assign)
+	{
+		sh_setenv(assign->key, assign->value);
+		assign = assign->next;
+	}
+	//free_allstuff
+	return (0);
+}
+
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
@@ -711,11 +728,9 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	//if (!token_begin)
-		//no_cmd_name;
-	//Expand_words+retokenize
-	//if (!token_begin)//(after retok)
-		//no_cmd_name;
+	//Expand_words+expand_alias_cmd_name+retokenize
+	if (!token_begin)//(after retok)
+		return (handle_no_cmd_name(p));
 	handle_assigns(p);
 	//if (token_begin->type == SH_FUNC)
 	//	store_func();
@@ -730,7 +745,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	remove_opened_files(p);
 	////print_redirections(p, p->redirect_lst);
-	print_assign(p);
+	////print_assign(p);
 	restore_before_assigns(p);
 	del_n_assign_lst(p, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:21:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2018/11/09 21:21:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/22 01:31:36 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(char const *str)
 {
 	size_t i;
 
+	if (!str)
+		return (0);
 	i = 0;
 	while (str[i])
 		i++;

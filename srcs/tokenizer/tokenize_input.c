@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 06:33:28 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/22 04:40:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,9 @@ t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype ty
 		return (read_here_doc(t, p_actual, type)); //can also be detected in treat_word
 	forward_blanks(t);
 	word_begin = t->i;
-	//if is io
-	//	->fd
 	if (!read_n_skip_word(t))
 	{
-		printf("%s\n", t->input + t->i);
+		//printf("%s\n", t->input + t->i);
 		if (!t->input[t->i])
 			sh()->unfinished_cmd = 1;
 		else
@@ -162,11 +160,8 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	(*p_actual)->next = create_token_n(SH_FUNC, name_begin, t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
 	t->i = word_begin;
-	if (((int)((*p_actual)->sub = tokenize_compound(t, type, word_begin))) == SH_SYNTAX_ERROR)
-	{
-		//free all
+	if (!((*p_actual)->sub = tokenize_compound(t, type, word_begin)));
 		return (SH_SYNTAX_ERROR);
-	}
 	//tokenize optional IO to exec when executing the func (yo() {echo yo } 1>/dev/null;)
 	return (0);
 }
@@ -189,11 +184,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 	int			len;
 
 	if ((len = is_io_nb(t)))
-	{
-		if (treat_redirection(t, p_actual, len) == SH_SYNTAX_ERROR)
-			return (SH_SYNTAX_ERROR);
-		return (0);
-	}
+		return (treat_redirection(t, p_actual, len));
 	word_begin = t->i;
 	if (read_n_skip_word(t))
 	{
@@ -202,7 +193,6 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 			t->i += len;
 			return (tokenize_function(t, p_actual, word_begin));
 		}
-		//	treat_function_def
 		if ((type = word_is_actual_terminator(t->input + word_begin, t->i - word_begin, actual_compound)) && t->word_nb == 1)
 			return (type);
 		if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin, t->i - word_begin)))
@@ -252,7 +242,7 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		treat_input(t, actual_compound, terminator, &actual);
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
-		//free all
+		//free ast
 		return (0);
 	}
 	actual = origin->next;

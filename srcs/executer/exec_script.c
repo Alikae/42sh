@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 23:15:48 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/22 03:21:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,20 +108,44 @@ void	handle_bang(t_token **p_token_begin, int *bang)
 	}
 }
 
+void	print_cmd(const char *input, int m, int n)
+{
+	ft_putchar('[');
+	ft_putnbr(m);
+	ft_putchar('[');
+	ft_putnbr(n);
+	while (input[m] && (m <= n || n == -1))
+	{
+		ft_putchar(input[m]);
+		m++;
+	}
+	ft_putchar(']');
+}
+
+//Put pipeline in jobs, name delimited by token->index;
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
+	//If no pipeline, builtin exec locally (cd ; echo lala | cd ;) will give different results
 	int		bang;
 	int		next_pipe_fd;
 	t_token	*next_separator;
+	int indexb, indexe;
 
+	indexb = token_begin->index;
+	indexe = (token_end) ? token_end->index : -1;
+	//print_cmd(p->cmd, indexb, indexe);
 	handle_bang(&token_begin, &bang);
 	next_pipe_fd = 0;
+	//if (no pipe)
+	//	exec_locally
 	while (token_begin && !p->abort_cmd && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
 	{
 		dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
 		next_pipe_fd = exec_command_to_pipe(p, token_begin, next_separator, next_pipe_fd);//
 		token_begin = next_separator->next;
 	}
+	if (p->abort_cmd)
+		return /*FREE ALL*/;
 	dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
 	if (next_pipe_fd)
 		push_redirect_lst(&p->redirect_lst, 0, next_pipe_fd);
@@ -129,6 +153,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	p->lldbug = 1;
 	//
 	p->pipein = next_pipe_fd;
+	//if was_piped, exec_in_background?
 	p->last_cmd_result = exec_command(p, token_begin, token_end);//
 	if (next_pipe_fd)
 		del_n_redirect_lst(&p->redirect_lst, 1);
