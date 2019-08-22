@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 00:29:34 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/21 04:17:29 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/22 02:54:01 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,24 @@
 #define F_PRINT 1
 
 char			**g_aliases = NULL;
+
+static int		replace_alias(char **g_aliases, char *key)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (key[i] != '=')
+		i++;
+	while (g_aliases && g_aliases[j] && ft_strncmp(g_aliases[j], key, i))
+		j++;
+	if (!g_aliases || !g_aliases[j])
+		return (0);
+	ft_memdel((void**)&g_aliases[j]);
+	g_aliases[j] = ft_strdup(key);
+	return (1);
+}
 
 static int		print_alias(char flag, char *alias)
 {
@@ -64,19 +82,17 @@ static int		process(int i, char **av, char flag)
 	j = 0;
 	while (av[i])
 	{
-		if ((test = ft_strchr(av[i], '=')))
+		if ((test = ft_strchr(av[i], '=')) && av[i][0] != '=')
 		{
-			if (!(g_aliases = tab_realloc(g_aliases, av[i])))
-				return (0);
+			if (!replace_alias(g_aliases, av[i]))
+				if (!(g_aliases = tab_realloc(g_aliases, av[i])))
+					return (0);
 			if (flag & F_PRINT)
 				print_alias(flag, av[i]);
 			test = NULL;
 		}
-		else
-		{
-			if (!(list_aliases(flag, av[i])))
-				k = 0;
-		}
+		else if (!(list_aliases(flag, av[i])))
+			k = 0;
 		i++;
 	}
 	return (k);
