@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/09 23:08:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/22 15:07:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_opt	*sh_getopt(int *ac, char ***av, char *optstr)
 		else
 		{
 			if (!(tmp->next = sh_create_opt((**av)[i], arg)))
-				break;
+				break ;
 			tmp = tmp->next;
 		}
 	}

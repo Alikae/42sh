@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 04:43:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/22 13:07:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,7 +382,7 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 		{
 			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > 0)
 			{
-				if (token_begin->content[0] ==)
+				//if (token_begin->content[0] ==)
 				push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
 				nb_redirections++;
 			}

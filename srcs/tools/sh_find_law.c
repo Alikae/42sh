@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_find_law.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/22 15:10:03 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/22 15:14:19 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 char	*sh_find_law(struct stat sb)
 {
 	int		i;
@@ -6,8 +18,8 @@ char	*sh_find_law(struct stat sb)
 	if (!(law = malloc(sizeof(char) * 10)))
 		exit(-1);
 	law[9] = '\0';
-	i = 0;
-	while (i <= 8)
+	i = -1;
+	while (++i <= 8)
 	{
 		if (((sb.st_mode & S_IRUSR) && i == 0)
 				|| ((sb.st_mode & S_IRGRP) && i == 3)
@@ -23,7 +35,6 @@ char	*sh_find_law(struct stat sb)
 			law[i] = 'x';
 		else
 			law[i] = '-';
-		i++;
 	}
 	return (law);
 }

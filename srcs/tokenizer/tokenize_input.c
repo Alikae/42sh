@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 04:40:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/22 13:06:47 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	(*p_actual)->next = create_token_n(SH_FUNC, name_begin, t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
 	t->i = word_begin;
-	if (!((*p_actual)->sub = tokenize_compound(t, type, word_begin)));
+	if (!((*p_actual)->sub = tokenize_compound(t, type, word_begin)))
 		return (SH_SYNTAX_ERROR);
 	//tokenize optional IO to exec when executing the func (yo() {echo yo } 1>/dev/null;)
 	return (0);

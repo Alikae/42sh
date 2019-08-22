@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 03:46:45 by tcillard          #+#    #+#             */
-/*   Updated: 2019/07/11 05:43:52 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/22 15:07:17 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*sh_tab_fusion(char **tab)
 	i = 0;
 	j_str = 0;
 	if (!(str = malloc(sizeof(char) * sh_tab_size(tab) + 1)))
-		exit (ERROR_MALLOC);
+		exit(ERROR_MALLOC);
 	while (tab[i])
 	{
 		j = 0;

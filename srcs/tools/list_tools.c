@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 16:34:51 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/11 22:14:43 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/22 15:08:48 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,42 @@
 #include "libft.h"
 #include "sh_tools.h"
 
-t_envp		    *lst_addelem(t_envp *next)
+t_envp	*lst_addelem(t_envp *next)
 {
 	t_envp	*elem;
 
 	if (!(elem = (t_envp *)malloc(sizeof(t_envp))))
 		return (NULL);
-    elem->key = NULL;
-    elem->value = NULL;
+	elem->key = NULL;
+	elem->value = NULL;
 	elem->next = next;
 	return (elem);
 }
 
-t_envp          *lst_chr(t_envp *list, char *str)
+t_envp	*lst_chr(t_envp *list, char *str)
 {
-    while (list->next)
-    {
-        if (!ft_strcmp(list->key, str))
-            return (list);
-        list = list->next;
-    }
-    return (NULL);
+	while (list->next)
+	{
+		if (!ft_strcmp(list->key, str))
+			return (list);
+		list = list->next;
+	}
+	return (NULL);
 }
 
-void		    lst_del(t_envp **list)
+void	lst_del(t_envp **list)
 {
 	if (list)
 	{
 		if ((*list)->next)
 			lst_del(&((*list)->next));
-        ft_strdel(&((*list)->key));
-        ft_strdel(&((*list)->value));
+		ft_strdel(&((*list)->key));
+		ft_strdel(&((*list)->value));
 		ft_memdel((void **)list);
 	}
 }
 
-t_envp			*lst_last(t_envp *list)
+t_envp	*lst_last(t_envp *list)
 {
 	if (!list)
 		return (NULL);
@@ -60,7 +60,7 @@ t_envp			*lst_last(t_envp *list)
 	return (list);
 }
 
-size_t			lst_size(t_envp *list)
+size_t	lst_size(t_envp *list)
 {
 	int		count;
 
