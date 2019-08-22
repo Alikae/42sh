@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/12 18:20:18 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/21 05:21:37 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef	struct	s_opt
 }				t_opt;
 
 char			**ft_free_tabstr(char **tab_tofree);
+char			**ft_tab_strdup(char **tabl);
+char			**tab_realloc(char **tabl, char *line);
 
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *s);

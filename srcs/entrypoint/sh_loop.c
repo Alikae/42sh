@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 15:09:52 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/22 05:36:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ int		sh_loop(void)
 	t_hist	*hist;
 	t_sh	*p;
 	char	*input;
+	int	complete;
 
 	p = sh();
-	//ask_for_extern_terminal(p);
 	hist = init_history();
-	int	complete;
-	while (42)
+	p->exit = 0;
+	while (!p->exit)
 	{
 		sh_prompt();
 		ln_tab = NULL;
@@ -108,7 +108,7 @@ int		sh_loop(void)
 			input = ft_strjoin_free(input, ln_tab, input);
 			//printf("%i - %s -\n", strlen(input), input);
 			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
-			free (ln_tab);
+			free(ln_tab);
 			p->unfinished_cmd = 0;
 			p->invalid_cmd = 0;
 			p->cmd = input;
@@ -117,12 +117,15 @@ int		sh_loop(void)
 				print_all_tokens(p, p->ast, 0);
 				p->abort_cmd = 0;
 				exec_script(p, p->ast, 0);
+				//printf("Script executed\n");
 			}
+			//free(/*ast*/);
 			if (p->invalid_cmd)
 				break;
 			if (!p->unfinished_cmd)
 				complete = 1;
 		}
+		//
 		free(input);
 	}
 	push_history(hist);

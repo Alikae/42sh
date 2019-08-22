@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 06:28:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/22 00:59:27 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "redirections.h"
 # include "t_token.h"
 # include "libft.h"
+
+
+extern	char		**g_aliases;
 
 typedef struct		s_open_file
 {
@@ -56,6 +59,7 @@ typedef struct		s_sh
 	int				unfinished_cmd;
 	int				invalid_cmd;
 	int				abort_cmd;
+	int				exit;
 
 	int	lldbug;
 	char *cmd;

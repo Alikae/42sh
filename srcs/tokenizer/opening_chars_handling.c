@@ -6,12 +6,16 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:38:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/06/15 23:56:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/22 04:42:19 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_token.h"
 #include "libft.h"
+
+//
+//				IS It GOOD ???
+//
 
 t_toktype	is_opening_char(t_tokenize_tool *t)
 {
