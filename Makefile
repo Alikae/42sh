@@ -6,12 +6,12 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 14:46:55 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/22 22:34:40 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := 42sh
-PROJECT := 42SH
+NAME := 21sh
+PROJECT := 21SH
 AUTHORS := Ede-ram Tcillard Thdelmas Tmeyer
 
 RM = /bin/rm
@@ -78,7 +78,6 @@ CC = gcc
 DEBUG_FLAGS = -g3
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
-		 $(DEBUG_FLAGS) \
 		 -Wall -Werror -Wextra
 
 LFLAGS = -ltermcap \
@@ -105,14 +104,14 @@ $(OBJ_DIR): | mkdir_msg
 
 ### Compilation ###
 .ONESHELL:
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
+	@$(CC) $(CFLAGS) -o $@ -c $<
 	@printf "$(BBLUE)$(@F)$(CLEAR) "
 
 ### Link ###
 .ONESHELL:
-$(NAME): $(OBJ_DIR) $(OBJ) $(INC) Makefile $(FT_DIR)/libft.a | link_msg
-	$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
+$(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg
+	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
 	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
 
 ### Clean ###
