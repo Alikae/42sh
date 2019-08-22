@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 04:29:37 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/22 00:59:25 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/22 02:54:03 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ static char		**delete_a_line(char **aliases, int index)
 		ft_memdel((void**)&aliases[k]);
 	}
 	new = ft_tab_strdup(aliases);
+	aliases = ft_free_tabstr(g_aliases);
 	return (new);
 }
-#include <stdio.h>
+
 static int		process(int i, char **av, char flag)
 {
 	int j;
@@ -103,8 +104,6 @@ int			sh_unalias(int ac, char **av, t_env **ev)
 			break ;
 		i++;
 	}
-	if (flag & F_ALL)
-		fprintf(stderr, "YESS\n");
 	(void)ac;
 	(void)ev;
 	if (!av[i] && !(flag & F_ALL))
