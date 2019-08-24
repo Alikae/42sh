@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/21 04:31:44 by tmeyer           ###   ########.fr        #
+#    Updated: 2019/08/22 14:59:25 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,14 @@ C_FILES_parameters = \
 	sh_unsetenv.c \
 	sh_set_pwd.c \
 	sh_isset.c \
+	#sh_init_var.c \
+	#sh_get_env.c \
+	#sh_set_env.c \
+	#sh_set_value.c \
+	#sh_get_value.c \
+	#sh_set_shlvl.c \
+	#sh_print_env.c \
+	#sh_fill_env.c \
 
 C_FILES_command_edition = \
 	sh_command_functions.c \
@@ -90,6 +98,7 @@ C_FILES_builtins = \
 	sh_false.c \
 	sh_unset.c \
 	sh_set.c \
+	sh_test.c \
 	sh_cd.c \
 	sh_true.c \
 	sh_alias.c \
@@ -102,19 +111,6 @@ C_FILES_tools = \
 	sh_error_path.c \
 	#sh_find_law.c
 	#sh_add_to_path.c
-
-C_FILES_env = \
-	
-	#sh_init_env.c \
-	sh_init_var.c \
-	sh_get_env.c \
-	sh_set_env.c \
-	sh_set_value.c \
-	sh_get_value.c \
-	sh_set_pwd.c \
-	sh_set_shlvl.c \
-	sh_print_env.c \
-	sh_fill_env.c \
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 04:23:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/22 13:07:09 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "sh.h"
 
 #include <stdio.h>
+t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len);
 
 t_toktype	read_n_skip_operator_4(t_tokenize_tool *t)
 {

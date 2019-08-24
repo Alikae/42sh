@@ -6,10 +6,10 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/20 13:45:30 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/20 18:04:57 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-#!/bin/bash
+#!/bin/sh
 
 readonly UT_dir="./unit_tests"
 readonly UT_log_dir="$UT_dir/logs"

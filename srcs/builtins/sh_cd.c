@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 14:54:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/20 18:08:26 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int			sh_cd(int ac, char **av, t_env **ev)
 			if (!(av[1][0] == '-' && !av[1][1] && (np = sh_getenv("OLDPWD"))))
 				np = ft_strdup(av[1]);
 		}
-		else if ((pwd = sh_getenv("HOME")) && pwd[5])
+		else if ((pwd = sh_getenv("HOME")))
 		{
-			np = ft_strdup(pwd + 5);
+			np = ft_strdup(pwd);
 		}
 		else
 		{
