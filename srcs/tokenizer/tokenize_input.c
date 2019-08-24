@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 04:40:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/24 22:50:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,17 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	read_n_skip_word(t);
 	(*p_actual)->next = create_token_n(SH_FUNC, name_begin, t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
+	(*p_actual)->sub = create_token(SH_GROUP, 0, 0);
 	t->i = word_begin;
-	if (!((*p_actual)->sub = tokenize_compound(t, type, word_begin)));
+	if (!((*p_actual)->sub->sub = tokenize_compound(t, type, word_begin)))
 		return (SH_SYNTAX_ERROR);
-	//tokenize optional IO to exec when executing the func (yo() {echo yo } 1>/dev/null;)
+	//tokenize optional IO to exec when executing the func (yo() {echo yo } 1>/dev/null;) in (*p_actual)->sub
+	//
+	//token_func(name)
+	//|
+	//--redirections
+	//|
+	//compound
 	return (0);
 }
 
@@ -242,7 +249,7 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		treat_input(t, actual_compound, terminator, &actual);
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
-		//free ast
+		free_ast(origin);
 		return (0);
 	}
 	actual = origin->next;
@@ -250,7 +257,7 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 	return (actual);
 }
 
-t_token		*tokenize_input(const char *input) //set p->container_stack && p->syntax_error
+t_token		*tokenize_input(const char *input)
 {
 	t_token			*ast;
 	t_toktype		terminator;

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 04:43:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/24 17:31:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,9 +382,13 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 		{
 			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > 0)
 			{
-				if (token_begin->content[0] ==)
-				push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
-				nb_redirections++;
+				if (token_begin->content[0] == '&')
+				{}
+				else
+				{
+					push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
+					nb_redirections++;
+				}
 			}
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
@@ -479,11 +483,12 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		fd_in = ft_atoi(token->content);
 	if (str_isnum(token->sub->content))
 		fd_out = ft_atoi(token->sub->content);
-	else if (!(fd_out = create_open_file(p, token->sub->content, token->type) > 0))
+	else if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > 0))
 	{
 		dprintf(p->debug_fd, "redirection error in %s\n", token->content);
 		return ;
 	}
+	dprintf(p->debug_fd, "fd_out = %i\n", fd_out);
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
 
@@ -742,7 +747,11 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_builtin(p, f);
 	else
 		ret = exec_prgm(p, token_begin, token_end);
+	dprintf(p->debug_fd, "then\n");
+	print_redirections(p, p->redirect_lst);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+	dprintf(p->debug_fd, "then\n");
+	print_redirections(p, p->redirect_lst);
 	remove_opened_files(p);
 	////print_redirections(p, p->redirect_lst);
 	////print_assign(p);
