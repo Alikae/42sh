@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 14:57:02 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/24 23:26:31 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ void	sh_init(t_sh *shell)
 	//MERGE?
 	shell->opt = NULL;
 	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
+	free(opts);//To pass static?
 		shell->pipe_lst = 0;
 		//
 	shell->last_cmd_result = 0;

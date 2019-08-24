@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 22:57:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/24 23:29:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,8 +264,10 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 		dprintf(p->debug_fd, "try path %s\n", real_path);
 		if (!(ret = lstat(real_path, &st)))
 			break ;
+		free(real_path);
 		//dprintf(p->debug_fd, "path error %i\n", errno);
 	}
+	ft_free_tabstr(paths);
 	if (ret)
 	{
 		printf("--%s not found\n", path);
@@ -723,6 +725,11 @@ int		handle_no_cmd_name(t_sh *p)
 	return (0);
 }
 
+
+//$hello
+//
+//echo ls && ls;
+
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
@@ -730,6 +737,11 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	ret;
 	int		(*f)(int ac, char **av, t_env **ev);
 
+	//v VERIFY
+	//if expand_word -> syntax_token
+	//	exec_script new-token
+	//	abort_cmd = true
+	//return;
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;

@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/07 14:31:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/09 23:13:00 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/24 23:34:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ char	**ft_free_tabstr(char **tab)
 
 	i = 0;
 	while (tab && tab[i])
-	{
-		free(tab[i]);
-		tab[i++] = NULL;
-	}
+		free(tab[i++]);
 	free(tab);
 	tab = NULL;
 	return (tab);

@@ -76,3 +76,12 @@ void	delete_token(t_token *tok)
 	free(tok->content);
 	free(tok);
 }
+
+void	free_ast(t_token *origin)
+{
+	if (!origin)
+		return ;
+	free_ast(origin->sub);
+	free_ast(origin->next);
+	delete_token(origin);
+}
