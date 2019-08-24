@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/22 14:59:25 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/24 17:08:30 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,6 +95,7 @@ C_FILES_debug_mode = \
 
 C_FILES_builtins = \
 	sh_env.c \
+	sh_export.c \
 	sh_false.c \
 	sh_unset.c \
 	sh_set.c \
