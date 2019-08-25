@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 23:29:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/25 19:43:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -559,8 +559,12 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_true);
 	else if (!ft_strcmp(cmd, "cd"))
 		return (&sh_cd);
+	else if (!ft_strcmp(cmd, "echo"))
+		return (&sh_echo);
 	else if (!ft_strcmp(cmd, "env"))
 		return (&sh_env);
+	else if (!ft_strcmp(cmd, "export"))
+		return (&sh_export);
 	else if (!ft_strcmp(cmd, "false"))
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))
@@ -571,6 +575,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_alias);
 	else if (!ft_strcmp(cmd, "unalias"))
 		return (&sh_unalias);
+	else if (!ft_strcmp(cmd, "readonly"))
+		return (&sh_readonly);
 	else if (!ft_strcmp(cmd, "exit"))
 	{
 		sh()->abort_cmd = 1;

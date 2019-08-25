@@ -40,6 +40,7 @@ typedef enum	e_toktype
 	SH_IN,
 	SH_FUNC,
 	SH_SUBSH, 		// ( )
+	SH_SUBSH_END, 		//  )
 	SH_SUBSH_EXP,	// $( )
 	SH_PARAM_EXP,	// ${ }
 	SH_ARITH_EXP,	// $(( ))

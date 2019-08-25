@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 23:12:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/25 22:17:10 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int		sh_loop(void)
 	{
 		sh_prompt();
 		ln_tab = NULL;
-		int dbug = 0;
+		int dbug = sh()->debug;
 		complete = 0;
 		input = 0;
 		while (!complete)
@@ -96,6 +96,9 @@ int		sh_loop(void)
 				//		ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ; esac");
 				//	ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
 				ln_tab = ft_strdup("LSCOLORS=lala ls -g");
+				ln_tab = ft_strdup("cat |");
+				ln_tab = ft_strdup("echo (PUSH SUR TA PUTAIN DE BRANCHE)");
+				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;
 			//	while (ln_tab[z])
