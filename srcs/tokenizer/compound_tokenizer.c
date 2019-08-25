@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/24 17:12:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/25 04:49:22 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -542,7 +542,35 @@ t_token	*tokenize_braces(t_tokenize_tool *t, int word_begin)
 		return (handle_syntax_error(t, "missing ending BRACE", compound));
 	}
 	return (compound);
+}
 
+t_token	*tokenize_subshell(t_tokenize_tool *t, int word_begin)
+{
+	t_token		*compound;
+	t_toktype	terminator;
+
+	compound = create_token(SH_SUBSH, word_begin, 0);
+	if (!(compound->sub = recursive_tokenizer(t, SH_SUBSH, &terminator)))
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
+		return (handle_syntax_error(t, "missing exec block in SUBSHELL", compound));
+	}
+	if (terminator != SH_SUBSH_END)
+	{
+		if (!t->input[t->i])
+		{
+			sh()->unfinished_cmd = 1;
+			return (0);
+		}
+		sh()->invalid_cmd = 1;
+		return (handle_syntax_error(t, "missing ending ')'", compound));
+	}
+	return (compound);
 }
 
 t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
@@ -560,6 +588,8 @@ t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
 		compound = tokenize_case(t, word_begin);
 	else if (type == SH_FOR)
 		compound = tokenize_for(t, word_begin);
+	else if (type == SH_SUBSH)
+		compound = tokenize_subshell(t, word_begin);
 	else
 		compound = tokenize_braces(t, word_begin);
 	t->word_nb = tmp + 1;

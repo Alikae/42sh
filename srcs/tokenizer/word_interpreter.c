@@ -5,7 +5,8 @@ int			is_compound(t_toktype type)
 {
 	if (type == SH_WHILE || type == SH_UNTIL
 			|| type == SH_IF || type == SH_FOR
-			|| type == SH_CASE || type == SH_BRACES)
+			|| type == SH_CASE || type == SH_BRACES
+			|| type == SH_SUBSH)
 		return (1);
 	return (0);
 }
@@ -51,6 +52,11 @@ t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_
 		if (!ft_strncmp(word, "esac", len))
 			return (SH_ESAC);
 	}
+	if (actual_compound == SH_SUBSH)
+	{
+		if (!ft_strncmp(word, ")", len))
+			return (SH_SUBSH_END);
+	}
 	return (0);
 }
 
@@ -64,6 +70,10 @@ t_toktype	word_is_reserved_2(const char *word, int len)
 		return (SH_IN);
 	else if (len == 1 && !ft_strncmp(word, "{", len))
 		return (SH_BRACES);
+	else if (len == 1 && !ft_strncmp(word, "(", len))
+		return (SH_SUBSH);
+	else if (len == 1 && !ft_strncmp(word, ")", len))
+		return (SH_SUBSH_END);
 	return (0);
 }
 

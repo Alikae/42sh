@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 22:56:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/25 04:49:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int			is_word_char(char c) // exhaustive? all operators
 	if (c == '\n' || c == '<'
 			|| c == '>' || c == '&'
 			|| c == '|' || c == ' '
-			|| c == '\t' || c == ';')
+			|| c == '\t' || c == ';'
+			|| c == '(' || c == ')')
 		return (0);
 	return (1);
 }
@@ -32,6 +33,11 @@ int			read_n_skip_word(t_tokenize_tool *t)
 	int	n;
 	int	tmp;
 
+	if (t->input[t->i] == '(' || t->input[t->i] == ')')
+	{
+		t->i++;
+		return (1);
+	}
 	escaped = 0;
 	n = 0;
 	while (t->input[t->i])
@@ -45,7 +51,7 @@ int			read_n_skip_word(t_tokenize_tool *t)
 		tmp = t->i;
 		if (!escaped && (type = read_skip_opening_char(t)))
 		{
-			skip_ending_char(t, type);
+			skip_ending_char(t, type);//...
 			n += t->i - tmp;
 		}
 		else
@@ -179,7 +185,7 @@ int			word_out_of_context(t_toktype type)
 			|| type == SH_THEN || type == SH_ELIF
 			|| type == SH_ELSE || type == SH_FI
 			|| type == SH_DO || type == SH_DONE
-			|| type == SH_ESAC)
+			|| type == SH_ESAC || type == SH_SUBSH_END)
 		return (1);
 	return (0);
 }
@@ -195,7 +201,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 	word_begin = t->i;
 	if (read_n_skip_word(t))
 	{
-		if ((len = next_is_parenthesis(t)))
+		if (t->word_nb == 1 && (len = next_is_parenthesis(t)))
 		{
 			t->i += len;
 			return (tokenize_function(t, p_actual, word_begin));
@@ -269,6 +275,7 @@ t_token		*tokenize_input(const char *input)
 	ast = recursive_tokenizer(&tok_tool, SH_NULL, &terminator);
 	return (ast);
 }
+//INCLUDE NOTION OF NEXT_WORD_NEEDED
 
 //{
 //	while (1)
