@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 18:53:03 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/25 19:29:34 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -552,6 +552,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_true);
 	else if (!ft_strcmp(cmd, "cd"))
 		return (&sh_cd);
+	else if (!ft_strcmp(cmd, "echo"))
+		return (&sh_echo);
 	else if (!ft_strcmp(cmd, "env"))
 		return (&sh_env);
 	else if (!ft_strcmp(cmd, "export"))

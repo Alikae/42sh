@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 18:51:56 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/25 19:27:57 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	sh_readonly(int ac, char **av, t_env **ev);
 int	sh_rm(int ac, char **av, t_env **env);
 int	sh_set(int ac, char **av, t_env **ev);
 int	sh_cd(int ac, char **av, t_env **ev);
+int	sh_echo(int ac, char **av, t_env **ev);
 int	sh_true(int ac, char **av, t_env **ev);
 int	sh_check_path(char *all_path, int *error);
 int	sh_find_opt(char **av, int *i);
