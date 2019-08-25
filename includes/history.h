@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 07:36:42 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/18 00:52:08 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/25 04:36:01 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ void			sh_switch_history(t_hist *hist, char **command);
 t_hist			*put_in_history(t_hist *hist, char *str);
 t_hist			*command_history(t_hist *hist);
 int				cursor_history(char **command, char *buf, int i, t_hist *hist);
-char			**tab_realloc(char **tabl, char *line);
 int				get_next_line(const int fd, char **line);
 char			*ft_strnjoin(const char *s1, const char *s2, size_t len);
+char			**tab_realloc(char **tabl, char *line);
 char			*find_path(void);
+char			**ft_reverse_tab(char **history);
+char			**tab_insert(char **history, char *line);
 
 #endif

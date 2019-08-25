@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/25 03:55:44 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/25 04:40:40 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,65 +27,6 @@
 #include "sh.h"
 #include "libft.h"
 #include "history.h"
-
-void			sh_switch_history(t_hist *hist, char **command)
-{
-	ft_memdel((void**)&hist->current);
-	hist->current = ft_strdup(*command);
-	hist->index = -1;
-}
-
-char			*find_path(void) //USE FOR TESTS ONLY. TO BE REMOVED
-{
-	struct passwd	*pass;
-	char			*line;
-	char			*path;
-
-	pass = getpwuid(getuid());
-	line = ft_strjoin("/Users/", pass->pw_name);
-	path = ft_strjoin(line, "/.42sh_history");
-	ft_memdel((void**)&line);
-	return (path);
-}
-
-static char		**ft_reverse_tab(char **history)
-{
-	int		i;
-	int		j;
-	char	*temp;
-
-	i = 0;
-	j = 0;
-	temp = NULL;
-	if (!history)
-		return (NULL);
-	while (history[i])
-		i++;
-	i--;
-	while (i > j)
-	{
-		temp = history[j];
-		history[j++] = history[i];
-		history[i--] = temp;
-	}
-	temp = NULL;
-	return (history);
-}
-
-static char		**tab_insert(char **history, char *line)
-{
-	int i;
-
-	i = 1;
-	free(history[0]);
-	while (history[i])
-	{
-		history[i - 1] = history[i];
-		i++;
-	}
-	history[--i] = ft_strdup(line);
-	return (history);
-}
 
 static	void	init_history(t_hist *hist, char **history)
 {
@@ -145,12 +86,11 @@ t_hist			*put_in_history(t_hist *hist, char *str)
 			i++;
 		}
 		temp = ft_free_tabstr(temp);
+		hist->prev = ft_reverse_tab(hist->prev);
+		return (hist);
 	}
-	else
-	{
-		hist->prev = tab_realloc(hist->prev, str);
-		hist->topush++;
-	}
+	hist->prev = tab_realloc(hist->prev, str);
+	hist->topush++;
 	hist->prev = ft_reverse_tab(hist->prev);
 	return (hist);
 }
