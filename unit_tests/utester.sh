@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/23 00:10:58 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/25 22:47:30 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -140,15 +140,9 @@ test_custom_script () {
 			exit ;
 		fi
 		sh_utests_tests "$UT_dir/tests/$i"
-		echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m"
-		echo "\033[0;36;40m[ $UT_sh_tgt ] [ Score: $UT_test_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
+		display_result
 		break ;
 	done
-	read -p "Display result ? (y/n): " ans
-	if [ "$ans" = 'y' ]
-	then
-		cat $UT_res_file
-	fi
 	rm $test_file $cmd_file_1 $cmd_file_0 2>> "$UT_log_file"
 
 }
