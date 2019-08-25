@@ -6,12 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 02:31:12 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/25 04:46:12 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH21_CMD_EDITION_H
-# define SH21_CMD_EDITION_H
+#ifndef SH_COMMAND_EDITION_H
+# define SH_COMMAND_EDITION_H
 
 # include <termios.h>
 # include <term.h>
@@ -71,7 +71,8 @@ void			sh_cursor_position(t_pos *cursor);
 int				sh_reader(char **command, t_hist *hist);
 int				sh_cursor_motion_word(char **command, char *buf, int i,
 				t_hist *hist);
-int				sh_cursor_motion(char **command, char *buf, int i, t_hist *hist);
+int				sh_cursor_motion(char **command, char *buf,
+								int i, t_hist *hist);
 int				sh_cursor_motion_line(char **command, char *buf, int i,
 				t_hist *hist);
 int				sh_copy_option(char **command, char *buf, int i, t_hist *hist);
