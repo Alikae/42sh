@@ -6,13 +6,12 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/25 02:31:07 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/26 01:04:53 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "history.h"
 #include "sh_command_edition.h"
-#include "sh_command_line.h"
 #include "libft.h"
 
 int			sh_cursor_forward(int i, int pointer, t_pos cursor, t_pos term)
@@ -114,9 +113,12 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 		i = sh_cursor_backward(1, i, cursor, term);
 	else if (ARROW_RIGHT && command[0][i + 1] != 0)
 		i = sh_cursor_forward(1, i, cursor, term);
-	else if (BACKSPACE)
+	else if (BACKSPACE || DELETE)
 	{
-		i = sh_backspace(command, i, cursor, term);
+		if (BACKSPACE)
+			i = sh_backspace(command, i, cursor, term);
+		else if (command[0][i] != '\0' && command[0][i + 1] != '\0')
+			i = sh_delete(command, i);
 		sh_switch_history(hist, command);
 	}
 	return (i);

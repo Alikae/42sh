@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 04:46:12 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/26 01:04:50 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sys/ioctl.h>
 # include "history.h"
 # include "libft.h"
+# include "sh_command_line.h"
+
 
 # define ARROW_LEFT		(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'D')
 # define ARROW_RIGHT 	(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'C')
@@ -47,7 +49,8 @@
 # define ALT_DOWN		(buf[0] == '\033' && buf[1] == 'B')
 # define COPY			(buf[0] == '\033' && buf[1] == '<')
 # define PASTE			(buf[0] == '\033' && buf[1] == '>')
-
+# define DELETE			(buf[0] == '\033' && buf[1] == '[' && buf[2] == '3' \
+							&& buf[3] == '~')
 
 # define BUFFER			7
 # define PROMPT_LENGTH	0
@@ -80,6 +83,7 @@ int				sh_cursor_backward(int i, int pointer,
 									t_pos cursor, t_pos term);
 int				sh_cursor_forward(int i, int pointer,
 									t_pos cursor, t_pos term);
+int				sh_delete(char **command, int i);
 int				sh_outc(int c);
 int				sh_echo_input(char **command, char *buf, int i, t_hist *hist);
 void			sh_tty_cbreak(int code, struct termios orig_termios);

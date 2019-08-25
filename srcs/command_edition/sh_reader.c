@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/16 01:54:27 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/26 00:51:24 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 
 static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 {
-	if (HOME || END || ARROW_LEFT || ARROW_RIGHT || BACKSPACE)
+	if (HOME || END || ARROW_LEFT || ARROW_RIGHT || BACKSPACE || DELETE)
 		*i = sh_cursor_motion(command, buf, *i, hist);
 	else if (BACKWARD_WORD || FORWARD_WORD)
 		*i = sh_cursor_motion_word(command, buf, *i, hist);

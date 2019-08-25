@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 08:48:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/16 00:01:29 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/26 01:12:32 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include <unistd.h>
 #include "sh_command_edition.h"
 #include "libft.h"
+
+int			sh_delete(char **command, int i)
+{
+	*command = sh_delete_last(*command, i + 1);
+	tputs(tgetstr("cd", NULL), 0, sh_outc);
+	tputs(tgetstr("sc", NULL), 0, sh_outc);
+	ft_putstr_fd(&command[0][i + 1], 0);
+	tputs(tgetstr("rc", NULL), 0, sh_outc);
+	return (i);
+}
 
 void		sh_cursor_position(t_pos *cursor)
 {
