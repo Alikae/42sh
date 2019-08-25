@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/22 14:59:25 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/25 04:37:57 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ C_FILES_command_line = \
 C_FILES_history = \
 	sh_get_next_line.c \
 	sh_21_history.c \
+	sh_history_2.c \
 	sh_cursor_history.c \
 	sh_strnjoin.c
 
