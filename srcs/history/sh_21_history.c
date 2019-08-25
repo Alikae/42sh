@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/18 04:04:19 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/25 03:55:44 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,14 +128,30 @@ t_hist			*command_history(t_hist *hist)
 t_hist			*put_in_history(t_hist *hist, char *str)
 {
 	int		i;
+	char	**temp;
 
 	i = 0;
 	if (!str || !ft_strcmp(str, ""))
 		return (hist);
 	hist->prev = ft_reverse_tab(hist->prev);
-	hist->prev = tab_realloc(hist->prev, str);
+	if (ft_strchr(str, '\n'))
+	{
+		temp = ft_strsplit(str, '\n');
+		hist->prev = ft_reverse_tab(hist->prev);
+		while (temp[i])
+		{
+			hist->prev = tab_realloc(hist->prev, temp[i]);
+			hist->topush++;
+			i++;
+		}
+		temp = ft_free_tabstr(temp);
+	}
+	else
+	{
+		hist->prev = tab_realloc(hist->prev, str);
+		hist->topush++;
+	}
 	hist->prev = ft_reverse_tab(hist->prev);
-	hist->topush++;
 	return (hist);
 }
 
@@ -151,4 +167,5 @@ void			push_history(t_hist *hist)
 	while (i >= 0)
 		ft_putendl_fd(hist->prev[i--], fd);
 	close(fd);
+	hist->prev = ft_free_tabstr(hist->prev);
 }
