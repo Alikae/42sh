@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 04:49:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/26 02:38:55 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,9 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 		else
 		{
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			//if (t->word_nb == 1)
+			//	while (is_unquoted_valid_alias_name(token->content))
+			//		(*p_actual)->next = retokenize_alias((*p_actual)->next);
 			t->word_nb++;
 		}
 		*p_actual = (*p_actual)->next;

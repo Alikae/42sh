@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 19:43:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/26 02:39:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -735,6 +735,47 @@ int		handle_no_cmd_name(t_sh *p)
 //$hello
 //
 //echo ls && ls;
+//
+//
+int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
+{
+	int	nb_redirections;
+	int	nb_assign;
+	int	ret;
+	int		(*f)(int ac, char **av, t_env **ev);
+
+	//v VERIFY
+	//expand_word
+	//if expand_word -> syntax_token
+	//	exec_script new-token
+	//	abort_cmd = true
+	//return;
+	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
+	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	//Expand_words+expand_alias_cmd_name+retokenize
+	if (!token_begin)//(after retok)
+		return (handle_no_cmd_name(p));
+	handle_assigns(p);
+	//if (token_begin->type == SH_FUNC)
+	//	store_func();
+	//else if cmd name is stored in func
+	//	replace func
+	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
+	print_redirections(p, p->redirect_lst);
+	if ((f = sh_is_builtin(token_begin->content)))
+		ret = exec_builtin(p, f);
+	else
+		ret = exec_prgm(p, token_begin, token_end);
+	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+	remove_opened_files(p);
+	////print_redirections(p, p->redirect_lst);
+	////print_assign(p);
+	restore_before_assigns(p);
+	del_n_assign_lst(p, nb_assign);
+	//KILL CHILD ENV ADDED AT EACH FUNC END
+	return (ret);
+}
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
@@ -765,11 +806,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_builtin(p, f);
 	else
 		ret = exec_prgm(p, token_begin, token_end);
-	dprintf(p->debug_fd, "then\n");
-	print_redirections(p, p->redirect_lst);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-	dprintf(p->debug_fd, "then\n");
-	print_redirections(p, p->redirect_lst);
 	remove_opened_files(p);
 	////print_redirections(p, p->redirect_lst);
 	////print_assign(p);

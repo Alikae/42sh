@@ -79,9 +79,14 @@ void	delete_token(t_token *tok)
 
 void	free_ast(t_token *origin)
 {
+	t_token	*next;
+	t_token	*sub;
+
 	if (!origin)
 		return ;
-	free_ast(origin->sub);
-	free_ast(origin->next);
+	next = origin->next;
+	sub = origin->sub;
 	delete_token(origin);
+	free_ast(sub);
+	free_ast(next);
 }

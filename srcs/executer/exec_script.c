@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 03:36:29 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/26 01:50:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	ret;
 
 	//	if (token_begin->type == SH_FUNC)
-	//		tokenize_func
+	//		exec_func
 	//	else
 	if (is_compound(token_begin->type))
 	{
