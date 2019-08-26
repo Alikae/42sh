@@ -29,8 +29,8 @@ shell_trap ()
 }
 
 display_result () {
-	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_out_ok / $UT_test_num ]\033[0;0m"
-	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_out_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
+	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_err_ok / $UT_test_num ]\033[0;0m"
+	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_err_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
 	read -p "Display result ? (y/n): " ans
 	if [ "$ans" = 'y' ]
 	then

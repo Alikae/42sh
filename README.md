@@ -253,3 +253,28 @@ Made by: Ede-Ram Tcillard Tmeyer Thdelmas
 - go to a branch							:	git checkout MyBranch
 - Do your ~~shit~~ commits
 - merge BranchX to the branch where i am	:	git merge BranchX
+
+REPORT
+______
+Bad command name:		OK
+Absolute path bin exec:	OK
+Relative path bin exec:	OK
+ARGV to child forked:	OK
+ENV to child forked:	KO
+Vim || Emacs:			OK
+Empty command:			OK
+Spaced command:			OK
+Escaped newline:		KO
+Cmd separator ';':		OK
+';':					OK
+Built-in exit:			OK
+Built-in echo:
+	'echo It Works':	OK
+	'echo It Wo\crks':	OK
+	'echo It Wo\\n':	OK
+	'echo It Wo\nrks':	OK
+Built-in cd:
+	PWD:				OK
+	OLDPWD:				OK
+	'cd ':				KO
+	'cd -':				KO
