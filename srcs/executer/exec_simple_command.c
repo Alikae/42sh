@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 23:51:16 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/26 23:53:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -738,7 +738,7 @@ int		handle_no_cmd_name(t_sh *p)
 //
 //echo ls && ls;
 //
-//
+/*
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
@@ -777,7 +777,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	del_n_assign_lst(p, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
 	return (ret);
-}
+}*/
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
