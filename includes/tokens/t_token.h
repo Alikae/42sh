@@ -40,6 +40,7 @@ typedef enum	e_toktype
 	SH_IN,
 	SH_FUNC,
 	SH_SUBSH, 		// ( )
+	SH_SUBSH_END, 		//  )
 	SH_SUBSH_EXP,	// $( )
 	SH_PARAM_EXP,	// ${ }
 	SH_ARITH_EXP,	// $(( ))
@@ -99,4 +100,6 @@ t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free
 
 int			is_redirection_operator(t_toktype type);
 t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype type);
+t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len);
+void		free_ast(t_token *origin);
 #endif

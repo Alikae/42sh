@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/22 22:34:06 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/26 23:54:30 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ C_FILES_command_line = \
 C_FILES_history = \
 	sh_get_next_line.c \
 	sh_21_history.c \
+	sh_history_2.c \
 	sh_cursor_history.c \
 	sh_strnjoin.c
 
@@ -94,12 +95,15 @@ C_FILES_debug_mode = \
 
 
 C_FILES_builtins = \
+	sh_cd.c \
+	sh_echo.c \
 	sh_env.c \
+	sh_export.c \
+	sh_readonly.c \
 	sh_false.c \
 	sh_unset.c \
 	sh_set.c \
 	sh_test.c \
-	sh_cd.c \
 	sh_true.c \
 	sh_alias.c \
 	sh_unalias.c

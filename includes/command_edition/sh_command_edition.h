@@ -6,12 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/16 01:33:08 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/26 01:04:50 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH21_CMD_EDITION_H
-# define SH21_CMD_EDITION_H
+#ifndef SH_COMMAND_EDITION_H
+# define SH_COMMAND_EDITION_H
 
 # include <termios.h>
 # include <term.h>
@@ -20,6 +20,8 @@
 # include <sys/ioctl.h>
 # include "history.h"
 # include "libft.h"
+# include "sh_command_line.h"
+
 
 # define ARROW_LEFT		(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'D')
 # define ARROW_RIGHT 	(buf[0] == '\033' && buf[1] == '[' && buf[2] == 'C')
@@ -47,7 +49,8 @@
 # define ALT_DOWN		(buf[0] == '\033' && buf[1] == 'B')
 # define COPY			(buf[0] == '\033' && buf[1] == '<')
 # define PASTE			(buf[0] == '\033' && buf[1] == '>')
-
+# define DELETE			(buf[0] == '\033' && buf[1] == '[' && buf[2] == '3' \
+							&& buf[3] == '~')
 
 # define BUFFER			7
 # define PROMPT_LENGTH	0
@@ -71,7 +74,8 @@ void			sh_cursor_position(t_pos *cursor);
 int				sh_reader(char **command, t_hist *hist);
 int				sh_cursor_motion_word(char **command, char *buf, int i,
 				t_hist *hist);
-int				sh_cursor_motion(char **command, char *buf, int i, t_hist *hist);
+int				sh_cursor_motion(char **command, char *buf,
+								int i, t_hist *hist);
 int				sh_cursor_motion_line(char **command, char *buf, int i,
 				t_hist *hist);
 int				sh_copy_option(char **command, char *buf, int i, t_hist *hist);
@@ -79,6 +83,7 @@ int				sh_cursor_backward(int i, int pointer,
 									t_pos cursor, t_pos term);
 int				sh_cursor_forward(int i, int pointer,
 									t_pos cursor, t_pos term);
+int				sh_delete(char **command, int i);
 int				sh_outc(int c);
 int				sh_echo_input(char **command, char *buf, int i, t_hist *hist);
 void			sh_tty_cbreak(int code, struct termios orig_termios);

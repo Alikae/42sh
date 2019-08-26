@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 00:29:34 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/22 02:54:01 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/25 04:03:01 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@
 
 #define F_PRINT 1
 
-char			**g_aliases = NULL;
-
-static int		replace_alias(char **g_aliases, char *key)
+static int		replace_alias(char **aliases, char *key)
 {
 	int		i;
 	int		j;
@@ -27,12 +25,12 @@ static int		replace_alias(char **g_aliases, char *key)
 	j = 0;
 	while (key[i] != '=')
 		i++;
-	while (g_aliases && g_aliases[j] && ft_strncmp(g_aliases[j], key, i))
+	while (aliases && aliases[j] && ft_strncmp_n(aliases[j], key, i))
 		j++;
-	if (!g_aliases || !g_aliases[j])
+	if (!aliases || !aliases[j])
 		return (0);
-	ft_memdel((void**)&g_aliases[j]);
-	g_aliases[j] = ft_strdup(key);
+	ft_memdel((void**)&aliases[j]);
+	aliases[j] = ft_strdup(key);
 	return (1);
 }
 
@@ -56,19 +54,22 @@ static int		print_alias(char flag, char *alias)
 static int		list_aliases(char flag, char *alias)
 {
 	int i;
+	int j;
 
 	i = 0;
-	while (!alias && g_aliases && g_aliases[i])
-		print_alias(flag, g_aliases[i++]);
+	while (!alias && sh()->aliases && sh()->aliases[i])
+		print_alias(flag, sh()->aliases[i++]);
 	if (!alias)
 		return (1);
-	while (g_aliases && g_aliases[i] && ft_strcmp(g_aliases[i], alias))
+	j = ft_strlen(alias);
+	while (sh()->aliases && sh()->aliases[i]
+			&& ft_strncmp_n(sh()->aliases[i], alias, j))
 		i++;
-	if (g_aliases[i])
-		return (print_alias(flag, g_aliases[i]));
-	ft_putstr("42sh: alias: ");
-	ft_putstr(alias);
-	ft_putstr(": not found\n");
+	if (sh()->aliases && sh()->aliases[i])
+		return (print_alias(flag, sh()->aliases[i]));
+	ft_putstr_fd("42sh: alias: ", 2);
+	ft_putstr_fd(alias, 2);
+	ft_putstr_fd(": not found\n", 2);
 	return (0);
 }
 
@@ -84,8 +85,8 @@ static int		process(int i, char **av, char flag)
 	{
 		if ((test = ft_strchr(av[i], '=')) && av[i][0] != '=')
 		{
-			if (!replace_alias(g_aliases, av[i]))
-				if (!(g_aliases = tab_realloc(g_aliases, av[i])))
+			if (!replace_alias(sh()->aliases, av[i]))
+				if (!(sh()->aliases = tab_realloc(sh()->aliases, av[i])))
 					return (0);
 			if (flag & F_PRINT)
 				print_alias(flag, av[i]);

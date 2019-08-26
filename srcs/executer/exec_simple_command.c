@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 22:12:47 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/26 23:53:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,8 +264,10 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 		dprintf(p->debug_fd, "try path %s\n", real_path);
 		if (!(ret = lstat(real_path, &st)))
 			break ;
+		free(real_path);
 		//dprintf(p->debug_fd, "path error %i\n", errno);
 	}
+	ft_free_tabstr(paths);
 	if (ret)
 	{
 		printf("--%s not found\n", path);
@@ -382,9 +384,13 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 		{
 			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > 0)
 			{
-				//if (token_begin->content[0] ==)
-				push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
-				nb_redirections++;
+				if (token_begin->content[0] == '&')
+				{}
+				else
+				{
+					push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
+					nb_redirections++;
+				}
 			}
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
@@ -479,11 +485,12 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		fd_in = ft_atoi(token->content);
 	if (str_isnum(token->sub->content))
 		fd_out = ft_atoi(token->sub->content);
-	else if (!(fd_out = create_open_file(p, token->sub->content, token->type) > 0))
+	else if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > 0))
 	{
 		dprintf(p->debug_fd, "redirection error in %s\n", token->content);
 		return ;
 	}
+	dprintf(p->debug_fd, "fd_out = %i\n", fd_out);
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
 
@@ -552,8 +559,12 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_true);
 	else if (!ft_strcmp(cmd, "cd"))
 		return (&sh_cd);
+	else if (!ft_strcmp(cmd, "echo"))
+		return (&sh_echo);
 	else if (!ft_strcmp(cmd, "env"))
 		return (&sh_env);
+	else if (!ft_strcmp(cmd, "export"))
+		return (&sh_export);
 	else if (!ft_strcmp(cmd, "false"))
 		return (&sh_false);
 	else if (!ft_strcmp(cmd, "set"))
@@ -564,6 +575,10 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_alias);
 	else if (!ft_strcmp(cmd, "unalias"))
 		return (&sh_unalias);
+	else if (!ft_strcmp(cmd, "readonly"))
+		return (&sh_readonly);
+	else if (!ft_strcmp(cmd, "test"))
+		return (&sh_test);
 	else if (!ft_strcmp(cmd, "exit"))
 	{
 		sh()->abort_cmd = 1;
@@ -718,6 +733,12 @@ int		handle_no_cmd_name(t_sh *p)
 	return (0);
 }
 
+
+//$hello
+//
+//echo ls && ls;
+//
+/*
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
@@ -725,6 +746,51 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	ret;
 	int		(*f)(int ac, char **av, t_env **ev);
 
+	//v VERIFY
+	//expand_word
+	//if expand_word -> syntax_token
+	//	exec_script new-token
+	//	abort_cmd = true
+	//return;
+	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
+	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	//Expand_words+expand_alias_cmd_name+retokenize
+	if (!token_begin)//(after retok)
+		return (handle_no_cmd_name(p));
+	handle_assigns(p);
+	//if (token_begin->type == SH_FUNC)
+	//	store_func();
+	//else if cmd name is stored in func
+	//	replace func
+	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
+	print_redirections(p, p->redirect_lst);
+	if ((f = sh_is_builtin(token_begin->content)))
+		ret = exec_builtin(p, f);
+	else
+		ret = exec_prgm(p, token_begin, token_end);
+	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+	remove_opened_files(p);
+	////print_redirections(p, p->redirect_lst);
+	////print_assign(p);
+	restore_before_assigns(p);
+	del_n_assign_lst(p, nb_assign);
+	//KILL CHILD ENV ADDED AT EACH FUNC END
+	return (ret);
+}*/
+
+int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
+{
+	int	nb_redirections;
+	int	nb_assign;
+	int	ret;
+	int		(*f)(int ac, char **av, t_env **ev);
+
+	//v VERIFY
+	//if expand_word -> syntax_token
+	//	exec_script new-token
+	//	abort_cmd = true
+	//return;
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;

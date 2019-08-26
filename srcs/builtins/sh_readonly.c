@@ -1,56 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_set.c                                           :+:      :+:    :+:   */
+/*   sh_readonly.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 15:31:27 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/24 18:49:52 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/08/24 18:51:00 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "sh.h"
 #include "sh_builtins.h"
 
-int		sh_set(int ac, char **av, t_env **ev)
+int		sh_readonly(int ac, char **av, t_env **ev)
 {
 	t_env	*params;
-	int 	i;
+	int		i;
 	char	*tmp;
-	char	*tmp2;
 
-	i = 1;
-	tmp = NULL;
-	tmp2 = NULL;
-	if (!ev || !*ev)
-		return (1);
 	params = *ev;
-	if (ac <= 1)
+	i = 0;
+	if (ac == 1 || (ac == 2 && !ft_strcmp(av[1], "-p")))
 		while (params)
 		{
-			ft_putstr(params->key);
-			ft_putchar('=');
-			if (params->value)
-				ft_putstr(params->value);
-			ft_putchar('\n');
+			if (params->readonly)
+			{
+				ft_putstr("readonly ");
+				ft_putstr(params->key);
+				if (params->value)
+				{
+					write(1, "=\"", 2);
+					ft_putstr(params->value);
+					write(1, "\"", 1);
+				}
+					write(1, "\n", 1);
+			}
 			params = params->next;
 		}
 	else
-	{
-		if ((tmp = ft_strchr(av[i], '=')))
+		while (++i < ac)
 		{
-			tmp2 = ft_strndup(av[i], tmp - av[i]);
-			tmp++;
-		}
+			if ((tmp = ft_strchr(av[i], '=')))
+			{
+				tmp = ft_strndup(av[i], tmp - av[i]);
+				sh_setenv(tmp, ft_strchr(av[i], '=') + 1)->readonly = 1;
+			}
 			else
-		{
-			tmp2 = av[i];
-			if (i + 1 < ac)
-				tmp = av[i + 1];
-
+				sh_setenv(av[i], NULL)->readonly = 1;
 		}
-		sh_setenv(tmp2, tmp);
-	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/21 05:21:37 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/25 00:51:26 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int				ft_strnequ(char const *s1, char const *s2, size_t n);
 char			*ft_strsub(char const *s, unsigned int start, size_t len);
 int				ft_match(const char *s1, const char *s2);
 int				ft_nmatch(const char *s1, const char *s2);
+int				ft_strncmp_n(const char *s1, const char *s2, size_t n);
 
 int				ft_isalpha(int c);
 int				ft_islower(int c);

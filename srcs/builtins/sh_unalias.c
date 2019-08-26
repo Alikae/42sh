@@ -6,15 +6,38 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 04:29:37 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/22 02:54:03 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/25 00:29:38 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "sh_builtins.h"
 #include "sh.h"
+#include <stdio.h> //TO REMOVE
 
 #define F_ALL 1
+
+static int		prompt_error(char *key)
+{
+	ft_putstr_fd("42sh: unalias: ", 2);
+	ft_putstr_fd(key, 2);
+	ft_putstr_fd(" : not found\n", 2);
+	return (1);
+}
+
+static char		*cut_key(char *key)
+{
+	char	*test;
+	int		i;
+
+	if (!key)
+		return (NULL);
+	i = 0;
+	while (key[i] != '=')
+		i++;
+	test = ft_strndup(key, i);
+	return (test);
+}
 
 static char		**delete_a_line(char **aliases, int index)
 {
@@ -33,32 +56,32 @@ static char		**delete_a_line(char **aliases, int index)
 		ft_memdel((void**)&aliases[k]);
 	}
 	new = ft_tab_strdup(aliases);
-	aliases = ft_free_tabstr(g_aliases);
+	aliases = ft_free_tabstr(aliases);
 	return (new);
 }
 
 static int		process(int i, char **av, char flag)
 {
-	int j;
-	int k;
-	int	l;
+	int		j;
+	int		k;
+	char	*test;
 
 	k = 0;
-	if (flag & F_ALL)
-	{
-		g_aliases = ft_free_tabstr(g_aliases);
-		return (0);
-	}
-	while (av[i])
+	test = NULL;
+	while (av[i] && !(flag && F_ALL))
 	{
 		j = 0;
-		l = ft_strlen(av[i]);
-		while (g_aliases && g_aliases[j] && ft_strncmp(g_aliases[j], av[i], l))
-			i++;
-		if (!g_aliases[j])
-			k = 1;
+		while (sh()->aliases && (test = (cut_key(sh()->aliases[j])))
+				&& ft_strcmp(test, av[i]))
+		{
+			j++;
+			ft_memdel((void**)&test);
+		}
+		ft_memdel((void**)&test);
+		if (!sh()->aliases || !sh()->aliases[j])
+			k = prompt_error(av[i]);
 		else
-			g_aliases = delete_a_line(g_aliases, j);
+			sh()->aliases = delete_a_line(sh()->aliases, j);
 		i++;
 	}
 	return (k);
@@ -77,8 +100,8 @@ static int		check_flags(char *from, char *to)
 		{
 			ft_putstr_fd("42sh: unalias: -", 2);
 			write(2, &from[i], 1);
-			ft_putstr_fd(": invalid option\nualias: usage:"
-					"unalias [-a] name [name ...]\n", 2);
+			ft_putstr_fd(": invalid option\nunalias: usage:"
+					" unalias [-a] name [name ...]\n", 2);
 			return (1);
 		}
 		i++;
@@ -106,7 +129,9 @@ int			sh_unalias(int ac, char **av, t_env **ev)
 	}
 	(void)ac;
 	(void)ev;
-	if (!av[i] && !(flag & F_ALL))
-		ft_putstr("unalias: usage: unalias [-a] name [name ...]\n");
-	return (!av[i] && !(flag & F_ALL) ? 1 : process(i, av, flag));
+	if (flag & F_ALL)
+		sh()->aliases = ft_free_tabstr(sh()->aliases);
+	else if (!av[i])
+		ft_putstr_fd("unalias: usage: unalias [-a] name [name ...]\n", 2);
+	return (!av[i] ? 1 : process(i, av, flag));
 }

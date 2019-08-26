@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tabstr.c                                   :+:      :+:    :+:   */
+/*   ft_strncmp_n.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/07 14:31:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/24 23:34:45 by ede-ram          ###   ########.fr       */
+/*   Created: 2019/08/24 22:27:57 by tmeyer            #+#    #+#             */
+/*   Updated: 2019/08/24 22:43:54 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-char	**ft_free_tabstr(char **tab)
+int		ft_strncmp_n(const char *s1, const char *s2, size_t n)
 {
-	int i;
+	unsigned char *ps1;
+	unsigned char *ps2;
 
-	i = 0;
-	while (tab && tab[i])
-		free(tab[i++]);
-	free(tab);
-	tab = NULL;
-	return (tab);
+	ps1 = (unsigned char *)s1;
+	ps2 = (unsigned char *)s2;
+	if (!n)
+		return (0);
+	while (*ps1 == *ps2 && *ps1 && --n)
+	{
+		ps1++;
+		ps2++;
+	}
+	return (n != 0 ? 1 : (int)(*ps1 - *ps2));
 }

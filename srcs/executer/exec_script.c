@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 03:21:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/26 01:50:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	ret;
 
 	//	if (token_begin->type == SH_FUNC)
-	//		tokenize_func
+	//		exec_func
 	//	else
 	if (is_compound(token_begin->type))
 	{
@@ -221,6 +221,24 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 	//	return
 }
 
+t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
+{
+	int	skip_newline;
+
+	skip_newline = 1;
+	while (token_begin && token_begin != token_end)
+	{
+		if (token_begin->type == SH_SEMI || token_begin->type == SH_AND || (token_begin->type == SH_NEWLINE && !skip_newline))
+			return (token_begin);
+		if (token_begin->type == SH_WORD || token_begin->type == SH_ASSIGN || token_begin->type == SH_LESS || token_begin->type == SH_GREAT || token_begin->type == SH_DLESS || token_begin->type == SH_DGREAT || token_begin->type == SH_LESSAND || token_begin->type == SH_GREATAND || token_begin->type == SH_LESSGREAT || token_begin->type == SH_DLESSDASH || token_begin->type == SH_CLOBBER || token_begin->type == SH_IF || token_begin->type == SH_CASE || token_begin->type == SH_WHILE || token_begin->type == SH_UNTIL || token_begin->type == SH_FOR || token_begin->type == SH_BRACES || token_begin->type == SH_BANG || token_begin->type == SH_FUNC)
+			skip_newline = 0;
+		else if (token_begin->type == SH_AND || token_begin->type == SH_OR || token_begin->type == SH_AND_IF || token_begin->type == SH_OR_IF || token_begin->type == SH_DSEMI)
+			skip_newline = 1;
+		token_begin = token_begin->next;
+	}
+	return (token_begin);
+}
+
 int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	t_token	*next_separator;
@@ -229,7 +247,7 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 	{
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
-		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->script_separators);
+		next_separator = find_next_script_separator(token_begin, token_end);
 		dprintf(p->debug_fd, "		x script cut at '%i'\n", p->type);
 		if (p->type == SH_AND)
 			exec_and_or_in_background(p, token_begin, next_separator);

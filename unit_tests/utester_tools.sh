@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 09:09:16 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/17 22:03:04 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/26 00:21:43 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -61,18 +61,22 @@ ask_for_out () {
 print_kook () {
 	diff "$UT_out_file_tgt" "$UT_out_file_ref" >"$UT_out_file_diff"
 	diff "$UT_err_file_tgt" "$UT_err_file_ref" >"$UT_err_file_diff"
-	if [ ! -s "$UT_out_file_diff" ] && [ ! -s "$UT_err_file_diff" ]
+	if [ ! -s "$UT_out_file_diff" ] && (([ ! -s "$UT_err_file_tgt" ] && [ ! -s "$UT_err_file_ref" ]) || ([ -s "$UT_err_file_tgt" ] && [ -s "$UT_err_file_ref" ]))
 	then
 		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m"
 		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m" >> $UT_res_file
-	elif [ -s "$UT_out_file_diff" ] && [ ! -s "$UT_err_file_diff" ]
+		UT_out_ok="$( expr $UT_out_ok + 1 )"
+		UT_err_ok="$( expr $UT_err_ok + 1 )"
+	elif [ -s "$UT_out_file_diff" ] && (([ ! -s "$UT_err_file_tgt" ] && [ ! -s "$UT_err_file_ref" ]) || ([ -s "$UT_err_file_tgt" ] && [ -s "$UT_err_file_ref" ]))
 	then
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m"
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;32;40m[ ERR: OK ]\033[0;0m" >> $UT_res_file
+		UT_err_ok="$( expr $UT_err_ok + 1 )"
 	elif [ ! -s "$UT_out_file_diff" ] && [ -s "$UT_err_file_diff" ]
 	then
 		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
 		echo "\033[0;32;40m[ OUT: OK ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m" >> $UT_res_file
+		UT_out_ok="$( expr $UT_out_ok + 1 )"
 	elif [ -s "$UT_out_file_diff" ] && [ -s "$UT_err_file_diff" ]
 	then
 		echo "\033[0;31;40m[ OUT: KO ]\033[0;0m \033[0;31;40m[ ERR: KO ]\033[0;0m"
@@ -83,13 +87,11 @@ print_kook () {
 	then
 		echo "\033[0;36;40m[ Stdout REPORT ]\033[0;0m" >> $UT_res_file && cat "$UT_err_file_diff" >> $UT_res_file
 		cat "$UT_out_file_diff" >> $UT_res_file
-	else
-		UT_test_ok="$( expr "$UT_test_ok" + 1 )"
 	fi
-	if [ -s "$UT_err_file_diff" ]
+	if ! ( ( [ -s "$UT_err_file_tgt" ] && [ -s "$UT_err_file_ref" ] ) || ( [ ! -s "$UT_err_file_tgt" ]  && [ ! -s "$UT_err_file_tgt" ] ) )
 	then
 		echo "\033[0;36;40m[ Stderr REPORT ]\033[0;0m" >> $UT_res_file && cat "$UT_err_file_diff" >> $UT_res_file
 		cat "$UT_err_file_diff" >> $UT_res_file
 	fi
-	UT_test_num="$( expr "$UT_test_num" + 1 )"
+	UT_test_num="$( expr $UT_test_num + 1 )"
 }

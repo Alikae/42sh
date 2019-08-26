@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 14:57:02 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/25 22:50:47 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	sh_set_shppid(void)
 	tmp = NULL;
 	tmp = ft_itoa((int)getppid());
 	sh_setenv("PPID", tmp);
-	sh_get_env("PPID")->exported = 1;
+	sh_get_env("PPID")->readonly = 1;
 	ft_strdel(&tmp);
 }
 static void	sh_set_shpid(void)
@@ -69,7 +69,7 @@ static void	sh_set_shlvl(void)
 		sh_setenv("SHLVL", "1");
 	else
 	{
-		tmp = ft_itoa(1 + ft_atoi(sh_getenv("SHLVL")));
+		tmp = ft_itoa(1 + ft_atoi(sh_get_env("SHLVL")->value));
 		sh_setenv("SHLVL", tmp);
 		ft_strdel(&tmp);
 	}
@@ -165,6 +165,7 @@ void	sh_init(t_sh *shell)
 	//MERGE?
 	shell->opt = NULL;
 	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
+	free(opts);//To pass static?
 		shell->pipe_lst = 0;
 		//
 	shell->last_cmd_result = 0;
@@ -195,4 +196,5 @@ void	sh_init(t_sh *shell)
 		shell->debug = 0; 
 		shell->debug_fd = open("/dev/null", 0);
 	}
+	shell->aliases = NULL;
 }
