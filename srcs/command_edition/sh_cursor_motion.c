@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/26 01:04:53 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/26 01:50:39 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 		i = sh_cursor_forward(ft_strlen(*command) - i - 1, i, cursor, term);
 	else if (ARROW_LEFT && i > -1)
 		i = sh_cursor_backward(1, i, cursor, term);
-	else if (ARROW_RIGHT && command[0][i + 1] != 0)
+	else if (ARROW_RIGHT && comMand[0][i + 1] != 0)
 		i = sh_cursor_forward(1, i, cursor, term);
 	else if (BACKSPACE || DELETE)
 	{
