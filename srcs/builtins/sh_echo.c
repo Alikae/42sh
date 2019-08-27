@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 19:39:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/27 16:26:14 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int		sh_echo(int ac, char **av, t_env **ev)
 			ft_putstr(tmp2);
 		else
 			break ;
+		ft_putchar(' ');
 	}
 	if (nl)
 		ft_putchar('\n');
