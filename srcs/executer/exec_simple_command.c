@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 02:39:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/27 04:44:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -407,7 +407,7 @@ int		count_argv(t_token *token_begin, t_token *token_end)
 	nb = 0;
 	while (token_begin)
 	{
-		if (token_begin->type == SH_WORD && !ft_strchr(token_begin->content, '='))
+		if (token_begin->type == SH_WORD && !ft_strchr(token_begin->content, '='))//hello= ? =hello ?
 			cmd_begin = 1;
 		if (token_begin->type == SH_WORD && cmd_begin)
 			nb++;
@@ -637,23 +637,9 @@ int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 	//Special signals stuff?
 	int ret;
 
-	//NO FORK!!!!!!!!!
-	//fork stuff
-	//int child_pid = fork();
-	//if (/*(p->lldbug) ? !child_pid : */child_pid)
-	//{
-//		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
-//		close_pipes_parent(p);
-//		ret = block_wait(p, child_pid);
-//	}
-//	else
-//	{
-//		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
-//		generate_redirections(p);
+//	generate_redirections_builtins(p);
 	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
 	ret = f(p->child_ac, p->child_argv, &(p->params));
-//		exit(1/*EXECVE ERROR*/);
-//	}
 	//restore_redirections(olds);
 	//freeall (olds);
 	return (ret); //<-- Return What?
@@ -736,45 +722,35 @@ int		handle_no_cmd_name(t_sh *p)
 //
 //echo ls && ls;
 //
-//
-int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
-{
-	int	nb_redirections;
-	int	nb_assign;
-	int	ret;
-	int		(*f)(int ac, char **av, t_env **ev);
 
-	//v VERIFY
-	//expand_word
-	//if expand_word -> syntax_token
-	//	exec_script new-token
-	//	abort_cmd = true
-	//return;
-	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
-	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	//Expand_words+expand_alias_cmd_name+retokenize
-	if (!token_begin)//(after retok)
-		return (handle_no_cmd_name(p));
-	handle_assigns(p);
-	//if (token_begin->type == SH_FUNC)
-	//	store_func();
-	//else if cmd name is stored in func
-	//	replace func
-	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
-	print_redirections(p, p->redirect_lst);
-	if ((f = sh_is_builtin(token_begin->content)))
-		ret = exec_builtin(p, f);
-	else
-		ret = exec_prgm(p, token_begin, token_end);
-	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-	remove_opened_files(p);
-	////print_redirections(p, p->redirect_lst);
-	////print_assign(p);
-	restore_before_assigns(p);
-	del_n_assign_lst(p, nb_assign);
-	//KILL CHILD ENV ADDED AT EACH FUNC END
-	return (ret);
+int		exec_function(t_sh *p, t_token *func)
+{
+	//store actual positional params
+	//change_position_params_by argv except_$0
+	return (exec_compound_command(p, func->sub->sub, 0));
+	//restore_positional_params
+}
+
+int		store_func(t_sh *p, t_token *function)
+{
+	t_token	*tmp;
+
+	//if exist remove old
+	tmp = p->functions;
+	p->functions = dup_token_with_sub(function);
+	p->functions->next = tmp;
+	//if error return !0
+	return (0);
+}
+
+t_token	*is_defined_function(char *name)
+{
+	t_token	*func;
+
+	func = sh()->functions;
+	while (func && ft_strcmp(func->content, name))
+		func = func->next;
+	return (func);
 }
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
@@ -783,26 +759,22 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	nb_assign;
 	int	ret;
 	int		(*f)(int ac, char **av, t_env **ev);
+	t_token	*func;
 
-	//v VERIFY
-	//if expand_word -> syntax_token
-	//	exec_script new-token
-	//	abort_cmd = true
-	//return;
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	//Expand_words+expand_alias_cmd_name+retokenize
-	if (!token_begin)//(after retok)
+	//Expand_words_and_retokenize(/*each argv*/);
+	if (!token_begin)
 		return (handle_no_cmd_name(p));
 	handle_assigns(p);
-	//if (token_begin->type == SH_FUNC)
-	//	store_func();
-	//else if cmd name is stored in func
-	//	replace func
 	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
 	print_redirections(p, p->redirect_lst);
-	if ((f = sh_is_builtin(token_begin->content)))
+	if (token_begin->type == SH_FUNC)
+		ret = store_func(p, token_begin);
+	else if ((func = is_defined_function(token_begin->content)))
+		ret = exec_function(p, func);
+	else if ((f = sh_is_builtin(token_begin->content)))
 		ret = exec_builtin(p, f);
 	else
 		ret = exec_prgm(p, token_begin, token_end);

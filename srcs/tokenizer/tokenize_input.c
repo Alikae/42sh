@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 02:38:55 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/27 05:34:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,21 @@ int			word_out_of_context(t_toktype type)
 	return (0);
 }
 
+int			bang_unfollowed_by_word(t_tokenize_tool *t)
+{
+	int i;
+
+	i = t->i;
+	forward_blanks(t);
+	if (read_n_skip_word(t))
+	{
+		t->i = i;
+		t->word_nb = 1;
+		return (0);
+	}
+	return (1);
+}
+
 t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {
 	int			word_begin;
@@ -206,11 +221,11 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 			t->i += len;
 			return (tokenize_function(t, p_actual, word_begin));
 		}
-		if ((type = word_is_actual_terminator(t->input + word_begin, t->i - word_begin, actual_compound)) && t->word_nb == 1)
+		if ((type = word_is_actual_terminator(t->input + word_begin, t->i - word_begin, actual_compound)) && (t->word_nb == 1 || type == SH_SUBSH_END))
 			return (type);
 		if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin, t->i - word_begin)))
 		{
-			if (word_out_of_context(type))
+			if (word_out_of_context(type) || (type == SH_BANG && bang_unfollowed_by_word(t)))
 			{
 				printf("Unexpected token at -%s\n", t->input + word_begin);
 				sh()->invalid_cmd = 1;

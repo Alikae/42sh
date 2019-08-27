@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 01:50:11 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/27 06:21:31 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
+	//+subshell
 	if (type == SH_WHILE || type == SH_UNTIL)
 		return (exec_compound_while(p, token_compound, type));
 	else if (type == SH_IF)
@@ -28,6 +29,8 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 		return (exec_compound_case(p, token_compound));
 	else if (type == SH_FOR)
 		return (exec_compound_for(p, token_compound));
+	else if (type == SH_SUBSH)
+		return (exec_compound_subsh(p, token_compound));
 	dprintf(p->debug_fd, "treating GROUPING\n");
 	return(exec_script(p, token_compound->sub, 0));
 }
@@ -37,9 +40,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	nb_redirections;
 	int	ret;
 
-	//	if (token_begin->type == SH_FUNC)
-	//		exec_func
-	//	else
+	//No token_begin, !!CMD_NAME!!
 	if (is_compound(token_begin->type))
 	{
 		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end);
@@ -125,7 +126,6 @@ void	print_cmd(const char *input, int m, int n)
 //Put pipeline in jobs, name delimited by token->index;
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	//If no pipeline, builtin exec locally (cd ; echo lala | cd ;) will give different results
 	int		bang;
 	int		next_pipe_fd;
 	t_token	*next_separator;
@@ -136,8 +136,6 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	//print_cmd(p->cmd, indexb, indexe);
 	handle_bang(&token_begin, &bang);
 	next_pipe_fd = 0;
-	//if (no pipe)
-	//	exec_locally
 	while (token_begin && !p->abort_cmd && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
 	{
 		dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
@@ -145,16 +143,16 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 		token_begin = next_separator->next;
 	}
 	if (p->abort_cmd)
-		return /*FREE ALL*/;
+	{
+		//free all
+		return ;
+	}
 	dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
 	if (next_pipe_fd)
 		push_redirect_lst(&p->redirect_lst, 0, next_pipe_fd);
-	//
-	p->lldbug = 1;
-	//
 	p->pipein = next_pipe_fd;
 	//if was_piped, exec_in_background?
-	p->last_cmd_result = exec_command(p, token_begin, token_end);//
+	p->last_cmd_result = (next_pipe_fd) ? exec_command_in_background(p, token_begin, token_end) : exec_command(p, token_begin, token_end);//
 	if (next_pipe_fd)
 		del_n_redirect_lst(&p->redirect_lst, 1);
 	delete_close_all_pipe_lst(p->pipe_lst);

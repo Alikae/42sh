@@ -102,4 +102,6 @@ int			is_redirection_operator(t_toktype type);
 t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype type);
 t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len);
 void		free_ast(t_token *origin);
+t_token		*dup_token_with_sub(t_token *origin);
+int			exec_compound_subsh(t_sh *p, t_token *tok);
 #endif

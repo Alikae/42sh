@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/18 16:26:45 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/27 06:24:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 //NAME
 //WORDLIST?
 //DO
+
+int		exec_compound_subsh(t_sh *p, t_token *tok)
+{
+	//Not more?
+	//do fork
+	return (exec_script(p, tok->sub, 0));
+}
 
 int		exec_compound_case(t_sh *p, t_token *tok)
 {

@@ -71,6 +71,29 @@ t_token	*create_token_n(t_toktype type, int index, const char *content, int n)
 	return (tok);	
 }
 
+t_token	*dup_ast(t_token *origin)
+{
+	t_token	*new;
+
+	if (!origin)
+		return (0);
+	new = create_token(origin->type, origin->index, origin->content);
+	new->sub = dup_ast(origin->sub);
+	new->next = dup_ast(origin->next);
+	return (new);
+}
+
+t_token	*dup_token_with_sub(t_token *origin)
+{
+	t_token	*new;
+
+	if (!origin)
+		return (0);
+	new = create_token(origin->type, origin->index, origin->content);
+	new->sub = dup_ast(origin->sub);
+	return (new);
+}
+
 void	delete_token(t_token *tok)
 {
 	free(tok->content);
@@ -79,14 +102,9 @@ void	delete_token(t_token *tok)
 
 void	free_ast(t_token *origin)
 {
-	t_token	*next;
-	t_token	*sub;
-
 	if (!origin)
 		return ;
-	next = origin->next;
-	sub = origin->sub;
+	free_ast(origin->sub);
+	free_ast(origin->next);
 	delete_token(origin);
-	free_ast(sub);
-	free_ast(next);
 }

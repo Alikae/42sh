@@ -63,3 +63,10 @@ retrieve each time
 Signals :
 	What to do while builtins?
 	Do ctrl-c / z are valid for 1 pipeline or 1 script?
+
+
+
+
+
+
+//Max cmd len? size_t ? (cause strlen)

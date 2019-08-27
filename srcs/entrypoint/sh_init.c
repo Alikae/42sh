@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 19:44:05 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/26 03:23:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void	sh_init(t_sh *shell)
 	shell->tmp_assign_lst = 0;
 	shell->opened_files = 0;
 	//shell->assign_lst = 0;
-	//init_signals_handling(shell);
+	init_signals_handling();
 	if (ft_fetch_opt("debug", 5, sh()->opt))
 	{
 		shell->debug = 1; 

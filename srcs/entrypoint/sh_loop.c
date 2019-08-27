@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 22:17:10 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/27 05:30:19 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("LSCOLORS=lala ls -g");
 				ln_tab = ft_strdup("cat |");
 				ln_tab = ft_strdup("echo (PUSH SUR TA PUTAIN DE BRANCHE)");
+				ln_tab = ft_strdup("if ( ls ) ; then echo yo ; fi");
+				ln_tab = ft_strdup("!");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;
@@ -127,6 +129,8 @@ int		sh_loop(void)
 				break;
 			if (!p->unfinished_cmd)
 				complete = 1;
+			else
+				ft_putstr("$->");//prompt PSX
 		}
 		//
 		free(input);

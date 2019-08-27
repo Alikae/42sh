@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 01:50:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/26 02:47:49 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct		s_sh
 	t_toktype		script_separators[2];
 	t_toktype		and_or_separators[2];
 	t_token			*ast;
+	t_token			*functions;
 	int				child_ac;
 	char			**child_argv;
 	t_open_file		*opened_files;
