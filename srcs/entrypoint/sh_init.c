@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 03:23:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/27 06:30:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	sh_set_shppid(void)
 	tmp = NULL;
 	tmp = ft_itoa((int)getppid());
 	sh_setenv("PPID", tmp);
-	sh_get_env("PPID")->exported = 1;
+	sh_get_env("PPID")->readonly = 1;
 	ft_strdel(&tmp);
 }
 static void	sh_set_shpid(void)
@@ -69,7 +69,7 @@ static void	sh_set_shlvl(void)
 		sh_setenv("SHLVL", "1");
 	else
 	{
-		tmp = ft_itoa(1 + ft_atoi(sh_getenv("SHLVL")));
+		tmp = ft_itoa(1 + ft_atoi(sh_get_env("SHLVL")->value));
 		sh_setenv("SHLVL", tmp);
 		ft_strdel(&tmp);
 	}
