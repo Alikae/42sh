@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/25 04:40:40 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/08/29 00:38:42 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static	void	init_history(t_hist *hist, char **history)
 	if (hist->size_r > hist->size_l)
 		hist->size_r = hist->size_l;
 	hist->topush = 0;
+		fprintf(stderr, "SIZE: %zu\n", hist->size_l);
 	hist->prev = ft_reverse_tab(history);
 	hist->index = -1;
 }
@@ -42,9 +43,11 @@ t_hist			*command_history(t_hist *hist)
 	int		fd;
 	char	*line;
 	char	**history;
+	char	*rest;
 
 	hist->size_r = 0;
 	history = NULL;
+	rest = NULL;
 	if (hist->size_l == 0)
 	{
 		hist->prev = NULL;
@@ -52,7 +55,7 @@ t_hist			*command_history(t_hist *hist)
 	}
 	if (!(fd = open(hist->path, O_RDONLY | O_CREAT | O_SYNC, 0600)))
 		return (0);
-	while (get_next_line(fd, &line) > 0)
+	while (get_next_line(fd, &line, &rest) > 0)
 	{
 		if (hist->size_r < hist->size_l - 1)
 			history = tab_realloc(history, line);
@@ -61,6 +64,8 @@ t_hist			*command_history(t_hist *hist)
 		ft_memdel((void**)&line);
 		hist->size_r += 1;
 	}
+	ft_memdel((void**)&rest);
+	ft_memdel((void**)&line);
 	init_history(hist, history);
 	close(fd);
 	return (hist);
