@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 02:47:49 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/28 04:04:12 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include "t_token.h"
 # include "libft.h"
 
+# define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
+# define SH_NESTED_COMPOUND_LIMIT 1000
+# define SH_NESTED_FUNCTION_LIMIT 1000
 
 extern	char		**g_aliases;
 
@@ -56,6 +59,9 @@ typedef struct		s_sh
 	int				child_ac;
 	char			**child_argv;
 	t_open_file		*opened_files;
+	int				nb_nested_functions;
+	int				nb_nested_compounds;
+	int				nb_nested_tokenized_compounds;
 	
 	int				unfinished_cmd;
 	int				invalid_cmd;

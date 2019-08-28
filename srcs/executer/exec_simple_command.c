@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/27 06:30:12 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/28 06:51:52 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -727,9 +727,20 @@ int		handle_no_cmd_name(t_sh *p)
 
 int		exec_function(t_sh *p, t_token *func)
 {
+	int	ret;
+
 	//store actual positional params
 	//change_position_params_by argv except_$0
-	return (exec_compound_command(p, func->sub->sub, 0));
+	if (p->nb_nested_functions >= SH_NESTED_FUNCTION_LIMIT)
+	{
+		p->abort_cmd = 1;
+		printf("SH_NESTED_FUNCTION_LIMIT REACHED\nAbort command\n");
+		return (1/*ERROR CODE*/);
+	}
+	p->nb_nested_functions++;
+	ret = exec_compound_command(p, func->sub->sub, 0);
+	p->nb_nested_functions--;
+	return (ret);
 	//restore_positional_params
 }
 
@@ -767,6 +778,8 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	//Expand_words_and_retokenize(/*each argv*/);
+	//	will give a new little ast for each retokenized word
+	//	store them accordingly in argvs only
 	if (!token_begin)
 		return (handle_no_cmd_name(p));
 	handle_assigns(p);

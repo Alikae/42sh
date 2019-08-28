@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/27 05:30:19 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/28 05:23:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,9 @@ int		sh_loop(void)
 		while (!complete)
 		{
 			//swap_signals_to_prompter
-			if (!dbug)
+			if (1 || !dbug)
 			{
+			fflush(0);
 				if (!(ln_tab = sh_arguments(hist)))
 					break ;
 			}

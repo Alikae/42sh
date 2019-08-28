@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/27 06:21:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/28 05:50:36 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
-	//+subshell
 	if (type == SH_WHILE || type == SH_UNTIL)
 		return (exec_compound_while(p, token_compound, type));
 	else if (type == SH_IF)
@@ -43,9 +42,17 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//No token_begin, !!CMD_NAME!!
 	if (is_compound(token_begin->type))
 	{
+		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
+		{
+			p->abort_cmd = 1;
+			printf("SH_NESTED_COMPOUND_LIMIT REACHED\nAbort command\n");
+			return (1/*ERROR CODE*/);
+		}
+		p->nb_nested_compounds++;
 		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end);
 		ret = exec_compound_command(p, token_begin, token_begin->type);
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+		p->nb_nested_compounds--;
 	}
 	else
 		ret = exec_simple_command(p, token_begin, token_end);
@@ -60,7 +67,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	{
 		dprintf(p->debug_fd, "[%i] PFORK\n", getpid());
 		close_pipes_parent(p);
-		return (0);
+		return (pid);
 	}
 	dprintf(p->debug_fd, "[%i] Pforked\n", getpid());
 	close(0);
@@ -152,7 +159,11 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 		push_redirect_lst(&p->redirect_lst, 0, next_pipe_fd);
 	p->pipein = next_pipe_fd;
 	//if was_piped, exec_in_background?
-	p->last_cmd_result = (next_pipe_fd) ? exec_command_in_background(p, token_begin, token_end) : exec_command(p, token_begin, token_end);//
+	int child_pid;
+	child_pid = 0;
+	p->last_cmd_result = (next_pipe_fd) ? (child_pid = exec_command_in_background(p, token_begin, token_end)) : exec_command(p, token_begin, token_end);//
+	if (child_pid)
+		block_wait(p, child_pid);
 	if (next_pipe_fd)
 		del_n_redirect_lst(&p->redirect_lst, 1);
 	delete_close_all_pipe_lst(p->pipe_lst);

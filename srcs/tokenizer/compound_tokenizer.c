@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/25 04:49:22 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/28 04:07:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -578,8 +578,15 @@ t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
 	t_token		*compound;
 	int			tmp;
 
+	if (sh()->nb_nested_tokenized_compounds >= SH_NESTED_TOKENIZED_COMPOUND_LIMIT)
+	{
+		sh()->abort_cmd = 1;
+		printf("SH_NESTED_TOKENIZED_COMPOUND_LIMIT REACHED\nAbort tokenization\n");
+		return (0);
+	}
 	tmp = t->word_nb;
 	t->word_nb = 1;
+	sh()->nb_nested_tokenized_compounds++;
 	if (type == SH_WHILE || type == SH_UNTIL)
 		compound = tokenize_while(t, type, word_begin);
 	else if (type == SH_IF)
@@ -593,5 +600,6 @@ t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
 	else
 		compound = tokenize_braces(t, word_begin);
 	t->word_nb = tmp + 1;
+	sh()->nb_nested_tokenized_compounds--;
 	return (compound);
 }

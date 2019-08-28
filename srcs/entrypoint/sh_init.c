@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/27 06:30:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/08/28 04:10:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,9 @@ void	sh_init(t_sh *shell)
 	shell->assign_lst = 0;
 	shell->tmp_assign_lst = 0;
 	shell->opened_files = 0;
+	shell->nb_nested_functions = 0;
+	shell->nb_nested_compounds = 0;
+	shell->nb_nested_tokenized_compounds = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();
 	if (ft_fetch_opt("debug", 5, sh()->opt))
