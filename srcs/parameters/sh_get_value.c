@@ -6,11 +6,11 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 21:59:25 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 15:25:57 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/08/31 04:24:23 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "sh.h"
 #include "sh_env.h"
 #include "libft.h"
 
@@ -31,7 +31,7 @@ const char			*sh_get_value(const char *key)
 
 	if (!key || !*key)
 		return (NULL);
-	if ((tmp = sh_getval(sh()->env, key)))
+	if ((tmp = sh_getval(sh()->params, key)))
 		return (tmp);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/08/31 03:46:15 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/08/31 04:30:43 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -114,13 +114,13 @@ t_token	*sh_expansion(t_token *tok, t_env **env)
 {
 	t_token	*new;
 
-	if (!(new = ceate_token(SH_WORD, tok->content)))
+	if (!(new = create_token(SH_WORD, 0, tok->content)))
 		exit (-1);
 	new->sub = NULL;
 	new->next = NULL;
 	printf("sh_expansion\n");
 	sh_word_expansion(&new, env);
 	printf("FINAL TOKEN=%s\n", new->content);
-	sh_quote_removal(&new, sh_get_value("IFS"));
+	sh_quote_removal(new, sh_get_value("IFS"));
 	return (new);
 }

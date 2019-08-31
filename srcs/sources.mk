@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/31 04:05:09 by tcillard         ###   ########.fr        #
+#    Updated: 2019/08/31 04:19:09 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,11 @@ C_FILES_parameters = \
 	sh_unsetenv.c \
 	sh_set_pwd.c \
 	sh_isset.c \
+	sh_get_value.c \
 	#sh_init_var.c \
 	#sh_get_env.c \
 	#sh_set_env.c \
 	#sh_set_value.c \
-	#sh_get_value.c \
 	#sh_set_shlvl.c \
 	#sh_print_env.c \
 	#sh_fill_env.c \
@@ -115,6 +115,13 @@ C_FILES_tools = \
 	sh_error_path.c \
 	#sh_find_law.c
 	#sh_add_to_path.c
+
+C_FILES_word_expansion = \
+	sh_word_expansion.c	\
+	sh_tilde_expansion.c \
+	sh_word_expression.c \
+	sh_expansion_size.c	\
+	sh_quote_removal.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

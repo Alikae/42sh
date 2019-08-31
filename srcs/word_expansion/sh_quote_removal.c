@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/08/31 04:00:03 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/08/31 04:32:24 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ void	sh_next_token(t_token **new)
 {
 	if (*new == NULL)
 	{
-		if (!(*new = (t_token*)create_token(SH_WORD, NULL)))
+		if (!(*new = (t_token*)create_token(SH_WORD, 0, NULL)))
 			exit (-1);
 	}
 	else
 	{
-		if (!((*new)->next = (t_token*)create_token(SH_WORD, NULL)))
+		if (!((*new)->next = (t_token*)create_token(SH_WORD, 0, NULL)))
 			exit (-1);
 		*new = (*new)->next;
 	}

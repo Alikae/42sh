@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 14:46:55 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/31 04:09:35 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,8 @@ SUB_DIRS := \
 	error \
 	redirections \
 	debug_mode \
-	tools
+	tools \
+	word_expansion
 
 
 ### INCLUDE SRC MAKEFILE ###

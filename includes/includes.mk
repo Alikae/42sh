@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/06 23:34:10 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/31 04:09:12 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,9 @@ H_FILES_tokens = \
 
 H_FILES_error = \
 	error.h
+
+H_FILES_word_expansion = \
+	sh_word_expansion.h
 
 H_FILES_redirections = \
 	redirections.h
