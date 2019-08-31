@@ -1,0 +1,151 @@
+21sh
+
+EDITION DE COMMANDE:
+	Fini
+	Bugs a corriger
+
+SIGNAUX:
+	En cours
+
+SEPARATEURS:
+	Fini
+
+PIPES:
+	Fini
+
+REDIRECTIONS:
+	Fini
+
+AGGREGATEURS DE FICHIERS:
+	Fini
+
+QUOTES SIMPLES/DOUBLES:
+	Fini
+	Reste retokenisation du quote-removal
+	Debug en cours
+
+42sh
+
+PARTIE OBLIGATOIRE
+
+BUILTINS:		
+	ALIAS:
+		Fini
+	BG:
+		a commencer
+	
+	CD:
+		Reste options posix
+		Debug a faire
+
+	ECHO:
+		Fini
+		Debug a faire
+
+	EXIT:
+		implementer la valeur de retour
+
+	FG:
+		a commencer
+	
+	JOBS:
+		a commencer
+	
+	SET:
+		Fini
+		Debug a faire
+	
+	TEST:
+		En cours
+	
+	TYPE:
+		En cours
+	
+	UNALIAS:
+		Fini
+	
+	UNSET:
+		Fini
+		Debug a faire
+
+OPERATEURS LOGIQUES:
+	?
+
+VARIABLES UNIQUES:
+	Fini
+
+EXPANSION SIMPLES:
+	Fini
+	
+SPECIAL PARAMETERS:
+	Manque $? $!
+	
+JOB CONTROL &:
+	?
+
+SIGNAUX:
+	?
+	
+PARTIE MODULAIRE
+
+INHIBITEURS:
+	ok
+	
+EXPANSIONS:
+	debug
+	
+COMMANDES GROUPEES/SUBSHELL:
+	?
+
+SUBSTITUTION DE COMMANDE:
+	?
+
+EXPANSION ARITHMETIQUE:
+	A commencer
+
+GESTION DES ALIAS:
+	substitution a faire
+
+
+
+
+
+
+
+
+
+Tokenization
+	HERE_DOC
+Exec
+	assignements
+	funcs
+	fork
+	simple_cmd
+	assignements
+SIGNALS
+
+Debug_mode ?
+cmd = "t" -> SEGV
+
+Multi-redirections on same file == redirection type handled by first operator (1>yo 2>>yo) 2 will use >
+
+File executer/fd_handler
+
+HERE DOCS:
+<< <<-
+operator terminator newline here doc newline terminator newline next_operator
+
+REPLACE SH_SYNTAX_ERROR by SH_UNFINISHED_INPUT at places
+
+case yolo in yola) echo ;; yali | yolo) loul;;(po)tu esac
+
+REPARER CASE + FUNC :'(
+
+p->invalid_cmd
+
+
+case yolo in yola ) echo ;; yali | yolo ) loul ;; ( po ) tu ; esac
+
+
+For stock cmd in jobs:
+stock position in script separators
