@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 18:13:44 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/31 21:13:07 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/01 00:14:18 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int		sh_test_and_or(int ac, char **av, t_env **ev)
 		else if (!ft_strcmp(")", av[j]))
 			brace--;
 		else if (!brace && !ft_strcmp("-a", av[j]))
-			return (sh_test(j - 1, av, ev) || sh_test(ac - j - 1, av + j + 1, ev));
+			return (sh_test(j, av, ev) || sh_test(ac - j, av + j, ev));
 	}
 	j = 0;
 	brace = 0;
@@ -104,7 +104,7 @@ int		sh_test_and_or(int ac, char **av, t_env **ev)
 		else if (!ft_strcmp(")", av[j]))
 			brace--;
 		else if (!brace && !ft_strcmp("-o", av[j]))
-			return (sh_test(j - 1, av, ev) && sh_test(ac - j - 1, av + j + 1, ev));
+			return (sh_test(j, av, ev) && sh_test(ac - j, av + j, ev));
 	}
 	return (-1);
 }
