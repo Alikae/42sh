@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 18:13:44 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/01 00:14:18 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/01 19:43:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ int		sh_test(int ac, char **av, t_env **ev)
 	ret = 1;
 	if ((ret = sh_test_and_or(ac, av, ev)) != -1)
 		return (ret);
+	else if (ac >= 2 && !ft_strcmp(av[i], "!"))
+		ret = !(sh_test(ac - 1, av + 1, ev));
 	else if (ac == 2)
 		ret = (sh_test_unary(NULL, av[i]));
 	else if (i < ac - 1  && ft_strstr(un_op, av[i]))
