@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/26 00:51:24 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/02 01:56:08 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,6 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 	bufptr = NULL;
 	res = NULL;
 }
-
-/*
-** 		About the copy/paste option:
-** 	- For now, the yanking buffer is alvalaible just for the current command you
-** 	are typing. Later, it would be great if we could access it as long as you
-** 	don't clear it by yanking something new (yanking whereas nothing is selected
-** 	won't do anything). This potentialy means using a global variable
-** 	to access the buffer in the functions that initialize it, make it work, and
-** 	most importantly to avoid leaks, clear it at shell exiting.
-*/
 
 static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 {
