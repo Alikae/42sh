@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/31 04:19:09 by tcillard         ###   ########.fr        #
+#    Updated: 2019/09/02 09:22:32 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -113,8 +113,8 @@ C_FILES_tools = \
 	sh_are_you_sur.c \
 	sh_check_path.c \
 	sh_error_path.c \
-	#sh_find_law.c
-	#sh_add_to_path.c
+	ft_join_with_char.c
+	#sh_find_law.c \
 
 C_FILES_word_expansion = \
 	sh_word_expansion.c	\
