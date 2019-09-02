@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/08/26 23:54:38 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/02 08:21:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -184,7 +184,7 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
 			&& exp->content[cpy] != '%' && exp->content[cpy] != '}'
 			&& exp->content[cpy] != '$' && exp->content[cpy] != '/'
-			&& exp->content[cpy])
+			&& exp->content[cpy] != '"' && exp->content[cpy])
 		cpy++;
 	if (!(exp->name = malloc(cpy - exp->i)))
 		exit(-1);
@@ -193,9 +193,10 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[exp->i] != '+' && exp->content[exp->i] != '#'
 			&& exp->content[exp->i] != '%' && exp->content[exp->i] != '}'
 			&& exp->content[exp->i] != '$' && exp->content[exp->i] != '/'
-			&& exp->content[exp->i])
+			&& exp->content[exp->i] != '"' && exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
+	printf("%s\n", exp->name);
 	sh_find_value(exp);
 	if (exp->find)
 	sh_word_opt(exp);
