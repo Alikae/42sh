@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/28 05:23:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 06:57:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,13 @@ int		sh_loop(void)
 		int dbug = sh()->debug;
 		complete = 0;
 		input = 0;
+		p->print_syntax_errors = 1;
 		while (!complete)
 		{
 			//swap_signals_to_prompter
-			if (1 || !dbug)
+			if (/*1 || */!dbug)
 			{
-			fflush(0);
+				fflush(0);
 				if (!(ln_tab = sh_arguments(hist)))
 					break ;
 			}
@@ -101,6 +102,7 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("echo (PUSH SUR TA PUTAIN DE BRANCHE)");
 				ln_tab = ft_strdup("if ( ls ) ; then echo yo ; fi");
 				ln_tab = ft_strdup("!");
+				ln_tab = ft_strdup("ls");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;

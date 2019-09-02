@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 05:11:23 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 07:02:10 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ char	*get_next_path(char *path, char **all_paths, int i)
 	return (next_path);
 }
 
-int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
+int		exec_prgm(t_sh *p)
 {
 	char *path;
 	int ret;
@@ -248,8 +248,7 @@ int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
 	int		nb_paths;
 	char	**paths;
 
-	(void)token_end;
-	path = (token_begin) ? token_begin->content : 0;
+	path = p->child_argv[0];
 	dprintf(p->debug_fd, "[%i] try path--%s\n", getpid(), path);
 	if (!path)
 		return (0);
@@ -594,7 +593,6 @@ t_token	*expand_and_retokenize(t_token *stack_argvs)
 	stack_origin = stack_argvs;
 	while (stack_argvs)
 	{
-		//retokenize
 		if (!origin)
 		{
 			origin = 0/*retokenize()*/;
@@ -644,6 +642,7 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 
 	*nb_assign = 0;
 	nb_redirections = 0;
+	argv_stack = 0;
 	while (token_begin)
 	{
 		if (is_redirection_operator(token_begin->type))
@@ -884,24 +883,22 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_token	*func;
 
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
-	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	//Expand_words_and_retokenize(/*each p->child_argv*/);
 	//	will give a new little ast for each retokenized word
 	//	store them accordingly in argvs only
-	if (!token_begin)
+	if (!p->child_argv[0])
 		return (handle_no_cmd_name(p));
 	handle_assigns(p);
 	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
 	print_redirections(p, p->redirect_lst);
-	if (token_begin->type == SH_FUNC)
+	if (/**/token_begin->type == SH_FUNC)
 		ret = store_func(p, token_begin);
-	else if ((func = is_defined_function(token_begin->content)))
+	else if ((func = is_defined_function(p->child_argv[0])))
 		ret = exec_function(p, func);
-	else if ((f = sh_is_builtin(token_begin->content)))
+	else if ((f = sh_is_builtin(p->child_argv[0])))
 		ret = exec_builtin(p, f);
 	else
-		ret = exec_prgm(p, token_begin, token_end);
+		ret = exec_prgm(p);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	remove_opened_files(p);
 	////print_redirections(p, p->redirect_lst);

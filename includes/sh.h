@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/28 04:04:12 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 05:49:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct		s_sh
 	int				invalid_cmd;
 	int				abort_cmd;
 	int				exit;
+	int				print_syntax_errors;
 	
 	char			**aliases;
 
