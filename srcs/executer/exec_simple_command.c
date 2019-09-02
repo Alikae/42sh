@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 07:04:11 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 07:43:41 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ int     exec_path(t_sh *p, char *path)
 
 	//fork stuff
 	int child_pid = fork();
+	printf("%s %s\n", p->child_argv[0], p->child_argv[1]);
 	if (/*(p->lldbug) ? !child_pid : */child_pid)
 	{
 		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
@@ -559,13 +560,16 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 
 void	stack_argvs(t_token **p_argv_stack, t_token *token)
 {
+	t_token	*tmp;
+
 	if (!*p_argv_stack)
 		*p_argv_stack = create_token(SH_WORD, token->index, token->content);
 	else
 	{
-		while ((*p_argv_stack)->next)
-			(*p_argv_stack) = (*p_argv_stack)->next;;
-		(*p_argv_stack)->next = create_token(SH_WORD, token->index, token->content);
+		tmp = *p_argv_stack;
+		while (tmp->next)
+			tmp = tmp->next;;
+		tmp->next = create_token(SH_WORD, token->index, token->content);
 	}
 }
 /*
@@ -615,6 +619,7 @@ char	**build_child_argvs(t_token *ast)
 	t_token	*tmp;
 	char	**argvs;
 
+	print_all_tokens(sh(), ast, 0);
 	len = 0;
 	tmp = ast;
 	while (tmp)
@@ -629,7 +634,7 @@ char	**build_child_argvs(t_token *ast)
 	while (ast)
 	{
 		//PROTEC EXIT STRDUP
-		argvs[len] = ft_strdup(ast->content);
+		argvs[len++] = ft_strdup(ast->content);
 		ast = ast->next;
 	}
 	return (argvs);
@@ -657,6 +662,7 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
+	print_all_tokens(sh(), argv_stack, 0);
 	argv_stack = expand_and_retokenize(p, argv_stack);
 	p->child_argv = build_child_argvs(argv_stack);
 	return (nb_redirections);
