@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 15:31:27 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/02 12:57:24 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int		sh_set(int ac, char **av, t_env **ev)
 	if (ac <= 1)
 		while (params)
 		{
+			ft_putstr("PUTE ");
 			ft_putstr(params->key);
 			ft_putchar('=');
 			if (params->value)
