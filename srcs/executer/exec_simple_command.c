@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 03:25:46 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/02 05:36:47 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <signal.h>//
 #include "sh_env.h"
 #include "error.h"
+#include "sh_word_expansion.h"
 
 //FORBIDDEN FUNCS
 
@@ -373,7 +374,7 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 
 int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	//?
+	//?TO REDO
 	int	nb_redirections;
 	int	fd;
 
@@ -523,8 +524,12 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	p->assign_lst->next = tmp;
 }
 
-int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
+/*int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
 {
+	//transform stockage
+	//	child_argv_ast
+	//	->retokenize_it
+	//	transform to child_argv
 	int	nb_redirections;
 	int	cmd_begin;
 	int	ac;
@@ -550,6 +555,111 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
 	p->child_argv[ac] = 0;
+	return (nb_redirections);
+}*/
+
+void	stack_argvs(t_token **p_argv_stack, t_token *token)
+{
+	if (!*p_argv_stack)
+		*p_argv_stack = create_token(SH_WORD, token->index, token->content);
+	else
+	{
+		while ((*p_argv_stack)->next)
+			(*p_argv_stack) = (*p_argv_stack)->next;;
+		(*p_argv_stack)->next = create_token(SH_WORD, token->index, token->content);
+	}
+}
+/*
+t_token	*stack_redirect(t_token *token_begin, t_token *token_end, int *nb_assign)
+{
+
+}
+
+t_token	*stack_assigns(t_token *token_begin, t_token *token_end, int *nb_assign)
+{
+	t_token	*origin;
+	int		cmd_begin;
+
+	while (token_begin && token_begin)
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	origin = (token_begin) ? create_token() : ;
+}*/
+
+t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
+{
+	t_token	*actual;
+	t_token	*origin;
+	t_token	*stack_origin;
+
+	origin = 0;
+	stack_origin = stack_argvs;
+	while (stack_argvs)
+	{
+		//retokenize
+		if (!origin)
+		{
+			origin = sh_expansion(stack_argvs, &(p->params));
+			actual = origin;
+		}
+		else
+			actual->next = sh_expansion(stack_argvs, &(p->params));
+		while (actual && actual->next)
+			actual = actual->next;
+		stack_argvs = stack_argvs->next;
+	}
+	free_ast(stack_origin);
+	return (origin);
+}
+
+char	**build_child_argvs(t_token *ast)
+{
+	int		len;
+	t_token	*tmp;
+	char	**argvs;
+
+	len = 0;
+	tmp = ast;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		len++;
+	}
+	if (!(argvs = (char **)malloc((len + 1) * sizeof(char*))))
+		exit(1/*MALLOC_ERROR*/);
+	argvs[len] = 0;
+	len = 0;
+	while (ast)
+	{
+		//PROTEC EXIT STRDUP
+		argvs[len] = ft_strdup(ast->content);
+		ast = ast->next;
+	}
+	return (argvs);
+}
+
+int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
+{
+	t_token	*argv_stack;
+	int		nb_redirections;
+	int		cmd_begin;
+
+	*nb_assign = 0;
+	nb_redirections = 0;
+	while (token_begin)
+	{
+		if (is_redirection_operator(token_begin->type))
+			stock_redirection(p, token_begin, &nb_redirections);
+		else if (!cmd_begin && (ft_strchr(token_begin->content, '=') > token_begin->content))
+			stock_assign(p, token_begin, nb_assign);
+		else if (token_begin->type == SH_WORD)
+		{
+			stack_argvs(&argv_stack, token_begin);
+			cmd_begin = 1;
+		}
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	}
+	argv_stack = expand_and_retokenize(p, argv_stack);
+	p->child_argv = build_child_argvs(argv_stack);
 	return (nb_redirections);
 }
 
@@ -792,13 +902,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	/*while (token_begin && token_begin != token_end)
-	{
-		print_tok(sh_expansion(token_begin, &(p->params)));
-		token_begin = token_begin->next;
-	}*/
-	//	will give a new little ast for each retokenized word
-	//	store them accordingly in argvs only
 	if (!token_begin)
 		return (handle_no_cmd_name(p));
 	handle_assigns(p);

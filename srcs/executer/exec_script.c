@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/28 05:50:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 05:20:55 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 
 	indexb = token_begin->index;
 	indexe = (token_end) ? token_end->index : -1;
-	//print_cmd(p->cmd, indexb, indexe);
+	print_cmd(p->cmd, indexb, indexe);
 	handle_bang(&token_begin, &bang);
 	next_pipe_fd = 0;
 	while (token_begin && !p->abort_cmd && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)

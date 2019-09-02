@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 08:48:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/26 01:12:32 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/02 01:56:05 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ void		sh_cursor_position(t_pos *cursor)
 		else
 			continue ;
 	}
-	cursor->rows = ft_atoi(temp + 2);
+	if (temp + 1 && temp + 2)
+		cursor->rows = ft_atoi(temp + 2);
 	rows = ft_strchr(temp, ';');
-	cursor->col = ft_atoi(rows + 1);
+	if (rows && rows + 1)
+		cursor->col = ft_atoi(rows + 1);
 	rows = NULL;
 	close(ttyfd);
 }
