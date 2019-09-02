@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 07:02:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 07:04:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <signal.h>//
 #include "sh_env.h"
 #include "error.h"
+#include "sh_word_expansion.h"
 
 //FORBIDDEN FUNCS
 
@@ -583,7 +584,7 @@ t_token	*stack_assigns(t_token *token_begin, t_token *token_end, int *nb_assign)
 	origin = (token_begin) ? create_token() : ;
 }*/
 
-t_token	*expand_and_retokenize(t_token *stack_argvs)
+t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
 {
 	t_token	*actual;
 	t_token	*origin;
@@ -595,11 +596,11 @@ t_token	*expand_and_retokenize(t_token *stack_argvs)
 	{
 		if (!origin)
 		{
-			origin = 0/*retokenize()*/;
+			origin = sh_expansion(stack_argvs, &(p->params));
 			actual = origin;
 		}
 		else
-			actual->next = 0/*retokenize()*/;
+			actual->next = sh_expansion(stack_argvs, &(p->params));
 		while (actual && actual->next)
 			actual = actual->next;
 		stack_argvs = stack_argvs->next;
@@ -656,7 +657,7 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
-	argv_stack = expand_and_retokenize(argv_stack);
+	argv_stack = expand_and_retokenize(p, argv_stack);
 	p->child_argv = build_child_argvs(argv_stack);
 	return (nb_redirections);
 }
@@ -874,6 +875,21 @@ t_token	*is_defined_function(char *name)
 	return (func);
 }
 
+//debug
+void	print_tok(t_token *tok)
+{
+	int		i;
+
+	i = 0;
+	while (tok)
+	{
+		printf("tok[%i] = %s\n", i, tok->content);
+		tok = tok->next;
+		i++;
+	}
+	printf("nb split = %i\n", i);
+}
+
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
@@ -883,9 +899,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_token	*func;
 
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
-	//Expand_words_and_retokenize(/*each p->child_argv*/);
-	//	will give a new little ast for each retokenized word
-	//	store them accordingly in argvs only
 	if (!p->child_argv[0])
 		return (handle_no_cmd_name(p));
 	handle_assigns(p);
