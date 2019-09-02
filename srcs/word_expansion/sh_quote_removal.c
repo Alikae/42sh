@@ -6,12 +6,12 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/08/31 04:32:24 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/01 02:43:44 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
-
+#include <stdio.h>
 void	sh_remove_car(char **str, int i)
 {
 	char	*new;

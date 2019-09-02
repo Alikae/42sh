@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:38:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/22 04:42:19 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 03:24:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void		skip_ending_char(t_tokenize_tool *t, t_toktype type)
 	{
 		if (escaped)
 			escaped--;
-		if (t->input[t->i] == '\\')
+		if (!escaped && t->input[t->i] == '\\')
 			escaped = 2;
 		if (!escaped && !ft_strncmp(ending_sequence, t->input + t->i, len) && (t->i += len))
 			return ;

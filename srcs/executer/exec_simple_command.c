@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/31 05:50:18 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/02 03:25:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -792,11 +792,11 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	while (token_begin && token_begin != token_end)
+	/*while (token_begin && token_begin != token_end)
 	{
 		print_tok(sh_expansion(token_begin, &(p->params)));
 		token_begin = token_begin->next;
-	}
+	}*/
 	//	will give a new little ast for each retokenized word
 	//	store them accordingly in argvs only
 	if (!token_begin)
