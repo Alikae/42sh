@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/16 14:46:55 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/08/27 04:50:03 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,7 @@ SHUTIL_LNK = -L$(SHUTIL_DIR) -l$(SHUTIL)
 ###  CC && FLAGS ###
 CC = gcc
 DEBUG_FLAGS = -g3
-CFLAGS = \
+CFLAGS = -g \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
 		 $(DEBUG_FLAGS) \
 		 -Wall -Werror -Wextra
