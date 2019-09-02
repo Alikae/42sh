@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/01 02:43:44 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/02 09:28:57 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	sh_remove_car(char **str, int i)
 		}
 		j_str++;
 	}
+	new[j] = '\0';
 	free(*str);
 	*str = new;
 }
@@ -54,6 +55,7 @@ void	sh_next_token(t_token **new)
 
 void	sh_token_spliting(t_split *splt)
 {
+	printf("ta gueul, noon\nz");
 	int		j;
 	char	*cpy;
 
