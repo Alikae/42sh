@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 22:11:18 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/03 23:52:12 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void		sh_echo_print(char *tmp, char **handle, int *nl)
 		else if (tmp[1] == '\\')
 			ft_putchar('\\');
 	}
-	if (tmp[1] == 'c')
+	if (tmp && tmp[1] == 'c')
 		nl = 0;
 }
 
