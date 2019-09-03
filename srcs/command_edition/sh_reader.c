@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/03 03:32:05 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/04 01:42:38 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-
-char	*g_buselect;
-char	*g_bucopy;
 
 int			sh_outc(int c)
 {
@@ -56,18 +53,19 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 }
 
 /*
- * To use copy/paste option, please do as follows:
- * 	- Go to profiles and open profiles and edit profiles
- * 	- In profiles section, select keys
- * 	- Then, in the lower left corner of the Key mappings, hit the '+' button
- * 	- Configure CTRL + SHIFT + < to send and escape sequence.
- * 		Set it to ^[<
- * 	- Do the same for CTRL + SHIFT + >. It must be set to ^[>
- * 	- Do the same for ALT + LEFT. Set it to ^[D
- * 	- Do the same for ALT + RIGHT. Set it to ^[C
- * 	NOTE: As an escaped sequence is defined by ^[,
- * 		you just have to add the last letter to the sequence.
- */
+***
+*** To use copy/paste option, please do as follows:
+*** 	- Go to profiles and open profiles and edit profiles
+*** 	- In profiles section, select keys
+*** 	- Then, in the lower left corner of the Key mappings, hit the '+' button
+*** 	- Configure CTRL + SHIFT + < to send and escape sequence.
+*** 		Set it to ^[<
+*** 	- Do the same for CTRL + SHIFT + >. It must be set to ^[>
+*** 	- Do the same for ALT + LEFT. Set it to ^[D
+*** 	- Do the same for ALT + RIGHT. Set it to ^[C
+*** NOTE: As an escaped sequence is defined by ^[,
+***  you just have to add the last letter to the sequence.
+*/
 
 static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 {
@@ -85,11 +83,11 @@ static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 				|| buf[2] == 'B'))
 		*i = cursor_history(command, buf, *i, hist);
 	else if (buf[0] == '\033' && (buf[1] == 'C' || buf[1] == 'D'
-				|| buf[1] == '<' || buf[2] == '>'))
+				|| buf[1] == '<' || buf[1] == '>'))
 		*i = sh_copy_option(command, buf, *i, hist);
-	else if (TAB)
+	else if (buf[0] == '\t')
 		;
-	else if (ENTER)
+	else if (buf[0] == '\n')
 		return (0);
 	else if (!ft_strchr(buf, '\033'))
 		*i = sh_echo_input(command, buf, *i, hist);
@@ -108,8 +106,7 @@ static char	*getcommand(char **command, t_hist *hist)
 	ft_bzero(buf, BUFFER);
 	while (k != 0 && *command && read(0, buf, BUFFER) > 0)
 		k = loop_keys(command, buf, &i, hist);
-	ft_memdel((void**)&g_buselect);
-	ft_memdel((void**)&g_bucopy);
+	ft_memdel((void**)&sh()->buselect);
 	sh_cursor_motion(command, "\033[F", i, hist);
 	return (*command);
 }
@@ -119,8 +116,7 @@ int			sh_reader(char **command, t_hist *hist)
 	struct termios	orig_termios;
 
 	hist->index = -1;
-	g_buselect = ft_strdup("");
-	g_bucopy = NULL;
+	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
 	tputs(tgetstr("ei", NULL), 0, sh_outc);
 	if (tgetent(NULL, getenv("TERM")) == ERR)

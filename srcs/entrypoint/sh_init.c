@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/04 00:22:41 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/04 00:59:19 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,4 +201,6 @@ void	sh_init(t_sh *shell)
 		shell->debug_fd = open("/dev/null", 0);
 	}
 	shell->aliases = NULL;
+	shell->bucopy = NULL;
+	shell->buselect = NULL;
 }

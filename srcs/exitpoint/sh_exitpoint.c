@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 04:02:58 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/04 00:39:44 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,7 @@ void	sh_exitpoint(void)
 	sh_free_params();
 	sh_free_opts();
 	sh()->aliases = ft_free_tabstr(sh()->aliases);
+	ft_memdel((void**)&sh()->bucopy);
+	ft_memdel((void**)&sh()->buselect);
 	exit(EXIT_SUCCESS);
 }
