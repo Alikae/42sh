@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 12:56:27 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/03 23:24:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -656,6 +656,7 @@ char	**build_child_argvs(t_token *ast)
 		tmp = tmp->next;
 		len++;
 	}
+	sh()->child_ac = len;
 	if (!(argvs = (char **)malloc((len + 1) * sizeof(char*))))
 		exit(1/*MALLOC_ERROR*/);
 	argvs[len] = 0;

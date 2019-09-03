@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:56:39 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/13 13:04:36 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/03 23:44:28 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "libft.h"
 #include "t_token.h"
 #include "sh_executer.h"
+#include "sh_entrypoint.h"
 #include <fcntl.h>
 
 int	sh_exec_stdin(void)
@@ -32,6 +33,7 @@ int	sh_exec_stdin(void)
 		ft_bzero(buff, 1024);
 	}
 	free(buff);
+	sh_init_cmd(ret);
 	if (ret && *ret && (sh()->ast = tokenize_input(ret)))//line
 	{
 		print_all_tokens(sh(), sh()->ast, 0);

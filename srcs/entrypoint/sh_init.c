@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 12:52:48 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/04 00:22:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ void	sh_init(t_sh *shell)
 	shell->and_or_separators[1] = SH_OR_IF;
 	shell->pipeline_separators[0] = SH_OR;
 	shell->pipeline_separators[1] = 0;
+	shell->functions = 0;
 	shell->pipein = 0;
 	shell->pipeout = 0;
 	shell->child_ac = 0;

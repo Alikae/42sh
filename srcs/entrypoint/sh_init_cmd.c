@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   sh_init_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 21:20:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 03:37:36 by tcillard         ###   ########.fr       */
+/*   Created: 2019/09/03 23:36:58 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/04 00:22:16 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "sh.h"
 
-char	*ft_strjoin(const char *s1, const char *s2)
+void	sh_init_cmd(char *input)
 {
-	char *dest;
+	t_sh	*p;
 
-	if (!s1 || !s2)
-		return (!s1 ? ft_strdup(s2) : ft_strdup(s1));
-	if ((dest = ft_memalloc(ft_strlen(s1) + ft_strlen(s2) + 1)))
-	{
-		ft_strcpy(dest, s1);
-		ft_strcat(dest, s2);
-	}
-	return (dest);
+	p = sh();
+	p->unfinished_cmd = 0;
+	p->invalid_cmd = 0;
+	p->cmd = input;
 }

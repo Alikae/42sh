@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/02 08:21:30 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/03 02:52:32 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -32,6 +32,7 @@ void	sh_sub_word(t_exp *exp)
 	while (exp->content[exp->i] != '}')
 		exp->value[j++] = exp->content[exp->i++];
 	exp->value[j] = '\0';
+	printf("exp->value in subword = %s\n", exp->value);
 }
 
 void	sh_next_expansion(t_exp *exp)

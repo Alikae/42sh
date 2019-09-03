@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 07:39:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/04 00:18:02 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		sh_loop(void)
 		while (!complete)
 		{
 			//swap_signals_to_prompter
-			if (1 || !dbug)
+			if (/*1 || */!dbug)
 			{
 				fflush(0);
 				if (!(ln_tab = sh_arguments(hist)))
@@ -104,6 +104,8 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("!");
 				ln_tab = ft_strdup("ls");
 				ln_tab = ft_strdup("echo yo lala");
+				ln_tab = ft_strdup("\"BONJOURS TOUT LE\"");
+				ln_tab = ft_strdup("readonly PWD ; cd .. ; pwd");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;
