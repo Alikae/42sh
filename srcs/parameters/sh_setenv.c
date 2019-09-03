@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 19:04:43 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/02 12:55:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ t_env	*sh_setenv(const char *key, const char *value)
 		if (env->value)
 			ft_strdel(&(env->value));
 		env->value = ft_strdup(value);
+	}
+	else if (env)
+	{
+		if (env->value)
+			ft_strdel(&(env->value));
 	}
 	return (env);
 }

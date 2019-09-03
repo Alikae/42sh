@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 04:14:49 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/03 05:26:25 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include "sh_env.h"
 #include "error.h"
 #include "sh_word_expansion.h"
+#include "sh_tools.h"
 
 //FORBIDDEN FUNCS
 
@@ -180,13 +181,37 @@ void	close_pipes_parent(t_sh *p)
 		dprintf(p->debug_fd, "[%i] NO PIPEIN\n", getpid());
 }
 
+char	**transform_env_for_child(t_env *env)
+{
+	char	**tab;
+	int		len;
+	t_env	*tmp;
+
+	len = 0;
+	tmp = env;
+	while (tmp)
+	{
+		len++;
+		tmp = tmp->next;
+	}
+	if (!(tab = (char**)malloc((len + 1) * sizeof(char*))))
+		exit(1/*MALLOC_ERROR*/);
+	len = 0;
+	while (env)
+	{
+		tab[len++] = ft_join_with_char(env->key, env->value, '=');
+		env = env->next;
+	}
+	tab[len] = 0;
+	return (tab);
+}
+
 int     exec_path(t_sh *p, char *path)
 {
 	int ret;
 
 	//fork stuff
 	int child_pid = fork();
-	printf("%s %s\n", p->child_argv[0], p->child_argv[1]);
 	if (/*(p->lldbug) ? !child_pid : */child_pid)
 	{
 		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
@@ -198,7 +223,9 @@ int     exec_path(t_sh *p, char *path)
 		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
 		generate_redirections(p);
 		//printf("lst->out = %d, in = %d\n", p->redirect_lst->out, p->redirect_lst->in);
-		execve(path, p->child_argv, 0/*prgm_env->env is a struct*/);
+		//Free env child?
+		printf("%s %s\n", p->child_argv[0], p->child_argv[1]);
+		execve(path, p->child_argv, transform_env_for_child(p->params)/*prgm_env->env is a struct*/);
 		exit(1/*EXECVE ERROR*/);
 	}
 	return (ret); //<-- Return What?
@@ -562,13 +589,15 @@ void	stack_argvs(t_token **p_argv_stack, t_token *token)
 {
 	t_token	*tmp;
 
+	printf("stack\n");
+	print_all_tokens(sh(), *p_argv_stack, 0);
 	if (!*p_argv_stack)
 		*p_argv_stack = create_token(SH_WORD, token->index, token->content);
 	else
 	{
 		tmp = *p_argv_stack;
 		while (tmp->next)
-			tmp = tmp->next;;
+			tmp = tmp->next;
 		tmp->next = create_token(SH_WORD, token->index, token->content);
 	}
 }
@@ -635,6 +664,7 @@ char	**build_child_argvs(t_token *ast)
 	{
 		//PROTEC EXIT STRDUP
 		argvs[len++] = ft_strdup(ast->content);
+		printf("->%s\n", argvs[len - 1]);
 		ast = ast->next;
 	}
 	return (argvs);
@@ -662,6 +692,7 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
+	printf("new ast\n");
 	print_all_tokens(sh(), argv_stack, 0);
 	argv_stack = expand_and_retokenize(p, argv_stack);
 	p->child_argv = build_child_argvs(argv_stack);
@@ -903,16 +934,20 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	ret;
 	int		(*f)(int ac, char **av, t_env **ev);
 	t_token	*func;
+	t_token	*tmp;
 
+	tmp = token_begin;
+	while (tmp != token_end && tmp->next)
+		tmp = tmp->next;
+	if (tmp->type == SH_FUNC)
+		return (store_func(p, token_begin));
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	if (!p->child_argv[0])
 		return (handle_no_cmd_name(p));
 	handle_assigns(p);
 	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
 	print_redirections(p, p->redirect_lst);
-	if (/**/token_begin->type == SH_FUNC)
-		ret = store_func(p, token_begin);
-	else if ((func = is_defined_function(p->child_argv[0])))
+	if ((func = is_defined_function(p->child_argv[0])))
 		ret = exec_function(p, func);
 	else if ((f = sh_is_builtin(p->child_argv[0])))
 		ret = exec_builtin(p, f);

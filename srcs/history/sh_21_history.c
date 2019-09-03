@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/29 00:38:42 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/03 01:47:56 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static	void	init_history(t_hist *hist, char **history)
 	if (hist->size_r > hist->size_l)
 		hist->size_r = hist->size_l;
 	hist->topush = 0;
-		fprintf(stderr, "SIZE: %zu\n", hist->size_l);
 	hist->prev = ft_reverse_tab(history);
 	hist->index = -1;
 }
@@ -48,7 +47,7 @@ t_hist			*command_history(t_hist *hist)
 	hist->size_r = 0;
 	history = NULL;
 	rest = NULL;
-	if (hist->size_l == 0)
+	if (hist->size_l == 0 || !hist->path)
 	{
 		hist->prev = NULL;
 		return (hist);
@@ -76,19 +75,18 @@ t_hist			*put_in_history(t_hist *hist, char *str)
 	int		i;
 	char	**temp;
 
-	i = 0;
-	if (!str || !ft_strcmp(str, ""))
+	i = -1;
+	if (!str || !ft_strcmp(str, "") || !hist->path)
 		return (hist);
 	hist->prev = ft_reverse_tab(hist->prev);
 	if (ft_strchr(str, '\n'))
 	{
 		temp = ft_strsplit(str, '\n');
 		hist->prev = ft_reverse_tab(hist->prev);
-		while (temp[i])
+		while (temp[++i])
 		{
 			hist->prev = tab_realloc(hist->prev, temp[i]);
 			hist->topush++;
-			i++;
 		}
 		temp = ft_free_tabstr(temp);
 		hist->prev = ft_reverse_tab(hist->prev);
