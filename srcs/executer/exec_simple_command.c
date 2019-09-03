@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 05:26:25 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/03 07:34:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 #include "error.h"
 #include "sh_word_expansion.h"
 #include "sh_tools.h"
+//ASK THEO
+#include "job_control/job_control.h"
 
 //FORBIDDEN FUNCS
 
@@ -92,11 +94,8 @@ int     block_wait(t_sh *p, int child_pid)
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
 			printf("\nChild_process [%i] suspended\n", child_pid);
-			//create_job
-			//{
-			//	extract cmd
-			//	create_job(cmd, pid)
-			//}
+			//add_job
+			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
 	}
 	else if (WIFSIGNALED(status))
@@ -224,8 +223,8 @@ int     exec_path(t_sh *p, char *path)
 		generate_redirections(p);
 		//printf("lst->out = %d, in = %d\n", p->redirect_lst->out, p->redirect_lst->in);
 		//Free env child?
-		printf("%s %s\n", p->child_argv[0], p->child_argv[1]);
-		execve(path, p->child_argv, transform_env_for_child(p->params)/*prgm_env->env is a struct*/);
+		//printf("%s %s\n", p->child_argv[0], p->child_argv[1]);
+		execve(path, p->child_argv, transform_env_for_child(p->params)/*protec?*/);
 		exit(1/*EXECVE ERROR*/);
 	}
 	return (ret); //<-- Return What?
@@ -658,6 +657,7 @@ char	**build_child_argvs(t_token *ast)
 	}
 	if (!(argvs = (char **)malloc((len + 1) * sizeof(char*))))
 		exit(1/*MALLOC_ERROR*/);
+	sh()->child_ac = len;
 	argvs[len] = 0;
 	len = 0;
 	while (ast)
@@ -725,6 +725,12 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_readonly);
 	else if (!ft_strcmp(cmd, "test"))
 		return (&sh_test);
+	else if (!ft_strcmp(cmd, "fg"))
+	{
+		if (sh()->jobs)
+		kill(sh()->jobs->pid, SIGCONT);
+		sh()->abort_cmd = 1;
+	}
 	else if (!ft_strcmp(cmd, "exit"))
 	{
 		sh()->abort_cmd = 1;
@@ -928,6 +934,7 @@ void	print_tok(t_token *tok)
 }
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
+	//ENV SEND TO FUNC
 {
 	int	nb_redirections;
 	int	nb_assign;
@@ -951,6 +958,13 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_function(p, func);
 	else if ((f = sh_is_builtin(p->child_argv[0])))
 		ret = exec_builtin(p, f);
+	//tmp
+	else if (p->abort_cmd)
+	{
+		block_wait(p, p->jobs->pid);
+		return(/*free*/0);
+	}
+	//tmp
 	else
 		ret = exec_prgm(p);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);

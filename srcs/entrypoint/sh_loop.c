@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 03:11:37 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/03 06:27:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("ls");
 				ln_tab = ft_strdup("echo yo lala");
 				ln_tab = ft_strdup("\"BONJOURS TOUT LE\"");
+				ln_tab = ft_strdup("echo yo");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;

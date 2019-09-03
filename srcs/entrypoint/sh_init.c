@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 12:52:48 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/03 07:13:56 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ void	sh_init(t_sh *shell)
 	free(opts);//To pass static?
 		shell->pipe_lst = 0;
 		//
+		//VERIFY ALL SHELL-> ARE SET
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;
 	shell->script_separators[0] = SH_SEMI;
@@ -187,6 +188,7 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_functions = 0;
 	shell->nb_nested_compounds = 0;
 	shell->nb_nested_tokenized_compounds = 0;
+	shell->functions = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();
 	if (ft_fetch_opt("debug", 5, sh()->opt))
