@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/03 07:24:15 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/04 01:21:09 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -141,6 +141,7 @@ $(SHUTIL)_fclean:
 .ONESHELL:
 fclean: $(FT)_fclean $(SHUTIL)_fclean | fclean_msg
 	$(RM) -rf $(OBJ_DIR)
+	$(RM) -rf $(NAME).dSYM
 	$(RM) -rf $(NAME)
 
 re: fclean all

@@ -6,11 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 14:06:25 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/13 16:17:20 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/03 23:42:40 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "sh_entrypoint.h"
 #include "sh_executer.h"
 #include "libft.h"
 #include "t_token.h"
@@ -26,6 +27,7 @@ int	sh_exec_arg(void)
 	opt = ft_fetch_opt("c", 1, sh()->opt);
 	if (opt && opt->arg)
 		ret = opt->arg;
+	sh_init_cmd(ret);
 	if (ret && *ret && (sh()->ast = tokenize_input(ret)))//line
 	{
 		print_all_tokens(sh(), sh()->ast, 0);
