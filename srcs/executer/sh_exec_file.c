@@ -6,11 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 01:53:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/03 23:44:05 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "sh_entrypoint.h"
 #include "libft.h"
 #include "t_token.h"
 #include <fcntl.h>
@@ -44,6 +45,7 @@ static	int		sh_script(const char *path)
 		ft_strclr(buff);
 	}
 	close(fd);
+	sh_init_cmd(input);
 	if (input && *input && (p->ast = tokenize_input(input)))//line
 	{
 		print_all_tokens(p, p->ast, 0);
