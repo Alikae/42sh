@@ -47,8 +47,7 @@ t_token	*create_token(t_toktype type, int index, const char *content)
 		exit(ERROR_MALLOC);
 //ATTENTION STRDUP
 //APPRENEZ A CODER
-	if (!(tok->content = dupfilsdup(content)) && content)
-		exit(ERROR_MALLOC);
+	tok->content = ft_strdup(content);
 	tok->type = type;
 	tok->index = index;
 	tok->sub = 0;

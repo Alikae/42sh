@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/02 07:04:38 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/03 03:07:20 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,7 @@ SHUTIL_INC_DIR = $(SHUTIL_DIR)/includes
 SHUTIL_LNK = -L$(SHUTIL_DIR) -l$(SHUTIL)
 
 ###  CC && FLAGS ###
-CC = gcc
+CC = gcc -g
 DEBUG_FLAGS = -g3
 CFLAGS = -g \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
