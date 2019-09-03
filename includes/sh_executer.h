@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 23:14:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/02 06:57:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		exec_command_to_pipe(t_sh *p, t_token *token_begin, t_token *token_end, int
 int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end);
 int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end);
 int     exec_path(t_sh *p, char *path);
-int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end);
+int		exec_prgm(t_sh *p);
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **));
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end);
 int		sh_exec_arg(void);

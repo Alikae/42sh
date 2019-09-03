@@ -1,113 +1,113 @@
 21sh
 
 EDITION DE COMMANDE:
-	Fini
-	Bugs a corriger
+Fini
+Bugs a corriger
 
 SIGNAUX:
-	En cours
+En cours
 
 SEPARATEURS:
-	Fini
+Fini
 
 PIPES:
-	Fini
+Fini
 
 REDIRECTIONS:
-	Fini
+Fini
 
 AGGREGATEURS DE FICHIERS:
-	Fini
+Fini
 
 QUOTES SIMPLES/DOUBLES:
-		Fini
-		Reste retokenisation du quote-removal
-		Debug en cours
+Fini
+Reste retokenisation du quote-removal
+Debug en cours
 
 
 42sh
 PARTIE OBLIGATOIRE
 
-BUILTINS:		
-	ALIAS:
-		Fini
-	
-	BG:
-		a commencer
-	
-	CD:
-		Reste options posix
-		Debug a faire
+BUILTINS:        MISSING BUILTIN`S ARGV
+ALIAS:
+Fini
 
-	ECHO:
-		Fini
-		Debug a faire
+BG:
+a commencer
 
-	EXIT:
-		implementer la valeur de retour
+CD:
+Reste options posix
+Debug a faire
 
-	FG:
-		a commencer
-	
-	JOBS:
-		a commencer
-		
-	SET:
-		Fini
-		Debug a faire
-	
-	TEST:
-		Fini
-		bug on ! 19 -le 10
-		-a && -o needs debug
-		
-	TYPE:
-		En cours
-	
-	UNALIAS:
-		Fini
-		
-	UNSET:
-		Fini
-		Debug a faire
+ECHO:
+Fini
+Debug a faire
+
+EXIT:
+implementer la valeur de retour
+
+FG:
+a commencer
+
+JOBS:
+a commencer
+
+SET:
+Fini
+BUG sur var existante ?
+Debug a faire
+
+TEST:
+Fini
+-a && -o needs debug
+
+TYPE:
+En cours
+
+UNALIAS:
+Fini
+
+UNSET:
+Fini
+Debug a faire
 
 OPERATEURS LOGIQUES:
-	?
+?
 
 VARIABLES UNIQUES:
-		Fini
+Fini
 
 EXPANSION SIMPLES:
-	Fini
-		
+Fini
+
 SPECIAL PARAMETERS:
-		Manque $? $!
-	
+Manque $? $!
+
 JOB CONTROL &:
-	?
+?
 
 SIGNAUX:
-		?
-	
+?
+
 PARTIE MODULAIRE
 
 INHIBITEURS:
-	ok
-		
+ok
+
 EXPANSIONS:
-		debug
-	
+debug
+
 COMMANDES GROUPEES/SUBSHELL:
-	?
+?
 
 SUBSTITUTION DE COMMANDE:
-		?
+?
 
 EXPANSION ARITHMETIQUE:
-	A commencer
+A commencer
 
 GESTION DES ALIAS:
-	substitution a faire
+substitution a faire
 
 
 
@@ -118,13 +118,51 @@ GESTION DES ALIAS:
 
 ->->-> OLD TODO
 
+Tokenization
+HERE_DOC
+Exec
+assignements
+funcs
+fork
+simple_cmd
+assignements
+SIGNALS
+
+Debug_mode ?
+cmd = "t" -> SEGV
+
+Multi-redirections on same file == redirection type handled by first operator (1>yo 2>>yo) 2 will use >
+
+File executer/fd_handler
+
+HERE DOCS:
+<< <<-
+operator terminator newline here doc newline terminator newline next_operator
+
+REPLACE SH_SYNTAX_ERROR by SH_UNFINISHED_INPUT at places
+
+case yolo in yola) echo ;; yali | yolo) loul;;(po)tu esac
+
+REPARER CASE + FUNC :'(
+
+		p->invalid_cmd
+
+
+		case yolo in yola ) echo ;; yali | yolo ) loul ;; ( po ) tu ; esac
+
+
+		For stock cmd in jobs:
+		stock position in script separators
+
+
+
 		Tokenization
-	HERE_DOC
-	Exec
+		HERE_DOC
+		Exec
 		assignements
-	funcs
+		funcs
 		fork
-	simple_cmd
+		simple_cmd
 		assignements
 		SIGNALS
 
@@ -145,45 +183,7 @@ GESTION DES ALIAS:
 
 		REPARER CASE + FUNC :'(
 
-		p->invalid_cmd
-
-
-		case yolo in yola ) echo ;; yali | yolo ) loul ;; ( po ) tu ; esac
-
-
-		For stock cmd in jobs:
-		stock position in script separators
-
-
-
-Tokenization
-	HERE_DOC
-Exec
-	assignements
-	funcs
-	fork
-	simple_cmd
-	assignements
-SIGNALS
-
-Debug_mode ?
-cmd = "t" -> SEGV
-
-Multi-redirections on same file == redirection type handled by first operator (1>yo 2>>yo) 2 will use >
-
-File executer/fd_handler
-
-HERE DOCS:
-<< <<-
-operator terminator newline here doc newline terminator newline next_operator
-
-REPLACE SH_SYNTAX_ERROR by SH_UNFINISHED_INPUT at places
-
-case yolo in yola) echo ;; yali | yolo) loul;;(po)tu esac
-
-REPARER CASE + FUNC :'(
-
-p->invalid_cmd
+				p->invalid_cmd
 
 
 
@@ -191,20 +191,20 @@ p->invalid_cmd
 
 
 
-case yolo in yola ) echo ;; yali | yolo ) loul ;; ( po ) tu ; esac
+				case yolo in yola ) echo ;; yali | yolo ) loul ;; ( po ) tu ; esac
 
 
-For stock cmd in jobs:
-stock position in script separators
-retrieve each time
+				For stock cmd in jobs:
+				stock position in script separators
+				retrieve each time
 
-Signals :
-	What to do while builtins?
-	Do ctrl-c / z are valid for 1 pipeline or 1 script?
-
-
-
+				Signals :
+				What to do while builtins?
+				Do ctrl-c / z are valid for 1 pipeline or 1 script?
 
 
 
-//Max cmd len? size_t ? (cause strlen)
+
+
+
+				//Max cmd len? size_t ? (cause strlen)

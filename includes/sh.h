@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/28 04:04:12 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 09:03:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "redirections.h"
 # include "t_token.h"
 # include "libft.h"
+# include "sh_env.h"
 
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
 # define SH_NESTED_COMPOUND_LIMIT 1000
@@ -67,6 +68,7 @@ typedef struct		s_sh
 	int				invalid_cmd;
 	int				abort_cmd;
 	int				exit;
+	int				print_syntax_errors;
 	
 	char			**aliases;
 
@@ -76,5 +78,5 @@ typedef struct		s_sh
 
 t_sh	*sh(void);
 char	*sh_tab_fusion(char **t);
-
+t_token	*sh_expansion(t_token *tok, t_env **env);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/28 04:07:23 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/02 05:49:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free
 	(void)t;
 	(void)to_free;
 	//freeall(to_free);
+	if (sh()->print_syntax_errors)
 	printf("SYNTAX_ERROR: %s\n", s);
 	return (0);
 }
@@ -49,7 +50,6 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 	compound_token->sub = create_token(SH_GROUP, 0, 0);
 	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_WHILE, &next_separator)))
 	{
-		printf("a\n");
 		if (!t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;//free everywhere
@@ -581,6 +581,7 @@ t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
 	if (sh()->nb_nested_tokenized_compounds >= SH_NESTED_TOKENIZED_COMPOUND_LIMIT)
 	{
 		sh()->abort_cmd = 1;
+		sh()->print_syntax_errors = 0;
 		printf("SH_NESTED_TOKENIZED_COMPOUND_LIMIT REACHED\nAbort tokenization\n");
 		return (0);
 	}
