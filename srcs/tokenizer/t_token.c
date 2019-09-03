@@ -9,10 +9,8 @@ char	*dupfilsdup(const char *in)
 	char	*new;
 	int		len;
 
-	if (!in)
-		return (0);
 	len = (in) ? ft_strlen(in) : 1;
-	if (!(new = (char*)malloc(sizeof(char))))
+	if (!(new = (char*)malloc(sizeof(char) * (len + 1))))
 		return (0);
 	new[len] = 0;
 	if (in)
@@ -47,8 +45,7 @@ t_token	*create_token(t_toktype type, int index, const char *content)
 		exit(ERROR_MALLOC);
 //ATTENTION STRDUP
 //APPRENEZ A CODER
-	if (!(tok->content = dupfilsdup(content)) && content)
-		exit(ERROR_MALLOC);
+	tok->content = dupfilsdup(content);
 	tok->type = type;
 	tok->index = index;
 	tok->sub = 0;

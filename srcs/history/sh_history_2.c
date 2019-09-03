@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 04:41:21 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/25 04:41:24 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/03 01:20:50 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,19 @@ void			sh_switch_history(t_hist *hist, char **command)
 
 char			*find_path(void) //USE FOR TESTS ONLY. TO BE REMOVED
 {
-	struct passwd	*pass;
+	char			*user;
 	char			*line;
 	char			*path;
 
-	pass = getpwuid(getuid());
-	line = ft_strjoin("/Users/", pass->pw_name);
-	path = ft_strjoin(line, "/.42sh_history");
-	ft_memdel((void**)&line);
-	return (path);
+	user = getenv("USER");
+	if (user)
+	{
+		line = ft_strjoin("/Users/", user);
+		path = ft_strjoin(line, "/.42sh_history");
+		ft_memdel((void**)&line);
+		return (path);
+	}
+	return (NULL);
 }
 
 char			**ft_reverse_tab(char **history)
