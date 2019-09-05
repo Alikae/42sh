@@ -12,6 +12,7 @@
 
 #include "sh_word_expansion.h"
 #include <stdio.h>
+
 void	sh_remove_car(char **str, int i)
 {
 	char	*new;
@@ -96,7 +97,7 @@ int		sh_check_split(t_split *splt)
 
 int		sh_check_quote(t_split *splt, short quote)
 {
-	if (splt->tok->content[splt->i] == '\'')
+	if (quote != SH_DQUOTE && splt->tok->content[splt->i] == '\'')
 	{
 		sh_remove_car(&(splt->tok->content), splt->i);
 		if (quote == SH_QUOTE)
@@ -104,7 +105,7 @@ int		sh_check_quote(t_split *splt, short quote)
 		else
 			sh_find_quote(splt, SH_QUOTE);
 	}
-	else if (splt->tok->content[splt->i] == '"')
+	else if (quote != SH_QUOTE && splt->tok->content[splt->i] == '"')
 	{
 		sh_remove_car(&(splt->tok->content), splt->i);
 		if (quote == SH_DQUOTE)
