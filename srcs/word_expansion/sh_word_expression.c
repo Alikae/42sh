@@ -19,6 +19,7 @@ void	sh_sub_word(t_exp *exp)
 
 	j = exp->i;
 	size = 0;
+	printf("exp->content[j] = %c\n", exp->content[j]);
 	while (exp->content[j] != '}')
 	{
 		j++;
@@ -37,6 +38,7 @@ void	sh_sub_word(t_exp *exp)
 
 void	sh_next_expansion(t_exp *exp)
 {
+	exp->find = (*exp->env);
 	if (sh_tilde_expansion(&(exp->content), *(exp->env)) == 1)
 		return ;
 	if ((exp->content)[exp->i] == '$')
@@ -56,15 +58,20 @@ void	sh_next_word(t_exp *exp)
 {
 	int		i;
 	int		j;
+	char	*cpy;
 
 	j = 0;
 	i = exp->i;
-	free(exp->content);
-	if (!(exp->content = malloc(ft_strlen(exp->content - i + 1))))
+	cpy = exp->content;
+	printf("next_word %c\n", exp->content[exp->i]);
+	if (!(exp->content = malloc(ft_strlen(cpy) - i + 1)))
 		exit(-1);
-	while ((exp->content)[i])
-		exp->content[j++] = exp->content[i++];
+	while (cpy[i])
+		exp->content[j++] = cpy[i++];
 	exp->content[j] = '\0';
+	exp->i = 0;
+	free(cpy);
+	printf("next_word %s\n", exp->content);
 }
 
 void	sh_add_var(t_exp *exp)
@@ -99,6 +106,7 @@ void	sh_assign_word(t_exp *exp)
 void	sh_opt_less(t_exp *exp)
 {
 	exp->i++;
+	printf("opt_less = %c\n", exp->content[exp->i]);
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
 	else if ((exp->find && !(exp->find->value) && exp->opt & COLON) || !(exp->find))
@@ -199,10 +207,9 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[exp->i] != '\\' && exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
-	printf("%s\n", exp->name);
+	printf("record->name = %s\n", exp->name);
 	sh_find_value(exp);
-	if (exp->find)
-		sh_word_opt(exp);
+	sh_word_opt(exp);
 }
 
 void	sh_parameter_expansion(t_exp *exp)
