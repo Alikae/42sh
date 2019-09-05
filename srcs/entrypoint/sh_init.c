@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/04 01:20:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/05 02:10:43 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	handle_signal(int sig)
 	dprintf(sh()->debug_fd, "sig %i\n", sig);
 	if (sig == SIGTSTP)
 	{
-		//printf("\nSIGTSTP detected\n");
+		printf("\nSIGTSTP detected\n");
 		//return to prompt
 	}
 	else if (sig == SIGINT)
@@ -115,9 +115,12 @@ void	handle_signal(int sig)
 	else if (sig == SIGILL)
 		printf("ILLEGAL INSTRUCTION\nWhat are you trying to do ?!?\n");
 	else if (sig == SIGBUS)
-		printf("BUS ERROR\nTake the train instead\n");
+		printf("BUS ERROR\n");
 	else if (sig == SIGCONT)
 		;//return to last job
+	else if (sig == SIGTRAP)
+		printf("SIGTRAPPED: WHAT IS THAT?\n");
+	//exit(0);//
 }
 
 void	init_signals_handling()
@@ -190,6 +193,7 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_compounds = 0;
 	shell->nb_nested_tokenized_compounds = 0;
 	shell->functions = 0;
+	shell->jobs = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();
 	if (ft_fetch_opt("debug", 5, sh()->opt))
