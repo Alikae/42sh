@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/04 01:20:14 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/05 02:47:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,25 @@ void	print_redirections(t_sh *p, t_redirect_lst *origin)
 	}
 }
 
+void	no_effect(int sig)
+{
+	(void)sig;
+}
+
+void	init_signals_child()
+{
+	signal(SIGTSTP, &no_effect);
+}
+
 void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 {
 	(void)p;
 	sigfillset(sigset);
 	sigprocmask(SIG_BLOCK, sigset, 0);
+
+	//
+	init_signals_child();
+	//
 }
 
 int     block_wait(t_sh *p, int child_pid)
@@ -88,6 +102,7 @@ int     block_wait(t_sh *p, int child_pid)
 		return (0);
 	}
 	dprintf(p->debug_fd, "waited\n");
+	printf("%i\n", status);
 	if (WIFSTOPPED(status))
 	{
 	dprintf(p->debug_fd, "waited2\n");
@@ -109,7 +124,9 @@ int     block_wait(t_sh *p, int child_pid)
 		}
 		*/
 	}
+			printf("\nChild_process [%i] suspended\n", child_pid);
 	sigprocmask(SIG_UNBLOCK, &sigset, 0);
+			printf("\nChild_process [%i] suspended\n", child_pid);
 	////wait(&wait_status);
 	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
 	//	;
@@ -205,13 +222,15 @@ char	**transform_env_for_child(t_env *env)
 	return (tab);
 }
 
+void lstp(){}
+
 int     exec_path(t_sh *p, char *path)
 {
 	int ret;
 
 	//fork stuff
 	int child_pid = fork();
-	if (/*(p->lldbug) ? !child_pid : */child_pid)
+	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 	{
 		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
 		close_pipes_parent(p);
@@ -224,6 +243,7 @@ int     exec_path(t_sh *p, char *path)
 		//printf("lst->out = %d, in = %d\n", p->redirect_lst->out, p->redirect_lst->in);
 		//Free env child?
 		//printf("%s %s\n", p->child_argv[0], p->child_argv[1]);
+		lstp();
 		execve(path, p->child_argv, transform_env_for_child(p->params)/*protec?*/);
 		exit(1/*EXECVE ERROR*/);
 	}
@@ -728,7 +748,10 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 	else if (!ft_strcmp(cmd, "fg"))
 	{
 		if (sh()->jobs)
-		kill(sh()->jobs->pid, SIGCONT);
+		{
+			kill(sh()->jobs->pid, SIGCONT);
+			block_wait(sh(), sh()->jobs->pid);
+		}
 		sh()->abort_cmd = 1;
 	}
 	else if (!ft_strcmp(cmd, "exit"))
@@ -961,7 +984,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//tmp
 	else if (p->abort_cmd)
 	{
-		block_wait(p, p->jobs->pid);
 		return(/*free*/0);
 	}
 	//tmp
