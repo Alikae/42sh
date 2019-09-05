@@ -55,7 +55,6 @@ void	sh_next_token(t_token **new)
 
 void	sh_token_spliting(t_split *splt)
 {
-	printf("ta gueul, noon\nz");
 	int		j;
 	char	*cpy;
 
@@ -146,7 +145,10 @@ void	sh_quote_removal(t_token *tok, const char *split)
 	t_split	splt;
 
 	splt.tok = tok;
-	splt.split = split;
+	if (split)
+		splt.split = split;
+	else
+		splt.split = ft_strdup(" \t\n");
 	splt.i = 0;
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
