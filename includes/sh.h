@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 07:23:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/05 02:36:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ typedef struct		s_sh
 	int				print_syntax_errors;
 	
 	char			**aliases;
+
+	char			*bucopy;
+	char			*buselect;	
 
 	int	lldbug;
 	char *cmd;
