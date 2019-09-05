@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 06:31:41 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/05 06:31:12 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,7 @@ int			bang_unfollowed_by_word(t_tokenize_tool *t)
 
 t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {
+	//If word contain = or >< , !word_nb++ ?
 	int			word_begin;
 	t_toktype	type;
 	int			len;
@@ -236,6 +237,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 		}
 		else
 		{
+			//handle aliases
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 			//if (t->word_nb == 1)
 			//	while (is_unquoted_valid_alias_name(token->content))

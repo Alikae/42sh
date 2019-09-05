@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/03 05:05:42 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/05 06:01:47 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -14,6 +14,7 @@
 
 void	sh_init_exp(t_env **env, t_exp *exp, t_token *tok)
 {
+	exp->quote = 0;
 	exp->first_i = 0;
 	exp->i = 0;
 	exp->find = *env;
@@ -78,6 +79,45 @@ void	sh_sub_token(t_exp exp, t_token **tok)
 	free(cpy);
 }
 
+int		sh_in_expansion(t_exp *exp, t_token **tok)
+{
+	exp->i++;
+	sh_parameter_expansion(exp);
+	if (exp->opt == ERROR)
+		return (sh_word_error(exp));
+//	else if (((*tok)->content)[i] == '('
+//			&& ((*tok)->content)[i + 1] == '(')
+//		sh_arithmetique_expanssion(&((*tok)->content), i + 2, env);
+	sh_sub_token(*exp, tok);
+	free(exp->content);
+	exp->content = ft_strdup((*tok)->content);
+	exp->i = exp->first_i - 1;
+	exp->find = *(exp->env);
+	if (exp->value)
+		free(exp->value);
+	exp->value = NULL;
+	return (0);
+}
+
+int		sh_expansion_quote(t_token **tok, t_exp *exp)
+{
+	if (exp->quote == SH_BQUOTE || exp->quote - SH_DQUOTE == SH_QUOTE)
+	{
+		exp->quote = 0;
+		return (0);
+	}
+	if (exp->quote != SH_DQUOTE && (*tok)->content[exp->i] == '\'')
+		exp->quote = SH_QUOTE;
+	else if (exp->quote != SH_QUOTE && (*tok)->content[exp->i] == '"')
+		exp->quote = SH_DQUOTE;
+	else if ((exp->quote == SH_QUOTE && (*tok)->content[exp->i] == '\'')
+			|| (exp->quote == SH_DQUOTE && (*tok)->content[exp->i] == '"'))
+		exp->quote = 0;
+	else if (exp->quote != SH_QUOTE && (*tok)->content[exp->i] == '\\')
+		exp->quote = SH_BQUOTE;
+	return (1);
+}
+
 int		sh_word_expansion(t_token **tok, t_env **env)
 {
 	t_exp	exp;
@@ -89,23 +129,12 @@ int		sh_word_expansion(t_token **tok, t_env **env)
 	while ((*tok) && (*tok)->content && ((*tok)->content)[exp.i])
 	{
 		exp.first_i = exp.i;
-		if ((*tok)->content[exp.i] == '$')
+		if (sh_expansion_quote(tok, &exp) && exp.quote != SH_QUOTE && exp.quote != SH_BQUOTE
+			&& (exp.quote - SH_DQUOTE) != SH_BQUOTE && (*tok)->content[exp.i] == '$'
+			&& (*tok)->content[exp.i + 1])
 		{
-			exp.i++;
-			sh_parameter_expansion(&exp);
-			if (exp.opt == ERROR)
-				return (sh_word_error(&exp));
-	//		else if (((*tok)->content)[i] == '('
-	//				&& ((*tok)->content)[i + 1] == '(')
-	//			sh_arithmetique_expanssion(&((*tok)->content), i + 2, env);
-			sh_sub_token(exp, tok);
-			free(exp.content);
-			exp.content = ft_strdup((*tok)->content);
-			exp.i = exp.first_i - 1;
-			exp.find = *(exp.env);
-			if (exp.value)
-				free(exp.value);
-			exp.value = NULL;
+			if (sh_in_expansion(&exp, tok))
+				return (1);
 		}
 		exp.i++;
 	}

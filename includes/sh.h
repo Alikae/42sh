@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/04 00:31:29 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/05 02:36:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "t_token.h"
 # include "libft.h"
 # include "sh_env.h"
+//ASK THEO
+# include "job_control/job_control.h"
 
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
 # define SH_NESTED_COMPOUND_LIMIT 1000
@@ -77,6 +79,9 @@ typedef struct		s_sh
 
 	int	lldbug;
 	char *cmd;
+	int				index_pipeline_begin;
+	int				index_pipeline_end;
+	t_job			*jobs;
 }					t_sh;
 
 t_sh	*sh(void);

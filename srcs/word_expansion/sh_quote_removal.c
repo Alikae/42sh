@@ -12,6 +12,7 @@
 
 #include "sh_word_expansion.h"
 #include <stdio.h>
+
 void	sh_remove_car(char **str, int i)
 {
 	char	*new;
@@ -55,7 +56,6 @@ void	sh_next_token(t_token **new)
 
 void	sh_token_spliting(t_split *splt)
 {
-	printf("ta gueul, noon\nz");
 	int		j;
 	char	*cpy;
 
@@ -97,7 +97,7 @@ int		sh_check_split(t_split *splt)
 
 int		sh_check_quote(t_split *splt, short quote)
 {
-	if (splt->tok->content[splt->i] == '\'')
+	if (quote != SH_DQUOTE && splt->tok->content[splt->i] == '\'')
 	{
 		sh_remove_car(&(splt->tok->content), splt->i);
 		if (quote == SH_QUOTE)
@@ -105,7 +105,7 @@ int		sh_check_quote(t_split *splt, short quote)
 		else
 			sh_find_quote(splt, SH_QUOTE);
 	}
-	else if (splt->tok->content[splt->i] == '"')
+	else if (quote != SH_QUOTE && splt->tok->content[splt->i] == '"')
 	{
 		sh_remove_car(&(splt->tok->content), splt->i);
 		if (quote == SH_DQUOTE)
@@ -146,7 +146,10 @@ void	sh_quote_removal(t_token *tok, const char *split)
 	t_split	splt;
 
 	splt.tok = tok;
-	splt.split = split;
+	if (split)
+		splt.split = split;
+	else
+		splt.split = ft_strdup(" \t\n");
 	splt.i = 0;
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
