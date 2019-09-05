@@ -99,19 +99,23 @@ int		sh_in_expansion(t_exp *exp, t_token **tok)
 	return (0);
 }
 
-void	sh_expansion_quote(t_token **tok, t_exp *exp)
+int		sh_expansion_quote(t_token **tok, t_exp *exp)
 {
 	if (exp->quote == SH_BQUOTE || exp->quote - SH_DQUOTE == SH_QUOTE)
 	{
 		exp->quote = 0;
-		return ;
+		return (0);
 	}
 	if (exp->quote != SH_DQUOTE && (*tok)->content[exp->i] == '\'')
 		exp->quote = SH_QUOTE;
 	else if (exp->quote != SH_QUOTE && (*tok)->content[exp->i] == '"')
 		exp->quote = SH_DQUOTE;
+	else if ((exp->quote == SH_QUOTE && (*tok)->content[exp->i] == '\'')
+			|| (exp->quote == SH_DQUOTE && (*tok)->content[exp->i] == '"'))
+		exp->quote = 0;
 	else if (exp->quote != SH_QUOTE && (*tok)->content[exp->i] == '\\')
 		exp->quote = SH_BQUOTE;
+	return (1);
 }
 
 int		sh_word_expansion(t_token **tok, t_env **env)
@@ -125,10 +129,9 @@ int		sh_word_expansion(t_token **tok, t_env **env)
 	while ((*tok) && (*tok)->content && ((*tok)->content)[exp.i])
 	{
 		exp.first_i = exp.i;
-		sh_expansion_quote(tok, &exp);
-		if (exp.quote != SH_QUOTE && exp.quote != SH_BQUOTE
-			&& (exp.quote - SH_DQUOTE) != SH_BQUOTE
-			&& (*tok)->content[exp.i] == '$' && (*tok)->content[exp.i + 1])
+		if (sh_expansion_quote(tok, &exp) && exp.quote != SH_QUOTE && exp.quote != SH_BQUOTE
+			&& (exp.quote - SH_DQUOTE) != SH_BQUOTE && (*tok)->content[exp.i] == '$'
+			&& (*tok)->content[exp.i + 1])
 		{
 			if (sh_in_expansion(&exp, tok))
 				return (1);

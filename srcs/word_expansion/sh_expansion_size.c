@@ -45,7 +45,8 @@ int		sh_simple_word(char *content, int i)
 	while (content[i] != ' ' && content[i] != '/'
 			&& content[i] != '"' &&  content[i] != '-'
 			&& content[i] != '$' && content[i] != '\''
-			&& content[i] != ':' && content[i])
+			&& content[i] != ':' && content[i] != '\\'
+			&& content[i])
 		++i;
 	return (i);
 }

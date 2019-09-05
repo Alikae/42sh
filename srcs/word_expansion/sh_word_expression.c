@@ -186,7 +186,7 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[cpy] != '%' && exp->content[cpy] != '}'
 			&& exp->content[cpy] != '$' && exp->content[cpy] != '/'
 			&& exp->content[cpy] != '"' && exp->content[cpy] != '\''
-			&& exp->content[cpy])
+			&& exp->content[cpy] != '\\' && exp->content[cpy])
 		cpy++;
 	if (!(exp->name = malloc(cpy - exp->i + 1)))
 		exit(-1);
@@ -196,7 +196,7 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[exp->i] != '%' && exp->content[exp->i] != '}'
 			&& exp->content[exp->i] != '$' && exp->content[exp->i] != '/'
 			&& exp->content[exp->i] != '"' && exp->content[exp->i] != '\''
-			&& exp->content[exp->i])
+			&& exp->content[exp->i] != '\\' && exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
 	printf("%s\n", exp->name);
