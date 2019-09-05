@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/04 01:39:00 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/05 02:33:33 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ typedef struct	s_cursors
 
 void			sh_cursor_position(t_pos *cursor);
 int				sh_reader(char **command, t_hist *hist);
-int				sh_cursor_motion_word(char **command, char *buf, int i,
+int				sh_cursor_motion_word(char **command, char *buf,
+								int i, t_hist *hist);
 
 int				sh_cursor_motion(char **command, char *buf,
 								int i, t_hist *hist);
