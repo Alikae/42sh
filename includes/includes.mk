@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/02 09:21:44 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/03 07:20:19 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,9 @@ H_FILES_word_expansion = \
 
 H_FILES_redirections = \
 	redirections.h
+
+H_FILES_job_control = \
+	job_control.h
 
 # SUPPA concat loop
 H_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(H_FILES_$(SUB_DIR))))

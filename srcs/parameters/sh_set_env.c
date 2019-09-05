@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 15:27:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 15:27:32 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/05 07:25:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	sh_set_env(const char *key, const char *value)
 	var = &(sh()->env);
 	if (!*var)
 		*var = sh_init_var(key, value);
-	else if (sh_get_value(key))
+	else if (sh_isset(key))
 		sh_set_value(key, value);
 	else
 		sh_add_var(key, value);

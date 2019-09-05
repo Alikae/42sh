@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/05 02:47:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/05 08:55:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	init_signals_child()
 {
 	signal(SIGTSTP, &no_effect);
 }
+
+void lstp(){}
 
 void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 {
@@ -222,8 +224,6 @@ char	**transform_env_for_child(t_env *env)
 	return (tab);
 }
 
-void lstp(){}
-
 int     exec_path(t_sh *p, char *path)
 {
 	int ret;
@@ -322,7 +322,7 @@ int		exec_prgm(t_sh *p)
 	}
 	if (!can_exec(&st))
 	{
-		printf("cant exec %s\n", path);
+		printf("cant exec '%s'\n", path);
 		return (127);
 	}
 	ret = exec_path(p, real_path);
@@ -557,6 +557,7 @@ void	del_n_assign_lst(t_sh *p, int n)
 
 void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 {
+	//reverse sens
 	t_env	*tmp;
 	char	*equal;
 
@@ -608,8 +609,8 @@ void	stack_argvs(t_token **p_argv_stack, t_token *token)
 {
 	t_token	*tmp;
 
-	printf("stack\n");
-	print_all_tokens(sh(), *p_argv_stack, 0);
+	//printf("stack\n");
+	//print_all_tokens(sh(), *p_argv_stack, 0);
 	if (!*p_argv_stack)
 		*p_argv_stack = create_token(SH_WORD, token->index, token->content);
 	else
@@ -667,7 +668,7 @@ char	**build_child_argvs(t_token *ast)
 	t_token	*tmp;
 	char	**argvs;
 
-	print_all_tokens(sh(), ast, 0);
+	//print_all_tokens(sh(), ast, 0);
 	len = 0;
 	tmp = ast;
 	while (tmp)
@@ -682,9 +683,8 @@ char	**build_child_argvs(t_token *ast)
 	len = 0;
 	while (ast)
 	{
-		//PROTEC EXIT STRDUP
-		argvs[len++] = ft_strdup(ast->content);
-		printf("->%s\n", argvs[len - 1]);
+		argvs[len++] = ft_strdup(ast->content);//need return "" when null->dupfilsdup
+		//printf("->%s\n", argvs[len - 1]);
 		ast = ast->next;
 	}
 	return (argvs);
@@ -699,6 +699,7 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 	*nb_assign = 0;
 	nb_redirections = 0;
 	argv_stack = 0;
+	cmd_begin = 0;
 	while (token_begin)
 	{
 		if (is_redirection_operator(token_begin->type))
@@ -712,10 +713,11 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
-	printf("new ast\n");
-	print_all_tokens(sh(), argv_stack, 0);
+	//printf("new ast\n");
+	//print_all_tokens(sh(), argv_stack, 0);
 	argv_stack = expand_and_retokenize(p, argv_stack);
 	p->child_argv = build_child_argvs(argv_stack);
+	free_ast(argv_stack);
 	return (nb_redirections);
 }
 
@@ -887,10 +889,12 @@ int		handle_no_cmd_name(t_sh *p)
 	assign = p->assign_lst;
 	while (assign)
 	{
-		sh_setenv(assign->key, assign->value);
+		lstp();
+		sh_setenv(assign->key, assign->value); //doesnt replace
 		assign = assign->next;
 	}
-	//free_allstuff
+	ft_free_tabstr(p->child_argv);
+	p->child_argv = 0;
 	return (0);
 }
 
@@ -899,6 +903,9 @@ int		handle_no_cmd_name(t_sh *p)
 //
 //echo ls && ls;
 //
+//
+//
+//Expand assigns?
 
 int		exec_function(t_sh *p, t_token *func)
 {
@@ -919,18 +926,6 @@ int		exec_function(t_sh *p, t_token *func)
 	//restore_positional_params
 }
 
-int		store_func(t_sh *p, t_token *function)
-{
-	t_token	*tmp;
-
-	//if exist remove old
-	tmp = p->functions;
-	p->functions = dup_token_with_sub(function);
-	p->functions->next = tmp;
-	//if error return !0
-	return (0);
-}
-
 t_token	*is_defined_function(char *name)
 {
 	t_token	*func;
@@ -939,6 +934,47 @@ t_token	*is_defined_function(char *name)
 	while (func && ft_strcmp(func->content, name))
 		func = func->next;
 	return (func);
+}
+
+////////////////////////////////////////////
+void	remove_old_function(const char *name)
+{
+	//can refactor but seems ok
+	t_token	*func;
+	t_token	*tmp;
+
+	func = sh()->functions;
+
+	if (!func)
+		return ;
+	if (!ft_strcmp(func->content, name))
+	{
+		tmp = func->next;
+		func->next = 0;
+		free_ast(func);
+		sh()->functions = tmp;
+	}
+	while (func && func->next && ft_strcmp(func->next->content, name))
+		func = func->next;
+	if (func->next && !ft_strcmp(func->next->content, name))
+	{
+		tmp = func->next;
+		func->next = 0;
+		free_ast(func);
+		sh()->functions = tmp;
+	}
+}
+
+int		store_func(t_sh *p, t_token *function)
+{
+	t_token	*tmp;
+
+	remove_old_function(function->content);
+	tmp = p->functions;
+	p->functions = dup_token_with_sub(function);
+	p->functions->next = tmp;
+	//if error return !0
+	return (0);
 }
 
 //debug
@@ -970,7 +1006,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	while (tmp != token_end && tmp->next)
 		tmp = tmp->next;
 	if (tmp->type == SH_FUNC)
-		return (store_func(p, token_begin));
+		return (store_func(p, tmp));
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	if (!p->child_argv[0])
 		return (handle_no_cmd_name(p));
@@ -996,5 +1032,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	restore_before_assigns(p);
 	del_n_assign_lst(p, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
+	//free tab2d p->child_argv
 	return (ret);
 }
