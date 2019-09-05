@@ -23,6 +23,7 @@ typedef struct	s_exp
 	char	*name;
 	char	*content;
 	short	opt;
+	short	quote;
 }				t_exp;
 
 typedef struct	s_split

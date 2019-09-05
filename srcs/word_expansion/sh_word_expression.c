@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/03 02:52:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/05 04:52:11 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -185,22 +185,24 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
 			&& exp->content[cpy] != '%' && exp->content[cpy] != '}'
 			&& exp->content[cpy] != '$' && exp->content[cpy] != '/'
-			&& exp->content[cpy] != '"' && exp->content[cpy])
+			&& exp->content[cpy] != '"' && exp->content[cpy] != '\''
+			&& exp->content[cpy])
 		cpy++;
-	if (!(exp->name = malloc(cpy - exp->i)))
+	if (!(exp->name = malloc(cpy - exp->i + 1)))
 		exit(-1);
 	while (exp->content[exp->i] != ':' && exp->content[exp->i] != '-'
 			&& exp->content[exp->i] != '=' && exp->content[exp->i] != '?'
 			&& exp->content[exp->i] != '+' && exp->content[exp->i] != '#'
 			&& exp->content[exp->i] != '%' && exp->content[exp->i] != '}'
 			&& exp->content[exp->i] != '$' && exp->content[exp->i] != '/'
-			&& exp->content[exp->i] != '"' && exp->content[exp->i])
+			&& exp->content[exp->i] != '"' && exp->content[exp->i] != '\''
+			&& exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
 	printf("%s\n", exp->name);
 	sh_find_value(exp);
 	if (exp->find)
-	sh_word_opt(exp);
+		sh_word_opt(exp);
 }
 
 void	sh_parameter_expansion(t_exp *exp)
