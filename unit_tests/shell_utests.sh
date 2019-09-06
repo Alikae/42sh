@@ -191,11 +191,48 @@ shell_utests ()
 	display_result
 }
 
+test_custom_script () {
+	sh_test_in
+	sh_utests_tests "$cmd_file_1"
+	PS3='Choose your cmd file: '
+	tests_fd_lst="$(ls $UT_dir/tests/ | grep .utest) exit"
+	select i in $tests_fd_lst
+	do
+		echo "\033[0;36;40m[ $i ]\033[0;0m"
+		if [ "$i" = 'exit' ] ; then
+			exit ;
+		fi
+		sh_utests_tests "$UT_dir/tests/$i"
+		display_result
+		break ;
+	done 2>&1
+
+}
+
 utest_minishell () {
 	sh_test_in
 	if [ -s "$UT_dir/tests/minishell.utest" ]
 	then
 		sh_utests_tests "$UT_dir/tests/minishell.utest"
+		display_result
+	fi
+}
+
+utest_21s () {
+	sh_test_in
+	if [ -s "$UT_dir/tests/minishell.utest" ]
+	then
+		sh_utests_tests "$UT_dir/tests/21sh.utest"
+		display_result
+	fi
+}
+
+
+utest_42sh () {
+	sh_test_in
+	if [ -s "$UT_dir/tests/minishell.utest" ]
+	then
+		sh_utests_tests "$UT_dir/tests/42sh.utest"
 		display_result
 	fi
 }
