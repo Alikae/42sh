@@ -6,13 +6,14 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 02:33:09 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/06 06:01:14 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "sh_env.h"
+#include "sh_entrypoint.h"
 #include "sh_opt.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -109,9 +110,10 @@ void	handle_signal(int sig)
 	{
 		printf("\nTerminated\n");
 		sh()->abort_cmd = 1;
+		sh_prompt();
 	}
-	else if (sig == SIGSEGV)
-		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
+//	else if (sig == SIGSEGV)
+//		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGABRT)
 		printf("SIGABORT\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGILL)
@@ -128,7 +130,7 @@ void	handle_signal(int sig)
 void	init_signals_handling()
 {
 	signal(SIGINT, &handle_signal);
-	signal(SIGSEGV, &handle_signal);
+//	signal(SIGSEGV, &handle_signal);
 	signal(SIGTSTP, &handle_signal);
 	signal(SIGILL, &handle_signal);
 //	signal(SIGTRAP, &handle_signal);
@@ -197,6 +199,7 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_tokenized_compounds = 0;
 	shell->functions = 0;
 	shell->jobs = 0;
+	shell->exit = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();
 	if (ft_fetch_opt("debug", 5, sh()->opt))
