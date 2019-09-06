@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 04:41:21 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/03 01:20:50 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/06 03:09:10 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,13 @@ void			sh_switch_history(t_hist *hist, char **command)
 	hist->index = -1;
 }
 
-char			*find_path(void) //USE FOR TESTS ONLY. TO BE REMOVED
+char			*find_path(void)
 {
-	char			*user;
-	char			*line;
 	char			*path;
 
-	user = getenv("USER");
-	if (user)
+	if (sh()->dir)
 	{
-		line = ft_strjoin("/Users/", user);
-		path = ft_strjoin(line, "/.42sh_history");
-		ft_memdel((void**)&line);
+		path = ft_strjoin(sh()->dir, "/.42sh_history");
 		return (path);
 	}
 	return (NULL);

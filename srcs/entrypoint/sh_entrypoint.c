@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 23:34:47 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 01:01:39 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	sh_init(sh());
 	if (ft_fetch_opt("c", 1, sh()->opt))
 		sh_exec_arg();
-	else if (sh()->ac >= 1)
+	else if (sh()->ac >= 1) //Are options (-c) counted
 		sh_exec_file();
 	else if (!isatty(0))
 		sh_exec_stdin();

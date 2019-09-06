@@ -6,14 +6,13 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 04:29:37 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/25 00:29:38 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/06 00:25:40 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "sh_builtins.h"
 #include "sh.h"
-#include <stdio.h> //TO REMOVE
 
 #define F_ALL 1
 
@@ -109,7 +108,7 @@ static int		check_flags(char *from, char *to)
 	return (0);
 }
 
-int			sh_unalias(int ac, char **av, t_env **ev)
+int				sh_unalias(int ac, char **av, t_env **ev)
 {
 	int		i;
 	char	flag;

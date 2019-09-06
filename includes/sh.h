@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/05 02:36:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/06 02:30:09 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ typedef struct		s_sh
 
 	char			*bucopy;
 	char			*buselect;	
+	
+	char			*user;
+	char			*dir;
 
 	int	lldbug;
 	char *cmd;

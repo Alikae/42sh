@@ -1,40 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tab_realloc.c                                      :+:      :+:    :+:   */
+/*   sh_palias.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/03 12:07:03 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/12 18:20:29 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/09/06 00:16:34 by tmeyer            #+#    #+#             */
+/*   Updated: 2019/09/06 03:20:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
-#include "history.h"
+#include "sh_entrypoint.h"
 
-char		**tab_realloc(char **tabl, char *line)
+static char			*find_path(void)
 {
-	int		i;
-	char	**new;
+	char			*path;
 
-	i = 0;
-	while (tabl && tabl[i])
-		i++;
-	if (!(new = (char**)malloc(sizeof(char*) * (i + 2))))
-		return (tabl);
-	else
+	if (sh()->dir)
 	{
-		i = 0;
-		while (tabl && tabl[i])
-		{
-			new[i] = ft_strdup(tabl[i]);
-			i++;
-		}
-		new[i] = ft_strdup(line);
-		new[i + 1] = NULL;
+		path = ft_strjoin(sh()->dir, "/.42sh_rc");
+		return (path);
 	}
-	ft_free_tabstr(tabl);
-	return (new);
+	return (NULL);
+}
+
+int		sh_parse_rc(void)
+{
+	char	*path;
+	int		ret;
+
+	path = find_path();
+	ret = sh_script(path);
+	ft_memdel((void**)&path);
+	return (ret);
 }

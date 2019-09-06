@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 23:44:05 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 03:12:12 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 int     exec_script(t_sh *p, t_token *token_begin, t_token *token_end);
 
-static	int		sh_script(const char *path)
+int		sh_script(const char *path)
 {
 	t_sh *p;
 	char	*buff;

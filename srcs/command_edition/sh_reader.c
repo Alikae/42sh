@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/04 01:42:38 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/06 02:04:44 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,14 @@ static char	*getcommand(char **command, t_hist *hist)
 int			sh_reader(char **command, t_hist *hist)
 {
 	struct termios	orig_termios;
+	char	*term;
 
+	term = getenv("TERM");
 	hist->index = -1;
 	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
 	tputs(tgetstr("ei", NULL), 0, sh_outc);
-	if (tgetent(NULL, getenv("TERM")) == ERR)
+	if (tgetent(NULL, term ? term : "vt100") == ERR)
 		exit(0);
 	if (tcgetattr(0, &orig_termios))
 		exit(0);
@@ -128,5 +130,6 @@ int			sh_reader(char **command, t_hist *hist)
 	getcommand(command, hist);
 	write(0, "\n", 1);
 	sh_tty_cbreak(2, orig_termios);
+	term = NULL;
 	return (1);
 }

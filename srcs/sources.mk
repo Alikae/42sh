@@ -6,14 +6,15 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/04 01:19:12 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/06 03:19:15 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### MAIN FILES ###
 C_FILES = \
 	main.c \
-	sh.c
+	sh.c \
+	sh_rc.c
 
 C_FILES_entrypoint = \
 	sh_entrypoint.c \

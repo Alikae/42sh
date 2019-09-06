@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/05 02:36:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/06 02:33:09 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 #include "sh_opt.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <stdio.h> //ARE U SURE ?
+#include <sys/types.h>
+#include <pwd.h>
 
 static void	sh_set_shppid(void)
 {
@@ -155,7 +157,8 @@ void	init_signals_handling()
 
 void	sh_init(t_sh *shell)
 {
-	char *opts;
+	char			*opts;
+	struct passwd	*pwd;
 	
 	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug");
 	sh_init_env();
@@ -209,4 +212,7 @@ void	sh_init(t_sh *shell)
 	shell->aliases = NULL;
 	shell->bucopy = NULL;
 	shell->buselect = NULL;
+	shell->user = getlogin();
+	pwd = getpwnam(shell->user);
+	shell->dir = pwd->pw_dir;
 }
