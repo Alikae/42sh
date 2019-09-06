@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/06 07:11:10 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/06 15:01:45 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,6 +112,7 @@ C_FILES_builtins = \
 	sh_test.c \
 	sh_true.c \
 	sh_alias.c \
+	sh_pwd.c \
 	sh_exit.c \
 	sh_unalias.c
 

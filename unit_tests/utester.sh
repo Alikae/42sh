@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/06 14:10:33 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/06 15:55:41 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -96,17 +96,17 @@ while [ -z $user_in ] ; do
 done
 
 if [[ "$user_in" -eq "1" ]] ; then
-	utest_minishell	2>>"$UT_log_file"
+	utest_minishell
 elif [[ "$user_in" -eq "2" ]] ; then
-	utest_21sh 2>>"$UT_log_file"
+	utest_21sh
 elif [[ "$user_in" -eq "3" ]] ; then
-	utest_42sh 2>>"$UT_log_file"
+	utest_42sh
 elif [[ "$user_in" -eq "4" ]] ; then
-	test_custom_script $1 2>"$UT_log_file"
+	test_custom_script $1
 elif [[ "$user_in" -eq "5" ]] ; then
-	test_custom_cmds 2>>"$UT_log_file"
+	test_custom_cmds
 elif [[ "$user_in" -eq "6" ]] ; then
-	shell_utests 2>>"$UT_log_file"
+	shell_utests
 fi
 rm -f $pipe_in_ref $pipe_in_tgt
 echo '[ Exit ]'

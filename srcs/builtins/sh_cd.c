@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 22:01:45 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 15:52:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,28 @@ static int	cd_go_old(void)
 	return (1);
 }
 
+static int	cd_logical(char *path)
+{
+	int i;
+	char *buff;
+
+	if (!(buff = ft_strnew(PATH_MAX + 1)))
+		return (1);
+	if ((i = readlink(path, buff, PATH_MAX)) == -1)
+		i = cd_go_to(path);
+	else if (buff[0] == '/')
+		i = cd_go_to(buff);
+	else if (ft_strrchr(path, '/'))
+	{
+		path = ft_strndup(path, ft_strrchr(path, '/') - path + 1);
+		ft_putendl(path);
+		buff = ft_strjoin_free(path, buff, path);
+		cd_go_to(buff);
+		ft_strdel(&buff);
+	}
+		return (i);
+}
+
 int			sh_cd(int ac, char **av, t_env **ev)
 {
 	(void)ev;
@@ -77,9 +99,13 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		return (cd_go_home());
 	else if (ac >= 2 && !ft_strcmp(av[1], "-"))
 		return (cd_go_old());
-	//else if (ac >= 2 && !ft_strcmp(av[1], "-L"))
-	//	return (cd_logical());
-	//else if (ac >= 2 && !ft_strcmp(av[1], "-P"))
-	//	return (cd_physical());
+	else if (ac >= 3 && !ft_strcmp(av[1], "-L"))
+		return (cd_logical(av[2]));
+	else if (ac >= 3 && !ft_strcmp(av[1], "-P"))
+		return (cd_go_to(av[2]));
+	else if (ac >= 2 && av[1][0] == '/')
+		return (cd_go_to(av[1]));
+	else
+		return (cd_go_to(av[1]));
 	return (0);
 }
