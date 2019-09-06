@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 12:55:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/05 09:05:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,24 @@
 #include "libft.h"
 #include <stdlib.h>
 
+void lsp(){}
+
 t_env	*sh_setenv(const char *key, const char *value)
 {
+	//TO REDO
 	t_env	*env;
 
 	if (!key)
 		return (NULL);
 	if (!(env = sh()->params))
+		//DONT SET ENV BUT NEED IT NEVERTHELLESS
+		//RETURN GARBAGE
 		sh()->params = sh_create_param(key);
 	else if (ft_strcmp(env->key, key))
 	{
 		while (env->next && ft_strcmp(env->next->key, key))
 			env = env->next;
+	lsp();
 		if (!env->next)
 			env->next = sh_create_param(key);
 		env = env->next;

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/03 02:52:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/06 07:18:37 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -32,11 +32,11 @@ void	sh_sub_word(t_exp *exp)
 	while (exp->content[exp->i] != '}')
 		exp->value[j++] = exp->content[exp->i++];
 	exp->value[j] = '\0';
-	printf("exp->value in subword = %s\n", exp->value);
 }
 
 void	sh_next_expansion(t_exp *exp)
 {
+	exp->find = (*exp->env);
 	if (sh_tilde_expansion(&(exp->content), *(exp->env)) == 1)
 		return ;
 	if ((exp->content)[exp->i] == '$')
@@ -56,15 +56,18 @@ void	sh_next_word(t_exp *exp)
 {
 	int		i;
 	int		j;
+	char	*cpy;
 
 	j = 0;
 	i = exp->i;
-	free(exp->content);
-	if (!(exp->content = malloc(ft_strlen(exp->content - i + 1))))
+	cpy = exp->content;
+	if (!(exp->content = malloc(ft_strlen(cpy) - i + 1)))
 		exit(-1);
-	while ((exp->content)[i])
-		exp->content[j++] = exp->content[i++];
+	while (cpy[i])
+		exp->content[j++] = cpy[i++];
 	exp->content[j] = '\0';
+	exp->i = 0;
+	free(cpy);
 }
 
 void	sh_add_var(t_exp *exp)
@@ -185,21 +188,21 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
 			&& exp->content[cpy] != '%' && exp->content[cpy] != '}'
 			&& exp->content[cpy] != '$' && exp->content[cpy] != '/'
-			&& exp->content[cpy] != '"' && exp->content[cpy])
+			&& exp->content[cpy] != '"' && exp->content[cpy] != '\''
+			&& exp->content[cpy] != '\\' && exp->content[cpy])
 		cpy++;
-	if (!(exp->name = malloc(cpy - exp->i)))
+	if (!(exp->name = malloc(cpy - exp->i + 1)))
 		exit(-1);
 	while (exp->content[exp->i] != ':' && exp->content[exp->i] != '-'
 			&& exp->content[exp->i] != '=' && exp->content[exp->i] != '?'
 			&& exp->content[exp->i] != '+' && exp->content[exp->i] != '#'
 			&& exp->content[exp->i] != '%' && exp->content[exp->i] != '}'
 			&& exp->content[exp->i] != '$' && exp->content[exp->i] != '/'
-			&& exp->content[exp->i] != '"' && exp->content[exp->i])
+			&& exp->content[exp->i] != '"' && exp->content[exp->i] != '\''
+			&& exp->content[exp->i] != '\\' && exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
-	printf("%s\n", exp->name);
 	sh_find_value(exp);
-	if (exp->find)
 	sh_word_opt(exp);
 }
 

@@ -6,17 +6,20 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 12:52:48 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 06:01:14 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "sh_env.h"
+#include "sh_entrypoint.h"
 #include "sh_opt.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <stdio.h> //ARE U SURE ?
+#include <sys/types.h>
+#include <pwd.h>
 
 static void	sh_set_shppid(void)
 {
@@ -100,30 +103,34 @@ void	handle_signal(int sig)
 	dprintf(sh()->debug_fd, "sig %i\n", sig);
 	if (sig == SIGTSTP)
 	{
-		//printf("\nSIGTSTP detected\n");
+		printf("\nSIGTSTP detected\n");
 		//return to prompt
 	}
 	else if (sig == SIGINT)
 	{
 		printf("\nTerminated\n");
 		sh()->abort_cmd = 1;
+		sh_prompt();
 	}
-	else if (sig == SIGSEGV)
-		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
+//	else if (sig == SIGSEGV)
+//		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGABRT)
 		printf("SIGABORT\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGILL)
 		printf("ILLEGAL INSTRUCTION\nWhat are you trying to do ?!?\n");
 	else if (sig == SIGBUS)
-		printf("BUS ERROR\nTake the train instead\n");
+		printf("BUS ERROR\n");
 	else if (sig == SIGCONT)
 		;//return to last job
+	else if (sig == SIGTRAP)
+		printf("SIGTRAPPED: WHAT IS THAT?\n");
+	//exit(0);//
 }
 
 void	init_signals_handling()
 {
 	signal(SIGINT, &handle_signal);
-	signal(SIGSEGV, &handle_signal);
+//	signal(SIGSEGV, &handle_signal);
 	signal(SIGTSTP, &handle_signal);
 	signal(SIGILL, &handle_signal);
 //	signal(SIGTRAP, &handle_signal);
@@ -152,7 +159,8 @@ void	init_signals_handling()
 
 void	sh_init(t_sh *shell)
 {
-	char *opts;
+	char			*opts;
+	struct passwd	*pwd;
 	
 	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug");
 	sh_init_env();
@@ -168,6 +176,7 @@ void	sh_init(t_sh *shell)
 	free(opts);//To pass static?
 		shell->pipe_lst = 0;
 		//
+		//VERIFY ALL SHELL-> ARE SET
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;
 	shell->script_separators[0] = SH_SEMI;
@@ -176,6 +185,7 @@ void	sh_init(t_sh *shell)
 	shell->and_or_separators[1] = SH_OR_IF;
 	shell->pipeline_separators[0] = SH_OR;
 	shell->pipeline_separators[1] = 0;
+	shell->functions = 0;
 	shell->pipein = 0;
 	shell->pipeout = 0;
 	shell->child_ac = 0;
@@ -187,6 +197,9 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_functions = 0;
 	shell->nb_nested_compounds = 0;
 	shell->nb_nested_tokenized_compounds = 0;
+	shell->functions = 0;
+	shell->jobs = 0;
+	shell->exit = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();
 	if (ft_fetch_opt("debug", 5, sh()->opt))
@@ -200,4 +213,9 @@ void	sh_init(t_sh *shell)
 		shell->debug_fd = open("/dev/null", 0);
 	}
 	shell->aliases = NULL;
+	shell->bucopy = NULL;
+	shell->buselect = NULL;
+	shell->user = getlogin();
+	pwd = getpwnam(shell->user);
+	shell->dir = pwd->pw_dir;
 }

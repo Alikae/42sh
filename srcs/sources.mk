@@ -6,20 +6,24 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/03 23:42:04 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/06 07:11:10 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### MAIN FILES ###
 C_FILES = \
 	main.c \
-	sh.c
+	sh.c \
+	sh_rc.c
 
 C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_loop.c \
 	sh_init_cmd.c \
 	sh_init.c
+
+C_FILES_job_control = \
+	t_job.c \
 
 C_FILES_exitpoint = \
 	sh_exitpoint.c \
@@ -51,6 +55,7 @@ C_FILES_command_edition = \
 	sh_cursor_motion2.c \
 	sh_cursor_motion_word.c \
 	sh_cursor_motion_line.c \
+	sh_controls.c \
 	sh_copy_option.c
 
 C_FILES_command_line = \
@@ -107,6 +112,7 @@ C_FILES_builtins = \
 	sh_test.c \
 	sh_true.c \
 	sh_alias.c \
+	sh_exit.c \
 	sh_unalias.c
 
 C_FILES_tools = \

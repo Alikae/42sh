@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 23:44:05 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 04:46:48 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@
 #include <stdlib.h>
 #define BUFF_SIZE 4096
 
+#include <stdio.h>
+
 int     exec_script(t_sh *p, t_token *token_begin, t_token *token_end);
 
-static	int		sh_script(const char *path)
+int		sh_script(const char *path)
 {
 	t_sh *p;
 	char	*buff;
@@ -48,7 +50,8 @@ static	int		sh_script(const char *path)
 	sh_init_cmd(input);
 	if (input && *input && (p->ast = tokenize_input(input)))//line
 	{
-		print_all_tokens(p, p->ast, 0);
+		dprintf(p->debug_fd, "YOLOTOLTKLITJOL\n");
+	//	print_all_tokens(p, p->ast, 0);
 		exec_script(p, p->ast, 0);
 	}
 	return (1);

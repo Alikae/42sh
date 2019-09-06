@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/03 21:26:34 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/04 01:21:09 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,8 @@ SUB_DIRS := \
 	redirections \
 	debug_mode \
 	tools \
-	word_expansion
+	word_expansion \
+	job_control
 
 
 ### INCLUDE SRC MAKEFILE ###

@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init_cmd.c                                      :+:      :+:    :+:   */
+/*   sh_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/03 23:36:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/04 00:22:16 by tmeyer           ###   ########.fr       */
+/*   Created: 2019/09/06 03:45:31 by ede-ram           #+#    #+#             */
+/*   Updated: 2019/09/06 03:52:00 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 
-void	sh_init_cmd(char *input)
+int				sh_exit(int ac, char **av, t_env **ev)
 {
-	t_sh	*p;
-
-	p = sh();
-	p->unfinished_cmd = 0;
-	p->invalid_cmd = 0;
-	p->cmd = input;
+	(void)ac;
+	(void)ev;
+	sh()->abort_cmd = 1;
+	sh()->exit = 1;
+	if (av[0] && av[1])
+		return (ft_atoi(av[1]));
+	return (0);
 }

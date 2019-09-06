@@ -6,12 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/02 09:28:57 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/06 07:19:12 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 #include <stdio.h>
+
 void	sh_remove_car(char **str, int i)
 {
 	char	*new;
@@ -55,7 +56,6 @@ void	sh_next_token(t_token **new)
 
 void	sh_token_spliting(t_split *splt)
 {
-	printf("ta gueul, noon\nz");
 	int		j;
 	char	*cpy;
 
@@ -97,15 +97,16 @@ int		sh_check_split(t_split *splt)
 
 int		sh_check_quote(t_split *splt, short quote)
 {
-	if (splt->tok->content[splt->i] == '\'')
+	if (quote != SH_DQUOTE && splt->tok->content[splt->i] == '\'')
 	{
 		sh_remove_car(&(splt->tok->content), splt->i);
 		if (quote == SH_QUOTE)
 			return (1);
 		else
+
 			sh_find_quote(splt, SH_QUOTE);
 	}
-	else if (splt->tok->content[splt->i] == '"')
+	else if (quote != SH_QUOTE && splt->tok->content[splt->i] == '"')
 	{
 		sh_remove_car(&(splt->tok->content), splt->i);
 		if (quote == SH_DQUOTE)
@@ -134,6 +135,8 @@ void	sh_find_quote(t_split *splt, short quote)
 		{
 			if (sh_check_quote(splt, quote))
 				break ;
+			if (!splt->tok->content[splt->i])
+				break ;
 		}
 		if (!quote && !bquote && sh_check_split(splt))
 			sh_token_spliting(splt);
@@ -146,7 +149,10 @@ void	sh_quote_removal(t_token *tok, const char *split)
 	t_split	splt;
 
 	splt.tok = tok;
-	splt.split = split;
+	if (split)
+		splt.split = split;
+	else
+		splt.split = ft_strdup(" \t\n");
 	splt.i = 0;
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))

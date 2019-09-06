@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 07:30:23 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/03 01:17:59 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/04 01:21:21 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ int			cursor_history(char **command, char *buf, int i, t_hist *hist)
 	int		j;
 
 	j = i;
-	if (ARROW_UP)
+	if (buf[2] == 'A')
 		i = history_up(command, hist, hist->current);
-	else if (ARROW_DOWN && hist->index >= 0)
+	else if (buf[2] == 'B' && hist->index >= 0)
 		i = history_down(command, hist, hist->current);
 	if (!*command)
 		*command = ft_strdup(hist->current);

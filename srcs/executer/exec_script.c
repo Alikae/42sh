@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/02 05:20:55 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/06 07:45:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	close(0);
 	exec_command(p, token_begin, token_end);
 	exit(0);
+	//CREATE JOB?
 	//fork
 	//in parent
 	//	return;
@@ -136,11 +137,10 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	int		bang;
 	int		next_pipe_fd;
 	t_token	*next_separator;
-	int indexb, indexe;
 
-	indexb = token_begin->index;
-	indexe = (token_end) ? token_end->index : -1;
-	print_cmd(p->cmd, indexb, indexe);
+	p->index_pipeline_begin = token_begin->index;
+	p->index_pipeline_end = (token_end) ? token_end->index : -1;
+	//print_cmd(p->cmd, indexb, indexe);
 	handle_bang(&token_begin, &bang);
 	next_pipe_fd = 0;
 	while (token_begin && !p->abort_cmd && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
@@ -199,8 +199,11 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 {
 	int	ret;
 	int pid = fork();
+	int	index_andor_begin;
+	int	index_andor_end;
 
 	//close(0);
+	//CREATE JOB?
 	if (pid < 0)
 	{
 		dprintf(p->debug_fd, "fork error\n");
@@ -214,6 +217,9 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 	}
 	else
 	{
+		index_andor_begin = token_begin->index;
+		index_andor_end = (token_end) ? token_end->index : -1;
+		add_job(pid, p->cmd, index_andor_begin, index_andor_end);
 		while (wait(&ret) != -1)
 			continue ;
 	}
