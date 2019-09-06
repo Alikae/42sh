@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/04 01:21:09 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/06 23:13:38 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,9 +76,9 @@ SHUTIL_INC_DIR = $(SHUTIL_DIR)/includes
 SHUTIL_LNK = -L$(SHUTIL_DIR) -l$(SHUTIL)
 
 ###  CC && FLAGS ###
-CC = gcc -g
+CC = clang
 DEBUG_FLAGS = -g3
-CFLAGS = -g \
+CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
 		 $(DEBUG_FLAGS) \
 		 -Wall -Werror -Wextra
