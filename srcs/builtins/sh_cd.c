@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 15:52:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 23:06:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static void	cd_change_env(char *new, char *old)
 	t_env	*tmp;
 
 	tmp = NULL;
-	if ((tmp = sh_setenv("PWD", new)))
+	if ((tmp = sh_setev("PWD", new)))
 		tmp->exported = 1;
-	if ((tmp = sh_setenv("OLDPWD", old)))
+	if ((tmp = sh_setev("OLDPWD", old)))
 		tmp->exported = 1;
 }
 

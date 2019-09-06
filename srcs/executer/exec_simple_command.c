@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 14:58:32 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 23:09:39 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -838,7 +838,7 @@ void	handle_assigns(t_sh *p)
 			p->tmp_assign_lst->value = ft_strdup(sh_getenv(assign->key));
 			p->tmp_assign_lst->next = tmp;
 		}
-		sh_setenv(assign->key, assign->value);
+		sh_setev(assign->key, assign->value);
 		assign = assign->next;
 	}
 }
@@ -857,7 +857,7 @@ void	restore_before_assigns(t_sh *p)
 	assign = p->tmp_assign_lst;
 	while (assign)
 	{
-		sh_setenv(assign->key, assign->value);
+		sh_setev(assign->key, assign->value);
 		tmp = assign;
 		assign = assign->next;
 		free(tmp->key);
@@ -887,7 +887,7 @@ int		handle_no_cmd_name(t_sh *p)
 	assign = p->assign_lst;
 	while (assign)
 	{
-		sh_setenv(assign->key, assign->value); //doesnt replace
+		sh_setev(assign->key, assign->value); //doesnt replace
 		assign = assign->next;
 	}
 	ft_free_tabstr(p->child_argv);

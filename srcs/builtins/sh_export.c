@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:31:36 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 22:16:27 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 23:06:54 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ int			sh_export(int ac, char **av, t_env **ev)
 			if ((tmp = ft_strchr(av[i], '=')))
 			{
 				tmp = ft_strndup(av[i], tmp - av[i]);
-				sh_setenv(tmp, ft_strchr(av[i], '=') + 1)->exported = 1;
+				sh_setev(tmp, ft_strchr(av[i], '=') + 1)->exported = 1;
 			}
 			else
-				sh_setenv(av[i], NULL)->exported = 1;
+				sh_setev(av[i], NULL)->exported = 1;
 		}
 	return (0);
 }

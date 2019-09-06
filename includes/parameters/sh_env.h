@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 22:16:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/31 04:18:37 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/06 23:05:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		sh_set_value(const char *key, const char *value);
 char		*sh_getenv(const char *key);
 t_env		*sh_get_env(const char *key);
 t_env		*sh_init_var(const char *key, const char *value);
-t_env		*sh_setenv(const char *key, const char *value);
+t_env		*sh_setev(const char *key, const char *value);
 const char	*sh_get_value(const char *key);
 void		sh_unsetenv(const char *key, t_env **env);
 t_env		*sh_create_param(const char *key);

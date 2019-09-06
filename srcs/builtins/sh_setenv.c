@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 23:07:41 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 23:05:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	sh_print_set(t_env **ev)
 	}
 }
 
-int			sh_set(int ac, char **av, t_env **ev)
+int			sh_setenv(int ac, char **av, t_env **ev)
 {
 	int		i;
 	char	*tmp;

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 13:50:23 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/06 23:09:22 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 void lsp(){}
 
-t_env	*sh_setenv(const char *key, const char *value)
+t_env	*sh_setev(const char *key, const char *value)
 {
 	//TO REDO
 	t_env	*env;
