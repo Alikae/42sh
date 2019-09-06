@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/05 06:01:47 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/06 07:17:59 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -22,7 +22,6 @@ void	sh_init_exp(t_env **env, t_exp *exp, t_token *tok)
 	exp->name = NULL;
 	exp->value = NULL;
 	exp->opt = 0;
-	printf("sh_init_exp tok = %s\n", tok->content);
 	exp->content = ft_strdup((tok->content));
 }
 
@@ -75,7 +74,6 @@ void	sh_sub_token(t_exp exp, t_token **tok)
 	while (cpy[j])
 		(*tok)->content[exp.first_i++] = cpy[j++];
 	(*tok)->content[exp.first_i] = '\0';
-	printf("sh_sub_token = %s\n", (*tok)->content);
 	free(cpy);
 }
 
@@ -122,7 +120,6 @@ int		sh_word_expansion(t_token **tok, t_env **env)
 {
 	t_exp	exp;
 
-	printf("sh_word_expansion tok = %s\n", (*tok)->content);
 	sh_init_exp(env, &exp, *tok);
 	if (sh_tilde_expansion(&(exp.content), *env) == 1)
 		return (0);
@@ -146,16 +143,11 @@ t_token	*sh_expansion(t_token *tok, t_env **env)
 {
 	t_token	*new_tok;
 
-	printf("sh_expansion tok = %s\n", tok->content);
 	if (!(new_tok = create_token(SH_WORD, 0, tok->content)))
 		exit (-1);
-	printf("START TOKEN=%s\n", new_tok->content);
 	new_tok->sub = NULL;
 	new_tok->next = NULL;
-	printf("sh_expansion\n");
 	sh_word_expansion(&new_tok, env);
-	printf("FINAL TOKEN=%s\n", new_tok->content);
 	sh_quote_removal(new_tok, sh_get_value("IFS"));
-	printf("FINAL TOKEN=%s\n", new_tok->content);
 	return (new_tok);
 }

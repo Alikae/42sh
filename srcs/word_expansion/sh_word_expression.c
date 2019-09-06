@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/05 04:52:11 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/06 07:18:37 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -19,7 +19,6 @@ void	sh_sub_word(t_exp *exp)
 
 	j = exp->i;
 	size = 0;
-	printf("exp->content[j] = %c\n", exp->content[j]);
 	while (exp->content[j] != '}')
 	{
 		j++;
@@ -33,7 +32,6 @@ void	sh_sub_word(t_exp *exp)
 	while (exp->content[exp->i] != '}')
 		exp->value[j++] = exp->content[exp->i++];
 	exp->value[j] = '\0';
-	printf("exp->value in subword = %s\n", exp->value);
 }
 
 void	sh_next_expansion(t_exp *exp)
@@ -63,7 +61,6 @@ void	sh_next_word(t_exp *exp)
 	j = 0;
 	i = exp->i;
 	cpy = exp->content;
-	printf("next_word %c\n", exp->content[exp->i]);
 	if (!(exp->content = malloc(ft_strlen(cpy) - i + 1)))
 		exit(-1);
 	while (cpy[i])
@@ -71,7 +68,6 @@ void	sh_next_word(t_exp *exp)
 	exp->content[j] = '\0';
 	exp->i = 0;
 	free(cpy);
-	printf("next_word %s\n", exp->content);
 }
 
 void	sh_add_var(t_exp *exp)
@@ -106,7 +102,6 @@ void	sh_assign_word(t_exp *exp)
 void	sh_opt_less(t_exp *exp)
 {
 	exp->i++;
-	printf("opt_less = %c\n", exp->content[exp->i]);
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
 	else if ((exp->find && !(exp->find->value) && exp->opt & COLON) || !(exp->find))
@@ -207,7 +202,6 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[exp->i] != '\\' && exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
-	printf("record->name = %s\n", exp->name);
 	sh_find_value(exp);
 	sh_word_opt(exp);
 }

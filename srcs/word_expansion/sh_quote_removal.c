@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/02 09:28:57 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/06 07:19:12 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int		sh_check_quote(t_split *splt, short quote)
 		if (quote == SH_QUOTE)
 			return (1);
 		else
+
 			sh_find_quote(splt, SH_QUOTE);
 	}
 	else if (quote != SH_QUOTE && splt->tok->content[splt->i] == '"')
@@ -133,6 +134,8 @@ void	sh_find_quote(t_split *splt, short quote)
 		if (!bquote)
 		{
 			if (sh_check_quote(splt, quote))
+				break ;
+			if (!splt->tok->content[splt->i])
 				break ;
 		}
 		if (!quote && !bquote && sh_check_split(splt))
