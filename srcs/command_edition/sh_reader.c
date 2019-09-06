@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/06 02:04:44 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/06 06:10:02 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,9 @@ static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 		*i = sh_copy_option(command, buf, *i, hist);
 	else if (buf[0] == '\t')
 		;
-	else if (buf[0] == '\n')
-		return (0);
-	else if (!ft_strchr(buf, '\033'))
+	else if (buf[0] == 3 || buf[0] == 4 || buf[0] == '\n')
+		return (sh_controls(command, buf, hist));
+	else if (!ft_strchr(buf, '\033') && buf[0] >= 32)
 		*i = sh_echo_input(command, buf, *i, hist);
 	ft_bzero(buf, BUFFER);
 	return (1);
@@ -108,6 +108,8 @@ static char	*getcommand(char **command, t_hist *hist)
 		k = loop_keys(command, buf, &i, hist);
 	ft_memdel((void**)&sh()->buselect);
 	sh_cursor_motion(command, "\033[F", i, hist);
+	if (k != 3)
+		write(0, "\n", 1);
 	return (*command);
 }
 
@@ -128,7 +130,6 @@ int			sh_reader(char **command, t_hist *hist)
 	*command = (char*)ft_memalloc(1);
 	sh_tty_cbreak(1, orig_termios);
 	getcommand(command, hist);
-	write(0, "\n", 1);
 	sh_tty_cbreak(2, orig_termios);
 	term = NULL;
 	return (1);

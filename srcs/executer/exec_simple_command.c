@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/05 08:55:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/06 04:20:19 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ int     block_wait(t_sh *p, int child_pid)
 			//add_job
 			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
+		if (WSTOPSIG(status) == SIGKILL)
+			printf("\nChild_process [%i] KILLED\n", child_pid);
 	}
 	else if (WIFSIGNALED(status))
 	{
@@ -318,12 +320,12 @@ int		exec_prgm(t_sh *p)
 	if (ret)
 	{
 		printf("--%s not found\n", path);
-		return (127);
+		return (127); //ret val?
 	}
 	if (!can_exec(&st))
 	{
 		printf("cant exec '%s'\n", path);
-		return (127);
+		return (127); //ret val?
 	}
 	ret = exec_path(p, real_path);
 	free(real_path);
@@ -757,11 +759,7 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		sh()->abort_cmd = 1;
 	}
 	else if (!ft_strcmp(cmd, "exit"))
-	{
-		sh()->abort_cmd = 1;
-		sh()->exit = 1;
-		//return what?
-	}
+		return (&sh_exit);
 	return (NULL);
 }
 
@@ -889,7 +887,6 @@ int		handle_no_cmd_name(t_sh *p)
 	assign = p->assign_lst;
 	while (assign)
 	{
-		lstp();
 		sh_setenv(assign->key, assign->value); //doesnt replace
 		assign = assign->next;
 	}
@@ -1013,18 +1010,14 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	handle_assigns(p);
 	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
 	print_redirections(p, p->redirect_lst);
+	//generate redirections
 	if ((func = is_defined_function(p->child_argv[0])))
 		ret = exec_function(p, func);
 	else if ((f = sh_is_builtin(p->child_argv[0])))
 		ret = exec_builtin(p, f);
-	//tmp
-	else if (p->abort_cmd)
-	{
-		return(/*free*/0);
-	}
-	//tmp
 	else
 		ret = exec_prgm(p);
+	//remove redirections ?
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 	remove_opened_files(p);
 	////print_redirections(p, p->redirect_lst);
