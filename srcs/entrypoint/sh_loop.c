@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 23:38:24 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/04 00:02:49 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,7 @@ int		sh_loop(void)
 			//printf("%i - %s -\n", strlen(input), input);
 			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
 			free(ln_tab);
-			p->unfinished_cmd = 0;
-			p->invalid_cmd = 0;
-			p->cmd = input;
+			sh_init_cmd(input);
 			if ((p->ast = tokenize_input(input)))//line
 			{
 				print_all_tokens(p, p->ast, 0);
