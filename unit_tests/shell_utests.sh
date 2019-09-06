@@ -4,17 +4,14 @@ stdin='false'
 arg='false'
 script_file='false'
 test_file=./unit_tests/test_file
-utests_base='
-something unkown
+utests_base='something unkown
 ls
 pwd'
 
 cmd_file_1=$UT_log_dir/cmd_file_1
 cmd_file_0=$UT_log_dir/cmd_file_0
-utests='
-pwd
-/usr/bin/env
-env
+utests='pwd
+ls
 exit'
 
 ret1=
@@ -28,16 +25,6 @@ shell_trap ()
 	echo "$?"
 }
 
-display_result () {
-	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_err_ok / $UT_test_num ]\033[0;0m"
-	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_err_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
-	read -p "Display result ? (y/n): " ans
-	if [ "$ans" = 'y' ]
-	then
-		cat $UT_res_file
-	fi
-	rm $test_file $cmd_file_1 $cmd_file_0 2>> "$UT_log_file"
-}
 
 shell_utests_fifo () 
 {
@@ -119,7 +106,7 @@ sh_utests_tests ()
 	done <"$1"
 }
 
-shell_utests ()
+sh_test_in()
 {
 	echo "$utests_base" > $cmd_file_0
 	echo "$utests" > $cmd_file_1
@@ -183,6 +170,11 @@ shell_utests ()
 		echo "\033[0;36;40m[ Testing: File ] \033[0;31;40m[ KO ]\033[0;0m"
 		echo "\033[0;36;40m[ Testing: File ] \033[0;31;40m[ KO ]\033[0;0m" >> $UT_res_file
 	fi
+}
+
+shell_utests ()
+{
+	sh_test_in
 	sh_utests_tests "$cmd_file_1"
 	tests_fd_lst="$(ls $UT_dir/tests/ | grep .utest)"
 	for i in ${tests_fd_lst[@]}
@@ -197,4 +189,13 @@ shell_utests ()
 		sh_utests_tests "$UT_dir/tests/$i"
 	done
 	display_result
+}
+
+utest_minishell () {
+	sh_test_in
+	if [ -s "$UT_dir/tests/minishell.utest" ]
+	then
+		sh_utests_tests "$UT_dir/tests/minishell.utest"
+		display_result
+	fi
 }
