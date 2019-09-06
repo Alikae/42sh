@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 15:27:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/05 07:25:20 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/06 13:49:03 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "sh_env.h"
 #include <unistd.h>
 
-void	sh_add_var(const char *key, const char *value)
+static void	sh_add_var(const char *key, const char *value)
 {
 	t_env *tmp;
 	t_env *begin;
