@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 04:20:19 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/06 07:41:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 {
 	(void)p;
 	sigfillset(sigset);
-	sigprocmask(SIG_BLOCK, sigset, 0);
+	//sigprocmask(SIG_BLOCK, sigset, 0);
 
 	//
 	init_signals_child();
@@ -128,9 +128,7 @@ int     block_wait(t_sh *p, int child_pid)
 		}
 		*/
 	}
-			printf("\nChild_process [%i] suspended\n", child_pid);
 	sigprocmask(SIG_UNBLOCK, &sigset, 0);
-			printf("\nChild_process [%i] suspended\n", child_pid);
 	////wait(&wait_status);
 	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
 	//	;
@@ -989,6 +987,16 @@ void	print_tok(t_token *tok)
 	printf("nb split = %i\n", i);
 }
 
+t_token	*is_function_definition(t_token *token_begin, t_token *token_end)
+{
+	while (token_begin && token_begin != token_end
+			&& token_begin->type != SH_FUNC)
+		token_begin = token_begin->next;
+	if (token_begin && token_begin->type == SH_FUNC)
+		return (token_begin);
+	return (0);
+}
+
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//ENV SEND TO FUNC
 {
@@ -999,10 +1007,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_token	*func;
 	t_token	*tmp;
 
-	tmp = token_begin;
-	while (tmp != token_end && tmp->next)
-		tmp = tmp->next;
-	if (tmp->type == SH_FUNC)
+	if ((tmp = is_function_definition(token_begin, token_end)))
 		return (store_func(p, tmp));
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
 	if (!p->child_argv[0])
