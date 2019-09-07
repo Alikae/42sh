@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 23:09:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/07 02:54:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,54 @@ void	print_redirections(t_sh *p, t_redirect_lst *origin)
 		dprintf(p->debug_fd, "fd %.3i --- to fd %.3i\n", origin->in, origin->out);
 		origin = origin->next;
 	}
+}
+
+int		out_already_in_lst_n(int out, t_redirect_lst *origin, t_redirect_lst *end)
+{
+	while (origin && origin != end)
+	{
+		if (origin->out == out)
+			return (origin->in);
+		origin = (origin->next == end) ? 0 : origin->next;
+	}
+	return (-1);
+}
+
+void	generate_redirections(t_sh *p)
+{
+	//REVERSE SENS
+	//PROTECC DUP2
+	//CLOSE EVERYWHW+ERE
+	t_redirect_lst	*lst;
+	t_redirect_lst	*origin;
+	//t_redirect_lst olds
+	int				out;
+
+	origin = p->redirect_lst;
+	lst = origin;
+	while (lst)
+	{
+		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
+		//close(lst->out) <-- ! see man dup2
+		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
+		{
+			if ((lst->out = dup(out)) < 0)
+				dprintf(p->debug_fd, "DUPERROR %i, errno %i\n", lst->out, errno);
+			else
+				dprintf(p->debug_fd, "DUPPED %i-> %i\n", out, lst->out);
+		}
+		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
+		//old = dup(lst->out)
+		if (dup2(lst->out, lst->in) < 0)
+			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
+		else
+			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, lst->out);
+		int ret;
+		ret = close(lst->out);
+		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
+		lst = lst->next;
+	}
+	//return olds
 }
 
 void	no_effect(int sig)
@@ -134,51 +182,6 @@ int     block_wait(t_sh *p, int child_pid)
 	//	;
 	dprintf(p->debug_fd, "		o Wait finish\n");
 	return (WEXITSTATUS(status));
-}
-
-int		out_already_in_lst_n(int out, t_redirect_lst *origin, t_redirect_lst *end)
-{
-	while (origin && origin != end)
-	{
-		if (origin->out == out)
-			return (origin->in);
-		origin = (origin->next == end) ? 0 : origin->next;
-	}
-	return (-1);
-}
-
-void	generate_redirections(t_sh *p)
-{
-	//REVERSE SENS
-	//PROTECC DUP2
-	//CLOSE EVERYWHW+ERE
-	t_redirect_lst	*lst;
-	t_redirect_lst	*origin;
-	int				out;
-
-	origin = p->redirect_lst;
-	lst = origin;
-	while (lst)
-	{
-		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
-		//close(lst->out) <-- ! see man dup2
-		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
-		{
-			if ((lst->out = dup(out)) < 0)
-				dprintf(p->debug_fd, "DUPERROR %i, errno %i\n", lst->out, errno);
-			else
-				dprintf(p->debug_fd, "DUPPED %i-> %i\n", out, lst->out);
-		}
-		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
-		if (dup2(lst->out, lst->in) < 0)
-			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
-		else
-			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, lst->out);
-		int ret;
-		ret = close(lst->out);
-		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
-		lst = lst->next;
-	}
 }
 
 void	close_pipes_parent(t_sh *p)
@@ -268,6 +271,12 @@ char	*get_next_path(char *path, char **all_paths, int i)
 	char	*cwd;
 	char	*next_path;
 
+	if (path[0] == '/')
+	{
+		if (i)
+			return (0);
+		return (ft_strdup(path));
+	}
 	if (i > tablen(all_paths))
 		return (0);
 	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])
@@ -275,12 +284,6 @@ char	*get_next_path(char *path, char **all_paths, int i)
 		cwd = getcwd(0, 0);
 		next_path = ft_strjoin_free(cwd, "/", cwd);
 		return (ft_strjoin_free(next_path, path, next_path));
-	}
-	else if (path[0] == '/')
-	{
-		if (i)
-			return (0);
-		return (ft_strdup(path));
 	}
 	next_path = ft_strjoin(all_paths[i], "/");
 	next_path = ft_strjoin_free(next_path, path, next_path);
@@ -304,7 +307,7 @@ int		exec_prgm(t_sh *p)
 	//print_redirections(p, p->redirect_lst);
 	ret = 0;
 	nb_paths = 0;
-	if (!(paths = ft_strsplit(sh_getenv("PATH"), ':')))
+	if (!(paths = ft_strsplit(sh_getenv("PATH"), ':')) && path[0] != '/')
 		printf("$PATH not found\n");
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
@@ -763,43 +766,6 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 	return (NULL);
 }
 
-void	generate_redirections_builtins(t_sh *p)
-{
-	//REVERSE SENS
-	//PROTECC DUP2
-	//CLOSE EVERYWHW+ERE
-	t_redirect_lst	*lst;
-	t_redirect_lst	*origin;
-	//t_redirect_lst olds
-	int				out;
-
-	origin = p->redirect_lst;
-	lst = origin;
-	while (lst)
-	{
-		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
-		//close(lst->out) <-- ! see man dup2
-		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
-		{
-			if ((lst->out = dup(out)) < 0)
-				dprintf(p->debug_fd, "DUPERROR %i, errno %i\n", lst->out, errno);
-			else
-				dprintf(p->debug_fd, "DUPPED %i-> %i\n", out, lst->out);
-		}
-		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
-		//old = dup(lst->out)
-		if (dup2(lst->out, lst->in) < 0)
-			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
-		else
-			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, lst->out);
-		int ret;
-		ret = close(lst->out);
-		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
-		lst = lst->next;
-	}
-	//return olds
-}
-
 /*void	restore_redirections(t_redirect_lst *olds)
 {
 	while (olds)
@@ -1017,7 +983,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	handle_assigns(p);
 	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
 	print_redirections(p, p->redirect_lst);
-	//generate redirections
+	//generate_redirections();
 	if ((func = is_defined_function(p->child_argv[0])))
 		ret = exec_function(p, func);
 	else if ((f = sh_is_builtin(p->child_argv[0])))

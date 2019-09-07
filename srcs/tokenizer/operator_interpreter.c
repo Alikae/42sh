@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 04:38:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/07 06:59:43 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,8 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 	word_len = 0;
 	forward_blanks(t);
 	word_begin = t->i;
-	read_n_skip_word(t);
+	if (read_n_skip_word(t) == -1)
+		return (SH_SYNTAX_ERROR);
 	if (word_begin == t->i)
 	{
 		sh()->unfinished_cmd = 1;

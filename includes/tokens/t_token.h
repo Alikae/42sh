@@ -85,7 +85,7 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 int			is_compound(t_toktype type);
 t_token		*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin);
 t_toktype	read_skip_opening_char(t_tokenize_tool *t);
-void		skip_ending_char(t_tokenize_tool *t, t_toktype type);
+t_toktype	skip_ending_char(t_tokenize_tool *t, t_toktype type);
 t_token		*find_token_by_key_until(t_token *tok_begin, t_token *tok_end, t_toktype *type, t_toktype (*types)[2]);
 t_token		*tokenize_for(t_tokenize_tool *t, int word_begin);
 t_token		*tokenize_if(t_tokenize_tool *t, int word_begin);

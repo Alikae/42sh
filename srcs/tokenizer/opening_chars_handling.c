@@ -6,12 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:38:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/02 05:33:43 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/07 07:11:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_token.h"
 #include "libft.h"
+#include "sh.h"
 
 //
 //				IS It GOOD ???
@@ -40,17 +41,18 @@ t_toktype	is_opening_char(t_tokenize_tool *t)
 		return (SH_BQUOTE);
 	return (0);
 }
+//		'	"	'\'	$(	$((	${	`
+/// '	x	x	x	x	x	x	x
+/// "	x	o	o	o	o	o	o
+// $(	o	o	o	o	o	o	o
+// $((	o	o	o	o	o	o	o
+// ${	o	o	o	o	o	o	o
+// `	o	o	o	o	o	o	
 
 int			sub_opening_is_compatible(t_toktype type, t_toktype subtype)
 {
-	if (type == SH_QUOTE || type == SH_BQUOTE
-			|| (type == SH_DQUOTE && subtype == SH_QUOTE)
-			|| ((type == SH_SUBSH_EXP || type == SH_ARITH_EXP)
-				&& subtype == SH_PARAM_EXP)
-			|| (subtype == SH_SUBSH
-				&& type != SH_SUBSH_EXP && type != SH_ARITH_EXP)
-			|| (type == SH_PARAM_EXP
-				&& (subtype == SH_SUBSH_EXP || subtype == SH_ARITH_EXP)))
+	if (type == SH_QUOTE || (type == SH_BQUOTE && subtype == SH_BQUOTE)
+			|| (type == SH_DQUOTE && subtype == SH_QUOTE))
 		return (0);
 	return (1);
 }
@@ -72,7 +74,7 @@ const char	*assign_ending_sequence(t_toktype type)
 	return ("");
 }
 
-void		skip_ending_char(t_tokenize_tool *t, t_toktype type)
+t_toktype	skip_ending_char(t_tokenize_tool *t, t_toktype type)
 {
 	int			subtype;
 	int			escaped;
@@ -89,15 +91,18 @@ void		skip_ending_char(t_tokenize_tool *t, t_toktype type)
 		if (!escaped && t->input[t->i] == '\\')
 			escaped = 2;
 		if (!escaped && !ft_strncmp(ending_sequence, t->input + t->i, len) && (t->i += len))
-			return ;
+			return (0);
 		else if (!escaped && (subtype = is_opening_char(t)) && sub_opening_is_compatible(type, subtype))
 		{
 			read_skip_opening_char(t);
-			skip_ending_char(t, subtype);
+			if (skip_ending_char(t, subtype) == SH_SYNTAX_ERROR)
+				return (SH_SYNTAX_ERROR);
 		}
 		else
 			t->i++;
 	}
+	sh()->unfinished_cmd = 1;
+	return (SH_SYNTAX_ERROR);
 }
 
 t_toktype	read_skip_opening_char(t_tokenize_tool *t)
