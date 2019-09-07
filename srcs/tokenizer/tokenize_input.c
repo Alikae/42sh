@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/07 07:04:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/07 07:24:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ int			read_n_skip_word(t_tokenize_tool *t)
 	int	escaped;
 	int	n;
 	int	tmp;
+	int	max_expansions;
 
 	//
 	//$()
 	//${}
 	//
+	max_expansions = 0;
 	if (t->input[t->i] == '(' || t->input[t->i] == ')')
 	{
 		t->i++;
@@ -55,7 +57,7 @@ int			read_n_skip_word(t_tokenize_tool *t)
 		tmp = t->i;
 		if (!escaped && (type = read_skip_opening_char(t)))
 		{
-			if (skip_ending_char(t, type) == SH_SYNTAX_ERROR)
+			if (skip_ending_char(t, type, max_expansions) == SH_SYNTAX_ERROR)
 				return (-1);
 			n += t->i - tmp;
 		}

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 12:31:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/07 07:12:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 			if (lvcpy < lvl - 1 || lvl == 1)
 				dprintf(p->debug_fd, "      ");
 		}
-		dprintf(p->debug_fd, "%-15s (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
+		dprintf(p->debug_fd, "[%15s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);
@@ -134,6 +134,8 @@ int		sh_loop(void)
 				exec_script(p, p->ast, 0);
 				//printf("Script executed\n");
 			}
+		//	else
+		//		printf("Tokenizer Error\n");
 			free_ast(p->ast);
 			if (p->invalid_cmd)
 				break;

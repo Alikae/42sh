@@ -6,12 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:38:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/07 07:11:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/07 07:25:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_token.h"
 #include "libft.h"
+#include "stdio.h"
 #include "sh.h"
 
 //
@@ -74,13 +75,18 @@ const char	*assign_ending_sequence(t_toktype type)
 	return ("");
 }
 
-t_toktype	skip_ending_char(t_tokenize_tool *t, t_toktype type)
+t_toktype	skip_ending_char(t_tokenize_tool *t, t_toktype type, int max_expansions)
 {
 	int			subtype;
 	int			escaped;
 	int			len;
 	const char	*ending_sequence;
 
+	if (max_expansions > /**/1024)
+	{
+		printf("Max nested expansions reached\n");
+		return (SH_SYNTAX_ERROR);
+	}
 	ending_sequence = assign_ending_sequence(type);
 	len = ft_strlen(ending_sequence);
 	escaped = 0;
@@ -95,7 +101,7 @@ t_toktype	skip_ending_char(t_tokenize_tool *t, t_toktype type)
 		else if (!escaped && (subtype = is_opening_char(t)) && sub_opening_is_compatible(type, subtype))
 		{
 			read_skip_opening_char(t);
-			if (skip_ending_char(t, subtype) == SH_SYNTAX_ERROR)
+			if (skip_ending_char(t, subtype, max_expansions + 1) == SH_SYNTAX_ERROR)
 				return (SH_SYNTAX_ERROR);
 		}
 		else
