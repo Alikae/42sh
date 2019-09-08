@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 23:06:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/08 22:54:16 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	cd_go_home(void)
 {
 	char *pwd;
 
-	if ((pwd = sh_getenv("HOME")))
+	if ((pwd = sh_getev_value("HOME")))
 	{
 		cd_go_to(pwd);
 		return (0);
@@ -60,7 +60,7 @@ static int	cd_go_old(void)
 {
 	char *pwd;
 
-	if ((pwd = sh_getenv("OLDPWD")))
+	if ((pwd = sh_getev_value("OLDPWD")))
 	{
 		cd_go_to(pwd);
 		return (0);

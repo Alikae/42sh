@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/06 23:12:44 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/08 23:03:57 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,11 +35,11 @@ C_FILES_parameters = \
 	sh_env_params.c \
 	sh_putparams.c \
 	sh_setev.c \
-	sh_getenv.c \
-	sh_unsetenv.c \
+	sh_getev.c \
+	sh_getev_value.c \
+	sh_unsetev.c \
 	sh_set_pwd.c \
 	sh_isset.c \
-	sh_get_value.c \
 
 C_FILES_command_edition = \
 	sh_command_functions.c \

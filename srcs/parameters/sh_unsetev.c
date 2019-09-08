@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:35:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/18 16:25:16 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/08 23:07:29 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
-void	sh_unsetenv(const char *key, t_env **env)
+void	sh_unsetev(const char *key, t_env **env)
 {
 	t_env	*tgt;
 	t_env	*tmp;
@@ -23,7 +23,7 @@ void	sh_unsetenv(const char *key, t_env **env)
 	env = &(sh()->params);
 	tgt = NULL;
 	tmp = NULL;
-	if (!(tgt = sh_get_env(key)))
+	if (!(tgt = sh_getev(key)))
 		return ;
 	if (tgt == *env)
 		*env = tgt->next;

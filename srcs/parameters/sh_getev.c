@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_get_value.c                                     :+:      :+:    :+:   */
+/*   sh_getev.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 21:59:25 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/31 04:24:23 by tcillard         ###   ########.fr       */
+/*   Created: 2019/09/08 22:56:42 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/08 23:04:58 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_env.h"
-#include "libft.h"
 
-static const char	*sh_getval(const t_env *handle, const char *key)
+t_env	*sh_getev(const char *key)
 {
-	while (handle)
-	{
-		if (!ft_strcmp(key, handle->key))
-			return (handle->value);
-		handle = handle->next;
-	}
-	return (NULL);
-}
+	t_env	*tmp;
 
-const char			*sh_get_value(const char *key)
-{
-	const char	*tmp;
-
-	if (!key || !*key)
+	if (!(tmp = sh()->params))
 		return (NULL);
-	if ((tmp = sh_getval(sh()->params, key)))
-		return (tmp);
-	return (NULL);
+	while (tmp && ft_strcmp(tmp->key, key))
+		tmp = tmp->next;
+	return (tmp);
 }

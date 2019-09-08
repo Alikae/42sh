@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 13:51:31 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/08 22:55:04 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@
 #include "error.h"
 #include "sh_word_expansion.h"
 #include "sh_tools.h"
-//ASK THEO
-#include "job_control/job_control.h"
+#include "job_control.h"
 
 //FORBIDDEN FUNCS
 
@@ -307,7 +306,7 @@ int		exec_prgm(t_sh *p)
 	//print_redirections(p, p->redirect_lst);
 	ret = 0;
 	nb_paths = 0;
-	if (!(paths = ft_strsplit(sh_getenv("PATH"), ':')) && path[0] != '/')
+	if (!(paths = ft_strsplit(sh_getev_value("PATH"), ':')) && path[0] != '/')
 		printf("$PATH not found\n");
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
@@ -801,7 +800,7 @@ void	handle_assigns(t_sh *p)
 		{
 			tmp = p->tmp_assign_lst;
 			p->tmp_assign_lst = sh_create_param(assign->key);
-			p->tmp_assign_lst->value = ft_strdup(sh_getenv(assign->key));
+			p->tmp_assign_lst->value = ft_strdup(sh_getev_value(assign->key));
 			p->tmp_assign_lst->next = tmp;
 		}
 		sh_setev(assign->key, assign->value);
@@ -817,7 +816,7 @@ void	restore_before_assigns(t_sh *p)
 	assign = p->assign_lst;
 	while (assign)
 	{
-		sh_unsetenv(assign->key, &(sh()->params));
+		sh_unsetev(assign->key, &(sh()->params));
 		assign = assign->next;
 	}
 	assign = p->tmp_assign_lst;

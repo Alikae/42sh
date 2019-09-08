@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/06 07:24:51 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/08 23:02:36 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -148,6 +148,6 @@ t_token	*sh_expansion(t_token *tok, t_env **env)
 	new_tok->sub = NULL;
 	new_tok->next = NULL;
 	sh_word_expansion(&new_tok, env);
-	sh_quote_removal(new_tok, sh_get_value("IFS"));
+	sh_quote_removal(new_tok, sh_getev_value("IFS"));
 	return (new_tok);
 }
