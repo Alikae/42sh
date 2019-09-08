@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/06 15:55:41 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/08 23:14:11 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -34,7 +34,6 @@ pipe_in_tgt="$UT_log_dir/pipe_in_tgt"
 #Externs Files
 . "$UT_dir/shell_utests.sh"
 . "$UT_dir/utester_tools.sh"
-. "$UT_dir/utest_env.sh"
 
 test_custom_cmds () {
 	echo '[ Testing custom commands ]'
