@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/06 23:13:38 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/08 23:12:09 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,11 +70,6 @@ FT_DIR = ./lib$(FT)
 FT_INC_DIR = $(FT_DIR)/includes
 FT_LNK = -L$(FT_DIR) -l$(FT)
 
-SHUTIL = shutil
-SHUTIL_DIR = ./lib$(SHUTIL)
-SHUTIL_INC_DIR = $(SHUTIL_DIR)/includes
-SHUTIL_LNK = -L$(SHUTIL_DIR) -l$(SHUTIL)
-
 ###  CC && FLAGS ###
 CC = clang
 DEBUG_FLAGS = -g3
@@ -97,11 +92,7 @@ all: $(FT) $(NAME) bye_msg
 $(FT): | lib_msg
 	@make -C $(FT_DIR)
 
-$(SHUTIL): $(FT) | lib_msg
-	@make -C $(SHUTIL_DIR)
-
 ### Mkdir obj ###
-.ONESHELL:
 $(OBJ_DIR): | mkdir_msg
 	@mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
 
@@ -112,34 +103,21 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
 	@printf "$(BBLUE)$(@F)$(CLEAR) "
 
 ### Link ###
-.ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) $(INC) Makefile $(FT_DIR)/libft.a | link_msg
 	$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
 	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
 
 ### Clean ###
-.ONESHELL:
 $(FT)_clean: | lib_msg
 	@make -C $(FT_DIR) clean
 
-.ONESHELL:
-$(SHUTIL)_clean: | lib_msg
-	@make -C $(SHUTIL_DIR) clean
-
-.ONESHELL:
-clean: $(FT)_clean $(SHUTIL)_clean | clean_msg
+clean: $(FT)_clean | clean_msg
 	$(RM) -rf $(OBJ_DIR)
 
-.ONESHELL:
 $(FT)_fclean: | lib_msg
 	@make -C $(FT_DIR) fclean
 
-.ONESHELL:
-$(SHUTIL)_fclean:
-	@make -C $(SHUTIL_DIR) fclean
-
-.ONESHELL:
-fclean: $(FT)_fclean $(SHUTIL)_fclean | fclean_msg
+fclean: $(FT)_fclean | fclean_msg
 	$(RM) -rf $(OBJ_DIR)
 	$(RM) -rf $(NAME).dSYM
 	$(RM) -rf $(NAME)
