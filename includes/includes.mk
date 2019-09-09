@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/03 07:20:19 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/08 22:41:03 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,39 +16,18 @@ H_FILES = \
 	history.h \
 	sh_opt.h \
 	sh_builtins.h \
-	sh.h
-
-### SUB FILES ###
-H_FILES_entrypoint = \
-	sh_entrypoint.h
-
-H_FILES_tools = \
-	sh_tools.h
-
-H_FILES_command_line = \
+	sh.h \
+	sh_entrypoint.h \
+	sh_tools.h \
 	sh_command_line.h \
-	sh_line.h
-
-H_FILES_command_edition = \
-	sh_command_edition.h
-
-H_FILES_parameters = \
-	sh_env.h
-
-H_FILES_tokens = \
-	t_token.h
-
-H_FILES_error = \
-	error.h
-
-H_FILES_word_expansion = \
-	sh_word_expansion.h
-
-H_FILES_redirections = \
-	redirections.h
-
-H_FILES_job_control = \
-	job_control.h
+	sh_line.h \
+	sh_command_edition.h \
+	sh_env.h \
+	t_token.h \
+	error.h \
+	sh_word_expansion.h \
+	redirections.h \
+	job_control.h 
 
 # SUPPA concat loop
 H_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(H_FILES_$(SUB_DIR))))

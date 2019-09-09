@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 02:07:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 07:06:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	dprintf(p->debug_fd, "treating FOR\n");
 	ins = tok->sub->sub;
 	tmp = 0;
-	if ((value = sh_getenv(tok->sub->content)))
+	if ((value = sh_getev_value(tok->sub->content)))
 		tmp = ft_strdup(value);
 	while (ins && !p->abort_cmd)
 	{
@@ -77,7 +77,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 		}
 		ins = ins->next;
 	}
-	sh_unsetenv(tok->sub->content, &(sh()->params));
+	sh_unsetev(tok->sub->content, &(sh()->params));
 	if (tmp)
 		sh_setev(tok->sub->content, tmp);
 	free(tmp);

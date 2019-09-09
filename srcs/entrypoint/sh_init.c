@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 06:00:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 07:06:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	sh_set_shppid(void)
 	tmp = NULL;
 	tmp = ft_itoa((int)getppid());
 	sh_setev("PPID", tmp);
-	sh_get_env("PPID")->readonly = 1;
+	sh_getev("PPID")->readonly = 1;
 	ft_strdel(&tmp);
 }
 static void	sh_set_shpid(void)
@@ -42,22 +42,22 @@ static void	sh_set_shpid(void)
 }
 static void	sh_set_ps(void)
 {
-	if (!(sh_getenv("PS1")))
+	if (!(sh_getev_value("PS1")))
 		sh_setev("PS1", "$ ");
-	if (!(sh_getenv("PS2")))
+	if (!(sh_getev_value("PS2")))
 		sh_setev("PS2", "> ");
-	if (!(sh_getenv("PS4")))
+	if (!(sh_getev_value("PS4")))
 		sh_setev("PS4", "+ ");
 }
 static void	sh_set_script_name()
 {
-	if (!(sh_getenv("0")))
+	if (!(sh_getev_value("0")))
 	sh_setev("0", ft_strdup(sh()->av[0]));
 }
 
 static void	sh_set_ifs(void)
 {
-	if (!(sh_getenv("IFS")))
+	if (!(sh_getev_value("IFS")))
 		sh_setev("IFS", " \t\n");
 }
 
@@ -68,15 +68,15 @@ static void	sh_set_shlvl(void)
 
 	shlvl = 0;
 	tmp = NULL;
-	if (!(sh_getenv("SHLVL")))
+	if (!(sh_getev_value("SHLVL")))
 		sh_setev("SHLVL", "1");
 	else
 	{
-		tmp = ft_itoa(1 + ft_atoi(sh_get_env("SHLVL")->value));
+		tmp = ft_itoa(1 + ft_atoi(sh_getev("SHLVL")->value));
 		sh_setev("SHLVL", tmp);
 		ft_strdel(&tmp);
 	}
-	sh_get_env("SHLVL")->exported = 1;
+	sh_getev("SHLVL")->exported = 1;
 }
 
 

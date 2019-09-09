@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_true.c                                          :+:      :+:    :+:   */
+/*   sh_getev.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/10 04:09:36 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/10 04:34:30 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/09/08 22:56:42 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/08 23:04:58 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libshutil.h"
+#include "sh.h"
+#include "sh_env.h"
 
-int		sh_true(int ac, char **av, t_env **ev)
+t_env	*sh_getev(const char *key)
 {
-	return (0);
+	t_env	*tmp;
+
+	if (!(tmp = sh()->params))
+		return (NULL);
+	while (tmp && ft_strcmp(tmp->key, key))
+		tmp = tmp->next;
+	return (tmp);
 }

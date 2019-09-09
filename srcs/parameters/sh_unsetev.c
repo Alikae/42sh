@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_get_value.c                                     :+:      :+:    :+:   */
+/*   sh_unsetenv.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 21:59:25 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/31 04:24:23 by tcillard         ###   ########.fr       */
+/*   Created: 2019/07/13 16:35:59 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/09 07:03:25 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_env.h"
 #include "libft.h"
+#include <stdlib.h>
 
-static const char	*sh_getval(const t_env *handle, const char *key)
+void	sh_unsetev(const char *key, t_env **env)
 {
-	while (handle)
+	t_env	*tgt;
+	t_env	*tmp;
+
+	env = &(sh()->params);
+	tgt = NULL;
+	tmp = NULL;
+	if (!(tgt = sh_getev(key)))
+		return ;
+	if (tgt == *env)
+		*env = tgt->next;
+	else
 	{
-		if (!ft_strcmp(key, handle->key))
-			return (handle->value);
-		handle = handle->next;
+		tmp = *env;
+		while (tmp && tmp->next != tgt)
+			tmp = tmp->next;
+		if (tmp->next == tgt)
+			tmp->next = tgt->next;
 	}
-	return (NULL);
-}
-
-const char			*sh_get_value(const char *key)
-{
-	const char	*tmp;
-
-	if (!key || !*key)
-		return (NULL);
-	if ((tmp = sh_getval(sh()->params, key)))
-		return (tmp);
-	return (NULL);
+	ft_strdel(&(tgt->key));
+	ft_strdel(&(tgt->value));
+	free(tgt);
 }

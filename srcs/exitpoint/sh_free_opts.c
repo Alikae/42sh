@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/18 00:46:24 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 15:06:23 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/08 22:37:38 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	sh_free_opts(void)
 	while (opts)
 	{
 		tmp = opts->next;
+		if (opts->name)
+			free(opts->name);
 		if (opts->arg)
 			free(opts->arg);
 		free(opts);
