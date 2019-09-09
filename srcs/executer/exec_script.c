@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 07:06:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 08:50:22 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,23 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	//SIG gestion
-	int pid = fork();
-	if (pid)
+	
+	//	add_job(child_pid, p->cmd, token_begin->index,
+	//			(token_end) ? token_end->index : -1);
+
+	int child_pid;
+	
+	child_pid = fork_process(p);
+	if (child_pid < 0)
+		return (-1);
+	if (child_pid)
 	{
 		dprintf(p->debug_fd, "[%i] PFORK\n", getpid());
 		close_pipes_parent(p);
-		return (pid);
+		return (child_pid);
 	}
 	dprintf(p->debug_fd, "[%i] Pforked\n", getpid());
-	close(0);
+	//close(0);
 	exec_command(p, token_begin, token_end);
 	exit(0);
 	//CREATE JOB?
@@ -160,7 +168,6 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	if (next_pipe_fd)
 		push_redirect_lst(&p->redirect_lst, 0, next_pipe_fd);
 	p->pipein = next_pipe_fd;
-	//if was_piped, exec_in_background?
 	int child_pid;
 	child_pid = 0;
 	p->last_cmd_result = (next_pipe_fd) ? (child_pid = exec_command_in_background(p, token_begin, token_end)) : exec_command(p, token_begin, token_end);//
@@ -172,6 +179,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	p->pipe_lst = 0;
 	if (bang)
 		p->last_cmd_result = (p->last_cmd_result) ? 0 : 1;
+	//Kill pipeline?
 }
 //CAN DO CMD1;!; <--WILL REVERSE LAST_CMD_RESULT
 

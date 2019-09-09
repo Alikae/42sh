@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 07:05:53 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 10:34:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	save_std_fds(t_sh *p)
 	{
 		p->cpy_std_fds[i] = dup(i);
 		if (p->cpy_std_fds[i] < 0)
-			printf("Error duplicating fd %i\n", i);
+			printf("Error duplicating fd %i %i\n", i, errno);
 	}
 	if (p->cpy_std_fds[2] > -1)
 		p->debug_fd = p->cpy_std_fds[2];
@@ -165,6 +165,9 @@ int     block_wait(t_sh *p, int child_pid)
 	printf("%i\n", status);
 	if (WIFSTOPPED(status))
 	{
+		//debugging
+		handle_signal(WTERMSIG(status));
+		//
 	dprintf(p->debug_fd, "waited2\n");
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
@@ -177,6 +180,7 @@ int     block_wait(t_sh *p, int child_pid)
 	}
 	else if (WIFSIGNALED(status))
 	{
+	dprintf(p->debug_fd, "waited3\n");
 		handle_signal(WTERMSIG(status));
 		/*
 	dprintf(p->debug_fd, "waited3\n");
@@ -186,6 +190,7 @@ int     block_wait(t_sh *p, int child_pid)
 		}
 		*/
 	}
+	dprintf(p->debug_fd, "waited4\n");
 	sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	////wait(&wait_status);
 	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
