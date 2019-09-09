@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/07 07:12:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 04:45:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("a=b;  a=c;  a=d; a=e");
 				ln_tab = ft_strdup("a=b;  e=c;  w=d; q=e");
 				ln_tab = ft_strdup("exit");
+				ln_tab = ft_strdup(";");
+				ln_tab = ft_strdup("echo \\;; ; ls");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;

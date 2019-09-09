@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/03 01:47:56 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/09 01:42:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_hist			*put_in_history(t_hist *hist, char *str)
 			hist->prev = tab_realloc(hist->prev, temp[i]);
 			hist->topush++;
 		}
-		temp = ft_free_tabstr(temp);
+		ft_free_tabstr(temp);
 		hist->prev = ft_reverse_tab(hist->prev);
 		return (hist);
 	}
@@ -110,5 +110,6 @@ void			push_history(t_hist *hist)
 	while (i >= 0)
 		ft_putendl_fd(hist->prev[i--], fd);
 	close(fd);
-	hist->prev = ft_free_tabstr(hist->prev);
+	ft_free_tabstr(hist->prev);
+	hist->prev = 0;
 }

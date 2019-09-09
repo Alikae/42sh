@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 06:36:35 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 04:02:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void lsp(){}
 t_env	*sh_setev(const char *key, const char *value)
 {
 	//
-	printf("%s%s\n", key, value);
+	
+	dprintf(sh()->debug_fd, "[%i]sh_setev %s%s\n", getpid(), key, value);
 	//
 	t_env	*env;
 

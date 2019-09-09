@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 07:45:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 06:39:00 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	int		next_pipe_fd;
 	t_token	*next_separator;
 
+	if (token_begin == token_end)
+		return;
 	p->index_pipeline_begin = token_begin->index;
 	p->index_pipeline_end = (token_end) ? token_end->index : -1;
 	//print_cmd(p->cmd, indexb, indexe);
@@ -180,7 +182,7 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_toktype	tmp;
 
 	prev_separator = 0;
-	while (token_begin && !p->abort_cmd)
+	while (token_begin && token_begin != token_end && !p->abort_cmd)
 	{
 		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->and_or_separators);
 		dprintf(p->debug_fd, "		x and_or cut at '%i'\n", p->type);
@@ -189,51 +191,46 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 				|| (prev_separator == SH_OR_IF && p->last_cmd_result))
 			exec_pipeline(p, token_begin, next_separator);
 		prev_separator = tmp;
-		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
+		token_begin = (next_separator) ? next_separator->next : 0;
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
 	}
 }
 
+int		fork_process(t_sh *p)
+{
+	int	child_pid;
+
+	if ((child_pid = fork()) < 0)
+		printf("[%i]FORK FAIL\n", getpid());
+	if (child_pid > 0)
+		p->is_interactive = 0;
+	return (child_pid);
+}
+
+void	close_cpy_std_fds(t_sh *p)
+{
+	close(p->cpy_std_fds[0]);
+	close(p->cpy_std_fds[1]);
+	close(p->cpy_std_fds[2]);
+}
+
 int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	int	ret;
-	int pid = fork();
-	int	index_andor_begin;
-	int	index_andor_end;
+	int child_pid;
 
-	//close(0);
-	//CREATE JOB?
-	if (pid < 0)
+	child_pid = fork_process(p);
+	if (child_pid == 0)
 	{
-		dprintf(p->debug_fd, "fork error\n");
-		exit(1);
-	}
-	else if (pid == 0)
-	{
-		dprintf(p->debug_fd, "dans fork\n");
+		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
+		//free stuff or not?
 		exit(0);
 	}
 	else
-	{
-		index_andor_begin = token_begin->index;
-		index_andor_end = (token_end) ? token_end->index : -1;
-		add_job(pid, p->cmd, index_andor_begin, index_andor_end);
-		while (wait(&ret) != -1)
-			continue ;
-	}
+		add_job(child_pid, p->cmd, token_begin->index,
+				(token_end) ? token_end->index : -1);
 	return (0);
-	//close(1);
-	//close(2);
-	//dup p + env
-	//fork
-	//in child
-	//	exec_script
-	//in parent
-	//	if blocking
-	//		wait
-	//	return
 }
 
 t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
@@ -258,17 +255,17 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	t_token	*next_separator;
 
-	while (token_begin && !p->abort_cmd)
+	while (token_begin && token_begin != token_end && !p->abort_cmd)
 	{
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
 		next_separator = find_next_script_separator(token_begin, token_end);
-		dprintf(p->debug_fd, "		x script cut at '%i'\n", p->type);
-		if (p->type == SH_AND)
+		dprintf(p->debug_fd, "		x script cut at '%i'\n", (next_separator) ? next_separator->type : 0);
+		if (next_separator && next_separator->type == SH_AND)
 			exec_and_or_in_background(p, token_begin, next_separator);
 		else
 			exec_and_or(p, token_begin, next_separator);
-		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
+		token_begin = (next_separator) ? next_separator->next : 0;
 	}
 	return (p->last_cmd_result);
 }

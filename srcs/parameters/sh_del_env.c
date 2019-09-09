@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_create_param.c                                  :+:      :+:    :+:   */
+/*   sh_del_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/01 14:53:44 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 02:27:04 by ede-ram          ###   ########.fr       */
+/*   Created: 2019/09/08 02:39:56 by ede-ram           #+#    #+#             */
+/*   Updated: 2019/09/09 04:26:31 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_env.h"
-#include "libft.h"
 #include <stdlib.h>
 
-t_env		*sh_create_param(const char *key)
+void	sh_del_env(t_env *env)
 {
-	t_env *new;
+	free(env->value);
+	free(env->key);
+	free(env);
+}
 
-	if (!(new = (t_env *)malloc(sizeof(t_env))))
-		exit(1/*MALLOC_ERROR*/);
-	new->key = ft_strdup(key);
-	new->value = NULL;
-	new->exported = 0;
-	new->readonly = 0;
-	new->next = NULL;
-	return (new);
+void	sh_del_all_env(t_env *env)
+{
+	if (env)
+	{
+		sh_del_all_env(env->next);
+		sh_del_env(env);
+	}
 }

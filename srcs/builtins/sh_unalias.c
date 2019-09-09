@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 04:29:37 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/06 00:25:40 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/09 01:37:49 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ static char		**delete_a_line(char **aliases, int index)
 		ft_memdel((void**)&aliases[k]);
 	}
 	new = ft_tab_strdup(aliases);
-	aliases = ft_free_tabstr(aliases);
+	ft_free_tabstr(aliases);
+	aliases = 0;
 	return (new);
 }
 
@@ -129,7 +130,10 @@ int				sh_unalias(int ac, char **av, t_env **ev)
 	(void)ac;
 	(void)ev;
 	if (flag & F_ALL)
-		sh()->aliases = ft_free_tabstr(sh()->aliases);
+	{
+		ft_free_tabstr(sh()->aliases);
+		sh()->aliases = 0;
+	}
 	else if (!av[i])
 		ft_putstr_fd("unalias: usage: unalias [-a] name [name ...]\n", 2);
 	return (!av[i] ? 1 : process(i, av, flag));

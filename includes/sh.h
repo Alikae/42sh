@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 03:51:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 05:45:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,14 @@ typedef struct		s_sh
 	char			*user;
 	char			*dir;
 
+	int				cpy_std_fds[3];
+
 	int	lldbug;
 	char *cmd;
 	int				index_pipeline_begin;
 	int				index_pipeline_end;
 	t_job			*jobs;
+	int				is_interactive;
 }					t_sh;
 
 t_sh	*sh(void);

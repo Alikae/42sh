@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 23:06:16 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/09 06:00:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,7 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_tokenized_compounds = 0;
 	shell->functions = 0;
 	shell->jobs = 0;
+	shell->is_interactive = 1; //SET WHEN WE TEST IT
 	shell->exit = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();

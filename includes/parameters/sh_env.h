@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 22:16:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 23:05:42 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/08 02:44:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ t_env		*sh_create_param(const char *key);
 t_env		*sh_env_params(char **env);
 void		sh_putparams(t_env *params);
 int			sh_isset(const char *key);
+void		sh_del_env(t_env *env);
+void		sh_del_all_env(t_env *env);
 
 #endif
