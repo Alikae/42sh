@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/10 22:03:40 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/11 01:16:24 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,39 +46,14 @@ void	sh_next_token(t_token **new)
 	}
 	else
 	{
+		while ((*new)->next)
+			(*new) = (*new)->next;
 		if (!((*new)->next = (t_token*)create_token(SH_WORD, 0, NULL)))
 			exit (-1);
 		*new = (*new)->next;
 	}
 	(*new)->sub = NULL;
 	(*new)->next = NULL;
-}
-
-void	sh_token_spliting(t_split *splt)
-{
-	int		j;
-	char	*cpy;
-
-	cpy = splt->tok->content;
-	j = 0;
-	sh_next_token(&(splt->sub));
-	if (!(splt->sub->content = (char*)malloc(splt->i + 1)))
-		exit (-1);
-	if (!(splt->tok->content = (char*)malloc(ft_strlen(cpy) - splt->i + 1)))
-		exit (-1);
-	while (j != splt->i)
-	{
-		splt->sub->content[j] = cpy[j];
-		j++;
-	}
-	splt->sub->content[j] = '\0';
-	j = 0;
-	splt->i++;
-	while (cpy[splt->i])
-		splt->tok->content[j++] = cpy[(splt->i)++];
-	splt->tok->content[j] = '\0';
-	free(cpy);
-	splt->i = 0;
 }
 
 int		sh_check_split(t_split *splt)
@@ -93,6 +68,28 @@ int		sh_check_split(t_split *splt)
 		j++;
 	}
 	return (0);
+}
+
+void	sh_token_spliting(t_split *splt)
+{
+	int			j;
+	static int	i = 0;
+	t_token		*cpy;
+
+	j = 0;
+	cpy = splt->sub;
+	sh_next_token(&(splt->sub));
+	if (!(splt->sub->content = (char*)malloc(splt->i - i +  1)))
+		exit (-1);
+	while (i < splt->i)
+		splt->sub->content[j++] = splt->tok->content[i++];
+	splt->sub->content[j] = '\0';
+	while (splt->tok->content[i] && sh_check_split(splt))
+		++(splt->i) && ++i;
+	if (!splt->tok->content[i])
+		i = 0;
+	if (cpy)
+		splt->sub = cpy;
 }
 
 int		sh_check_quote(t_split *splt, short quote)
@@ -142,9 +139,10 @@ void	sh_find_quote(t_split *splt, short quote)
 			sh_token_spliting(splt);
 		splt->i++;
 	}
+	sh_token_spliting(splt);
 }
 
-void	sh_quote_removal(t_token *tok, const char *split)//, short ifs)
+t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 {
 	t_split	splt;
 
@@ -159,4 +157,5 @@ void	sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
+	return (splt.sub);
 }
