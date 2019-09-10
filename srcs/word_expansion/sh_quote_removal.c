@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/06 07:19:12 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/10 22:03:40 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,15 +144,17 @@ void	sh_find_quote(t_split *splt, short quote)
 	}
 }
 
-void	sh_quote_removal(t_token *tok, const char *split)
+void	sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 {
 	t_split	splt;
 
 	splt.tok = tok;
-	if (split)
+	if (split)// && ifs)
 		splt.split = split;
-	else
+	else// if (ifs)
 		splt.split = ft_strdup(" \t\n");
+	//else
+	//	splt.split = NULL;
 	splt.i = 0;
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
