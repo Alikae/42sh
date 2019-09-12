@@ -6,15 +6,15 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/11 01:13:00 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/12 05:33:18 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "sh_word_expansion.h"
 
-void	sh_init_exp(t_env **env, t_exp *exp, t_token *tok)
+void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 {
-	if (!(exp->tok = create_token(SH_WORD, 0, tok->content)))
+	if (!(exp->tok = create_token(SH_WORD, 0, tok_content)))
 		exit (-1);
 	exp->quote = 0;
 	exp->first_i = 0;
@@ -24,7 +24,7 @@ void	sh_init_exp(t_env **env, t_exp *exp, t_token *tok)
 	exp->name = NULL;
 	exp->value = NULL;
 	exp->opt = 0;
-	exp->content = ft_strdup((tok->content));
+	exp->content = ft_strdup((tok_content));
 }
 
 void	sh_free_exp(t_exp *exp)
@@ -35,6 +35,8 @@ void	sh_free_exp(t_exp *exp)
 		free(exp->content);
 	if (exp->name)
 		free(exp->name);
+	free(exp->tok->content);
+	free(exp->tok);
 	exp->name = NULL;
 	exp->value = NULL;
 	exp->content = NULL;
@@ -155,12 +157,13 @@ int		sh_word_expansion(t_exp *exp)
 	return (0);
 }
 
-t_token	*sh_expansion(t_token *tok, t_env **env)//, short ifs)
+t_token	*sh_expansion(char *tok_content, t_env **env)//, short ifs)
 {
 	t_exp	exp;
 	t_token	*new_tok;
 
-	sh_init_exp(env, &exp, tok);
+//	printf("\ninside = %s\n", tok_content);
+	sh_init_exp(env, &exp, tok_content);
 	exp.tok->sub = NULL;
 	exp.tok->next = NULL;
 	sh_tilde_expansion(&(exp.tok->content), *env);
