@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 04:41:46 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/18 05:30:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,44 @@
 #include "sh_env.h"
 #include "sh_executer.h"
 #include "sh_entrypoint.h"
+#include "signal.h"
+#include "stdio.h"
+#include <termios.h>
 
 void	sh_entrypoint(int ac, char **av, char **ev)
 {
-	int i;
+	int 	i;
+	t_sh	*tsh;
+	pid_t	shell_pgid;
+	struct termios	shell_tmodes;
 
+	tsh = sh();
 	i = -1;
-	sh()->ac = ac;
-	sh()->av = av;
-	sh()->ev = ev;
-	sh_init(sh());
-	if (ft_fetch_opt("c", 1, sh()->opt))
+	tsh->ac = ac;
+	tsh->av = av;
+	tsh->ev = ev;
+	sh_init(tsh);
+	tsh->is_interactive = isatty(0);
+	if (ft_fetch_opt("c", 1, tsh->opt))
 		sh_exec_arg();
-	else if (sh()->ac >= 1) //Are options (-c) counted
+	else if (tsh->ac >= 1) //Are options (-c) counted
 		sh_exec_file();
-	else if (!isatty(0))
+	else if (!tsh->is_interactive)
 		sh_exec_stdin();
 	else
+	{
+		while (tcgetpgrp(0/*STDIN*/) != (shell_pgid = getpgrp()))
+			kill (shell_pgid, SIGTTIN);
+		/*ignore sigs int quit tstp ttin ttou chld*/
+		shell_pgid = getpid();
+		if (setpgid(shell_pgid, shell_pgid) < 0)
+		{
+			printf("Cant put the shell in its own process group\nExiting\n");
+			//exitpoint(free ressources)
+			exit(1);
+		}
+		tcsetpgrp(0, shell_pgid);
+		tcgetattr (0, &shell_tmodes);//<--call sh_tty_cbreak?
 		sh_loop();
+	}
 }

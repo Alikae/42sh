@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 07:03:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/17 02:46:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@
 
 t_env	*sh_setev(const char *key, const char *value)
 {
-	//
-	
-	dprintf(sh()->debug_fd, "[%i]sh_setev %s%s\n", getpid(), key, value);
-	//
 	t_env	*env;
 
 	if (!key)

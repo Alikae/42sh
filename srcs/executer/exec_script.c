@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 08:50:22 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/18 05:04:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 
 	int child_pid;
 	
-	child_pid = fork_process(p);
+	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
 		return (-1);
 	if (child_pid)
@@ -125,7 +125,7 @@ void	handle_bang(t_token **p_token_begin, int *bang)
 	}
 }
 
-void	print_cmd(const char *input, int m, int n)
+/*void	print_cmd(const char *input, int m, int n)
 {
 	ft_putchar('[');
 	ft_putnbr(m);
@@ -137,9 +137,13 @@ void	print_cmd(const char *input, int m, int n)
 		m++;
 	}
 	ft_putchar(']');
-}
+}*/
 
 //Put pipeline in jobs, name delimited by token->index;
+//
+//???
+//Put each command in jobs?
+//Set pgid of the pipeline to pid of first pipeline process?
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int		bang;
@@ -205,34 +209,44 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 	}
 }
 
-int		fork_process(t_sh *p)
-{
-	int	child_pid;
-
-	if ((child_pid = fork()) < 0)
-		printf("[%i]FORK FAIL\n", getpid());
-	if (child_pid > 0)
-		p->is_interactive = 0;
-	return (child_pid);
-}
-
 void	close_cpy_std_fds(t_sh *p)
 {
+	printf("[%i] closing cpy std fds\n", getpid());
 	close(p->cpy_std_fds[0]);
 	close(p->cpy_std_fds[1]);
 	close(p->cpy_std_fds[2]);
+	p->cpy_std_fds[0] = -1;
+	p->cpy_std_fds[1] = -1;
+	p->cpy_std_fds[2] = -1;
+}
+
+int		fork_process(t_sh *p, int foreground)
+{//protec fork?
+	int	child_pid;
+	//parent
+	//	is_interactive = (is_interactive && !foreground)
+	//children
+	//	is_interactive = (is_interactive && foreground)
+
+	if ((child_pid = fork()) > 0)
+		printf("[%i] FORK -> [%i]\n", getpid(), child_pid);
+	p->is_interactive = (p->is_interactive && (!child_pid != !foreground)) ? 1 : 0;
+	if (!(child_pid > 0))
+		close_cpy_std_fds(p);
+	return (child_pid);
 }
 
 int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int child_pid;
 
-	child_pid = fork_process(p);
+	child_pid = fork_process(p, 0);
 	if (child_pid == 0)
 	{
 		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
 		//free stuff or not?
+		printf("[%i] suicide\n", getpid());
 		exit(0);
 	}
 	else

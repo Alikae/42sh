@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 09:05:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/10 06:25:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "sh_command_line.h"
 #include "history.h"
 #include "sh_env.h"
+#include "job_control.h"
 
 #include <stdio.h>
 
@@ -149,6 +150,7 @@ int		sh_loop(void)
 		}
 		//
 		free(input);
+		check_jobs_status(p);
 	}
 	push_history(hist);
 	return (1);
