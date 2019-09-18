@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/12 05:33:18 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/15 04:49:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -87,16 +87,22 @@ void	sh_sub_token(t_exp *exp)
 
 int		sh_in_expansion(t_exp *exp)
 {
-	exp->i++;
-	sh_parameter_expansion(exp);
-	if (exp->opt == ERROR)
-		return (sh_word_error(exp));
-//	else if (((*tok)->content)[i] == '('
-//			&& ((*tok)->content)[i + 1] == '(')
-//		sh_arithmetique_expanssion(&((*tok)->content), i + 2, env);
-//	sh_print_exp(exp, "sh_in_expansion before subtoken");
+	if (exp->content[exp->i] == '{')
+	{
+		sh_parameter_expansion(exp);
+		if (exp->opt == ERROR)
+			return (sh_word_error(exp));
+	}
+	else if (exp->content[exp->i] == '(' || exp->content[exp->i] == '`')
+	{
+//		if (exp->content[exp->i] == '(' && exp->content[exp->i + 1 == '(')
+//			sh_arithmetique_expanssion(&((*tok)->content), i + 2, env);
+//		else
+			sh_subsh_expansion(exp);
+	}
+	else
+		sh_simple_expansion(exp);
 	sh_sub_token(exp);
-//	sh_print_exp(exp, "sh_in_expansion after subtoken");
 	free(exp->content);
 	exp->content = ft_strdup(exp->tok->content);
 	exp->i = exp->first_i - 1;
@@ -142,17 +148,17 @@ int		sh_word_expansion(t_exp *exp)
 {
 	while (exp->content && (exp->content)[exp->i])
 	{
-//		sh_print_exp(exp, "sh_word_expansion");
 		exp->first_i = exp->i;
 		if (sh_expansion_quote(exp) && exp->quote != SH_QUOTE && exp->quote != SH_BQUOTE
-			&& (exp->quote - SH_DQUOTE) != SH_BQUOTE && exp->content[exp->i] == '$'
-			&& exp->content[exp->i + 1])
+			&& (exp->quote - SH_DQUOTE) != SH_BQUOTE && exp->content[exp->i + 1]
+			&& (exp->content[exp->i] == '$' || exp->content[exp->i] == '`'))
 		{
+			if (exp->content[exp->i] == '$')
+				exp->i++;
 			if (sh_in_expansion(exp))
 				return (1);
 		}
 		exp->i++;
-//		sh_print_exp(exp,"end of sh_word_expansion");
 	}
 	return (0);
 }

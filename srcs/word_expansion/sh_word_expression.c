@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/12 05:32:34 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/15 02:46:54 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -220,20 +220,18 @@ void	sh_record_name(t_exp *exp)
 	exp->name[i_sub] = '\0';
 //	sh_print_exp(exp, "record_name");
 	sh_find_value(exp);
-	sh_word_opt(exp);
 }
 
 void	sh_parameter_expansion(t_exp *exp)
 {
 	//attenton expression sans {
-	if (exp->content[exp->i] == '{')
-		exp->i++;
 	if (exp->content[exp->i] == '#')
 	{
 		exp->opt = exp->opt + LEN;
 		exp->i++;
 	}
 	sh_record_name(exp);
+	sh_word_opt(exp);
 	if (exp->value)
 		sh_spetial_quote(&(exp->value));
 }
