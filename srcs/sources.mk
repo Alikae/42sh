@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/09 07:09:01 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/15 04:49:13 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,7 +123,9 @@ C_FILES_word_expansion = \
 	sh_tilde_expansion.c \
 	sh_word_expression.c \
 	sh_expansion_size.c	\
-	sh_quote_removal.c
+	sh_quote_removal.c \
+	sh_simple_word.c \
+	sh_subsh_expansion.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))
