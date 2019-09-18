@@ -25,7 +25,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 {
 	int	pid;
 	//Not more?
-	if ((pid = fork/*_process*/()) < 0)
+	if ((pid = fork_process(p, 0)) < 0)
 	{
 		printf("fork error\n");
 		return (1/*fork_error*/);
