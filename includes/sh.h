@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 07:07:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/11 03:00:04 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,5 @@ typedef struct		s_sh
 
 t_sh	*sh(void);
 char	*sh_tab_fusion(char **t);
-t_token	*sh_expansion(t_token *tok, t_env **env);
+t_token	*sh_expansion(char *tok_content, t_env **env);
 #endif

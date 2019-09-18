@@ -6,11 +6,42 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/10 22:05:26 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/12 05:32:34 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "sh_word_expansion.h"
+
+void	sh_spetial_quote(char **content)
+{
+	unsigned int	i;
+	unsigned int	size;
+	unsigned int	j;
+	char			*cpy;
+
+	i = 0;
+	j = 0;
+	size = 0;
+	cpy = (*content);
+	while ((*content)[i])
+	{
+		if ((*content)[i] == '\'' || (*content)[i] == '"' || (*content)[i] == '\\')
+			size++;
+		i++;
+	}
+	if (!((*content) = malloc(size + i + 1)))
+		exit (-1);
+	i = 0;
+	while (cpy[i])
+	{
+		if (cpy[i] == '\'' || cpy[i] == '"' || cpy[i] == '\\')
+			(*content)[j++] = '\\';
+		(*content)[j++] = cpy[i++];
+	}
+	(*content)[j] = '\0';
+//	printf("content in sh_spetial_quote = %s\n", (*content));
+	free(cpy);
+}
 
 void	sh_sub_word(t_exp *exp)
 {
@@ -203,4 +234,6 @@ void	sh_parameter_expansion(t_exp *exp)
 		exp->i++;
 	}
 	sh_record_name(exp);
+	if (exp->value)
+		sh_spetial_quote(&(exp->value));
 }

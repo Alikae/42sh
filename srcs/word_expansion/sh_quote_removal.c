@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/11 01:16:24 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/13 02:28:13 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	sh_token_spliting(t_split *splt)
 	splt->sub->content[j] = '\0';
 	while (splt->tok->content[i] && sh_check_split(splt))
 		++(splt->i) && ++i;
+	splt->i--;
 	if (!splt->tok->content[i])
 		i = 0;
 	if (cpy)
@@ -116,14 +117,16 @@ int		sh_check_quote(t_split *splt, short quote)
 
 void	sh_find_quote(t_split *splt, short quote)
 {
-	short	bquote;
+	int		bquote;
 
 	bquote = 0;
+	while (splt->tok->content[splt->i] && sh_check_split(splt))
+		++(splt->i);
 	while (splt->tok->content[splt->i])
 	{
-		if (bquote == 1)
+		if (bquote)
 			bquote--;
-		if (splt->tok->content[splt->i] == '\\')
+		if (quote != SH_QUOTE && splt->tok->content[splt->i] == '\\')
 		{
 			sh_remove_car(&(splt->tok->content), splt->i);
 			bquote = 1;
@@ -134,12 +137,13 @@ void	sh_find_quote(t_split *splt, short quote)
 				break ;
 			if (!splt->tok->content[splt->i])
 				break ;
+			if (splt->split && !quote && sh_check_split(splt))
+				sh_token_spliting(splt);
 		}
-		if (!quote && !bquote && sh_check_split(splt))
-			sh_token_spliting(splt);
 		splt->i++;
 	}
-	sh_token_spliting(splt);
+	if (!quote)
+		sh_token_spliting(splt);
 }
 
 t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
