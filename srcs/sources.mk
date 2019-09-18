@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/15 04:49:13 by tcillard         ###   ########.fr        #
+#    Updated: 2019/09/10 06:30:04 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ C_FILES_entrypoint = \
 
 C_FILES_job_control = \
 	t_job.c \
+	job_control.c
 
 C_FILES_exitpoint = \
 	sh_exitpoint.c \
@@ -108,6 +109,7 @@ C_FILES_builtins = \
 	sh_alias.c \
 	sh_pwd.c \
 	sh_exit.c \
+	sh_jobs.c \
 	sh_unalias.c
 
 C_FILES_tools = \

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/11 03:01:09 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/18 01:56:52 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,13 @@ void	save_std_fds(t_sh *p)
 	while (++i < 3)
 	{
 		p->cpy_std_fds[i] = dup(i);
+		printf("[%i] storing %i -> cpy = %i\n", getpid(), i, p->cpy_std_fds[i]);
+		dprintf(p->cpy_std_fds[i], "[TEST FD]%i\n", i);
 		if (p->cpy_std_fds[i] < 0)
-			printf("Error duplicating fd %i %i\n", i, errno);
+			printf("[%i] Error duplicating fd %i: err%i\n", getpid(), i, errno);
 	}
-	if (p->cpy_std_fds[2] > -1)
-		p->debug_fd = p->cpy_std_fds[2];
+	//if (p->cpy_std_fds[2] > -1)
+	//	p->debug_fd = p->cpy_std_fds[2];
 }
 
 void	close_all_redirections(t_sh *p)
@@ -146,6 +148,7 @@ void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 	//sigprocmask(SIG_BLOCK, sigset, 0);
 
 	//
+	//SIGDEFAULT all jobcctrl sigs
 	init_signals_child();
 	//
 }
@@ -162,13 +165,16 @@ int     block_wait(t_sh *p, int child_pid)
 		return (0);
 	}
 	dprintf(p->debug_fd, "waited\n");
-	printf("%i\n", status);
+	//printf("waited\n");
+	//printf("wait status: %i\n", status);
+	//printf("IFSTOPPED macro: %i\n", WIFSTOPPED(status));
+	//printf("IFSIGNALED macro: %i\n", WIFSIGNALED(status));
 	if (WIFSTOPPED(status))
 	{
 		//debugging
+	dprintf(p->debug_fd, "waited2\n");
 		handle_signal(WTERMSIG(status));
 		//
-	dprintf(p->debug_fd, "waited2\n");
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
 			printf("\nChild_process [%i] suspended\n", child_pid);
@@ -190,6 +196,7 @@ int     block_wait(t_sh *p, int child_pid)
 		}
 		*/
 	}
+	printf("%i\n", p->debug_fd);
 	dprintf(p->debug_fd, "waited4\n");
 	sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	////wait(&wait_status);
@@ -247,21 +254,14 @@ int     exec_path(t_sh *p, char *path)
 	int ret;
 
 	//fork stuff
-	int child_pid = fork();
+	int child_pid = fork_process(p, 1);
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 	{
-		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
 		close_pipes_parent(p);
 		ret = block_wait(p, child_pid);
 	}
 	else
 	{
-		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
-		//generate_redirections(p);
-		//printf("lst->out = %d, in = %d\n", p->redirect_lst->out, p->redirect_lst->in);
-		//Free env child?
-		//printf("%s %s\n", p->child_argv[0], p->child_argv[1]);
-		lstp();
 		execve(path, p->child_argv, transform_env_for_child(p->params)/*protec?*/);
 		exit(1/*EXECVE ERROR*/);
 	}
@@ -447,7 +447,7 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 	{
 		if (is_redirection_operator(token_begin->type))
 		{
-			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > 0)
+			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > -1)
 			{
 				if (token_begin->content[0] == '&')
 				{}
@@ -553,11 +553,11 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		fd_in = ft_atoi(token->content);
 	if (str_isnum(token->sub->content))
 		fd_out = ft_atoi(token->sub->content);
-	else if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > 0))
+	else if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))
 	{
-		dprintf(p->debug_fd, "redirection error in %s\n", token->content);
+		dprintf(p->debug_fd, "redirection error in %s\n", token->sub->content);
 		return ;
-	}
+	}9999
 	dprintf(p->debug_fd, "fd_out = %i\n", fd_out);
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
@@ -775,6 +775,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_readonly);
 	else if (!ft_strcmp(cmd, "test"))
 		return (&sh_test);
+	else if (!ft_strcmp(cmd, "jobs"))
+		return (&sh_jobs);
 	else if (!ft_strcmp(cmd, "fg"))
 	{
 		if (sh()->jobs)
@@ -997,9 +999,12 @@ void	restore_std_fds(t_sh *p)
 	i = -1;
 	while (++i < 3)
 	{
+		errno = 0;
 		if (p->cpy_std_fds[i] < 0)
 			continue;
-		dup2(p->cpy_std_fds[i], i);
+		int ret = dup2(p->cpy_std_fds[i], i);
+		(void)ret;
+		//printf("[%i] restoring %i from cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
 		close(p->cpy_std_fds[i]);
 	}
 	p->debug_fd = 2;

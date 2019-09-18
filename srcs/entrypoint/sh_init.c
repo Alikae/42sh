@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/11 01:04:58 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/13 05:47:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,8 @@ void	init_signals_handling()
 	signal(SIGTERM, &handle_signal);
 	signal(SIGCONT, &handle_signal);
 	signal(SIGCHLD, &handle_signal);
-	signal(SIGTTIN, &handle_signal);
-	signal(SIGTTOU, &handle_signal);
+	//signal(SIGTTIN, &handle_signal);
+	//signal(SIGTTOU, &handle_signal);
 	signal(SIGIO, &handle_signal);
 	signal(SIGXCPU, &handle_signal);
 	signal(SIGXFSZ, &handle_signal);
