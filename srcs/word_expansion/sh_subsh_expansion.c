@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 04:11:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 09:53:34 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	sh_read_pipe(t_exp *exp, int fd)
 	while ((ret = read(fd, &buff, 499)) > 0)
 	{
 		buff[ret] = '\0';
-		printf("reading from pipe: %s\n", buff);
+		printf("[%i]reading from pipe: %s\n", getpid(), buff);
 	}
 }
 void	sh_subsh_expansion(t_exp *exp)
@@ -108,13 +108,14 @@ void	sh_subsh_expansion(t_exp *exp)
 	tok = create_token(SH_SUBSH, 0, NULL);
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
-		printf("fijwlfl\n");
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
+		printf("exec subsh exp\n");
 		exec_compound_subsh(sh(), tok);
 		del_n_redirect_lst(&(sh()->redirect_lst), 1);
 		sh_read_pipe(exp, pipe_fd[0]);
 	}
 	else//error
 	{}
+	printf("						[%i] expansions close [%i]\n", getpid(), pipe_fd[1]);
 	close(pipe_fd[1]);
 }

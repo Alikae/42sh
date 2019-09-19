@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 03:43:35 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 09:56:16 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,28 @@ int		tablen(char **tab)
 	return (l);
 }
 
+void	restore_std_fds(t_sh *p)
+{
+	int	i;
+
+	i = -1;
+	while (++i < 3)
+	{
+		errno = 0;
+		if (p->cpy_std_fds[i] < 0)
+			continue;
+		int ret = dup2(p->cpy_std_fds[i], i);
+		(void)ret;
+		printf("						[%i] restoring %i from (closed)cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
+		close(p->cpy_std_fds[i]);
+		p->cpy_std_fds[i] = -1;
+	}
+}
+
 void	print_redirections(t_sh *p, t_redirect_lst *origin)
 {
-	printf("[%i]REDIRECTIONS(%p):\n", getpid(), origin);
+	dprintf(p->debug_fd, "[%i]REDIRECTIONS(%p)[fd%i]:\n", getpid(), origin, p->debug_fd);
+	dprintf(p->debug_fd, "DEBUGOK\n");
 	while (origin)
 	{
 		dprintf(p->debug_fd, "fd %.3i --- to fd %.3i\n", origin->in, origin->out);
@@ -73,12 +92,16 @@ void	save_std_fds(t_sh *p)
 	{
 		p->cpy_std_fds[i] = dup(i);
 		printf("[%i] storing %i -> cpy = %i\n", getpid(), i, p->cpy_std_fds[i]);
-		dprintf(p->cpy_std_fds[i], "[TEST FD]%i\n", i);
+		dprintf(p->debug_fd, "[TEST FD]%i\n", i);
 		if (p->cpy_std_fds[i] < 0)
 			printf("[%i] Error duplicating fd %i: err%i\n", getpid(), i, errno);
 	}
-	//if (p->cpy_std_fds[2] > -1)
-	//	p->debug_fd = p->cpy_std_fds[2];
+//	if (p->cpy_std_fds[2] > -1)
+//	{
+//		p->debug_fd = p->cpy_std_fds[2];
+//		printf("DEBUG FD IS NOW %i\n", p->debug_fd);
+//		dprintf(p->debug_fd, "[TEST DBUGFD]%i\n", i);
+//	}
 }
 
 void	close_all_redirections(t_sh *p)
@@ -90,6 +113,7 @@ void	close_all_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
+		printf("						[%i]close_all_redirections [%i][%i]\n", getpid(), lst->in, lst->out);
 		close(lst->in);
 		close(lst->out);
 		lst = lst->next;
@@ -115,17 +139,17 @@ void	generate_redirections(t_sh *p)
 	{
 		printf("redirecting %i->%i\n", lst->in, lst->out);
 		to_close = 0;
-		if ((fd_out = out_already_in_lst_n(lst->out, origin, lst)) < 0)
+/*		if ((fd_out = out_already_in_lst_n(lst->out, origin, lst)) < 0)
 		{
-			fd_out = lst->out;
+			*/fd_out = lst->out;/*
 			to_close = 1;
-		}
+		}*/
 		if (dup2(fd_out, lst->in) < 0)
-			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, fd_out, errno);
+			dprintf(p->debug_fd, "[%i]DUP2ERROR %i->%i, errno %i\n", getpid(), lst->in, fd_out, errno);
 		else
-			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, fd_out);
-		if (to_close)
-			close(fd_out);
+			dprintf(p->debug_fd, "[%i]DUP2 %i->%i\n", getpid(), lst->in, fd_out);
+//		if (to_close)
+//			close(fd_out);
 		lst = lst->next;
 	}
 }
@@ -212,17 +236,17 @@ void	close_pipes_parent(t_sh *p)
 	if (p->pipeout)
 	{
 		close(p->pipeout); //<PROTECC
-		dprintf(p->debug_fd, "[%i] CLOSE PIPEOUT %i\n", getpid(), p->pipeout);
+		dprintf(p->debug_fd, "						[%i] CLOSE PIPEOUT %i\n", getpid(), p->pipeout);
 	}
 	else
-		dprintf(p->debug_fd, "[%i] NO PIPEOUT\n", getpid());
+		dprintf(p->debug_fd, "						[%i] NO PIPEOUT\n", getpid());
 	if (p->pipein)
 	{
 		close(p->pipein); //<PROTECC
-		dprintf(p->debug_fd, "[%i] CLOSE PIPEIN %i\n", getpid(), p->pipein);
+		dprintf(p->debug_fd, "						[%i] CLOSE PIPEIN %i\n", getpid(), p->pipein);
 	}
 	else
-		dprintf(p->debug_fd, "[%i] NO PIPEIN\n", getpid());
+		dprintf(p->debug_fd, "						[%i] NO PIPEIN\n", getpid());
 }
 
 char	**transform_env_for_child(t_env *env)
@@ -263,6 +287,8 @@ int     exec_path(t_sh *p, char *path)
 	}
 	else
 	{
+		printf("redirections before execve\n");
+		print_redirections(p, p->redirect_lst);
 		execve(path, p->child_argv, transform_env_for_child(p->params)/*protec?*/);
 		exit(1/*EXECVE ERROR*/);
 	}
@@ -320,7 +346,7 @@ int		exec_prgm(t_sh *p)
 	if (!path)
 		return (0);
 	//dprintf(p->debug_fd, "with_redirections:\n");
-	printf("lolo\n");
+	printf("exec_prgm\n");
 	printf("%p\n", p->redirect_lst);
 	print_redirections(p, p->redirect_lst);
 	ret = 0;
@@ -501,7 +527,7 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 	int	nb_redirections;
 
 	nb_redirections = 0;
-	printf("pushing redirections, %i, %i, %i\n", fd_in, fd_out, type);
+	printf("[%i]pushing redirections, %i, %i, %i\n", getpid(), fd_in, fd_out, type);
 	if (type == SH_GREAT || type == SH_CLOBBER || type == SH_DGREAT)
 	{
 		//if (type == SH_GREAT/*&& is_set(NOCLOBBER)*/)
@@ -993,24 +1019,6 @@ t_token	*is_function_definition(t_token *token_begin, t_token *token_end)
 	if (token_begin && token_begin->type == SH_FUNC)
 		return (token_begin);
 	return (0);
-}
-
-void	restore_std_fds(t_sh *p)
-{
-	int	i;
-
-	i = -1;
-	while (++i < 3)
-	{
-		errno = 0;
-		if (p->cpy_std_fds[i] < 0)
-			continue;
-		int ret = dup2(p->cpy_std_fds[i], i);
-		(void)ret;
-		//printf("[%i] restoring %i from cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
-		close(p->cpy_std_fds[i]);
-	}
-	p->debug_fd = 2;
 }
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)

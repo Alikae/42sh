@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/13 02:50:19 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/19 08:00:36 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ void	sh_find_quote(t_split *splt, short quote)
 t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 {
 	t_split	splt;
+	t_token	*thotho;
 
 	splt.tok = tok;
 	if (split)// && ifs)
@@ -161,5 +162,7 @@ t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
+	thotho = splt.sub;
+	print_all_tokens(sh(), thotho, 0);
 	return (splt.sub);
 }

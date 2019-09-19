@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 06:44:29 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 09:44:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 
 void	close_cpy_std_fds(t_sh *p)
 {
-	printf("[%i] closing cpy std fds\n", getpid());
+	printf("									[%i] closing cpy std fds: [%i][%i][%i]\n", getpid(), p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
 	close(p->cpy_std_fds[0]);
 	close(p->cpy_std_fds[1]);
 	close(p->cpy_std_fds[2]);

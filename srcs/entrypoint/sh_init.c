@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/13 05:47:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 08:31:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void	sh_init(t_sh *shell)
 	if (ft_fetch_opt("debug", 5, sh()->opt))
 	{
 		shell->debug = 1; 
-		shell->debug_fd = 2;
+		shell->debug_fd = dup(2);
 	}
 	else
 	{
