@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 04:11:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 07:44:05 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	sh_read_pipe(t_exp *exp, int fd)
 	(void)exp;
 	ret = 0;
 
+	printf("oui\n");
 	while ((ret = read(fd, &buff, 499)) > 0)
 	{
 		buff[ret] = '\0';
