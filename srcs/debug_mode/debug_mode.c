@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:33:55 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 23:34:15 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/19 09:37:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include "libft.h"
 
-void	ask_for_extern_terminal(t_sh *p)
+/*void	ask_for_extern_terminal(t_sh *p)
 {
 	int		n;
 	char	*nc;
@@ -57,4 +57,4 @@ void	ask_for_extern_terminal(t_sh *p)
 			return ;
 		n++;
 	}
-}
+}*/
