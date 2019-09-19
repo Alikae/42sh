@@ -6,11 +6,42 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/06 07:18:37 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/15 02:46:54 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "sh_word_expansion.h"
+
+void	sh_spetial_quote(char **content)
+{
+	unsigned int	i;
+	unsigned int	size;
+	unsigned int	j;
+	char			*cpy;
+
+	i = 0;
+	j = 0;
+	size = 0;
+	cpy = (*content);
+	while ((*content)[i])
+	{
+		if ((*content)[i] == '\'' || (*content)[i] == '"' || (*content)[i] == '\\')
+			size++;
+		i++;
+	}
+	if (!((*content) = malloc(size + i + 1)))
+		exit (-1);
+	i = 0;
+	while (cpy[i])
+	{
+		if (cpy[i] == '\'' || cpy[i] == '"' || cpy[i] == '\\')
+			(*content)[j++] = '\\';
+		(*content)[j++] = cpy[i++];
+	}
+	(*content)[j] = '\0';
+//	printf("content in sh_spetial_quote = %s\n", (*content));
+	free(cpy);
+}
 
 void	sh_sub_word(t_exp *exp)
 {
@@ -32,24 +63,6 @@ void	sh_sub_word(t_exp *exp)
 	while (exp->content[exp->i] != '}')
 		exp->value[j++] = exp->content[exp->i++];
 	exp->value[j] = '\0';
-}
-
-void	sh_next_expansion(t_exp *exp)
-{
-	exp->find = (*exp->env);
-	if (sh_tilde_expansion(&(exp->content), *(exp->env)) == 1)
-		return ;
-	if ((exp->content)[exp->i] == '$')
-	{
-		exp->i++;
-		if ((exp->content)[exp->i] == '{')
-			sh_parameter_expansion(exp);
-//		else if (((*exp->content)[i] == '('
-//				&& ((*exp->content)[i + 1] == '(')
-//			sh_arithmetique_expanssion(&((*exp->content), i + 2, env);
-	}
-	else
-		sh_sub_word(exp);
 }
 
 void	sh_next_word(t_exp *exp)
@@ -88,7 +101,7 @@ void	sh_assign_word(t_exp *exp)
 
 	i = 0;
 	sh_next_word(exp);
-	sh_next_expansion(exp);
+	sh_word_expansion(exp);
 	if (exp->find)
 	{
 		if (exp->find->value)
@@ -101,13 +114,14 @@ void	sh_assign_word(t_exp *exp)
 
 void	sh_opt_less(t_exp *exp)
 {
+//	sh_print_exp(exp, "sh_opt_less");
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
 	else if ((exp->find && !(exp->find->value) && exp->opt & COLON) || !(exp->find))
 	{
 		sh_next_word(exp);
-		sh_next_expansion(exp);
+		sh_word_expansion(exp);
 	}
 	else
 		exp->value = NULL;
@@ -145,7 +159,7 @@ void	sh_opt_plus(t_exp *exp)
 			|| (exp->find && exp->find->value))
 	{
 		sh_next_word(exp);
-		sh_next_expansion(exp);
+		sh_word_expansion(exp);
 	}
 	else
 		exp->value = NULL;
@@ -168,6 +182,7 @@ void	sh_word_opt(t_exp *exp)
 		sh_opt_plus(exp);
 	else if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
+//	sh_print_exp(exp, "word_opt");
 }
 
 void	sh_find_value(t_exp *exp)
@@ -183,6 +198,7 @@ void	sh_record_name(t_exp *exp)
 
 	i_sub = 0;
 	cpy = exp->i;
+	printf("%c\n", exp->content[cpy]);
 	while (exp->content[cpy] != ':' && exp->content[cpy] != '-'
 			&& exp->content[cpy] != '=' && exp->content[cpy] != '?'
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
@@ -202,18 +218,20 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[exp->i] != '\\' && exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
+//	sh_print_exp(exp, "record_name");
 	sh_find_value(exp);
-	sh_word_opt(exp);
 }
 
 void	sh_parameter_expansion(t_exp *exp)
 {
-	if (exp->content[exp->i] == '{')
-		exp->i++;
+	//attenton expression sans {
 	if (exp->content[exp->i] == '#')
 	{
 		exp->opt = exp->opt + LEN;
 		exp->i++;
 	}
 	sh_record_name(exp);
+	sh_word_opt(exp);
+	if (exp->value)
+		sh_spetial_quote(&(exp->value));
 }

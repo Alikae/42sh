@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 23:03:06 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/19 08:31:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ void	handle_signal(int sig)
 		sh()->abort_cmd = 1;
 		sh_prompt();
 	}
-//	else if (sig == SIGSEGV)
-//		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
+	else if (sig == SIGSEGV)
+		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGABRT)
 		printf("SIGABORT\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGILL)
@@ -124,37 +124,41 @@ void	handle_signal(int sig)
 		;//return to last job
 	else if (sig == SIGTRAP)
 		printf("SIGTRAPPED: WHAT IS THAT?\n");
+	else if (sig == SIGTTIN)
+		printf("SIGTTIN detected\n");
+	else if (sig == SIGTTOU)
+		printf("SIGTTOU detected\n");
 	//exit(0);//
 }
 
 void	init_signals_handling()
 {
 	signal(SIGINT, &handle_signal);
-//	signal(SIGSEGV, &handle_signal);
+	signal(SIGSEGV, &handle_signal);
 	signal(SIGTSTP, &handle_signal);
 	signal(SIGILL, &handle_signal);
-//	signal(SIGTRAP, &handle_signal);
+	signal(SIGTRAP, &handle_signal);
 	signal(SIGABRT, &handle_signal);
-//	signal(SIGEMT, &handle_signal);
-//	signal(SIGFPE, &handle_signal);
+	signal(SIGEMT, &handle_signal);
+	signal(SIGFPE, &handle_signal);
 	signal(SIGBUS, &handle_signal);
-//	signal(SIGSYS, &handle_signal);
-//	signal(SIGPIPE, &handle_signal);
-//	signal(SIGALRM, &handle_signal);
-//	signal(SIGTERM, &handle_signal);
+	signal(SIGSYS, &handle_signal);
+	signal(SIGPIPE, &handle_signal);
+	signal(SIGALRM, &handle_signal);
+	signal(SIGTERM, &handle_signal);
 	signal(SIGCONT, &handle_signal);
-//	signal(SIGCHLD, &handle_signal);
-//	signal(SIGTTIN, &handle_signal);
-//	signal(SIGTTOU, &handle_signal);
-//	signal(SIGIO, &handle_signal);
-//	signal(SIGXCPU, &handle_signal);
-//	signal(SIGXFSZ, &handle_signal);
-//	signal(SIGVTALRM, &handle_signal);
-//	signal(SIGPROF, &handle_signal);
-//	signal(SIGWINCH, &handle_signal);
-//	signal(SIGINFO, &handle_signal);
-//	signal(SIGUSR1, &handle_signal);
-//	signal(SIGUSR2, &handle_signal);
+	signal(SIGCHLD, &handle_signal);
+	//signal(SIGTTIN, &handle_signal);
+	//signal(SIGTTOU, &handle_signal);
+	signal(SIGIO, &handle_signal);
+	signal(SIGXCPU, &handle_signal);
+	signal(SIGXFSZ, &handle_signal);
+	signal(SIGVTALRM, &handle_signal);
+	signal(SIGPROF, &handle_signal);
+	signal(SIGWINCH, &handle_signal);
+	signal(SIGINFO, &handle_signal);
+	signal(SIGUSR1, &handle_signal);
+	signal(SIGUSR2, &handle_signal);
 }
 
 void	sh_init(t_sh *shell)
@@ -199,13 +203,14 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_tokenized_compounds = 0;
 	shell->functions = 0;
 	shell->jobs = 0;
+	shell->is_interactive = 1; //SET WHEN WE TEST IT
 	shell->exit = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();
 	if (ft_fetch_opt("debug", 5, sh()->opt))
 	{
 		shell->debug = 1; 
-		shell->debug_fd = 2;
+		shell->debug_fd = dup(2);
 	}
 	else
 	{

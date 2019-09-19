@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 07:45:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 09:44:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,23 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	//SIG gestion
-	int pid = fork();
-	if (pid)
+
+	//	add_job(child_pid, p->cmd, token_begin->index,
+	//			(token_end) ? token_end->index : -1);
+
+	int child_pid;
+
+	child_pid = fork_process(p, 0);
+	if (child_pid < 0)
+		return (-1);
+	if (child_pid)
 	{
 		dprintf(p->debug_fd, "[%i] PFORK\n", getpid());
 		close_pipes_parent(p);
-		return (pid);
+		return (child_pid);
 	}
 	dprintf(p->debug_fd, "[%i] Pforked\n", getpid());
-	close(0);
+	//close(0);
 	exec_command(p, token_begin, token_end);
 	exit(0);
 	//CREATE JOB?
@@ -117,27 +125,33 @@ void	handle_bang(t_token **p_token_begin, int *bang)
 	}
 }
 
-void	print_cmd(const char *input, int m, int n)
-{
-	ft_putchar('[');
-	ft_putnbr(m);
-	ft_putchar('[');
-	ft_putnbr(n);
-	while (input[m] && (m <= n || n == -1))
-	{
-		ft_putchar(input[m]);
-		m++;
-	}
-	ft_putchar(']');
-}
+/*void	print_cmd(const char *input, int m, int n)
+  {
+  ft_putchar('[');
+  ft_putnbr(m);
+  ft_putchar('[');
+  ft_putnbr(n);
+  while (input[m] && (m <= n || n == -1))
+  {
+  ft_putchar(input[m]);
+  m++;
+  }
+  ft_putchar(']');
+  }*/
 
 //Put pipeline in jobs, name delimited by token->index;
+//
+//???
+//Put each command in jobs?
+//Set pgid of the pipeline to pid of first pipeline process?
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int		bang;
 	int		next_pipe_fd;
 	t_token	*next_separator;
 
+	if (token_begin == token_end)
+		return;
 	p->index_pipeline_begin = token_begin->index;
 	p->index_pipeline_end = (token_end) ? token_end->index : -1;
 	//print_cmd(p->cmd, indexb, indexe);
@@ -158,7 +172,6 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	if (next_pipe_fd)
 		push_redirect_lst(&p->redirect_lst, 0, next_pipe_fd);
 	p->pipein = next_pipe_fd;
-	//if was_piped, exec_in_background?
 	int child_pid;
 	child_pid = 0;
 	p->last_cmd_result = (next_pipe_fd) ? (child_pid = exec_command_in_background(p, token_begin, token_end)) : exec_command(p, token_begin, token_end);//
@@ -170,6 +183,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	p->pipe_lst = 0;
 	if (bang)
 		p->last_cmd_result = (p->last_cmd_result) ? 0 : 1;
+	//Kill pipeline?
 }
 //CAN DO CMD1;!; <--WILL REVERSE LAST_CMD_RESULT
 
@@ -180,7 +194,7 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_toktype	tmp;
 
 	prev_separator = 0;
-	while (token_begin && !p->abort_cmd)
+	while (token_begin && token_begin != token_end && !p->abort_cmd)
 	{
 		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->and_or_separators);
 		dprintf(p->debug_fd, "		x and_or cut at '%i'\n", p->type);
@@ -189,51 +203,69 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 				|| (prev_separator == SH_OR_IF && p->last_cmd_result))
 			exec_pipeline(p, token_begin, next_separator);
 		prev_separator = tmp;
-		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
+		token_begin = (next_separator) ? next_separator->next : 0;
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
 	}
 }
 
+void	close_cpy_std_fds(t_sh *p)
+{
+	printf("									[%i] closing cpy std fds: [%i][%i][%i]\n", getpid(), p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
+	close(p->cpy_std_fds[0]);
+	close(p->cpy_std_fds[1]);
+	close(p->cpy_std_fds[2]);
+	p->cpy_std_fds[0] = -1;
+	p->cpy_std_fds[1] = -1;
+	p->cpy_std_fds[2] = -1;
+}
+
+int		fork_process(t_sh *p, int foreground)
+{//protec fork?
+	int		child_pid;
+	pid_t	pid;
+	pid_t	pgid;
+
+	if ((child_pid = fork()) > 0)
+		printf("[%i] FORK -> [%i]\n", getpid(), child_pid);
+	p->is_interactive = (p->is_interactive && (!child_pid != !foreground)) ? 1 : 0;
+	if (p->is_interactive)
+	{
+		pid = getpid();
+		pgid = getpgid(pid);
+		if (pgid == 0) pgid = pid;
+		setpgid (pid, pgid);
+		if (foreground)
+			tcsetpgrp (0, pgid);
+		signal (SIGINT, SIG_DFL);
+		signal (SIGQUIT, SIG_DFL);
+		signal (SIGTSTP, SIG_DFL);
+		signal (SIGTTIN, SIG_DFL);
+		signal (SIGTTOU, SIG_DFL);
+		signal (SIGCHLD, SIG_DFL);
+	}
+	if (!(child_pid > 0))
+		close_cpy_std_fds(p);
+	return (child_pid);
+}
+
 int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	int	ret;
-	int pid = fork();
-	int	index_andor_begin;
-	int	index_andor_end;
+	int child_pid;
 
-	//close(0);
-	//CREATE JOB?
-	if (pid < 0)
+	child_pid = fork_process(p, 0);
+	if (child_pid == 0)
 	{
-		dprintf(p->debug_fd, "fork error\n");
-		exit(1);
-	}
-	else if (pid == 0)
-	{
-		dprintf(p->debug_fd, "dans fork\n");
+		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
+		//free stuff or not?
+		printf("[%i] suicide\n", getpid());
 		exit(0);
 	}
 	else
-	{
-		index_andor_begin = token_begin->index;
-		index_andor_end = (token_end) ? token_end->index : -1;
-		add_job(pid, p->cmd, index_andor_begin, index_andor_end);
-		while (wait(&ret) != -1)
-			continue ;
-	}
+		add_job(child_pid, p->cmd, token_begin->index,
+				(token_end) ? token_end->index : -1);
 	return (0);
-	//close(1);
-	//close(2);
-	//dup p + env
-	//fork
-	//in child
-	//	exec_script
-	//in parent
-	//	if blocking
-	//		wait
-	//	return
 }
 
 t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
@@ -258,17 +290,17 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	t_token	*next_separator;
 
-	while (token_begin && !p->abort_cmd)
+	while (token_begin && token_begin != token_end && !p->abort_cmd)
 	{
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
 		next_separator = find_next_script_separator(token_begin, token_end);
-		dprintf(p->debug_fd, "		x script cut at '%i'\n", p->type);
-		if (p->type == SH_AND)
+		dprintf(p->debug_fd, "		x script cut at '%i'\n", (next_separator) ? next_separator->type : 0);
+		if (next_separator && next_separator->type == SH_AND)
 			exec_and_or_in_background(p, token_begin, next_separator);
 		else
 			exec_and_or(p, token_begin, next_separator);
-		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
+		token_begin = (next_separator) ? next_separator->next : 0;
 	}
 	return (p->last_cmd_result);
 }

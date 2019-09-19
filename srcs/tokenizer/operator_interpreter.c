@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/07 06:59:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/09 04:49:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,8 +186,12 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 			t->i--;
 			return (treat_redirection(t, p_actual, 1));
 		}
-		if (actual_compound == SH_CASE && type == SH_DSEMI)
-			return (SH_DSEMI);
+		if (type == SH_DSEMI)
+		{
+			if (actual_compound == SH_CASE)
+				return (SH_DSEMI);
+			type = SH_SEMI;
+		}
 		(*p_actual)->next = create_token(type, op_begin, 0);
 		*p_actual = (*p_actual)->next;
 		if (t->word_nb == 1 && operator_cant_be_first(type))

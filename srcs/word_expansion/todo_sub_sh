@@ -1,0 +1,18 @@
+pipe avec l'addresse de a et b, in out
+appelle funtion push_redirection (sh(), int in(1), int out, toktype Sh_clobber)
+
+			ast = create_token(SH_SUBSH, 0, 0);
+			if ((ast->sub = tokenize_input( content_of_subsh_exp )))
+			{
+
+				exec_compound_subsh(sh(), ast);
+			}
+			else
+				chaine vide	<-------------------|
+			free_ast(ast);						|
+												|
+read sur le fd out du pipe						|
+tab = realloc      <----------------------------|
+if (malloc == NULL)								|
+	exit (-1)									|
+replace by -------------------------------------|

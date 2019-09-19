@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 22:44:54 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/17 02:46:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-void lsp(){}
 
 t_env	*sh_setev(const char *key, const char *value)
 {

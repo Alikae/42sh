@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/08 23:03:57 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/10 06:30:04 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ C_FILES_entrypoint = \
 
 C_FILES_job_control = \
 	t_job.c \
+	job_control.c
 
 C_FILES_exitpoint = \
 	sh_exitpoint.c \
@@ -35,8 +36,9 @@ C_FILES_parameters = \
 	sh_env_params.c \
 	sh_putparams.c \
 	sh_setev.c \
-	sh_getev.c \
 	sh_getev_value.c \
+	sh_del_env.c \
+	sh_getev.c \
 	sh_unsetev.c \
 	sh_set_pwd.c \
 	sh_isset.c \
@@ -107,6 +109,7 @@ C_FILES_builtins = \
 	sh_alias.c \
 	sh_pwd.c \
 	sh_exit.c \
+	sh_jobs.c \
 	sh_unalias.c
 
 C_FILES_tools = \
@@ -122,7 +125,9 @@ C_FILES_word_expansion = \
 	sh_tilde_expansion.c \
 	sh_word_expression.c \
 	sh_expansion_size.c	\
-	sh_quote_removal.c
+	sh_quote_removal.c \
+	sh_simple_word.c \
+	sh_subsh_expansion.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

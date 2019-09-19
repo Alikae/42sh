@@ -8,4 +8,6 @@ typedef struct	s_redirection_lst
 	struct s_redirection_lst	*next;
 }				t_redirection_lst;
 
+void	print_redirections(t_sh *p, t_redirect_lst *origin);
+
 #endif

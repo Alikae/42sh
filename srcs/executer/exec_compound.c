@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 22:54:43 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/09 07:06:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,16 @@
 
 int		exec_compound_subsh(t_sh *p, t_token *tok)
 {
+	int	pid;
 	//Not more?
-	//do fork
-	return (exec_script(p, tok->sub, 0));
+	if ((pid = fork_process(p, 0)) < 0)
+	{
+		printf("fork error\n");
+		return (1/*fork_error*/);
+	}
+	if (!pid)
+		exit(exec_script(p, tok->sub, 0));
+	return (block_wait(p, pid));
 }
 
 int		exec_compound_case(t_sh *p, t_token *tok)

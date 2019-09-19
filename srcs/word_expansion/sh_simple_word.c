@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tabstr.c                                   :+:      :+:    :+:   */
+/*   sh_simple_word.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/07 14:31:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/08 03:01:50 by ede-ram          ###   ########.fr       */
+/*   Created: 2019/09/15 02:40:54 by tcillard          #+#    #+#             */
+/*   Updated: 2019/09/15 02:50:43 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
+#include "sh_word_expansion.h"
 
-void	ft_free_tabstr(char **tab)
+void	sh_simple_expansion(t_exp *exp)
 {
-	int i;
-
-	i = 0;
-	while (tab && tab[i])
-		free(tab[i++]);
-	free(tab);
+	sh_record_name(exp);
+	if (exp->find)
+		exp->value = ft_strdup(exp->find->value);
 }
