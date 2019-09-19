@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/09 02:05:47 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 20:32:26 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 		if (t->i != word_begin && ft_strncmp(t->input + word_begin, ")", t->i - word_begin))
 		{
 			(*previous_next) = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
-			dprintf(sh()->debug_fd, "case WORD : %s\n", (*previous_next)->content);
+			dprintf(sh()->dbg_fd, "case WORD : %s\n", (*previous_next)->content);
 			previous_next = &((*previous_next)->next);
 		}
 		else
@@ -265,7 +265,7 @@ t_token	*tokenize_case(t_tokenize_tool *t, int word_begin)
 		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "Invalid WORD in CASE", 0));
 	}
-	dprintf(sh()->debug_fd, "case name : %s\n", compound_token->content);
+	dprintf(sh()->dbg_fd, "case name : %s\n", compound_token->content);
 	forward_blanks_newline(t);
 	if (!read_n_skip_in(t))
 	{

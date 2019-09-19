@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/11 03:00:04 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/19 19:58:11 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,18 @@ typedef struct		s_sh
 	char			**av;
 	char			**ev;
 	t_opt			*opt;
-	int				debug;
 	t_toktype		type; //for recognize tokens
 	int				last_cmd_result;
 	int				last_child_pid;
 	struct s_env	*params;
 	t_ln			*ln_history;
 
+	//dbg
+	char			*dbg;
+	int				dbg_fd;
+	int	lldbug;
+
 	//new
-	int				debug_fd;
 	t_pipe_lst		*pipe_lst;
 	t_redirect_lst	*redirect_lst;
 	struct s_env	*assign_lst;
@@ -83,7 +86,6 @@ typedef struct		s_sh
 
 	int				cpy_std_fds[3];
 
-	int	lldbug;
 	char *cmd;
 	int				index_pipeline_begin;
 	int				index_pipeline_end;
