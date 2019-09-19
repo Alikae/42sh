@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 03:53:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 19:58:48 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tsh->is_interactive = isatty(0);
 	if (ft_fetch_opt("c", 1, tsh->opt))
 		sh_exec_arg();
-	else if (tsh->ac >= 1) //Are options (-c) counted
+	else if (tsh->ac > 1) //Are options (-c) counted
 		sh_exec_file();
 	else if (!tsh->is_interactive)
 		sh_exec_stdin();
 	else
 	{
-		while (!sh()->debug && tcgetpgrp(0/*STDIN*/) != (shell_pgid = getpgrp()))
+		while (!sh()->dbg && tcgetpgrp(0/*STDIN*/) != (shell_pgid = getpgrp()))
 			kill (shell_pgid, SIGTTIN);
 		/*ignore sigs int quit tstp ttin ttou chld*/
 		shell_pgid = getpid();

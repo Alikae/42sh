@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 12:11:03 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:33:40 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	sh_next_token(t_token **new)
 int		sh_check_split(t_split *splt)
 {
 	int		j;
-	
+
 	j = 0;
 	while (splt->split[j])
 	{
@@ -151,7 +151,8 @@ t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 	t_split	splt;
 	t_token	*thotho;
 
-	printf("tok->content = %s\n", tok->content);
+	if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all"))
+		printf("tok->content = %s\n", tok->content);
 	splt.tok = tok;
 	if (split)// && ifs)
 		splt.split = split;

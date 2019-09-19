@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 09:52:19 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 19:59:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int		sh_script(const char *path)
 	sh_init_cmd(input);
 	if (input && *input && (p->ast = tokenize_input(input)))//line
 	{
-		dprintf(p->debug_fd, "YOLOTOLTKLITJOL\n");
+		dprintf(p->dbg_fd, "YOLOTOLTKLITJOL\n");
 	//	print_all_tokens(p, p->ast, 0);
 		exec_script(p, p->ast, 0);
 	}

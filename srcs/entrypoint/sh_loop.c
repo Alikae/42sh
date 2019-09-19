@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 06:59:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 20:39:04 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,15 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 		while (lvcpy--)
 		{
 			if (!lvcpy && lvl > 1)
-				dprintf(p->debug_fd, "‾‾‾‾‾‾");
-			dprintf(p->debug_fd, "%c", (lvcpy == 0) ? '|' : ' ');
+				if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+					dprintf(p->dbg_fd, "‾‾‾‾‾‾");
+			if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+				dprintf(p->dbg_fd, "%c", (lvcpy == 0) ? '|' : ' ');
 			if (lvcpy < lvl - 1 || lvl == 1)
-				dprintf(p->debug_fd, "      ");
+				dprintf(p->dbg_fd, "      ");
 		}
-		dprintf(p->debug_fd, "[%15s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			dprintf(p->dbg_fd, "[%15s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);
@@ -73,7 +76,7 @@ int		sh_loop(void)
 	{
 		sh_prompt();
 		ln_tab = NULL;
-		int dbug = sh()->debug;
+		int dbug = sh()->dbg != NULL;
 		complete = 0;
 		input = 0;
 		p->print_syntax_errors = 1;
@@ -139,8 +142,8 @@ int		sh_loop(void)
 				exec_script(p, p->ast, 0);
 				//printf("Script executed\n");
 			}
-		//	else
-		//		printf("Tokenizer Error\n");
+			//	else
+			//		printf("Tokenizer Error\n");
 			free_ast(p->ast);
 			if (p->invalid_cmd)
 				break;

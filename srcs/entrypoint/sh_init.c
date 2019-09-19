@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 08:31:47 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 20:41:40 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	sh_set_ps(void)
 static void	sh_set_script_name()
 {
 	if (!(sh_getev_value("0")))
-	sh_setev("0", ft_strdup(sh()->av[0]));
+		sh_setev("0", ft_strdup(sh()->av[0]));
 }
 
 static void	sh_set_ifs(void)
@@ -100,7 +100,7 @@ static void	sh_init_env()
 
 void	handle_signal(int sig)
 {
-	dprintf(sh()->debug_fd, "sig %i\n", sig);
+	dprintf(sh()->dbg_fd, "sig %i\n", sig);
 	if (sig == SIGTSTP)
 	{
 		printf("\nSIGTSTP detected\n");
@@ -161,26 +161,41 @@ void	init_signals_handling()
 	signal(SIGUSR2, &handle_signal);
 }
 
+void	sh_init_debug(t_sh *shell)
+{
+	t_opt	*tmp;
+
+	if ((tmp = ft_fetch_opt("debug", 5, shell->opt)))
+	{
+		shell->dbg = tmp->arg;
+		shell->dbg_fd = dup(2);
+	}
+	else
+	{
+		shell->dbg_fd = open("/dev/null", 0);
+		shell->dbg = NULL;
+	}
+}
+
 void	sh_init(t_sh *shell)
 {
 	char			*opts;
 	struct passwd	*pwd;
-	
-	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug");
+
+	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug:");
 	sh_init_env();
-	/*shell->opt = sh_getopt(&(shell->ac), &(shell->av), "abc:Cefhimns:uvx");
-	shell->abort_cmd = 0;
-	shell->debug = 1;
-	shell->debug_fd = 2;
-	shell->pipe_lst = 0;
-	*/
+	/*
+	   shell->abort_cmd = 0;
+	   shell->dbg = 1;
+	   shell->dbg_fd = 2;
+	   shell->pipe_lst = 0;
+	   */
 	//MERGE?
-	shell->opt = NULL;
-	ft_getopt(&(shell->ac), &(shell->av), opts, &(shell->opt));
+	shell->opt = ft_getopt(&(shell->ac), &(shell->av), opts);
 	free(opts);//To pass static?
-		shell->pipe_lst = 0;
-		//
-		//VERIFY ALL SHELL-> ARE SET
+	shell->pipe_lst = 0;
+	//
+	//VERIFY ALL SHELL-> ARE SET
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;
 	shell->script_separators[0] = SH_SEMI;
@@ -207,16 +222,7 @@ void	sh_init(t_sh *shell)
 	shell->exit = 0;
 	//shell->assign_lst = 0;
 	init_signals_handling();
-	if (ft_fetch_opt("debug", 5, sh()->opt))
-	{
-		shell->debug = 1; 
-		shell->debug_fd = dup(2);
-	}
-	else
-	{
-		shell->debug = 0; 
-		shell->debug_fd = open("/dev/null", 0);
-	}
+	sh_init_debug(shell);
 	shell->aliases = NULL;
 	shell->bucopy = NULL;
 	shell->buselect = NULL;
