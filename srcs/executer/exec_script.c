@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/18 05:04:29 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 06:44:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	//SIG gestion
-	
+
 	//	add_job(child_pid, p->cmd, token_begin->index,
 	//			(token_end) ? token_end->index : -1);
 
 	int child_pid;
-	
+
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
 		return (-1);
@@ -126,18 +126,18 @@ void	handle_bang(t_token **p_token_begin, int *bang)
 }
 
 /*void	print_cmd(const char *input, int m, int n)
-{
-	ft_putchar('[');
-	ft_putnbr(m);
-	ft_putchar('[');
-	ft_putnbr(n);
-	while (input[m] && (m <= n || n == -1))
-	{
-		ft_putchar(input[m]);
-		m++;
-	}
-	ft_putchar(']');
-}*/
+  {
+  ft_putchar('[');
+  ft_putnbr(m);
+  ft_putchar('[');
+  ft_putnbr(n);
+  while (input[m] && (m <= n || n == -1))
+  {
+  ft_putchar(input[m]);
+  m++;
+  }
+  ft_putchar(']');
+  }*/
 
 //Put pipeline in jobs, name delimited by token->index;
 //
@@ -222,15 +222,28 @@ void	close_cpy_std_fds(t_sh *p)
 
 int		fork_process(t_sh *p, int foreground)
 {//protec fork?
-	int	child_pid;
-	//parent
-	//	is_interactive = (is_interactive && !foreground)
-	//children
-	//	is_interactive = (is_interactive && foreground)
+	int		child_pid;
+	pid_t	pid;
+	pid_t	pgid;
 
 	if ((child_pid = fork()) > 0)
 		printf("[%i] FORK -> [%i]\n", getpid(), child_pid);
 	p->is_interactive = (p->is_interactive && (!child_pid != !foreground)) ? 1 : 0;
+	if (p->is_interactive)
+	{
+		pid = getpid();
+		pgid = getpgid(pid);
+		if (pgid == 0) pgid = pid;
+		setpgid (pid, pgid);
+		if (foreground)
+			tcsetpgrp (0, pgid);
+		signal (SIGINT, SIG_DFL);
+		signal (SIGQUIT, SIG_DFL);
+		signal (SIGTSTP, SIG_DFL);
+		signal (SIGTTIN, SIG_DFL);
+		signal (SIGTTOU, SIG_DFL);
+		signal (SIGCHLD, SIG_DFL);
+	}
 	if (!(child_pid > 0))
 		close_cpy_std_fds(p);
 	return (child_pid);

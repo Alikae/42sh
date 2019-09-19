@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/18 05:30:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 03:53:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 		sh_exec_stdin();
 	else
 	{
-		while (tcgetpgrp(0/*STDIN*/) != (shell_pgid = getpgrp()))
+		while (!sh()->debug && tcgetpgrp(0/*STDIN*/) != (shell_pgid = getpgrp()))
 			kill (shell_pgid, SIGTTIN);
 		/*ignore sigs int quit tstp ttin ttou chld*/
 		shell_pgid = getpid();

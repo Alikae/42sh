@@ -1,17 +1,22 @@
 #include "sh.h"
 #include "error.h"
 #include "redirections.h"
+#include "redirection_lst.h"
+#include <stdio.h>
+#include <stdio.h>
 
 void	push_redirect_lst(t_redirect_lst **p_origin, int in, int out)
 {
 	t_redirect_lst	*tmp;
 
+	printf("pushing %i -> %i\n", in, out);
 	if (!(tmp = (t_redirect_lst*)malloc(sizeof(t_redirect_lst))))
 		exit(ERROR_MALLOC);
 	tmp->in = in;
 	tmp->out = out;
 	tmp->next = *p_origin;
 	*p_origin = tmp;
+	print_redirections(sh(), *p_origin);
 }
 
 void	del_n_redirect_lst(t_redirect_lst **p_origin, int n)
