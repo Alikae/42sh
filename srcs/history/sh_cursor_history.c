@@ -6,14 +6,14 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 07:30:23 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/04 01:21:21 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/19 23:39:41 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "sh_command_edition.h"
-#include "history.h"
+#include "sh_history.h"
 
 static int	history_up(char **command, t_hist *hist, char *current)
 {

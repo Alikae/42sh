@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 20:39:04 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/19 23:38:27 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 #include "sh_executer.h"
 #include "sh_entrypoint.h"
 #include "sh_command_line.h"
-#include "history.h"
+#include "sh_history.h"
 #include "sh_env.h"
-#include "job_control.h"
+#include "sh_job_control.h"
 
 #include <stdio.h>
 

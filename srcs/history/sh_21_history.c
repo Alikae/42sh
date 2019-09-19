@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/09 01:42:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 23:39:09 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <pwd.h>
 #include "sh.h"
 #include "libft.h"
-#include "history.h"
+#include "sh_history.h"
 
 static	void	init_history(t_hist *hist, char **history)
 {

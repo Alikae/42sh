@@ -6,13 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 05:22:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/10 06:45:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/20 00:22:05 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
-#include "job_control.h"
-#include "stdio.h"
+#include "sh_job_control.h"
+#include <stdio.h>
 
 void	check_jobs_status(t_sh *p)
 {

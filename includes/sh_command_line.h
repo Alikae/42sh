@@ -6,14 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:25:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/18 09:25:34 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 23:34:18 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH21_COMMAND_LINE_H
 # define SH21_COMMAND_LINE_H
 
-# include "history.h"
+# include "sh_history.h"
 
 void	sh_prompt(void);
 char	*sh_arguments(t_hist *hist);

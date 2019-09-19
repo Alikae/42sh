@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 05:33:37 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/19 23:37:10 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 # include <curses.h>
 # include <termcap.h>
 # include <sys/ioctl.h>
-# include "history.h"
+# include "sh_history.h"
 # include "libft.h"
+# include "sh_types.h"
 # include "sh_command_line.h"
 
 /*
@@ -54,18 +55,6 @@
 
 # define BUFFER			7
 # define PROMPT_LENGTH	0
-
-typedef struct	s_pos
-{
-	int rows;
-	int col;
-}				t_pos;
-
-typedef struct	s_cursors
-{
-	t_pos cursor;
-	t_pos term;
-}				t_cursors;
 
 void			sh_cursor_position(t_pos *cursor);
 int				sh_reader(char **command, t_hist *hist);

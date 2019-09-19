@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/18 05:30:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 23:37:42 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "sh.h"
 #include "sh_command_edition.h"
 #include "sh_command_line.h"
-#include "history.h"
+#include "sh_history.h"
 #include <term.h>
 #include <curses.h>
 #include <stdlib.h>

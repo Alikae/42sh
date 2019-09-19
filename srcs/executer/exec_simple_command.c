@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 20:40:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/19 23:42:08 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 #include <errno.h>//
 #include <signal.h>//
 #include "sh_env.h"
-#include "error.h"
+#include "sh_error.h"
 #include "sh_word_expansion.h"
 #include "sh_tools.h"
-#include "job_control.h"
+#include "sh_job_control.h"
 
 //FORBIDDEN FUNCS
 int		tablen(char **tab)

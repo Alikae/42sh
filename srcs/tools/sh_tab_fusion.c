@@ -6,12 +6,12 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 03:46:45 by tcillard          #+#    #+#             */
-/*   Updated: 2019/08/22 15:07:17 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/20 00:21:00 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "error.h"
+#include "sh_error.h"
 
 int		sh_tab_size(char **tab)
 {

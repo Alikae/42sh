@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_token.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/19 23:40:24 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/19 23:40:26 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "t_token.h"
 #include "stdlib.h"
 #include "libft.h"
-#include "error.h"
+#include "sh_error.h"
 
 //ATTENTION STRDUP
 char	*dupfilsdup(const char *in)

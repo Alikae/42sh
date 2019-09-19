@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections_handler.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/20 00:20:16 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/20 00:20:44 by thdelmas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
-#include "error.h"
-#include "redirections.h"
-#include "redirection_lst.h"
+#include "sh_error.h"
+#include "sh_redirections.h"
+#include "sh_redirection_lst.h"
 #include <stdio.h>
 #include <stdio.h>
 

@@ -6,13 +6,13 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 20:38:08 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/19 23:41:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_token.h"
 #include "sh_executer.h"
-#include "redirections.h"
+#include "sh_redirections.h"
 #include "sh.h"
 #include "errno.h"
 #include <unistd.h>
