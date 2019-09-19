@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:24:17 by tcillard          #+#    #+#             */
-/*   Updated: 2019/08/13 19:24:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/19 15:11:38 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int		sh_complex_word(char *content, int i)
 	quote = 0;
 	while (content[i])
 	{
-
 		if (bquote)
 			bquote--;
 		if (content[i] == '\'' && !quote)
@@ -31,10 +30,10 @@ int		sh_complex_word(char *content, int i)
 		if (content[i] == '\\')
 			bquote = 1;
 		if (!bquote && !quote && (content[i] == '}'
-					|| content[i] == ')'))
+					|| content[i] == ')' || content[i] == '`'))
 			return (++i);
 		i++;
-		if (content[i] == '{' || content[i] == '(')
+		if (content[i] == '{' || content[i] == '`' || content[i] == '(')
 			i = sh_complex_word(content, i);
 	}
 	return (i);
