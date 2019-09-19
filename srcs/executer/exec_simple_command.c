@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/18 01:56:52 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 03:43:35 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int		tablen(char **tab)
 
 void	print_redirections(t_sh *p, t_redirect_lst *origin)
 {
+	printf("[%i]REDIRECTIONS(%p):\n", getpid(), origin);
 	while (origin)
 	{
 		dprintf(p->debug_fd, "fd %.3i --- to fd %.3i\n", origin->in, origin->out);
@@ -319,7 +320,9 @@ int		exec_prgm(t_sh *p)
 	if (!path)
 		return (0);
 	//dprintf(p->debug_fd, "with_redirections:\n");
-	//print_redirections(p, p->redirect_lst);
+	printf("lolo\n");
+	printf("%p\n", p->redirect_lst);
+	print_redirections(p, p->redirect_lst);
 	ret = 0;
 	nb_paths = 0;
 	if (!(paths = ft_strsplit(sh_getev_value("PATH"), ':')) && path[0] != '/')
@@ -557,7 +560,7 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	{
 		dprintf(p->debug_fd, "redirection error in %s\n", token->sub->content);
 		return ;
-	}9999
+	}
 	dprintf(p->debug_fd, "fd_out = %i\n", fd_out);
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
