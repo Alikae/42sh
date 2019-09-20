@@ -35,6 +35,7 @@ typedef struct	s_split
 	const char	*split;
 }				t_split;
 
+void	sh_spetial_quote(char **content);
 int		sh_word_expansion(t_exp *exp);
 void	sh_parameter_expansion(t_exp *exp);
 int		sh_tilde_expansion(char **content, t_env *env);

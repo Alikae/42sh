@@ -6,20 +6,20 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/11 03:00:04 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/19 23:34:05 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_H
 # define SH_H
 
+# include "sh_types.h" //where struct are
 # include "sh_line.h"
-# include "redirections.h"
+# include "sh_redirections.h"
 # include "t_token.h"
 # include "libft.h"
 # include "sh_env.h"
-//ASK THEO
-# include "job_control.h"
+# include "sh_job_control.h"
 
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
 # define SH_NESTED_COMPOUND_LIMIT 1000
@@ -27,32 +27,29 @@
 
 extern	char		**g_aliases;
 
-typedef struct		s_open_file
-{
-	char				*name;
-	int					fd;
-	struct s_open_file	*next;
-}					t_open_file;
 
 typedef struct		s_sh
 {
 	int				ac;
 	char			**av;
 	char			**ev;
-	t_opt			*opt;
-	int				debug;
+	t_opt	*opt;
 	t_toktype		type; //for recognize tokens
 	int				last_cmd_result;
 	int				last_child_pid;
-	struct s_env	*params;
+	t_env	*params;
 	t_ln			*ln_history;
 
+	//dbg
+	char			*dbg;
+	int				dbg_fd;
+	int	lldbug;
+
 	//new
-	int				debug_fd;
 	t_pipe_lst		*pipe_lst;
 	t_redirect_lst	*redirect_lst;
-	struct s_env	*assign_lst;
-	struct s_env	*tmp_assign_lst;
+	t_env	*assign_lst;
+	t_env	*tmp_assign_lst;
 	int				pipein;
 	int				pipeout;
 	t_toktype		pipeline_separators[2];
@@ -83,7 +80,6 @@ typedef struct		s_sh
 
 	int				cpy_std_fds[3];
 
-	int	lldbug;
 	char *cmd;
 	int				index_pipeline_begin;
 	int				index_pipeline_end;

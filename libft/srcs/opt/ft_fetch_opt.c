@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_opt.c                                     :+:      :+:    :+:   */
+/*   ft_fetch_opt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/09 23:05:02 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 15:12:37 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/09/19 19:31:10 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/19 19:54:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_print_opt(t_opt *optlst)
+t_opt	*ft_fetch_opt(char *name, size_t size, t_opt *optlst)
 {
+	if (!name)
+		return (NULL);
 	while (optlst)
 	{
-		ft_putstr(optlst->name);
-		ft_putchar('=');
-		ft_putstr(optlst->arg);
-		ft_putchar('\n');
+		if (ft_strnequ(name, optlst->name, size))
+			return (optlst);
 		optlst = optlst->next;
 	}
+	return (NULL);
 }

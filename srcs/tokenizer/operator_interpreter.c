@@ -6,13 +6,13 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/09 04:49:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 23:41:22 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_token.h"
 #include "libft.h"
-#include "error.h"
+#include "sh_error.h"
 #include "sh.h"
 
 #include <stdio.h>

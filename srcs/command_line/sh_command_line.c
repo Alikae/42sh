@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 07:36:41 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/10 02:15:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 23:37:28 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "sh.h"
 #include "sh_command_edition.h"
 #include "sh_command_line.h"
-#include "history.h"
+#include "sh_history.h"
 #include <unistd.h>
 
 char			*sh_add_newline(char *line)

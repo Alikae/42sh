@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 08:00:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 23:01:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	sh_next_token(t_token **new)
 int		sh_check_split(t_split *splt)
 {
 	int		j;
-	
+
 	j = 0;
 	while (splt->split[j])
 	{
@@ -149,8 +149,12 @@ void	sh_find_quote(t_split *splt, short quote)
 t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 {
 	t_split	splt;
-	t_token	*thotho;
+	t_token	*toke;
+	int		i;
 
+	i = 0;
+	if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
+		printf("tok->content = %s\n", tok->content);
 	splt.tok = tok;
 	if (split)// && ifs)
 		splt.split = split;
@@ -162,7 +166,12 @@ t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
-	thotho = splt.sub;
-	print_all_tokens(sh(), thotho, 0);
+	toke = splt.sub;
+	while (toke)
+	{
+//		printf("		[%i]->content = %s||\n", i, toke->content);
+		toke = toke->next;
+		i++;
+	}
 	return (splt.sub);
 }

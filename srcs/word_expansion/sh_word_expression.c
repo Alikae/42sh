@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/15 02:46:54 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/19 15:11:10 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -39,7 +39,6 @@ void	sh_spetial_quote(char **content)
 		(*content)[j++] = cpy[i++];
 	}
 	(*content)[j] = '\0';
-//	printf("content in sh_spetial_quote = %s\n", (*content));
 	free(cpy);
 }
 
@@ -126,7 +125,6 @@ void	sh_opt_less(t_exp *exp)
 	else
 		exp->value = NULL;
 }
-
 void	sh_opt_equal(t_exp *exp)
 {
 	exp->i++;
