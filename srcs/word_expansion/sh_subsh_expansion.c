@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 09:53:34 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 11:00:49 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,5 @@ void	sh_subsh_expansion(t_exp *exp)
 	else//error
 	{}
 	printf("						[%i] expansions close [%i]\n", getpid(), pipe_fd[1]);
-	close(pipe_fd[1]);
+	//close(pipe_fd[1]);
 }

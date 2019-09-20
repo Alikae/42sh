@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 09:56:16 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 10:49:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ void	restore_std_fds(t_sh *p)
 	i = -1;
 	while (++i < 3)
 	{
+		dprintf((p->cpy_std_fds[1] > 0) ? p->cpy_std_fds[1] : 1, "						[%i]restore_std_fds %i cpy is %i\n", getpid(), i, p->cpy_std_fds[i]);
 		errno = 0;
 		if (p->cpy_std_fds[i] < 0)
 			continue;
 		int ret = dup2(p->cpy_std_fds[i], i);
 		(void)ret;
-		printf("						[%i] restoring %i from (closed)cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
+		dprintf((p->cpy_std_fds[1] > 0) ? p->cpy_std_fds[1] : 1, "						[%i] restoring %i from (closed)cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
 		close(p->cpy_std_fds[i]);
 		p->cpy_std_fds[i] = -1;
 	}
@@ -113,7 +114,7 @@ void	close_all_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
-		printf("						[%i]close_all_redirections [%i][%i]\n", getpid(), lst->in, lst->out);
+		dprintf((p->cpy_std_fds[1] > 0) ? p->cpy_std_fds[1] : 1, "						[%i]close_all_redirections [%i][%i]\n", getpid(), lst->in, lst->out);
 		close(lst->in);
 		close(lst->out);
 		lst = lst->next;
@@ -137,7 +138,7 @@ void	generate_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
-		printf("redirecting %i->%i\n", lst->in, lst->out);
+		//printf("redirecting %i->%i\n", lst->in, lst->out);
 		to_close = 0;
 /*		if ((fd_out = out_already_in_lst_n(lst->out, origin, lst)) < 0)
 		{

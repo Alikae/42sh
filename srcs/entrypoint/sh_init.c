@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 08:31:47 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/19 10:32:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,9 @@ void	sh_init(t_sh *shell)
 	shell->redirect_lst = 0;
 	shell->assign_lst = 0;
 	shell->tmp_assign_lst = 0;
+	shell->cpy_std_fds[0] = -1;
+	shell->cpy_std_fds[1] = -1;
+	shell->cpy_std_fds[2] = -1;
 	shell->opened_files = 0;
 	shell->nb_nested_functions = 0;
 	shell->nb_nested_compounds = 0;
