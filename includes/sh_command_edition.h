@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 23:37:10 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/22 01:25:18 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,13 @@ int				sh_cursor_forward(int i, int pointer,
 									t_pos cursor, t_pos term);
 int				sh_delete(char **command, int i);
 int				sh_outc(int c);
+int				sh_check_buflength(char *command, char *buf, t_cursors c,
+								t_pos rest);
 int				sh_echo_input(char **command, char *buf, int i, t_hist *hist);
 int				sh_controls(char **command, char *buf, t_hist *hist);
 void			sh_tty_cbreak(int code, struct termios orig_termios);
 void			reset_selection(char **commmand, int i, t_hist *hist);
 char			*sh_delete_last(char *command, int i);
 char			*sh_insert_char(char *command, char *buf, int i);
-
+t_pos			sh_getbuflength(char **command, char *buf, int i);
 #endif
