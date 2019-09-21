@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 20:11:50 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 16:25:24 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ t_opt	*ft_getopt(int *ac, char ***av, char *optstr)
 		tmp = ft_get_dopt(ac, av, optstr);
 	else if ((*av)[1][0] == '-' && (*av)[1][1])
 		tmp = ft_get_sopt(ac, av, optstr);
-	if (!tmp)
+	if (!tmp && (*av)[1][0] == '-' && ft_strcmp((*av)[1], "--"))
 	{
 		ft_putstr_fd("ft_getopt: Error: ", 2);
 		ft_putstr_fd((*av)[1], 2);
