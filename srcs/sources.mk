@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/10 06:30:04 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/21 23:29:11 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ C_FILES_job_control = \
 
 C_FILES_exitpoint = \
 	sh_exitpoint.c \
-	sh_free_opts.c \
 	sh_free_params.c \
 
 C_FILES_parameters = \

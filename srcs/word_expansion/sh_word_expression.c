@@ -6,11 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 15:11:10 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/22 00:15:58 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "sh_word_expansion.h"
+#include "sh_tokens.h"
+#include "sh_tokenizer.h"
 
 void	sh_spetial_quote(char **content)
 {

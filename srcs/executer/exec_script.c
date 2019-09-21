@@ -6,11 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 23:41:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/22 00:07:54 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "t_token.h"
+#include "sh_job_control.h"
+#include "sh_tokenizer.h"
 #include "sh_executer.h"
 #include "sh_redirections.h"
 #include "sh.h"

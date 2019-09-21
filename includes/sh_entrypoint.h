@@ -6,12 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 21:35:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 03:21:32 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/22 00:06:09 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_ENTRYPOINT_H
 # define SH_ENTRYPOINT_H
+
+# include "sh.h"
 
 void				sh_entrypoint(int ac , char **av, char **ev);
 void				sh_exec_line(const char *input);

@@ -4,36 +4,13 @@
 # include <pwd.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "t_token.h"
-# include "sh_env.h"
+# include "sh_types.h"
 # include "sh.h"
-# include "libft.h"
 
 # define COLON	1
 # define ERROR	2
 # define LEN	4
 
-typedef struct	s_exp
-{
-	t_token	*tok;
-	int		i;
-	int		first_i;
-	t_env	**env;
-	t_env	*find;
-	char	*value;
-	char	*name;
-	char	*content;
-	short	opt;
-	short	quote;
-}				t_exp;
-
-typedef struct	s_split
-{
-	int			i;
-	t_token		*tok;
-	t_token		*sub;
-	const char	*split;
-}				t_split;
 
 void	sh_spetial_quote(char **content);
 int		sh_word_expansion(t_exp *exp);
@@ -46,5 +23,7 @@ void	sh_print_exp(t_exp *exp, char *where);
 void	sh_record_name(t_exp *exp);
 void	sh_simple_expansion(t_exp *exp);
 void	sh_subsh_expansion(t_exp *exp);
+char	*sh_tab_fusion(char **t);
+t_token	*sh_expansion(char *tok_content, t_env **env);
 
 #endif

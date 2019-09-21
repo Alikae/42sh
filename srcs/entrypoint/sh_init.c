@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 20:41:40 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 23:25:16 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "libft.h"
 #include "sh_env.h"
 #include "sh_entrypoint.h"
-#include "sh_opt.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h> //ARE U SURE ?
