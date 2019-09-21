@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 19:32:09 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 23:09:38 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ int				ft_power(int nb, int power);
 int				ft_factorial(int nb);
 
 void			ft_print_opt(t_opt *optlst);
-t_opt			*ft_create_opt(char *name, char *content);
+t_opt			*ft_create_sopt(char name, char *content);
+t_opt			*ft_create_dopt(char *name, char *content);
 t_opt			*ft_getopt(int *ac, char ***av, char *optstr);
 t_opt			*ft_fetch_opt(char *name, size_t size, t_opt *optlst);
 #endif
