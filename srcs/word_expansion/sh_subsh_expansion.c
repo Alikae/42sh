@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/21 00:46:56 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/21 02:24:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,17 +135,18 @@ void	sh_subsh_expansion(t_exp *exp)
 	int		pipe_fd[2];
 
 	tok = NULL;
-	if (pipe(pipe_fd) == -1)
-		exit(-1);
 	sh_record_commande_string(exp);
 	tok = create_token(SH_SUBSH, 0, NULL);
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
+		if (pipe(pipe_fd) == -1)
+			exit(-1);//exit_properly
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
 	//	printf("exec subsh exp\n");
 		exec_compound_subsh(sh(), tok);
 		del_n_redirect_lst(&(sh()->redirect_lst), 1);
 		sh_read_pipe(exp, pipe_fd[0]);
+		close(pipe_fd[0]);
 	}
 	else//error
 	{}

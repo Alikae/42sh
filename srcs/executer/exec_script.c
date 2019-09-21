@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 23:41:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 01:57:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ int		fork_process(t_sh *p, int foreground)
 
 	if ((child_pid = fork()) > 0)
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		printf("[%i] FORK -> [%i]\n", getpid(), child_pid);
+			printf("[%i] FORK -> [%i]\n", getpid(), child_pid);
 	p->is_interactive = (p->is_interactive && (!child_pid != !foreground)) ? 1 : 0;
 	if (p->is_interactive)
 	{

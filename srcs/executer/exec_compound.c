@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 20:00:10 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 01:51:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 {
 	int	pid;
 	//Not more?
+	printf("[%i]exec_compound_subsh\n", getpid());
 	if ((pid = fork_process(p, 0)) < 0)
 	{
 		printf("fork error\n");

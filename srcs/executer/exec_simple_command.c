@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 00:43:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/21 10:58:36 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,11 @@ void	restore_std_fds(t_sh *p)
 		if (p->cpy_std_fds[i] < 0)
 			continue;
 		int ret = dup2(p->cpy_std_fds[i], i);
-		(void)ret;
+		//(void)ret;
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			printf("						[%i] restoring %i from (closed)cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
-		close(p->cpy_std_fds[i]);
+		ret = close(p->cpy_std_fds[i]);
+			printf("						[%i](closed)%i: ret %i errno %i\n", getpid(), p->cpy_std_fds[i], ret, errno);
 		p->cpy_std_fds[i] = -1;
 	}
 }
@@ -122,7 +123,7 @@ void	close_all_redirections(t_sh *p)
 	while (lst)
 	{
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			printf("						[%i]close_all_redirections [%i][%i]\n", getpid(), lst->in, lst->out);
+			dprintf(p->dbg_fd, "						[%i]close_all_redirections [%i][%i]\n", getpid(), lst->in, lst->out);
 		close(lst->in);
 		close(lst->out);
 		lst = lst->next;
@@ -146,7 +147,7 @@ void	generate_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
-		//printf("redirecting %i->%i\n", lst->in, lst->out);
+		printf("redirecting %i->%i\n", lst->in, lst->out);
 		to_close = 0;
 		/*		if ((fd_out = out_already_in_lst_n(lst->out, origin, lst)) < 0)
 				{
@@ -158,7 +159,7 @@ void	generate_redirections(t_sh *p)
 		else
 			dprintf(p->dbg_fd, "[%i]DUP2 %i->%i\n", getpid(), lst->in, fd_out);
 		//		if (to_close)
-		//			close(fd_out);
+		/*?*/			close(fd_out);
 		lst = lst->next;
 	}
 }
@@ -296,7 +297,7 @@ int     exec_path(t_sh *p, char *path)
 	}
 	else
 	{
-		printf("redirections before execve\n");
+		printf("[%i]redirections before execve\n", getpid());
 		print_redirections(p, p->redirect_lst);
 		execve(path, p->child_argv, transform_env_for_child(p->params)/*protec?*/);
 		exit(1/*EXECVE ERROR*/);
@@ -709,19 +710,29 @@ t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
 
 	origin = 0;
 	stack_origin = stack_argvs;
+	dprintf(p->dbg_fd, "[%i]EXPAND:\n", getpid());
+	print_all_tokens(p, stack_origin, 0);
 	while (stack_argvs)
 	{
 		if (!origin)
 		{
 			origin = sh_expansion(stack_argvs->content, &(p->params));
 			actual = origin;
+			dprintf(p->dbg_fd, "[%i]EXPANDING\n", getpid());
+			print_all_tokens(p, origin, 0);
 		}
 		else
+		{
 			actual->next = sh_expansion(stack_argvs->content, &(p->params));
+			dprintf(p->dbg_fd, "[%i]EXPANDING\n", getpid());
+			print_all_tokens(p, origin, 0);
+		}
 		while (actual && actual->next)
 			actual = actual->next;
 		stack_argvs = stack_argvs->next;
 	}
+	dprintf(p->dbg_fd, "[%i]EXPANDED\n", getpid());
+	print_all_tokens(p, origin, 0);
 	free_ast(stack_origin);
 	return (origin);
 }

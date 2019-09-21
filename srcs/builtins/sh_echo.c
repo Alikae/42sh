@@ -6,12 +6,16 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 23:52:12 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 10:48:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_env.h"
 #include "libft.h"
+
+//
+#include "sh.h"
+#include "stdio.h"
 
 static void		sh_echo_print(char *tmp, char **handle, int *nl)
 {
@@ -49,8 +53,12 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	i = 0;
 	nl = 1;
 	(void)ev;
+	//dprintf(sh()->dbg_fd, "echo begin\n");
+	//dprintf(2, "echo begin\n");
+	
 	while (++i < ac)
 	{
+		dprintf(2, "										[%i]i = %i, result = %s\n ", getpid(), i, av[i]);
 		if (i > 1)
 			ft_putchar(' ');
 		handle = av[i];
@@ -62,5 +70,7 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	}
 	if (nl)
 		ft_putchar('\n');
+	//dprintf(sh()->dbg_fd, "echo end\n");
+	//dprintf(2, "echo end\n");
 	return (0);
 }
