@@ -29,6 +29,7 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b, int index_e)
 	if (!(job = (t_job*)malloc(sizeof(t_job))))
 		exit(1/*MALLOC_ERROR*/);
 	job->name = ft_strndup(name + index_b, index_e - index_b);
+	ft_bzero(&job->t_mode, sizeof(job->t_mode));
 	job->pid = pid;
 	job->next = 0;
 	return (job);

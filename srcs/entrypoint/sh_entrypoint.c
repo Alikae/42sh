@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 19:58:48 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/22 09:17:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	int 	i;
 	t_sh	*tsh;
 	pid_t	shell_pgid;
-	struct termios	shell_tmodes;
 
 	tsh = sh();
 	i = -1;
@@ -35,15 +34,21 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tsh->is_interactive = isatty(0);
 	if (ft_fetch_opt("c", 1, tsh->opt))
 		sh_exec_arg();
-	else if (tsh->ac > 1) //Are options (-c) counted
+	else if (tsh->ac > 1)
 		sh_exec_file();
 	else if (!tsh->is_interactive)
 		sh_exec_stdin();
 	else
 	{
-		while (!sh()->dbg && tcgetpgrp(0/*STDIN*/) != (shell_pgid = getpgrp()))
+		while (!sh()->dbg && tcgetpgrp(0) != (shell_pgid = getpgrp()))
 			kill (shell_pgid, SIGTTIN);
-		/*ignore sigs int quit tstp ttin ttou chld*/
+		/*ignore sigs, need handling*/
+		signal (SIGINT, SIG_IGN);
+		signal (SIGQUIT, SIG_IGN);
+		signal (SIGTSTP, SIG_IGN);
+		signal (SIGTTIN, SIG_IGN);
+		signal (SIGTTOU, SIG_IGN);
+//		signal (SIGCHLD, SIG_IGN);
 		shell_pgid = getpid();
 		if (setpgid(shell_pgid, shell_pgid) < 0)
 		{
@@ -52,7 +57,8 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 			exit(1);
 		}
 		tcsetpgrp(0, shell_pgid);
-		tcgetattr (0, &shell_tmodes);//<--call sh_tty_cbreak?
+		//tcgetattr (0, &shell_tmodes);//<--call sh_tty_cbreak? Unuseful?
+		//Do 1 time on termios on sh()
 		sh_loop();
 	}
 }
