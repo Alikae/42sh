@@ -58,7 +58,7 @@ typedef enum	e_arthtype
 typedef struct	s_arith
 {
 	t_arthtype		next_op;
-	unigned int		nb;
+	long int		nb;
 	struct s_arith	*next;
 	struct s_arith	*sub;
 }				t_arith;
