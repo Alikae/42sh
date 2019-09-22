@@ -6,17 +6,20 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 06:47:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/10 05:39:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/22 05:30:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef JOB_CONTROL_H
 # define JOB_CONTROL_H
 
+# include <termios.h>
+
 typedef struct	s_job
 {
 	char			*name;
 	unsigned int	pid;
+	struct termios	t_mode;
 	struct s_job	*next;
 }				t_job;
 

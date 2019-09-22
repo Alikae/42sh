@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 05:21:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/22 09:46:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,18 @@ void	restore_std_fds(t_sh *p)
 	i = -1;
 	while (++i < 3)
 	{
-		dprintf((p->cpy_std_fds[1] > 0) ? p->cpy_std_fds[1] : 1, "						[%i]restore_std_fds %i cpy is %i\n", getpid(), i, p->cpy_std_fds[i]);
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			dprintf((p->cpy_std_fds[1] > 0) ? p->cpy_std_fds[1] : 1, "						[%i]restore_std_fds %i cpy is %i\n", getpid(), i, p->cpy_std_fds[i]);
 		errno = 0;
 		if (p->cpy_std_fds[i] < 0)
 			continue;
 		int ret = dup2(p->cpy_std_fds[i], i);
 		//(void)ret;
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			printf("						[%i] restoring %i from (closed)cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
+			dprintf((p->cpy_std_fds[1] > 0) ? p->cpy_std_fds[1] : 1, "						[%i] restoring %i from (closed)cpy %i: ret %i errno %i\n", getpid(), i, p->cpy_std_fds[i], ret, errno);
 		ret = close(p->cpy_std_fds[i]);
-			printf("						[%i](closed)%i: ret %i errno %i\n", getpid(), p->cpy_std_fds[i], ret, errno);
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			dprintf((p->cpy_std_fds[1] > 0) ? p->cpy_std_fds[1] : 1, "						[%i](closed)%i: ret %i errno %i\n", getpid(), p->cpy_std_fds[i], ret, errno);
 		p->cpy_std_fds[i] = -1;
 	}
 }
@@ -180,11 +182,11 @@ void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 {
 	(void)p;
 	sigfillset(sigset);
-	//sigprocmask(SIG_BLOCK, sigset, 0);
+	sigprocmask(SIG_BLOCK, sigset, 0);
 
 	//
 	//SIGDEFAULT all jobcctrl sigs
-	init_signals_child();
+//	init_signals_child();
 	//
 }
 
@@ -196,7 +198,7 @@ int     block_wait(t_sh *p, int child_pid)
 	swap_to_signals_exec(p, &sigset);
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
-		dprintf(p->dbg_fd, "WAIT ERROR\n");
+		dprintf(p->dbg_fd, "WAIT ERROR %i\n", errno);
 		return (0);
 	}
 	dprintf(p->dbg_fd, "waited\n");
@@ -207,8 +209,9 @@ int     block_wait(t_sh *p, int child_pid)
 	if (WIFSTOPPED(status))
 	{
 		//debugging
-		dprintf(p->dbg_fd, "waited2\n");
+		dprintf(p->dbg_fd, "waited stopped\n");
 		handle_signal(WTERMSIG(status));
+		dprintf(p->dbg_fd, "signal: %i\n", WSTOPSIG(status));
 		//
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
@@ -221,7 +224,7 @@ int     block_wait(t_sh *p, int child_pid)
 	}
 	else if (WIFSIGNALED(status))
 	{
-		dprintf(p->dbg_fd, "waited3\n");
+		dprintf(p->dbg_fd, "waited signaled\n");
 		handle_signal(WTERMSIG(status));
 		/*
 		   dprintf(p->dbg_fd, "waited3\n");
@@ -231,13 +234,13 @@ int     block_wait(t_sh *p, int child_pid)
 		   }
 		   */
 	}
-	/* Put the shell back in the foreground.  */
-//	tcsetpgrp (0, getpgid(0));
-	/* Restore the shell’s terminal modes.  */
-//	tcgetattr (0, &j->tmodes);
+//	if (p->is_interactive)
+//		tcsetpgrp (0, getpgid(0));
+												//ctrl-Z only	tcgetattr (0, &j->tmodes);
 //	tcsetattr (0, TCSADRAIN, &shell_tmodes);
-	printf("%i\n", p->dbg_fd);
-	dprintf(p->dbg_fd, "waited4\n");
+//	printf("%i\n", p->dbg_fd);
+	if (p->is_interactive)
+		tcsetpgrp (0, getpgid(0));
 	sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	////wait(&wait_status);
 	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
@@ -302,7 +305,7 @@ int     exec_path(t_sh *p, char *path)
 	}
 	else
 	{
-		printf("[%i]redirections before execve\n", getpid());
+		dprintf(p->dbg_fd, "[%i]redirections before execve\n", getpid());
 		print_redirections(p, p->redirect_lst);
 		execve(path, p->child_argv, transform_env_for_child(p->params)/*protec?*/);
 		exit(1/*EXECVE ERROR*/);
@@ -361,8 +364,8 @@ int		exec_prgm(t_sh *p)
 	if (!path)
 		return (0);
 	//dprintf(p->dbg_fd, "with_redirections:\n");
-	printf("exec_prgm\n");
-	printf("%p\n", p->redirect_lst);
+	//printf("exec_prgm\n");
+	//printf("%p\n", p->redirect_lst);
 	print_redirections(p, p->redirect_lst);
 	ret = 0;
 	nb_paths = 0;
