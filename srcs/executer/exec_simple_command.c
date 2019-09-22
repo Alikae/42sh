@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 10:58:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/22 04:57:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,11 @@ int     block_wait(t_sh *p, int child_pid)
 		   }
 		   */
 	}
+	/* Put the shell back in the foreground.  */
+//	tcsetpgrp (0, getpgid(0));
+	/* Restore the shell’s terminal modes.  */
+//	tcgetattr (0, &j->tmodes);
+//	tcsetattr (0, TCSADRAIN, &shell_tmodes);
 	printf("%i\n", p->dbg_fd);
 	dprintf(p->dbg_fd, "waited4\n");
 	sigprocmask(SIG_UNBLOCK, &sigset, 0);
