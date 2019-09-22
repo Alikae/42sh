@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 04:57:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/22 05:21:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,9 +312,9 @@ int     exec_path(t_sh *p, char *path)
 
 int		can_exec(struct stat *st)
 {
-	if (!S_ISREG(st->st_mode))
-		return (0);
-	else if (st->st_uid == getuid() && st->st_mode & S_IXUSR)
+	//if (!S_ISREG(st->st_mode)) //SYMLINK
+	//	return (0);
+	if (st->st_uid == getuid() && st->st_mode & S_IXUSR)
 		return (1);
 	else if (st->st_gid == getgid() && st->st_mode & S_IXGRP)
 		return (1);
