@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 00:59:28 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/23 18:28:02 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ typedef struct		s_sh
 	int				index_pipeline_end;
 	t_job			*jobs;
 	int				is_interactive;
-
 	struct termios	orig_termios;
+	//truct termios	fromTMeyer;
 }					t_sh;
 
 t_sh	*sh(void);
