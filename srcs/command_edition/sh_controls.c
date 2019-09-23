@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:58:44 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/22 00:58:07 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/23 21:04:50 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int			sh_controls(char **command, char *buf, t_hist *hist)
 		ft_memdel((void**)&(*command));
 		ft_memdel((void**)&sh()->bucopy);
 		(void)hist;
-		sh_tty_cbreak(2, sh->orig_termios);
+		sh_tty_cbreak(2, sh()->orig_termios);
 		kill(id, SIGINT);
 		return (3);
 	}

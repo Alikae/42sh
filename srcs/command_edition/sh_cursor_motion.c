@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/22 01:25:15 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/23 21:04:48 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
 {
 	t_cursors	c;
-	t_pos		rest;
+	t_pos		head;
 
 	sh_cursor_position(&c.cursor);
 	c.term.rows = tgetnum("li");
@@ -138,16 +138,15 @@ int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
 	*command = sh_insert_char(*command, buf, i);
 	tputs(tgetstr("sc", NULL), 0, sh_outc);
 	tputs(tgetstr("cd", NULL), 0, sh_outc);
-	rest = sh_getbuflength(command, buf, i);
 	ft_putstr_fd(&command[0][i + 1], 0);
-//	if (command[0][i + ft_strlen(buf) + 1] != 0 && head.rows == c.term.rows
-	//		&& (int)ft_strlen(&command[0][i]) > head.col - 1)
-//	if (sh_check_buflength(*command, buf, head, rest)) 
-//	{
+	sh_cursor_position(&head);
+	if (command[0][i + ft_strlen(buf) + 1] != 0 && head.rows == c.term.rows
+			&& (int)ft_strlen(buf) == head.col - 1)
+	{
 		tputs(tgetstr("rc", NULL), 0, sh_outc);
 		tputs(tgetstr("up", NULL), 0, sh_outc);
-//	}
-//	else
+	}
+	else
 		tputs(tgetstr("rc", NULL), 0, sh_outc);
 	i = sh_cursor_forward(ft_strlen(buf), i, c.cursor, c.term);
 	sh_switch_history(hist, command);

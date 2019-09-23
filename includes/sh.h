@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/23 18:28:02 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/23 21:01:46 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include "libft.h"
 # include "sh_env.h"
 # include "sh_job_control.h"
-# include <term.h>
 # include <curses.h>
 
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
