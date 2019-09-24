@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/24 05:52:17 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/25 01:52:23 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void	sh_record_arithmetic_string(t_exp *exp)
 		exit (-1);
 	sh_str_start_end(&(exp->name), exp->content, exp->i, exp->i + size - 1);
 }
-
+/*
 t_arith	*sh_creat_arithmetic_ast(char *str)
 {
 	int		i;
 
 	
-}
+}*/
 
 void	sh_arithmetic_expansion(t_exp *exp)
 {
@@ -56,5 +56,5 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
-	arith = sh_creat_arithmetic_ast(exp->name);
+//	arith = sh_creat_arithmetic_ast(exp->name);
 }
