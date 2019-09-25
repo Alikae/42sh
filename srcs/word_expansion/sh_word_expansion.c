@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 14:36:44 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/24 05:13:20 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -95,9 +95,9 @@ int		sh_in_expansion(t_exp *exp)
 	}
 	else if (exp->content[exp->i] == '(' || exp->content[exp->i] == '`')
 	{
-//		if (exp->content[exp->i] == '(' && exp->content[exp->i + 1 == '(')
-//			sh_arithmetique_expanssion(&((*tok)->content), i + 2, env);
-//		else
+		if (exp->content[exp->i + 1] == '(')
+			sh_arithmetic_expansion(exp);
+		else
 			sh_subsh_expansion(exp);
 	}
 	else

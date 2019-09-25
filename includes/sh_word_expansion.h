@@ -63,6 +63,7 @@ typedef struct	s_arith
 	struct s_arith	*sub;
 }				t_arith;
 
+void	sh_subsh_quote(t_exp *exp, short *quote);
 void	sh_spetial_quote(char **content);
 int		sh_word_expansion(t_exp *exp);
 void	sh_parameter_expansion(t_exp *exp);
@@ -74,5 +75,6 @@ void	sh_print_exp(t_exp *exp, char *where);
 void	sh_record_name(t_exp *exp);
 void	sh_simple_expansion(t_exp *exp);
 void	sh_subsh_expansion(t_exp *exp);
-
+void	sh_arithmetic_expansion(t_exp *exp);
+void	sh_str_start_end(char **dest, char *src, int i, int n);
 #endif
