@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/25 07:35:10 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/25 08:30:15 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -122,6 +122,7 @@ C_FILES_tools = \
 	#sh_find_law.c \
 
 C_FILES_word_expansion = \
+	sh_arithmetic_expansion.c \
 	sh_word_expansion.c	\
 	sh_tilde_expansion.c \
 	sh_word_expression.c \
