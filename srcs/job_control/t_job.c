@@ -31,6 +31,7 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b, int index_e)
 	job->name = ft_strndup(name + index_b, index_e - index_b);
 	ft_bzero(&job->t_mode, sizeof(job->t_mode));
 	job->pid = pid;
+	job->pgid = getpgid(pid);
 	job->next = 0;
 	return (job);
 }

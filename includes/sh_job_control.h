@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 06:47:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/22 05:30:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/25 07:37:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 typedef struct	s_job
 {
 	char			*name;
-	unsigned int	pid;
+	pid_t			pid;
+	pid_t			pgid;
 	struct termios	t_mode;
 	struct s_job	*next;
 }				t_job;

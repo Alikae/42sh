@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/10 06:30:04 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/25 07:35:10 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -110,6 +110,7 @@ C_FILES_builtins = \
 	sh_pwd.c \
 	sh_exit.c \
 	sh_jobs.c \
+	sh_fg.c \
 	sh_unalias.c
 
 C_FILES_tools = \

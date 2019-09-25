@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 09:14:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/04 03:11:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/24 01:05:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@ char	*ft_join_with_char(const char *path, const char *name, char c)
 	int		j;
 	char	*new;
 
-	//
-	//CORRECT IN TRANSFORM_ENV_FOR_CHILD FOR UNSET VARS
-	if (!(path && name))
-		return (0);
-	//
+	if (!path)
+		path = "";
+	if (!name)
+		name = "";
 	j = 0;
 	i = 0;
 	if (!((new = malloc((ft_strlen(path) + ft_strlen(name)) + 2))))

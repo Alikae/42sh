@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 05:30:14 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/25 05:15:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,12 @@ typedef struct		s_sh
 	int				index_pipeline_end;
 	t_job			*jobs;
 	int				is_interactive;
+	int	pid_main_process;
 	//struct termios	fromTMeyer;
 }					t_sh;
 
 t_sh	*sh(void);
+void	init_signals_handling(void);
 char	*sh_tab_fusion(char **t);
 t_token	*sh_expansion(char *tok_content, t_env **env);
 #endif

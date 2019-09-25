@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 09:17:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/25 05:10:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tsh->ac = ac;
 	tsh->av = av;
 	tsh->ev = ev;
-	sh_init(tsh);
 	tsh->is_interactive = isatty(0);
+	sh_init(tsh);
+	printf("isatty = %i\n", tsh->is_interactive);
 	if (ft_fetch_opt("c", 1, tsh->opt))
 		sh_exec_arg();
 	else if (tsh->ac > 1)
@@ -40,15 +41,16 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 		sh_exec_stdin();
 	else
 	{
-		while (!sh()->dbg && tcgetpgrp(0) != (shell_pgid = getpgrp()))
-			kill (shell_pgid, SIGTTIN);
-		/*ignore sigs, need handling*/
-		signal (SIGINT, SIG_IGN);
-		signal (SIGQUIT, SIG_IGN);
-		signal (SIGTSTP, SIG_IGN);
-		signal (SIGTTIN, SIG_IGN);
-		signal (SIGTTOU, SIG_IGN);
+//		signal (SIGINT, SIG_IGN);
+//		signal (SIGQUIT, SIG_IGN);
+//		signal (SIGTSTP, SIG_IGN);
+//		signal (SIGTTIN, SIG_IGN);
+//		signal (SIGTTOU, SIG_IGN);
 //		signal (SIGCHLD, SIG_IGN);
+		while (/*!sh()->dbg && */tcgetpgrp(0) != (shell_pgid = getpgrp()))
+			kill (shell_pgid, SIGTTIN);
+		init_signals_handling();
+		/*ignore sigs, need handling*/
 		shell_pgid = getpid();
 		if (setpgid(shell_pgid, shell_pgid) < 0)
 		{
