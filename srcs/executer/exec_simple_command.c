@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/25 08:24:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/25 09:50:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ int     block_wait(t_sh *p, int child_pid)
 		return (0);
 	}
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		dprintf(p->dbg_fd, "waited\n");
+		dprintf(p->dbg_fd, "waited: sig %i\n", WSTOPSIG(status));
 	//dprintf(p->dbg_fd, "waited\n");
 	//dprintf(p->dbg_fd, "wait status: %i\n", status);
 	//printf("IFSTOPPED macro: %i\n", WIFSTOPPED(status));
@@ -235,11 +235,6 @@ int     block_wait(t_sh *p, int child_pid)
 		{
 			printf("\nChild_process [%i] suspended\n", child_pid);
 			//???index_pipeline_begin?
-			errno = 0;
-			signal(SIGTTOU, SIG_IGN);
-			int ret = tcsetpgrp(0, getpgid(0));
-			signal(SIGTTOU, SIG_DFL);
-			printf("handle SIGTSTP: tcsetpgrp ret = %i errno %i\n", ret, errno);
 			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
 		if (WSTOPSIG(status) == SIGKILL)
@@ -265,12 +260,12 @@ int     block_wait(t_sh *p, int child_pid)
 	////wait(&wait_status);
 	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
 	//	;
-	if (p->is_interactive)
+	if (p->is_interactive && p->pid_main_process == getpid())
 	{
 		signal(SIGTTOU, SIG_IGN);
 		errno = 0;
 		int ret = tcsetpgrp (0, getpgid(0));
-		printf("tcsetpgrp ret = %i errno%i\n", ret, errno);
+		printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), getpgid(0), ret, errno);
 		signal(SIGTTOU, SIG_DFL);
 //		sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	//	init_signals_handling();

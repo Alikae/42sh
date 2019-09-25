@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/25 07:40:24 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/25 09:46:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,12 +229,16 @@ void	close_cpy_std_fds(t_sh *p)
 	p->cpy_std_fds[2] = -1;
 }
 
-int		fork_process(t_sh *p, int foreground, /*?*/int default_sig)
+int		fork_process(t_sh *p, int /*conserve_foreground*/foreground, /*?*/int default_sig)
 {//protec fork?
 	int		child_pid;
+	int		create_pgrp;
 	pid_t	pid;
 //	pid_t	pgid;
 
+	create_pgrp = 0;
+	if (p->pid_main_process == getpid())
+		create_pgrp = 1;
 	if ((child_pid = fork()) > 0)
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			dprintf(p->dbg_fd, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
@@ -243,19 +247,22 @@ int		fork_process(t_sh *p, int foreground, /*?*/int default_sig)
 		//exitpoint to free resources
 		exit(1);
 	}
-	pid = (child_pid) ? child_pid : getpid();
-	if (p->pid_main_process == getpid())
+	if (create_pgrp)
 	{
+		pid = (child_pid) ? child_pid : getpid();
 //		pgid = getpgid(pid);
 //			if (pgid == 0)		gnu_job_control_inplementing_a_shell not clear
 //				pgid = pid;		when can pgid be equl to 0?
 		setpgid (pid, pid);
-	}
-	if (p->is_interactive && foreground)
-	{
-		errno = 0;
-		int ret = tcsetpgrp(0, pid);
-		printf("tcsetpgrp ret %i errno %i\n", ret, errno);
+		printf("setpgid of [%i] to itself\n", pid);
+		if (getpgid(0) == tcgetpgrp(0) && foreground)
+		{
+			signal(SIGTTOU, SIG_IGN);
+			errno = 0;
+			int ret = tcsetpgrp(0, pid);
+			printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
+			signal(SIGTTOU, SIG_DFL);
+		}
 	}
 	if (!child_pid)
 	{
