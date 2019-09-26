@@ -16,6 +16,7 @@
 #include "sh_redirections.h"
 #include "sh.h"
 #include "errno.h"
+#include <signal.h>
 #include <unistd.h>
 #include <stdio.h>
 

@@ -15,6 +15,7 @@
 #include "sh_env.h"
 #include "sh_entrypoint.h"
 #include <fcntl.h>
+#include <signal.h>
 #include <unistd.h>
 #include <stdio.h> //ARE U SURE ?
 #include <sys/types.h>
