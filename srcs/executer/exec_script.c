@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/25 09:46:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/26 07:56:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "errno.h"
 #include <unistd.h>
 #include <stdio.h>
+#include "sh_exitpoint.h"
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
@@ -254,7 +255,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground, /*?*/int defau
 //			if (pgid == 0)		gnu_job_control_inplementing_a_shell not clear
 //				pgid = pid;		when can pgid be equl to 0?
 		setpgid (pid, pid);
-		printf("setpgid of [%i] to itself\n", pid);
+		//printf("setpgid of [%i] to itself\n", pid);
 		if (getpgid(0) == tcgetpgrp(0) && foreground)
 		{
 			signal(SIGTTOU, SIG_IGN);
@@ -296,7 +297,8 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 		exec_and_or(p, token_begin, token_end);
 		//free stuff or not?
 		printf("[%i] exec background suicide\n", getpid());
-		exit(0);
+		sh_exitpoint();
+		//
 	}
 	else
 		add_job(child_pid, p->cmd, token_begin->index,
@@ -338,7 +340,7 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 		else
 			exec_and_or(p, token_begin, next_separator);
 		token_begin = (next_separator) ? next_separator->next : 0;
-		printf("script next -->\n");
+		//printf("script next -->\n");
 	}
 	return (p->last_cmd_result);
 }

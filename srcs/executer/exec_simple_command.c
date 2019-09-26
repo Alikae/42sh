@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/25 09:50:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/26 08:05:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,8 +202,9 @@ void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 	//
 }
 
-int     block_wait(t_sh *p, int child_pid)
+int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 {
+	//IF CONTINUED_JOB: ADD JOB DONT TRIGGER AND IF !ADD JOB DEL CONTINUED JOB
 	int			status;
 	//sigset_t	sigset;
 
@@ -240,6 +241,12 @@ int     block_wait(t_sh *p, int child_pid)
 		if (WSTOPSIG(status) == SIGKILL)
 			if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 				printf("\nChild_process [%i] KILLED\n", child_pid);
+		if (WSTOPSIG(status) == SIGTTOU)
+		{
+			printf("\nChild_process [%i] SIGTTOU\n", child_pid);
+			//kill SIGTSTP?
+			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+		}
 	}
 	else if (WIFSIGNALED(status))
 	{
@@ -1139,6 +1146,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	del_n_assign_lst(p, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
 	//free tab2d p->child_argv
-	printf("ex simple cmd end o\n");
+	//printf("ex simple cmd end o\n");
 	return (ret);
 }

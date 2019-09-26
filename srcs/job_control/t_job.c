@@ -1,6 +1,7 @@
 #include "sh.h"
 #include "libft.h"
 #include <stdlib.h>
+#include <signal.h>
 
 void	delete_job(t_job *job)
 {
@@ -35,7 +36,7 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b, int index_e)
 	job->next = 0;
 	return (job);
 }
-
+#include <stdio.h>
 t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e)
 {
 	t_job	*jobs;
@@ -43,5 +44,20 @@ t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e)
 	jobs = sh()->jobs;
 	sh()->jobs = create_job(pid, name, index_b, index_e);
 	sh()->jobs->next = jobs;
+	printf("[%i] add job:%s\n", getpid(), sh()->jobs->name);
 	return (jobs);
+}
+
+void	signal_all_jobs(int sig)
+{
+	t_job	*jobs;
+
+	jobs = sh()->jobs;
+	printf("[%i] send sig %i to jobs:\n", getpid(), sig);
+	while (jobs)
+	{
+		printf("--> {[%i]%s}\n", jobs->pid, jobs->name);
+		kill(jobs->pid, sig);
+		jobs = jobs->next;
+	}
 }
