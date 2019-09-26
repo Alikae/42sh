@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <stdio.h> //ARE U SURE ?
 #include <sys/types.h>
+#include <signal.h>
 #include <pwd.h>
 
 static void	sh_set_shppid(void)
