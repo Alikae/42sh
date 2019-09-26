@@ -13,6 +13,7 @@
 #ifndef SH_TYPES_H
 # define SH_TYPES_H
 
+#include <termios.h>
 
 typedef struct s_tokenize_tool
 {
@@ -33,13 +34,6 @@ typedef struct  s_pipe_lst
 	int                 pipe[2];
 	struct s_pipe_lst   *next;
 }               t_pipe_lst;
-
-typedef struct	s_job
-{
-	char			*name;
-	unsigned int	pid;
-	struct s_job	*next;
-}				t_job;
 
 typedef struct		s_ln
 {
@@ -159,4 +153,13 @@ typedef struct	s_split
 	t_token		*sub;
 	const char	*split;
 }				t_split;
+
+typedef struct	s_job
+{
+	char			*name;
+	unsigned int	pid;
+	struct termios	t_mode;
+	struct s_job	*next;
+}				t_job;
+
 #endif

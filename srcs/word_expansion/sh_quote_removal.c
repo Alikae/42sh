@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 23:01:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 12:53:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		sh_check_split(t_split *splt)
 	return (0);
 }
 
-void	sh_token_spliting(t_split *splt)
+void	sh_token_spliting(t_split *splt, int reset)
 {
 	int			j;
 	static int	i = 0;
@@ -87,7 +87,7 @@ void	sh_token_spliting(t_split *splt)
 	while (splt->tok->content[i] && sh_check_split(splt))
 		++(splt->i) && ++i;
 	splt->i--;
-	if (!splt->tok->content[i])
+	if (reset)
 		i = 0;
 	if (cpy)
 		splt->sub = cpy;
@@ -137,13 +137,13 @@ void	sh_find_quote(t_split *splt, short quote)
 				break ;
 			if (!splt->tok->content[splt->i])
 				break ;
-			if (splt->split && !quote && sh_check_split(splt))
-				sh_token_spliting(splt);
+			if (splt->split && !quote  && sh_check_split(splt))
+				sh_token_spliting(splt, 0);
 		}
 		splt->i++;
 	}
 	if (!quote)
-		sh_token_spliting(splt);
+		sh_token_spliting(splt, 1);
 }
 
 t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
@@ -152,9 +152,7 @@ t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 	t_token	*toke;
 	int		i;
 
-	i = 0;
-	if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
-		printf("tok->content = %s\n", tok->content);
+	i = 1;
 	splt.tok = tok;
 	if (split)// && ifs)
 		splt.split = split;
@@ -169,7 +167,8 @@ t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 	toke = splt.sub;
 	while (toke)
 	{
-//		printf("		[%i]->content = %s||\n", i, toke->content);
+		if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
+			printf("								[%i]tok->content = %s\n", i, tok->content);
 		toke = toke->next;
 		i++;
 	}

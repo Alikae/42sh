@@ -12,6 +12,34 @@
 # define LEN	4
 
 
+typedef enum	e_arthtype
+{
+	PLUS = 0,
+	MINUS,
+	PARENTHESIS,
+	MULTI,
+	DIV,
+	MODULO,
+	INCREMENT,
+	DECREMENT,
+	MORE,
+	LESS,
+	MORE_EQUAL,
+	LESS_EQUAL,
+	AND,
+	OR,
+	EQUAL,
+	DIFFERENT
+}				t_arthtype;
+
+typedef struct	s_arith
+{
+	t_arthtype		next_op;
+	unsigned int		nb;
+	struct s_arith	*next;
+	struct s_arith	*sub;
+}				t_arith;
+
 void	sh_spetial_quote(char **content);
 int		sh_word_expansion(t_exp *exp);
 void	sh_parameter_expansion(t_exp *exp);

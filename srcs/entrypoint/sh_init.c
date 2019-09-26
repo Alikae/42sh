@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 23:25:16 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/22 09:12:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,31 +134,32 @@ void	handle_signal(int sig)
 void	init_signals_handling()
 {
 	signal(SIGINT, &handle_signal);
-	signal(SIGSEGV, &handle_signal);
+//	signal(SIGSEGV, &handle_signal);
 	signal(SIGTSTP, &handle_signal);
-	signal(SIGILL, &handle_signal);
-	signal(SIGTRAP, &handle_signal);
-	signal(SIGABRT, &handle_signal);
-	signal(SIGEMT, &handle_signal);
-	signal(SIGFPE, &handle_signal);
-	signal(SIGBUS, &handle_signal);
-	signal(SIGSYS, &handle_signal);
-	signal(SIGPIPE, &handle_signal);
-	signal(SIGALRM, &handle_signal);
-	signal(SIGTERM, &handle_signal);
-	signal(SIGCONT, &handle_signal);
+//	signal(SIGILL, &handle_signal);
+//	signal(SIGTRAP, &handle_signal);
+//	signal(SIGABRT, &handle_signal);
+//	signal(SIGEMT, &handle_signal);
+//	signal(SIGFPE, &handle_signal);
+//	signal(SIGBUS, &handle_signal);
+//	signal(SIGSYS, &handle_signal);
+//	signal(SIGPIPE, &handle_signal);
+//	signal(SIGALRM, &handle_signal);
+//	signal(SIGTERM, &handle_signal);
+//	signal(SIGCONT, &handle_signal);
+	signal(SIGQUIT, &handle_signal);
 	signal(SIGCHLD, &handle_signal);
-	//signal(SIGTTIN, &handle_signal);
-	//signal(SIGTTOU, &handle_signal);
-	signal(SIGIO, &handle_signal);
-	signal(SIGXCPU, &handle_signal);
-	signal(SIGXFSZ, &handle_signal);
-	signal(SIGVTALRM, &handle_signal);
-	signal(SIGPROF, &handle_signal);
-	signal(SIGWINCH, &handle_signal);
-	signal(SIGINFO, &handle_signal);
-	signal(SIGUSR1, &handle_signal);
-	signal(SIGUSR2, &handle_signal);
+	signal(SIGTTIN, &handle_signal);
+	signal(SIGTTOU, &handle_signal);
+//	signal(SIGIO, &handle_signal);
+//	signal(SIGXCPU, &handle_signal);
+//	signal(SIGXFSZ, &handle_signal);
+//	signal(SIGVTALRM, &handle_signal);
+//	signal(SIGPROF, &handle_signal);
+//	signal(SIGWINCH, &handle_signal);
+//	signal(SIGINFO, &handle_signal);
+//	signal(SIGUSR1, &handle_signal);
+//	signal(SIGUSR2, &handle_signal);
 }
 
 void	sh_init_debug(t_sh *shell)
@@ -168,7 +169,7 @@ void	sh_init_debug(t_sh *shell)
 	if ((tmp = ft_fetch_opt("debug", 5, shell->opt)))
 	{
 		shell->dbg = tmp->arg;
-		shell->dbg_fd = dup(2);
+		shell->dbg_fd = dup(2); //CLOSE AT EXITPOINT
 	}
 	else
 	{
@@ -212,6 +213,9 @@ void	sh_init(t_sh *shell)
 	shell->redirect_lst = 0;
 	shell->assign_lst = 0;
 	shell->tmp_assign_lst = 0;
+	shell->cpy_std_fds[0] = -1;
+	shell->cpy_std_fds[1] = -1;
+	shell->cpy_std_fds[2] = -1;
 	shell->opened_files = 0;
 	shell->nb_nested_functions = 0;
 	shell->nb_nested_compounds = 0;

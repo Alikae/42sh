@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 00:20:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/20 00:20:44 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 02:17:56 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ void	del_n_redirect_lst(t_redirect_lst **p_origin, int n)
 	while (n-- && *p_origin)
 	{
 		printf("						[%i] del_n_redirect_lst [%i][%i]\n", getpid(), (*p_origin)->in, (*p_origin)->out);
+		/*if ((*p_origin)->out > 2)
+			close((*p_origin)->out);
+		if ((*p_origin)->in > 2)
+			close((*p_origin)->in);*/
 		if ((*p_origin)->out > 2)
 			close((*p_origin)->out);
 		if ((*p_origin)->in > 2)

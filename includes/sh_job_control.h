@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 06:47:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/22 00:08:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/22 05:30:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define JOB_CONTROL_H
 
 # include "sh.h"
+# include <termios.h>
 
 void	delete_job(t_job *job);
 void	delete_all_jobs(t_job *job);

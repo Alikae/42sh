@@ -230,29 +230,40 @@ int		fork_process(t_sh *p, int foreground)
 {//protec fork?
 	int		child_pid;
 	pid_t	pid;
-	pid_t	pgid;
+//	pid_t	pgid;
 
 	if ((child_pid = fork()) > 0)
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		printf("[%i] FORK -> [%i]\n", getpid(), child_pid);
-	p->is_interactive = (p->is_interactive && (!child_pid != !foreground)) ? 1 : 0;
+			printf("[%i] FORK -> [%i]\n", getpid(), child_pid);
+	if (child_pid < 0)
+	{
+		//exitpoint to free resources
+		exit(1);
+	}
 	if (p->is_interactive)
 	{
-		pid = getpid();
-		pgid = getpgid(pid);
-		if (pgid == 0) pgid = pid;
-		setpgid (pid, pgid);
+		pid = (child_pid) ? child_pid : getpid();
+//		pgid = getpgid(pid);
+//			if (pgid == 0)		gnu_job_control_inplementing_a_shell not clear
+//				pgid = pid;		when can pgid be equl to 0?
+			setpgid (pid, pid);
 		if (foreground)
-			tcsetpgrp (0, pgid);
-		signal (SIGINT, SIG_DFL);
-		signal (SIGQUIT, SIG_DFL);
-		signal (SIGTSTP, SIG_DFL);
-		signal (SIGTTIN, SIG_DFL);
-		signal (SIGTTOU, SIG_DFL);
-		signal (SIGCHLD, SIG_DFL);
+			tcsetpgrp(0, pid);
+		if (!child_pid)
+		{
+			//printf("re-enabling signals\n");
+			signal (SIGINT, SIG_DFL);
+			signal (SIGQUIT, SIG_DFL);
+			signal (SIGTSTP, SIG_DFL);
+			signal (SIGTTIN, SIG_DFL);
+			signal (SIGTTOU, SIG_DFL);
+			signal (SIGCHLD, SIG_DFL);
+			p->is_interactive = 0;
+		}
 	}
-	if (!(child_pid > 0))
+	if (!child_pid)
 		close_cpy_std_fds(p);
+	dprintf(p->dbg_fd, "[%i] -FORK- PGID-> [%i]\n", getpid(), getpgid(0));
 	return (child_pid);
 }
 
@@ -266,7 +277,7 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
 		//free stuff or not?
-		printf("[%i] suicide\n", getpid());
+		printf("[%i] exec background suicide\n", getpid());
 		exit(0);
 	}
 	else
