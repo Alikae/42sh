@@ -28,7 +28,6 @@ C_FILES_job_control = \
 
 C_FILES_exitpoint = \
 	sh_exitpoint.c \
-	sh_free_opts.c \
 	sh_free_params.c \
 
 C_FILES_parameters = \

@@ -14,12 +14,13 @@
 # define SH_H
 
 # include "sh_types.h" //where struct are
-# include "sh_line.h"
-# include "sh_redirections.h"
-# include "t_token.h"
 # include "libft.h"
-# include "sh_env.h"
-# include "sh_job_control.h"
+//# include "sh_line.h"
+//# include "sh_redirections.h"
+//# include "t_token.h"
+//# include "libft.h"
+//# include "sh_env.h"
+//# include "sh_job_control.h"
 
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
 # define SH_NESTED_COMPOUND_LIMIT 1000
@@ -90,7 +91,4 @@ typedef struct		s_sh
 }					t_sh;
 
 t_sh	*sh(void);
-void	init_signals_handling(void);
-char	*sh_tab_fusion(char **t);
-t_token	*sh_expansion(char *tok_content, t_env **env);
 #endif

@@ -10,15 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "libft.h"
 #include "sh_exitpoint.h"
 #include "sh_entrypoint.h"
 #include "sh_builtins.h"
 #include "sh_executer.h"
 #include <fcntl.h>
 #include <stdio.h>
-#include "t_token.h"
+#include "sh_tokenizer.h"
+#include "sh_redirections.h"
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>

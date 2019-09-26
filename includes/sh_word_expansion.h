@@ -4,36 +4,13 @@
 # include <pwd.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "t_token.h"
-# include "sh_env.h"
+# include "sh_types.h"
 # include "sh.h"
-# include "libft.h"
 
 # define COLON	1
 # define ERROR	2
 # define LEN	4
 
-typedef struct	s_exp
-{
-	t_token	*tok;
-	int		i;
-	int		first_i;
-	t_env	**env;
-	t_env	*find;
-	char	*value;
-	char	*name;
-	char	*content;
-	short	opt;
-	short	quote;
-}				t_exp;
-
-typedef struct	s_split
-{
-	int			i;
-	t_token		*tok;
-	t_token		*sub;
-	const char	*split;
-}				t_split;
 
 typedef enum	e_arthtype
 {

@@ -12,6 +12,7 @@
 
 #include "libft.h"
 #include "sh_exitpoint.h"
+#include <signal.h>
 #include "sh.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,7 +30,7 @@ void	sh_exitpoint(void)
 	}
 	delete_all_jobs(sh()->jobs);
 	sh_free_params();
-	sh_free_opts();
+	ft_free_opts(sh()->opt);
 	ft_free_tabstr(sh()->aliases);
 	sh()->aliases = 0;
 	ft_memdel((void**)&sh()->bucopy);

@@ -11,9 +11,10 @@
 /* ************************************************************************** */
 
 #include "sh.h"
+
+#include "sh_tokenizer.h"
 #include "tmp.h"
 #include "libft.h"
-#include "sh_env.h"
 #include "sh_executer.h"
 #include "sh_entrypoint.h"
 #include "sh_command_line.h"

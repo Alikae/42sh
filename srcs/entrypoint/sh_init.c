@@ -14,11 +14,12 @@
 #include "libft.h"
 #include "sh_env.h"
 #include "sh_entrypoint.h"
-#include "sh_opt.h"
 #include <fcntl.h>
+#include <signal.h>
 #include <unistd.h>
 #include <stdio.h> //ARE U SURE ?
 #include <sys/types.h>
+#include <signal.h>
 #include <pwd.h>
 
 static void	sh_set_shppid(void)

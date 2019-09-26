@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_free_opts.c                                     :+:      :+:    :+:   */
+/*   ft_free_opts.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/18 00:46:24 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 22:37:38 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 23:27:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_opt.h"
 #include <stdlib.h>
+#include "libft.h"
 
-void	sh_free_opts(void)
+void	ft_free_opts(t_opt *opts)
 {
-	t_opt	*opts;
 	t_opt	*tmp;
 
-	if (!(opts = sh()->opt))
+	if (!opts)
 		return ;
 	while (opts)
 	{

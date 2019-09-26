@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:25:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 23:34:18 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 23:46:10 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SH21_COMMAND_LINE_H
 
 # include "sh_history.h"
+# include "sh_line.h"
 
 void	sh_prompt(void);
 char	*sh_arguments(t_hist *hist);

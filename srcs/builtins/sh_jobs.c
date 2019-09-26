@@ -12,6 +12,7 @@
 
 #include "sh.h"
 #include "sh_job_control.h"
+#include <sys/wait.h>
 #include <stdio.h>
 
 int	sh_jobs(int ac, char **av, char **env)

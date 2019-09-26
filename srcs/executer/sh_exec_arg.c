@@ -6,15 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 14:06:25 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 23:42:40 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/22 00:06:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
 #include "sh_entrypoint.h"
 #include "sh_executer.h"
-#include "libft.h"
-#include "t_token.h"
+#include "sh_tokens.h"
+#include "sh_tokenizer.h"
 #include "stdlib.h"
 #include <fcntl.h>
 

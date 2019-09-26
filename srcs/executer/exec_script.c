@@ -6,15 +6,16 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/26 08:12:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "t_token.h"
+#include "sh_job_control.h"
+#include "sh_tokenizer.h"
 #include "sh_executer.h"
 #include "sh_redirections.h"
 #include "sh.h"
 #include "errno.h"
+#include <signal.h>
 #include <unistd.h>
 #include <stdio.h>
 #include "sh_exitpoint.h"

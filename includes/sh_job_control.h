@@ -13,16 +13,9 @@
 #ifndef JOB_CONTROL_H
 # define JOB_CONTROL_H
 
+# include "sh.h"
 # include <termios.h>
 
-typedef struct	s_job
-{
-	char			*name;
-	pid_t			pid;
-	pid_t			pgid;
-	struct termios	t_mode;
-	struct s_job	*next;
-}				t_job;
 
 void	delete_job(t_job *job);
 void	delete_all_jobs(t_job *job);
