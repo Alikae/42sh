@@ -6,12 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/19 23:38:53 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/26 08:00:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_job_control.h"
+#include <sys/wait.h>
 #include <stdio.h>
 
 int	sh_jobs(int ac, char **av, char **env)

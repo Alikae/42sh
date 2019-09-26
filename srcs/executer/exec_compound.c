@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 01:51:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/24 06:49:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 {
 	int	pid;
 	//Not more?
-	printf("[%i]exec_compound_subsh\n", getpid());
-	if ((pid = fork_process(p, 0)) < 0)
+//	printf("[%i]exec_compound_subsh\n", getpid());
+	if ((pid = fork_process(p, 0, 0)) < 0)
 	{
 		printf("fork error\n");
 		return (1/*fork_error*/);
@@ -48,6 +48,7 @@ int		exec_compound_case(t_sh *p, t_token *tok)
 		word = case_elem->sub;
 		while (word)
 		{
+			//not strcmp : matchnmatch
 			if (!ft_strcmp(tok->content, word->content))
 				return (exec_script(p, tok->sub->sub->sub, 0));
 			word = word->next;
@@ -112,5 +113,6 @@ int     exec_compound_if(t_sh *p, t_token *tok)
 	dprintf(p->dbg_fd, "IF false\n");
 	if (tok->sub->next->next && !p->abort_cmd)
 		return (p->last_cmd_result = exec_script(p, tok->sub->next->next, 0));
+	//return what?
 	return (0);
 }

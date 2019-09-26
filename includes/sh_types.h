@@ -157,9 +157,9 @@ typedef struct	s_split
 typedef struct	s_job
 {
 	char			*name;
-	unsigned int	pid;
+	pid_t			pid;
+	pid_t			pgid;
 	struct termios	t_mode;
 	struct s_job	*next;
-}				t_job;
-
+} t_job;
 #endif

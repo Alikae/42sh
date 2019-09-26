@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 09:12:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/25 09:09:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <stdio.h> //ARE U SURE ?
 #include <sys/types.h>
+#include <signal.h>
 #include <pwd.h>
 
 static void	sh_set_shppid(void)
@@ -97,18 +98,27 @@ static void	sh_init_env()
 	sh_set_ps();
 	sh_set_pwd();
 }
+#include <errno.h>
 
 void	handle_signal(int sig)
 {
-	dprintf(sh()->dbg_fd, "sig %i\n", sig);
+	dprintf(sh()->dbg_fd, "[%i]sig %i\n", getpid(), sig);
 	if (sig == SIGTSTP)
 	{
+		errno = 0;
+		int ret = tcsetpgrp(0, getpgid(0));
+		printf("handle SIGTSTP: tcsetpgrp ret = %i errno %i\n", ret, errno);
 		printf("\nSIGTSTP detected\n");
 		//return to prompt
 	}
 	else if (sig == SIGINT)
 	{
-		printf("\nTerminated\n");
+		if (sh()->pid_main_process != getpid())
+		{
+			dprintf(sh()->dbg_fd, "[%i] CTRL-C: exiting non-interactive shell\n", getpid());
+			exit(1/*exitpoint*/);
+		}
+		dprintf(sh()->dbg_fd, "\nTerminated\n");
 		sh()->abort_cmd = 1;
 		sh_prompt();
 	}
@@ -127,7 +137,7 @@ void	handle_signal(int sig)
 	else if (sig == SIGTTIN)
 		printf("SIGTTIN detected\n");
 	else if (sig == SIGTTOU)
-		printf("SIGTTOU detected\n");
+		printf("[%i]SIGTTOU detected\n", getpid());
 	//exit(0);//
 }
 
@@ -197,6 +207,7 @@ void	sh_init(t_sh *shell)
 	shell->pipe_lst = 0;
 	//
 	//VERIFY ALL SHELL-> ARE SET
+	shell->pid_main_process = getpid();
 	shell->last_cmd_result = 0;
 	shell->lldbug = 0;
 	shell->script_separators[0] = SH_SEMI;
@@ -222,10 +233,8 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_tokenized_compounds = 0;
 	shell->functions = 0;
 	shell->jobs = 0;
-	shell->is_interactive = 1; //SET WHEN WE TEST IT
 	shell->exit = 0;
 	//shell->assign_lst = 0;
-	init_signals_handling();
 	sh_init_debug(shell);
 	shell->aliases = NULL;
 	shell->bucopy = NULL;

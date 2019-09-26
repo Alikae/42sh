@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/10 06:29:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/25 07:34:44 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ int	sh_alias(int ac, char **av, t_env **ev);
 int	sh_unalias(int ac, char **av, t_env **ev);
 int	sh_exit(int ac, char **av, t_env **ev);
 int	sh_jobs(int ac, char **av, t_env **ev);
+int	sh_fg(int ac, char **av, t_env **ev);
 
 #endif
