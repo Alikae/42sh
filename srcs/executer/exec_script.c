@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/26 07:56:53 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/26 08:12:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,8 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground, /*?*/int defau
 			signal(SIGTTOU, SIG_IGN);
 			errno = 0;
 			int ret = tcsetpgrp(0, pid);
-			printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
+			(void)ret;
+		//	printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
 			signal(SIGTTOU, SIG_DFL);
 		}
 	}
