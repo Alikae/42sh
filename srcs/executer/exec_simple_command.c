@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/26 08:05:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/27 01:49:44 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include "sh_error.h"
 #include "sh_word_expansion.h"
 #include "sh_tools.h"
+#include "sh_tokens.h"
 #include "sh_job_control.h"
 
 //FORBIDDEN FUNCS

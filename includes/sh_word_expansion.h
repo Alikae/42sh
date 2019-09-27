@@ -48,6 +48,7 @@ int		sh_tilde_expansion(char **content, t_env *env);
 t_token	*sh_quote_removal(t_token *tok, const char *split);
 void	sh_find_quote(t_split *splt, short quote);
 int		sh_expansion_size(char *content, int i);
+t_token	*sh_expansion(char *content, t_env **env);
 void	sh_print_exp(t_exp *exp, char *where);
 void	sh_record_name(t_exp *exp);
 void	sh_simple_expansion(t_exp *exp);

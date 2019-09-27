@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/25 05:15:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/27 01:43:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,5 @@ typedef struct		s_sh
 }					t_sh;
 
 t_sh	*sh(void);
+void	init_signals_handling(void);
 #endif

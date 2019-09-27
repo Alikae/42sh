@@ -79,7 +79,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	if (child_pid)
 	{
 		dprintf(p->dbg_fd, "[%i] PFORK\n", getpid());
-		close_pipes_parent(p);//verify usefullness
+		close_pipes_parent(p);
 		return (child_pid);
 	}
 	dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
@@ -154,6 +154,9 @@ void	handle_bang(t_token **p_token_begin, int *bang)
 //ECHO YO | LS //does the ppe empty itself?
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
+	/////////////////////////////
+	//take pid of first piped cmd, set pgid of all cmds to it
+	/////////////////////////////
 	int		bang;
 	int		next_pipe_fd;
 	t_token	*next_separator;
@@ -272,12 +275,12 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground, /*?*/int defau
 		if (1 || default_sig)
 		{
 		//printf("re-enabling signals\n");
-//			signal (SIGINT, SIG_DFL);
-//			signal (SIGQUIT, SIG_DFL);
-//			signal (SIGTSTP, SIG_DFL);
-//			signal (SIGTTIN, SIG_DFL);
-//			signal (SIGTTOU, SIG_DFL);
-//			signal (SIGCHLD, SIG_DFL);
+			signal (SIGINT, SIG_DFL);
+			signal (SIGQUIT, SIG_DFL);
+			signal (SIGTSTP, SIG_DFL);
+			signal (SIGTTIN, SIG_DFL);
+			signal (SIGTTOU, SIG_DFL);
+			signal (SIGCHLD, SIG_DFL);
 		}
 //		p->is_interactive = 0;
 	}

@@ -6,12 +6,13 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/26 08:10:25 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/27 01:48:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "sh_exitpoint.h"
+#include "sh_job_control.h"
 #include <signal.h>
 #include "sh.h"
 #include <stdlib.h>

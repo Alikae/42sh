@@ -6,11 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/22 15:33:05 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/27 01:47:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
+#include "sh_tokenizer.h"
+#include "sh_redirections.h"
 #include <stdio.h>
 
 #define P(x) (printf(x))

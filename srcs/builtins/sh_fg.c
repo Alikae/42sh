@@ -6,12 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/27 01:32:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/27 02:08:34 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_job_control.h"
+#include "sh_tokenizer.h"
 #include <stdio.h>
 #include <signal.h>
 
@@ -54,7 +55,7 @@ int	sh_fg(int ac, char **av, char **env)
 	}
 	//tmp job
 	tcsetpgrp(0, sh()->jobs->pgid);
-	if (kill (sh()->jobs->pgid, SIGCONT) < 0)
+	if (kill (-1 * sh()->jobs->pgid, SIGCONT) < 0)
 		perror ("kill (SIGCONT)");
 	block_wait(sh(), sh()->jobs->pid);
 	//if block_wait return != SIGCHLD recreate job
