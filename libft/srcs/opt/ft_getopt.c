@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 23:11:18 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/27 20:07:52 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ int		ft_check_opt(char *name, size_t size_name, char *optstr, t_opt *opts)
 	if (opts && ft_fetch_opt(name, size_name, opts))
 		return (0);
 	if (ft_strnequ(optstr, name, size_name))
-		return ((*(tmp + size_name + 1) == ':') + 1);
+		return ((*(tmp + size_name) == ':') + 1);
 	while ((tmp = ft_strchr(tmp + 1, '|')))
 	{
 		oldtmp = tmp;
 		if (ft_strnequ(tmp + 1, name, size_name))
 			if (tmp[1 + size_name] == ':' || tmp[1 + size_name] == '|'
 					|| !tmp[1 + size_name])
-				return ((*(tmp + size_name + 1) == ':') + 1);
+				return ((*(tmp + size_name) == ':') + 1);
 	}
 	if (!(tmp = ft_strchr(optstr, '|')))
 		tmp = optstr + ft_strlen(optstr) - 1;

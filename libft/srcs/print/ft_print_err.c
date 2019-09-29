@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_print_err.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 21:25:15 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/29 18:07:05 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/09/29 18:05:03 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/09/29 18:06:18 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	ft_putstr_fd(const char *s, int fd)
+void	ft_print_err(const char *s1, const char *s2, const char *s3)
 {
-	if (s && fd >= 0)
-		write(fd, s, ft_strlen(s));
+	ft_putstr_fd(s1, 2);
+	ft_putstr_fd(s2, 2);
+	ft_putendl_fd(s3, 2);
 }
