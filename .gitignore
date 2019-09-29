@@ -1,3 +1,16 @@
+# Object
+*.o
+
+# Librairies
+*.a
+
+# Executables
+*.out
+42sh
+
+# Debug files
+*.dSYM/
+
 # ignore all logs
 log
 *.log
