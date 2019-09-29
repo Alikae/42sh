@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/10 06:30:04 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/09/25 08:30:15 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ C_FILES_job_control = \
 
 C_FILES_exitpoint = \
 	sh_exitpoint.c \
-	sh_free_opts.c \
 	sh_free_params.c \
 
 C_FILES_parameters = \
@@ -110,6 +109,7 @@ C_FILES_builtins = \
 	sh_pwd.c \
 	sh_exit.c \
 	sh_jobs.c \
+	sh_fg.c \
 	sh_unalias.c
 
 C_FILES_tools = \
@@ -121,6 +121,7 @@ C_FILES_tools = \
 	#sh_find_law.c \
 
 C_FILES_word_expansion = \
+	sh_arithmetic_expansion.c \
 	sh_word_expansion.c	\
 	sh_tilde_expansion.c \
 	sh_word_expression.c \

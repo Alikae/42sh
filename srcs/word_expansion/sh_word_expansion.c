@@ -6,11 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 14:36:44 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/27 01:52:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "sh_word_expansion.h"
+#include "sh_tokenizer.h"
+#include "sh_env.h"
 
 void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 {
@@ -95,9 +97,9 @@ int		sh_in_expansion(t_exp *exp)
 	}
 	else if (exp->content[exp->i] == '(' || exp->content[exp->i] == '`')
 	{
-//		if (exp->content[exp->i] == '(' && exp->content[exp->i + 1 == '(')
-//			sh_arithmetique_expanssion(&((*tok)->content), i + 2, env);
-//		else
+		if (exp->content[exp->i + 1] == '(')
+			sh_arithmetic_expansion(exp);
+		else
 			sh_subsh_expansion(exp);
 	}
 	else

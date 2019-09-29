@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/19 23:32:49 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/21 23:54:53 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@
 H_FILES = \
 	sh_exitpoint.h \
 	sh_history.h \
-	sh_opt.h \
 	sh_builtins.h \
 	sh.h \
 	sh_entrypoint.h \
@@ -23,7 +22,6 @@ H_FILES = \
 	sh_line.h \
 	sh_command_edition.h \
 	sh_env.h \
-	t_token.h \
 	sh_error.h \
 	sh_word_expansion.h \
 	sh_redirections.h \

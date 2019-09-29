@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/23 21:01:46 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/27 01:43:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 # define SH_H
 
 # include "sh_types.h" //where struct are
-# include "sh_line.h"
-# include "sh_redirections.h"
-# include "t_token.h"
 # include "libft.h"
 # include "sh_env.h"
 # include "sh_job_control.h"
 # include <curses.h>
+//# include "sh_line.h"
+//# include "sh_redirections.h"
+//# include "t_token.h"
+//# include "libft.h"
+//# include "sh_env.h"
+//# include "sh_job_control.h"
 
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
 # define SH_NESTED_COMPOUND_LIMIT 1000
@@ -87,11 +90,10 @@ typedef struct		s_sh
 	t_job			*jobs;
 	int				is_interactive;
 	struct termios	orig_termios;
-	//truct termios	fromTMeyer;
+	int	pid_main_process;
 }					t_sh;
 
 t_sh	*sh(void);
-char	*sh_tab_fusion(char **t);
-t_token	*sh_expansion(char *tok_content, t_env **env);
+void	init_signals_handling(void);
 #endif
 

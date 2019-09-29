@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/09/19 19:31:44 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/21 23:28:51 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -118,6 +118,8 @@ C_FILES_print = \
 C_FILES_opt = \
 	ft_getopt.c \
 	ft_fetch_opt.c \
+	ft_free_opts.c \
+	ft_create_opt.c \
 	ft_print_opt.c
 
 # SUPPA concat loop

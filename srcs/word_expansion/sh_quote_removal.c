@@ -6,11 +6,12 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/21 12:53:27 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/09/27 01:54:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
+#include "sh_tokenizer.h"
 #include <stdio.h>
 
 void	sh_remove_car(char **str, int i)
