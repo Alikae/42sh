@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 06:47:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/26 07:21:35 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/29 21:35:54 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "sh.h"
 # include <termios.h>
-
 
 void	delete_job(t_job *job);
 void	delete_all_jobs(t_job *job);

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/27 01:43:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/09/29 21:37:04 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "sh_types.h" //where struct are
 # include "libft.h"
 # include "sh_env.h"
-# include "sh_job_control.h"
 # include <curses.h>
 //# include "sh_line.h"
 //# include "sh_redirections.h"
