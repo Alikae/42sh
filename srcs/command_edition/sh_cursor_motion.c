@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/19 23:37:59 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/29 23:41:32 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,12 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 	return (i);
 }
 
+static int check(void)
+{
+	fprintf(stderr, "OK\n");
+	return (1);
+}
+
 int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
 {
 	t_cursors	c;
@@ -140,8 +146,8 @@ int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
 	tputs(tgetstr("cd", NULL), 0, sh_outc);
 	ft_putstr_fd(&command[0][i + 1], 0);
 	sh_cursor_position(&head);
-	if (command[0][i + ft_strlen(buf) + 1] != 0 && head.rows == c.term.rows
-			&& (int)ft_strlen(buf) == head.col - 1)
+	if (command[0][i + 2] != 0 && check() && head.rows == c.term.rows
+			&& head.col == 2)
 	{
 		tputs(tgetstr("rc", NULL), 0, sh_outc);
 		tputs(tgetstr("up", NULL), 0, sh_outc);

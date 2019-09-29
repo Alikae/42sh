@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/14 13:56:07 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/04 01:22:17 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/30 01:10:10 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,6 @@ int			sh_copy_option(char **command, char *buf, int i, t_hist *hist)
 		sh()->bucopy = ft_strdup(sh()->buselect);
 	}
 	else if (buf[1] == '>' && sh()->bucopy)
-		i = sh_echo_input(command, sh()->bucopy, i, hist);
+		i = sh_paste(command, sh()->bucopy, i, hist);
 	return (i);
 }
