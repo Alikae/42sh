@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/22 00:57:47 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/01 02:18:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include "sh_exitpoint.h"
 
 int			sh_outc(int c)
 {
@@ -95,7 +96,7 @@ static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 	return (1);
 }
 
-static char	*getcommand(char **command, t_hist *hist)
+static char	*getcommand(char **command, char *term, t_hist *hist)
 {
 	int		i;
 	int		k;
@@ -105,11 +106,20 @@ static char	*getcommand(char **command, t_hist *hist)
 	k = 1;
 	ft_bzero(buf, BUFFER);
 	while (k != 0 && *command && read(0, buf, BUFFER) > 0)
+	{
+		if (tgetent(NULL, term ? term : "vt100") == ERR)
+			sh_exitpoint();
+		if (tcgetattr(0, &sh()->orig_termios))
+			sh_exitpoint();
+		sh_tty_cbreak(1, sh()->orig_termios);
 		k = loop_keys(command, buf, &i, hist);
+	}
 	ft_memdel((void**)&sh()->buselect);
-	sh_cursor_motion(command, "\033[F", i, hist);
 	if (k != 3)
+	{
+		sh_cursor_motion(command, "\033[F", i, hist);
 		write(0, "\n", 1);
+	}
 	return (*command);
 }
 
@@ -121,14 +131,14 @@ int			sh_reader(char **command, t_hist *hist)
 	hist->index = -1;
 	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
-	tputs(tgetstr("ei", NULL), 0, sh_outc);
+//	tputs(tgetstr("ei", NULL), 0, sh_outc);
 	if (tgetent(NULL, term ? term : "vt100") == ERR)
-		exit(0);
+		sh_exitpoint();
 	if (tcgetattr(0, &sh()->orig_termios))
-		exit(0);
+		sh_exitpoint();
 	*command = (char*)ft_memalloc(1);
 	sh_tty_cbreak(1, sh()->orig_termios);
-	getcommand(command, hist);
+	getcommand(command, term, hist);
 	sh_tty_cbreak(2, sh()->orig_termios);
 	term = NULL;
 	return (1);
