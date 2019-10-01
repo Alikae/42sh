@@ -63,7 +63,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	return (ret);
 }
 
-int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
+int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end, int force_pgid)
 {
 	//SIG gestion
 
@@ -78,6 +78,8 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 		return (-1);
 	if (child_pid)
 	{
+		if (force_pgid && !p->pgid_current_pipeline)
+			p->pgid_current_pipeline = child_pid;
 		dprintf(p->dbg_fd, "[%i] PFORK\n", getpid());
 		close_pipes_parent(p);
 		return (child_pid);
@@ -114,7 +116,7 @@ int		exec_command_to_pipe(t_sh *p, t_token *token_begin, t_token *token_end, int
 	p->pipeout = pipe_out[1];
 	if (pipe_in_fd)
 		push_redirect_lst(&p->redirect_lst, 0, pipe_in_fd);
-	exec_command_in_background(p, token_begin, token_end);
+	exec_command_in_background(p, token_begin, token_end, 1);
 	p->pipein = 0;
 	p->pipeout = 0;
 	del_n_redirect_lst(&p->redirect_lst, (pipe_in_fd) ? 2 : 1);
@@ -163,6 +165,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 
 	if (token_begin == token_end)
 		return;
+	p->pgid_current_pipeline = 0;
 	p->index_pipeline_begin = token_begin->index;
 	p->index_pipeline_end = (token_end) ? token_end->index : -1;
 	//print_cmd(p->cmd, indexb, indexe);
@@ -188,7 +191,8 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	int child_pid;
 	child_pid = 0;
 	//lastcmdres = 0 if exec in background
-	p->last_cmd_result = (next_pipe_fd) ? (child_pid = exec_command_in_background(p, token_begin, token_end)) : exec_command(p, token_begin, token_end);//
+	p->last_cmd_result = (next_pipe_fd) ? (child_pid = exec_command_in_background(p, token_begin, token_end, 1)) : exec_command(p, token_begin, token_end);//
+	p->pgid_current_pipeline = 0;
 	if (child_pid)
 		block_wait(p, child_pid);
 	if (next_pipe_fd)
@@ -258,7 +262,10 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground, /*?*/int defau
 //		pgid = getpgid(pid);
 //			if (pgid == 0)		gnu_job_control_inplementing_a_shell not clear
 //				pgid = pid;		when can pgid be equl to 0?
-		setpgid (pid, pid);
+		if (p->pgid_current_pipeline)
+			setpgid (pid, p->pgid_current_pipeline);
+		else
+			setpgid (pid, pid);
 		//printf("setpgid of [%i] to itself\n", pid);
 		if (getpgid(0) == tcgetpgrp(0) && foreground)
 		{

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/24 06:49:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/01 05:25:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "sh.h"
 #include "sh_env.h"
 #include "sh_executer.h"
+#include "sh_word_expansion.h"
 #include <stdio.h>
 
 //FOR
@@ -63,8 +64,19 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	t_token		*ins;
 	char	*tmp;
 	const char	*value;
+	t_token *tmp_tok;
 
 	dprintf(p->dbg_fd, "treating FOR\n");
+	//printf("%s\n", tok->sub->content);
+	//to tmp v
+	tmp_tok = sh_expansion(tok->sub->content, &p->params);
+	if (!tmp_tok)
+	{
+		//
+		printf("exp error\n");
+		exit(0);
+	}
+	//
 	ins = tok->sub->sub;
 	tmp = 0;
 	if ((value = sh_getev_value(tok->sub->content)))
@@ -74,7 +86,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 		if (ins->type == SH_WORD)
 		{
 			sh_setev(tok->sub->content, ins->content);
-			printf("%s\n", tok->sub->sub->sub->content);
+			//printf("%s\n", tok->sub->sub->sub->content);
 			p->last_cmd_result = exec_script(p, tok->sub->sub->sub, 0);
 		}
 		ins = ins->next;

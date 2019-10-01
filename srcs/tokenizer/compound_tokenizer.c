@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/22 00:00:33 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/01 06:23:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 
 	compound_token = create_token(type, word_begin, 0);
 	compound_token->sub = create_token(SH_GROUP, 0, 0);
+	sh()->unfinished_cmd = 1;
 	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_WHILE, &next_separator)))
 	{
 		if (!t->input[t->i])
@@ -416,6 +417,7 @@ t_token	*tokenize_for_do_group(t_tokenize_tool *t, t_token *compound)
 		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing DO group in for", compound));
 	}
+	printf("%i\n", next_separator);
 	if (next_separator != SH_DONE)
 	{
 		if (!t->input[t->i])
@@ -482,6 +484,7 @@ t_token	*tokenize_for(t_tokenize_tool *t, int word_begin)
 	t_token		*compound_token;
 
 	compound_token = create_token(SH_FOR, word_begin, 0);
+	//printf("%s\n", t->input);
 	if (!tokenize_for_name(t, compound_token))
 	{
 		sh()->invalid_cmd = 1;

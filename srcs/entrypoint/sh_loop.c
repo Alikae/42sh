@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 10:48:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/01 06:09:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,8 @@ int		sh_loop(void)
 			{
 				print_all_tokens(p, p->ast, 0);
 				p->abort_cmd = 0;
-				exec_script(p, p->ast, 0);
+				if (!p->unfinished_cmd)
+					exec_script(p, p->ast, 0);
 				//printf("Script executed\n");
 			}
 			//	else
