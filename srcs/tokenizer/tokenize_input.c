@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 00:00:07 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/01 06:23:56 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,8 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 
 int			word_out_of_context(t_toktype type)
 {
-	if (type == SH_DONE || type == SH_IN
+	if (type == SH_DO
+			|| type == SH_DONE || type == SH_IN
 			|| type == SH_THEN || type == SH_ELIF
 			|| type == SH_ELSE || type == SH_FI
 			|| type == SH_DO || type == SH_DONE

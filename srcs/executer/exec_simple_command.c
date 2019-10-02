@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/27 01:49:44 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/01 09:24:25 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,12 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 		if (WSTOPSIG(status) == SIGKILL)
 			if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 				printf("\nChild_process [%i] KILLED\n", child_pid);
+		if (WSTOPSIG(status) == SIGTTIN)
+		{
+			printf("\nChild_process [%i] SIGTTIN\n", child_pid);
+			//kill SIGTSTP?
+			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+		}
 		if (WSTOPSIG(status) == SIGTTOU)
 		{
 			printf("\nChild_process [%i] SIGTTOU\n", child_pid);

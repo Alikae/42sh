@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/22 00:15:58 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/01 04:10:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -198,7 +198,6 @@ void	sh_record_name(t_exp *exp)
 
 	i_sub = 0;
 	cpy = exp->i;
-	printf("%c\n", exp->content[cpy]);
 	while (exp->content[cpy] != ':' && exp->content[cpy] != '-'
 			&& exp->content[cpy] != '=' && exp->content[cpy] != '?'
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'

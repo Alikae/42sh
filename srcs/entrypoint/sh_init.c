@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/25 09:09:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/01 06:51:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,10 @@ void	sh_init_debug(t_sh *shell)
 		shell->dbg_fd = open("/dev/null", 0);
 		shell->dbg = NULL;
 	}
+	//
+	shell->dbg = "all";
+	shell->dbg_fd = dup(2); //CLOSE AT EXITPOINT
+	//
 }
 
 void	sh_init(t_sh *shell)
@@ -216,6 +220,7 @@ void	sh_init(t_sh *shell)
 	shell->and_or_separators[1] = SH_OR_IF;
 	shell->pipeline_separators[0] = SH_OR;
 	shell->pipeline_separators[1] = 0;
+	shell->pgid_current_pipeline = 0;
 	shell->functions = 0;
 	shell->pipein = 0;
 	shell->pipeout = 0;
