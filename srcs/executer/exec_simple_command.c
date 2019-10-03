@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 09:24:25 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/03 06:48:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,6 +278,7 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 		signal(SIGTTOU, SIG_IGN);
 		errno = 0;
 		int ret = tcsetpgrp (0, getpgid(0));
+		tcsetattr(0, TCSADRAIN, &p->orig_termios);
 		printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), getpgid(0), ret, errno);
 		signal(SIGTTOU, SIG_DFL);
 //		sigprocmask(SIG_UNBLOCK, &sigset, 0);
@@ -354,6 +355,7 @@ int     exec_path(t_sh *p, char *path)
 		signal(SIGTTIN, SIG_DFL);
 		signal(SIGTTOU, SIG_DFL);
 		signal(SIGCHLD, SIG_DFL);
+		//restore termcaps?
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			dprintf(p->dbg_fd, "[%i]redirections before execve\n", getpid());
 		print_redirections(p, p->redirect_lst);

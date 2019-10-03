@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/01 06:23:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/03 06:27:44 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 
 	compound_token = create_token(type, word_begin, 0);
 	compound_token->sub = create_token(SH_GROUP, 0, 0);
-	sh()->unfinished_cmd = 1;
 	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_WHILE, &next_separator)))
 	{
 		if (!t->input[t->i])

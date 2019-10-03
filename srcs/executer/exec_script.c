@@ -259,9 +259,6 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground, /*?*/int defau
 	if (create_pgrp)
 	{
 		pid = (child_pid) ? child_pid : getpid();
-//		pgid = getpgid(pid);
-//			if (pgid == 0)		gnu_job_control_inplementing_a_shell not clear
-//				pgid = pid;		when can pgid be equl to 0?
 		if (p->pgid_current_pipeline)
 			setpgid (pid, p->pgid_current_pipeline);
 		else
@@ -273,7 +270,8 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground, /*?*/int defau
 			errno = 0;
 			int ret = tcsetpgrp(0, pid);
 			(void)ret;
-		//	printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
+			printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
+			tcsetattr(0, TCSADRAIN, &p->extern_termios);
 			signal(SIGTTOU, SIG_DFL);
 		}
 	}
@@ -352,7 +350,6 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 		else
 			exec_and_or(p, token_begin, next_separator);
 		token_begin = (next_separator) ? next_separator->next : 0;
-		//printf("script next -->\n");
 	}
 	return (p->last_cmd_result);
 }

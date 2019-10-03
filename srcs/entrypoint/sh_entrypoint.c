@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/29 23:32:22 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/03 03:59:35 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tsh->ac = ac;
 	tsh->av = av;
 	tsh->ev = ev;
+	tcgetattr(0, &tsh->extern_termios);
 	tsh->is_interactive = isatty(0);
 	sh_init(tsh);
 	if (!ft_strcmp("all", tsh->dbg) || !ft_strcmp(__func__, tsh->dbg))

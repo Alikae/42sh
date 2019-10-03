@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 05:25:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/03 06:29:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "sh_env.h"
 #include "sh_executer.h"
 #include "sh_word_expansion.h"
+#include "sh_exitpoint.h"
 #include <stdio.h>
 
 //FOR
@@ -33,7 +34,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 		return (1/*fork_error*/);
 	}
 	if (!pid)
-		exit(exec_script(p, tok->sub, 0));
+		exit(exec_script(p, tok->sub, 0));//exitpoint?
 	return (block_wait(p, pid));
 }
 
@@ -74,9 +75,8 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	{
 		//
 		printf("exp error\n");
-		exit(0);
+		sh_exitpoint();
 	}
-	//
 	ins = tok->sub->sub;
 	tmp = 0;
 	if ((value = sh_getev_value(tok->sub->content)))
