@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/02 06:44:48 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/10/03 22:53:41 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 typedef enum	e_arthtype
 {
 	INIT = 0,
+	NUMBER,
 	PLUS,
 	MINUS,
 	PARENTHESIS,
