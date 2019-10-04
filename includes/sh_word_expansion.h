@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/03 22:53:41 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/10/04 06:59:17 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,19 @@ typedef enum	e_arthtype
 	NUMBER,
 	PLUS,
 	MINUS,
-	PARENTHESIS,
 	MULTI,
 	DIV,
 	MODULO,
-	INCREMENT,
-	DECREMENT,
 	MORE,
 	LESS,
 	MORE_EQUAL,
 	LESS_EQUAL,
 	AND,
 	OR,
-	EQUAL,
-	DIFFERENT
+	AND_AND,
+	OR_OR,
+	DIFFERENT,
+	NOP
 }				t_arthtype;
 
 typedef struct	s_arith
