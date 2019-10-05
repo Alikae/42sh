@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/04 07:08:51 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/10/04 23:15:04 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ long int	sh_atoi_index(char *str, int *i)
 //		) - 3
 //		+ VALop
 
-void	sh_count_priority(char *c, int i, int count, unsigned int *less_count)
+void	sh_count_priority(char *c, int i, int count, int *less_count)
 {
 	if ((c[i] == '*' || c[i] == '/' || c[i] == '%')
 			&& (count + 3) < *less_count)
@@ -120,46 +120,46 @@ void	sh_count_priority(char *c, int i, int count, unsigned int *less_count)
 		*less_count = 1;
 }
 
-void	sh_write_next_op(char *str, int i, t_arith **arith)
+void	sh_write_less_op(char *str, int i, t_arith **arith)
 {
 	if (str[i] == '-')
-		*arith->next_op = LESS;
+		(*arith)->next_op = LESS;
 	else if (str[i] == '+')
-		*arith->next_op = PLUS;
+		(*arith)->next_op = PLUS;
 	else if (str[i] == '>' && str[i + 1] == '=')
-		*arith->next_op = MORE_EQUAL;
+		(*arith)->next_op = MORE_EQUAL;
 	else if (str[i] == '>')
-		*arith->next_op = MORE;
+		(*arith)->next_op = MORE;
 	else if (str[i] == '<' && str[i + 1] == '-')
-		*arith->next_op = LESS_EQUAL;
+		(*arith)->next_op = LESS_EQUAL;
 	else if (str[i] == '<')
-		*arith->next_op = LESS;
+		(*arith)->next_op = LESS;
 	else if (str[i] == '&' && str[i + 1] == '&')
-		*arith->next_op = AND_AND;
+		(*arith)->next_op = AND_AND;
 	else if (str[i] == '&')
-		*arith->next_op = AND;
+		(*arith)->next_op = AND;
 	else if (str[i] == '|' && str[i + 1] == '|')
-		*arith->next_op = OR_OR;
+		(*arith)->next_op = OR_OR;
 	else if (str[i] == '=')
 	{
 		if (str[i + 1] == '=')
-			*arith->next_op = EQUAL;
+			(*arith)->next_op = EQUAL;
 		else
-			*arith->next_op = NOP;
+			(*arith)->next_op = NOP;
 	}
 	else if (str[i] == '!')
 	{
 		if (str[i + 1] == '=')
-			*arith->next_op = DIFFERENT;
+			(*arith)->next_op = DIFFERENT;
 		else
-			*arith->next_op = NOP;
+			(*arith)->next_op = NOP;
 	}
 	else if (str[i] == '*')
-		*arith->next_op = MULTI;
+		(*arith)->next_op = MULTI;
 	else if (str[i] == '/')
-		*arith->next_op = DIV;
+		(*arith)->next_op = DIV;
 	else if (str[i] == '%')
-		*arith->next_op = MODULO;
+		(*arith)->next_op = MODULO;
 }
 
 int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
@@ -179,7 +179,7 @@ int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
 		else if (str[begin] == ')')
 			par = par - 3;
 		old_less_op	= less_count;
-		sh_count_priority(str, begin, count, &less_count);
+		sh_count_priority(str, begin, par, &less_count);
 		if (old_less_op > less_count)
 			i_less_op = begin;
 		begin++;
@@ -205,7 +205,7 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 		arith->next = sh_creat_arithmetic_ast(str, 0, end);
 		arith->sub = sh_creat_arithmetic_ast(str, end, ft_strlen(str));
 	}
-	printf("%i\n", *arith->next_op);
+	printf("%i\n", arith->next_op);
 	return (arith);
 }
 

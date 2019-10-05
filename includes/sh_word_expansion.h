@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/04 06:59:17 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/10/04 23:14:33 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef enum	e_arthtype
 	AND_AND,
 	OR_OR,
 	DIFFERENT,
+	EQUAL,
 	NOP
 }				t_arthtype;
 
