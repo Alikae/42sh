@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/01 02:18:41 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/06 22:26:45 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 			exit(0);
 	}
 	if (code == 2)
-		tcsetattr(0, TCSADRAIN, &orig_termios);
+		tcsetattr(0, TCSANOW, &orig_termios);
 	bufptr = NULL;
 	res = NULL;
 }
@@ -89,7 +89,7 @@ static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 	else if (buf[0] == '\t')
 		;
 	else if (buf[0] == 3 || buf[0] == 4 || buf[0] == '\n')
-		return (sh_controls(command, buf, hist));
+		return (sh_controls(command, buf, hist, i));
 	else if (!ft_strchr(buf, '\033') && buf[0] >= 32)
 		*i = sh_echo_input(command, buf, *i, hist);
 	ft_bzero(buf, BUFFER);
@@ -100,19 +100,24 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 {
 	int		i;
 	int		k;
+	int		j;
 	char	buf[BUFFER];
 
 	i = -1;
 	k = 1;
+	j = 1;
 	ft_bzero(buf, BUFFER);
-	while (k != 0 && *command && read(0, buf, BUFFER) > 0)
+	while (k != 0 && *command && j > 0)
 	{
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
 			sh_exitpoint();
 		if (tcgetattr(0, &sh()->orig_termios))
 			sh_exitpoint();
 		sh_tty_cbreak(1, sh()->orig_termios);
+		sh_reprompt(i, command);
+		j = read(0, buf, BUFFER);
 		k = loop_keys(command, buf, &i, hist);
+		sh_tty_cbreak(2, sh()->orig_termios);
 	}
 	ft_memdel((void**)&sh()->buselect);
 	if (k != 3)

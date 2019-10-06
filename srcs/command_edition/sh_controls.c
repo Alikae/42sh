@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:58:44 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/01 03:46:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/06 22:26:42 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,28 @@
 #include "signal.h"
 #include "sh_exitpoint.h"
 
-int			sh_controls(char **command, char *buf, t_hist *hist)
+int			sh_controls(char **command, char *buf, t_hist *hist, int *i)
 {
 	pid_t id;
 
 	id = getpid();
 	if (buf[0] == 3)
 	{
-		fprintf(stderr, "OK\n");
+		sh_cursor_motion(command, "\033[F", *i, hist);
 		ft_memdel((void**)&(*command));
 		ft_memdel((void**)&sh()->bucopy);
-		(void)hist;
-		sh_tty_cbreak(2, sh()->orig_termios);
+		*i = -1;
 		write(0, "\n", 1);
+		sh_tty_cbreak(2, sh()->orig_termios);
 		kill(id, SIGINT);
+		ft_bzero(buf, BUFFER);
 		return (3);
 	}
 	if (buf[0] == 4)
 	{
 		ft_memdel((void**)&(*command));
 		ft_memdel((void**)&sh()->bucopy);
-		(void)hist;
+		sh_tty_cbreak(2, sh()->orig_termios);
 		sh_exitpoint();
 	}
 	if (buf[0] == '\n')
