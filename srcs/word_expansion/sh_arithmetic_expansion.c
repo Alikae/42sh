@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/04 23:15:04 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/10/06 01:47:36 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	less_count = 2147483647;
 	old_less_op = 0;
 	i_less_op = -1;
-	while (begin < end)
+	while (begin <= end)
 	{
 		if (str[begin] == '(')
 			par = par + 3;
@@ -189,6 +189,19 @@ int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	return (i_less_op);
 }
 
+int		sh_find_number(char *str, int begin, int end)
+{
+	short	opt;
+	int		result;
+
+	inc = 0;
+	while (str[begin] != '(' && str[begin] != ' ')
+		begin++;
+
+	if (str[begin] >= '0' && str[begin] <= '9')
+
+}
+
 t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 {
 	t_arith *arith;
@@ -198,12 +211,12 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 	if (end == -1)
 	{
 		arith->next_op = NUMBER;
-	//	arith->nb = sh_find_number(str, i);
+		arith->nb = sh_find_number(str, begin, end);
 	}
 	else
 	{
-		arith->next = sh_creat_arithmetic_ast(str, 0, end);
-		arith->sub = sh_creat_arithmetic_ast(str, end, ft_strlen(str));
+		arith->next = sh_creat_arithmetic_ast(str, 0, end - 1);
+		arith->sub = sh_creat_arithmetic_ast(str, end + 1, ft_strlen(str));
 	}
 	printf("%i\n", arith->next_op);
 	return (arith);
