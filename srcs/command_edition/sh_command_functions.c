@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 14:05:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/04 00:53:09 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/06 22:26:44 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,33 @@
 #include <stdio.h>
 #include <sgtty.h>
 #include <sys/ioctl.h>
+
+
+void	sh_reprompt(int i, char **command)
+{
+	static int	c = 0;
+	int			j;
+	int			len;
+	t_pos		cursor;
+	t_pos		term;
+
+	j = i;
+	if ((term.col = tgetnum("col")) == c || c == 0)
+	{
+		c = term.col;
+		return ;
+	}
+	term.rows = tgetnum("li");
+	len = ft_strlen(*command);
+	tputs(tgetstr("cr", NULL), 0, sh_outc);
+	tputs(tgetstr("cd", NULL), 0, sh_outc);
+	sh_prompt();
+	write(0, *command, len);
+	sh_cursor_position(&cursor);
+	i = len - 1;
+	sh_cursor_backward(len - j, i, cursor, term);
+	c = term.col;
+}
 
 void	reset_selection(char **command, int i, t_hist *hist)
 {
