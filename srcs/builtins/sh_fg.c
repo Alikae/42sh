@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/03 06:48:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 04:56:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ int	sh_fg(int ac, char **av, char **env)
 		printf("[%i] actually no job\n", getpid());
 		return (0);
 	}
-	printf("ARGV1 %s\n", av[1]);
-	arg = (ac > 1) ? ft_atoi(av[1]) : 0;
+	//printf("ARGV1 %s\n", av[1]);
+	arg = (ac > 1) ? ft_atoi(av[1]) : 0;//atoi protec?
 	argcpy = arg;
-	while (arg-- && job)
+	while (arg-- > 0 && job)
 		job = job->next;
 	if (!job)
 	{
@@ -49,21 +49,19 @@ int	sh_fg(int ac, char **av, char **env)
 		else if (argcpy % 10 == 2)
 			argsuffix = "nd";
 		else
-			argsuffix = (argcpy % 3 == 3) ? "rd": "th";
+			argsuffix = (argcpy % 10 == 3) ? "rd": "th";
 		printf("fg: bad arg: no %i%s job\n", argcpy, argsuffix);
 		return (-1/*error*/);
 	}
 	//tmp job
+	tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
 	tcsetpgrp(0, sh()->jobs->pgid);
 	if (kill (-1 * sh()->jobs->pgid, SIGCONT) < 0)
 		perror ("kill (SIGCONT)");
 	block_wait(sh(), sh()->jobs->pid);
-	//if block_wait return != SIGCHLD recreate job
+	if (p->process_is_stopped)
+	{
+		//untmp job
+	}
 	return (0/*?*/);
-	//}
-	//block_wait(sh, pid)
-	//
-	//     /* Restore the shell’s terminal modes.  */
-	//       tcgetattr (shell_terminal, &j->tmodes);
-	//         tcsetattr (shell_terminal, TCSADRAIN, &shell_tmodes);
 }

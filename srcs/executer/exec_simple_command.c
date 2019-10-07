@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/03 06:48:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 04:56:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,31 @@ void	close_all_redirections(t_sh *p)
 //1->3
 //2->3
 
+void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
+{
+	//Functional???
+	if (!lst)
+		return;
+	gen_redirections_recursively(p, lst->next);
+	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+		printf("redirecting %i->%i\n", lst->in, lst->out);
+	if (dup2(lst->out, lst->in) < 0)
+		dprintf(p->dbg_fd, "[%i]DUP2ERROR %i->%i, errno %i\n", getpid(), lst->in, lst->out, errno);
+	else
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			dprintf(p->dbg_fd, "[%i]DUP2 %i->%i\n", getpid(), lst->in, lst->out);
+	close(lst->out);
+}
+
+void	generate_redirections(t_sh *p)
+{
+	t_redirect_lst	*lst;
+	t_redirect_lst	*origin;
+
+	lst = p->redirect_lst;
+	gen_redirections_recursively(p, lst);
+}
+/*
 void	generate_redirections(t_sh *p)
 {
 	//REVERSE SENS
@@ -152,21 +177,21 @@ void	generate_redirections(t_sh *p)
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			printf("redirecting %i->%i\n", lst->in, lst->out);
 		to_close = 0;
-		/*		if ((fd_out = out_already_in_lst_n(lst->out, origin, lst)) < 0)
+		*//*		if ((fd_out = out_already_in_lst_n(lst->out, origin, lst)) < 0)
 				{
-				*/fd_out = lst->out;/*
+				*//*fd_out = lst->out;*//*
 									   to_close = 1;
 									   }*/
-		if (dup2(fd_out, lst->in) < 0)
+		/*if (dup2(fd_out, lst->in) < 0)
 			dprintf(p->dbg_fd, "[%i]DUP2ERROR %i->%i, errno %i\n", getpid(), lst->in, fd_out, errno);
 		else
 			if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 				dprintf(p->dbg_fd, "[%i]DUP2 %i->%i\n", getpid(), lst->in, fd_out);
 		//		if (to_close)
-		/*?*/			close(fd_out);
+					close(fd_out);
 		lst = lst->next;
 	}
-}
+}*/
 
 void	no_effect(int sig)
 {
@@ -209,6 +234,7 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 	//sigset_t	sigset;
 
 //	swap_to_signals_exec(p, &sigset);
+	p->process_is_stopped = 0;
 	dprintf(p->dbg_fd, "[%i]waiting interactive = %i\n", getpid(), p->is_interactive);
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
@@ -234,30 +260,36 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 		//
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
+			p->process_is_stopped = 1;
+			kill(-1 * child_pid, SIGTSTP);
 			printf("\nChild_process [%i] suspended\n", child_pid);
 			//???index_pipeline_begin?
 			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
-		if (WSTOPSIG(status) == SIGKILL)
-			if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-				printf("\nChild_process [%i] KILLED\n", child_pid);
 		if (WSTOPSIG(status) == SIGTTIN)
 		{
+			p->process_is_stopped = 1;
 			printf("\nChild_process [%i] SIGTTIN\n", child_pid);
 			//kill SIGTSTP?
 			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
-		if (WSTOPSIG(status) == SIGTTOU)
+		if (WSTOPSIG(status) == SIGKILL)
+				printf("\nChild_process [%i] KILLED\n", child_pid);
+		/*if (WSTOPSIG(status) == SIGTTOU)
 		{
 			printf("\nChild_process [%i] SIGTTOU\n", child_pid);
 			//kill SIGTSTP?
 			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
-		}
+		}*/
 	}
 	else if (WIFSIGNALED(status))
 	{
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			dprintf(p->dbg_fd, "waited signaled\n");
+		if (WSTOPSIG(status) == SIGINT)
+		{
+			printf("\nChild_process [%i] Interrupted\n", child_pid);
+		}
 //		handle_signal(WTERMSIG(status));
 		/*
 		   dprintf(p->dbg_fd, "waited3\n");
@@ -275,12 +307,12 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 	//	;
 	if (p->is_interactive && p->pid_main_process == getpid())
 	{
-		signal(SIGTTOU, SIG_IGN);
+	//	signal(SIGTTOU, SIG_IGN);
 		errno = 0;
 		int ret = tcsetpgrp (0, getpgid(0));
 		tcsetattr(0, TCSADRAIN, &p->orig_termios);
 		printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), getpgid(0), ret, errno);
-		signal(SIGTTOU, SIG_DFL);
+	//	signal(SIGTTOU, SIG_DFL);
 //		sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	//	init_signals_handling();
 	}
@@ -341,7 +373,7 @@ int     exec_path(t_sh *p, char *path)
 	int ret;
 
 	//fork stuff
-	int child_pid = fork_process(p, 1, 1);
+	int child_pid = fork_process(p, 1);
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 	{
 		close_pipes_parent(p);
@@ -353,7 +385,7 @@ int     exec_path(t_sh *p, char *path)
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGTSTP, SIG_DFL);
 		signal(SIGTTIN, SIG_DFL);
-		signal(SIGTTOU, SIG_DFL);
+		//signal(SIGTTOU, SIG_DFL);
 		signal(SIGCHLD, SIG_DFL);
 		//restore termcaps?
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))

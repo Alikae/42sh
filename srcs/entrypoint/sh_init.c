@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 06:51:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 02:53:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	init_signals_handling()
 	signal(SIGQUIT, &handle_signal);
 	signal(SIGCHLD, &handle_signal);
 	signal(SIGTTIN, &handle_signal);
-	signal(SIGTTOU, &handle_signal);
+	//signal(SIGTTOU, &handle_signal);
 //	signal(SIGIO, &handle_signal);
 //	signal(SIGXCPU, &handle_signal);
 //	signal(SIGXFSZ, &handle_signal);
@@ -237,6 +237,7 @@ void	sh_init(t_sh *shell)
 	shell->nb_nested_compounds = 0;
 	shell->nb_nested_tokenized_compounds = 0;
 	shell->functions = 0;
+	shell->force_setpgrp_setattr = 0;
 	shell->jobs = 0;
 	shell->exit = 0;
 	//shell->assign_lst = 0;
