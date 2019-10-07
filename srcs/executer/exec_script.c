@@ -65,23 +65,18 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	//SIG gestion
-
-	//	add_job(child_pid, p->cmd, token_begin->index,
-	//			(token_end) ? token_end->index : -1);
-
 	int child_pid;
 
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
-		//exitpoint
-		return (-1);
+		sh_exitpoint();
 	if (child_pid)
 	{
 		//dprintf(p->dbg_fd, "[%i] PFORK\n", getpid());
 		close_pipes_parent(p);
 		return (child_pid);
 	}
+	//close_pipes_except
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
 	exec_command(p, token_begin, token_end);
@@ -197,13 +192,13 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	p->index_pipeline_end = (token_end) ? token_end->index : -1;
 	handle_bang(&token_begin, &bang);
 	printf("there\n");
-	printf("tyep = %i\n", find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators));
+		printf("tyep = %i\n", find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators));
 	if ((next_sep = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_sep->type == SH_OR)
 	{
 	printf("1\n");
 		exec_pipeline_recursively(p, token_begin, token_end, -1);
-		p->last_cmd_result = block_wait(p, p->pgid_current_pipeline);
 		delete_close_all_pipe_lst(p->pipe_lst);
+		p->last_cmd_result = block_wait(p, p->pgid_current_pipeline, 0);
 		p->pipe_lst = 0;
 		if (!p->process_is_stopped)
 		{
@@ -322,25 +317,25 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		printf("fork error: exiting\n");
 		sh_exitpoint();
 	}
+	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 	{
-		pid = (child_pid) ? child_pid : getpid();
 		if (p->pgid_current_pipeline)
 			setpgid (pid, p->pgid_current_pipeline);
 		else
 			setpgid (pid, pid);
 		//printf("setpgid of [%i] to itself\n", pid);
-		if (foreground || p->force_setpgrp_setattr)
+		if (foreground || p->force_setpgrp_setattr)//pipeline in background?
 		{
 			errno = 0;
 			int ret = tcsetpgrp(0, pid);
 			(void)ret;
 			printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
-	//		signal(SIGTTOU, SIG_IGN);
+			signal(SIGTTOU, SIG_IGN);
 			errno = 0;
 			ret = tcsetattr(0, TCSADRAIN, &p->extern_termios);
 			printf("[%i] tcsetattr ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
-	//		signal(SIGTTOU, SIG_DFL);
+			signal(SIGTTOU, SIG_DFL);
 		}
 	}
 	if (!child_pid)

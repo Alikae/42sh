@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:31:21 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 23:59:27 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/07 06:33:59 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len);
 void		free_ast(t_token *origin);
 t_token		*dup_token_with_sub(t_token *origin);
 int			exec_compound_subsh(t_sh *p, t_token *tok);
-int     	block_wait(t_sh *p, int child_pid);
+int     	block_wait(t_sh *p, int child_pid, int from_fg);
 void	sh_print_onetok(t_token *tok);
 void	sh_print_alltok(t_token *tok);
 char	*sh_get_tok_content(const char *input);

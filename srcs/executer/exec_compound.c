@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/06 03:22:49 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 06:31:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	}
 	if (!pid)
 		exit(exec_script(p, tok->sub));//exitpoint?
-	return (block_wait(p, pid));
+	return (block_wait(p, pid, 0));
 }
 
 int		exec_compound_case(t_sh *p, t_token *tok)

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 04:56:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 08:05:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
 	//
 }
 
-int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
+int     block_wait(t_sh *p, int child_pid, int from_fg)
 {
 	//IF CONTINUED_JOB: ADD JOB DONT TRIGGER AND IF !ADD JOB DEL CONTINUED JOB
 	int			status;
@@ -243,6 +243,7 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 		//exitpoint
 		return (0);
 	}
+	printf("[%i]wait ret = %i\n", getpid(), child_pid);
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 		dprintf(p->dbg_fd, "waited: sig %i\n", WSTOPSIG(status));
 	//dprintf(p->dbg_fd, "waited\n");
@@ -264,23 +265,25 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 			kill(-1 * child_pid, SIGTSTP);
 			printf("\nChild_process [%i] suspended\n", child_pid);
 			//???index_pipeline_begin?
-			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+			if (!from_fg)
+				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
 		if (WSTOPSIG(status) == SIGTTIN)
 		{
 			p->process_is_stopped = 1;
 			printf("\nChild_process [%i] SIGTTIN\n", child_pid);
 			//kill SIGTSTP?
-			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+			if (!from_fg)
+				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
 		if (WSTOPSIG(status) == SIGKILL)
 				printf("\nChild_process [%i] KILLED\n", child_pid);
-		/*if (WSTOPSIG(status) == SIGTTOU)
+		if (WSTOPSIG(status) == SIGTTOU)
 		{
 			printf("\nChild_process [%i] SIGTTOU\n", child_pid);
 			//kill SIGTSTP?
 			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
-		}*/
+		}
 	}
 	else if (WIFSIGNALED(status))
 	{
@@ -300,19 +303,19 @@ int     block_wait(t_sh *p, int child_pid/*, t_job *continued_job*/)
 		   */
 	}
 	//ctrl-Z only	tcgetattr (0, &j->tmodes);
-	//	tcsetattr (0, TCSADRAIN, &shell_tmodes);
+	//	tcsetattr(0, TCSADRAIN, &shell_tmodes);
 	//	printf("%i\n", p->dbg_fd);
 	////wait(&wait_status);
 	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
 	//	;
 	if (p->is_interactive && p->pid_main_process == getpid())
 	{
-	//	signal(SIGTTOU, SIG_IGN);
+		signal(SIGTTOU, SIG_IGN);
 		errno = 0;
 		int ret = tcsetpgrp (0, getpgid(0));
 		tcsetattr(0, TCSADRAIN, &p->orig_termios);
 		printf("[%i] tcsetpgrp ->[%i] ret = %i errno%i\n", getpid(), getpgid(0), ret, errno);
-	//	signal(SIGTTOU, SIG_DFL);
+		signal(SIGTTOU, SIG_DFL);
 //		sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	//	init_signals_handling();
 	}
@@ -377,10 +380,11 @@ int     exec_path(t_sh *p, char *path)
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 	{
 		close_pipes_parent(p);
-		ret = block_wait(p, child_pid);
+		ret = block_wait(p, child_pid, 0);
 	}
 	else
 	{
+		//MOVE
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGTSTP, SIG_DFL);
@@ -932,15 +936,7 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 	else if (!ft_strcmp(cmd, "jobs"))
 		return (&sh_jobs);
 	else if (!ft_strcmp(cmd, "fg"))
-	{
 		return (&sh_fg);
-/*		if (sh()->jobs)
-		{
-			kill(sh()->jobs->pid, SIGCONT);
-			block_wait(sh(), sh()->jobs->pid);//only if process exist
-		}
-		sh()->abort_cmd = 1;
-*/	}
 	else if (!ft_strcmp(cmd, "exit"))
 		return (&sh_exit);
 	return (NULL);

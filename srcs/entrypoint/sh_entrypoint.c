@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 01:52:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 07:41:25 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tcgetattr(0, &tsh->extern_termios);
 	tsh->is_interactive = isatty(0);
 	sh_init(tsh);
-	signal(SIGTTOU, SIG_IGN);
+//	signal(SIGTTOU, SIG_IGN);
 	if (!ft_strcmp("all", tsh->dbg) || !ft_strcmp(__func__, tsh->dbg))
 		printf("isatty = %i\n", tsh->is_interactive);
 	if (ft_fetch_opt("c", 1, tsh->opt))

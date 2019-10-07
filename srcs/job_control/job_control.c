@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 05:22:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/20 00:22:05 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/07 06:35:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	check_jobs_status(t_sh *p)
 		job = *old_next;
 		if (waitpid(job->pid, &status, WNOHANG | WUNTRACED) < 0)
 		{
-			printf("wait error on process %i: deleting job\n", job->pid);
+			printf("[%i] done: %s\n", job->pid, job->name);
 			*old_next = job->next;
 			delete_job(job);
 			continue;

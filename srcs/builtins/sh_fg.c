@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/07 04:56:11 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 08:08:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ int	sh_fg(int ac, char **av, char **env)
 		return (0);
 	}
 	//printf("ARGV1 %s\n", av[1]);
-	arg = (ac > 1) ? ft_atoi(av[1]) : 0;//atoi protec?
+	arg = (ac > 1) ? ft_atoi(av[1]) - 1 : 1;//atoi protec?
 	argcpy = arg;
-	while (arg-- > 0 && job)
+	while (arg-- > 1 && job)
 		job = job->next;
-	if (!job)
+	if (!job || arg < 0)
 	{
 		if (argcpy % 10 == 1)
 			argsuffix = "st";
@@ -50,18 +50,14 @@ int	sh_fg(int ac, char **av, char **env)
 			argsuffix = "nd";
 		else
 			argsuffix = (argcpy % 10 == 3) ? "rd": "th";
-		printf("fg: bad arg: no %i%s job\n", argcpy, argsuffix);
+		printf("fg: bad arg: no %s%s job\n", av[1], argsuffix);
 		return (-1/*error*/);
 	}
-	//tmp job
 	tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
-	tcsetpgrp(0, sh()->jobs->pgid);
-	if (kill (-1 * sh()->jobs->pgid, SIGCONT) < 0)
+	tcsetpgrp(0, job->pid);
+	printf("SIGCONT process group [%i]\n", job->pid);
+	if (kill (-1 * job->pid, SIGCONT) < 0)
 		perror ("kill (SIGCONT)");
-	block_wait(sh(), sh()->jobs->pid);
-	if (p->process_is_stopped)
-	{
-		//untmp job
-	}
+	block_wait(sh(), job->pid, 1);
 	return (0/*?*/);
 }
