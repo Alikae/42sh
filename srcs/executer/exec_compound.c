@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/08 05:02:37 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/08 17:01:12 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	if (!pid)
 	{
 		exec_script(p, tok->sub);
-		exitpoint();
+		sh_exitpoint();
 	}
 	return (block_wait(p, pid, 0));
 }

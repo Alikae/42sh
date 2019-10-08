@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/08 10:49:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/08 17:00:45 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1035,7 +1035,7 @@ int		handle_no_cmd_name(t_sh *p)
 	p->child_argv = 0;
 	sh_del_all_env(p->assign_lst);
 	p->assign_lst = 0;
-	close_all_pipe_lst(p->pipe_lst);
+	delete_close_all_pipe_lst(p->pipe_lst);
 	p->pipe_lst = 0;
 	//close open files
 	return (0);
