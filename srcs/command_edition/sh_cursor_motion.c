@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/01 02:18:43 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/08 18:51:17 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,33 +122,5 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 			i = sh_delete(command, i);
 		sh_switch_history(hist, command);
 	}
-	return (i);
-}
-
-int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
-{
-	t_cursors	c;
-	t_pos		head;
-
-	sh_cursor_position(&c.cursor);
-	c.term.rows = tgetnum("li");
-	c.term.col = tgetnum("co");
-	if (sh()->buselect)
-		reset_selection(command, i, hist);
-	*command = sh_insert_char(*command, buf, i);
-	tputs(tgetstr("sc", NULL), 0, sh_outc);
-	tputs(tgetstr("cd", NULL), 0, sh_outc);
-	ft_putstr_fd(&command[0][i + 1], 0);
-	sh_cursor_position(&head);
-	if (command[0][i + 2] != 0 && head.rows == c.term.rows
-			&& head.col == 2)
-	{
-		tputs(tgetstr("rc", NULL), 0, sh_outc);
-		tputs(tgetstr("up", NULL), 0, sh_outc);
-	}
-	else
-		tputs(tgetstr("rc", NULL), 0, sh_outc);
-	i = sh_cursor_forward(ft_strlen(buf), i, c.cursor, c.term);
-	sh_switch_history(hist, command);
 	return (i);
 }

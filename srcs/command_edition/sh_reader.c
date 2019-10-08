@@ -6,19 +6,12 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/07 02:33:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/08 19:54:44 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "sh.h"
 #include "sh_command_edition.h"
-#include "sh_command_line.h"
-#include "sh_history.h"
-#include <term.h>
-#include <curses.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <fcntl.h>
 #include "sh_exitpoint.h"
 
@@ -70,6 +63,8 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 
 static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 {
+	if (!buf)
+		return (0);
 	if ((buf[0] == '\033' && buf[1] == '[' && ((buf[2] == 'C' || buf[2] == 'D'
 		|| buf[2] == 'H' || buf[2] == 'F') || (buf[2] == '3' && buf[3] == '~')))
 			|| buf[0] == 127 || buf[0] == 8)
@@ -91,8 +86,7 @@ static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 	else if (buf[0] == 3 || buf[0] == 4 || buf[0] == '\n')
 		return (sh_controls(command, buf, hist, i));
 	else if (!ft_strchr(buf, '\033') && buf[0] >= 32)
-		*i = sh_echo_input(command, buf, *i, hist);
-	ft_bzero(buf, BUFFER);
+		*i = sh_paste(command, buf, *i, hist);
 	return (1);
 }
 
@@ -101,12 +95,11 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	int		i;
 	int		k;
 	int		j;
-	char	buf[BUFFER];
+	char	*buf;
 
 	i = -1;
 	k = 1;
 	j = 1;
-	ft_bzero(buf, BUFFER);
 	while (k != 0 && *command && j > 0)
 	{
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
@@ -115,10 +108,11 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 			sh_exitpoint();
 		sh_tty_cbreak(1, sh()->orig_termios);
 		sh_reprompt(i, command);
-		j = read(0, buf, BUFFER);
+		buf = sh_buffer();
 		k = loop_keys(command, buf, &i, hist);
 		sh_tty_cbreak(2, sh()->orig_termios);
 	}
+	ft_memdel((void**)&buf);
 	ft_memdel((void**)&sh()->buselect);
 	if (k != 3)
 	{
