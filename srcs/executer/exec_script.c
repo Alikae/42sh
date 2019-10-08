@@ -44,7 +44,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//No token_begin, !!CMD_NAME!!
 	if (is_compound(token_begin->type))
 	{
-		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
+		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)//PUT IN ENV
 		{
 			p->abort_cmd = 1;
 			printf("SH_NESTED_COMPOUND_LIMIT REACHED\nAbort command\n");
@@ -73,7 +73,6 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	if (child_pid)
 	{
 		//dprintf(p->dbg_fd, "[%i] PFORK\n", getpid());
-		close_pipes_parent(p);
 		return (child_pid);
 	}
 	//close_pipes_except
@@ -198,8 +197,8 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	printf("1\n");
 		exec_pipeline_recursively(p, token_begin, token_end, -1);
 		delete_close_all_pipe_lst(p->pipe_lst);
-		p->last_cmd_result = block_wait(p, p->pgid_current_pipeline, 0);
 		p->pipe_lst = 0;
+		p->last_cmd_result = block_wait(p, p->pgid_current_pipeline, 0);
 		if (!p->process_is_stopped)
 		{
 			printf("killing pipeline:\n");

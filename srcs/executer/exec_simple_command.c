@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 08:05:11 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/08 10:49:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,8 @@ void	generate_redirections(t_sh *p)
 
 	lst = p->redirect_lst;
 	gen_redirections_recursively(p, lst);
+	delete_close_all_pipe_lst(p->pipe_lst);
+	p->pipe_lst = 0;
 }
 /*
 void	generate_redirections(t_sh *p)
@@ -527,7 +529,7 @@ int		file_is_already_open(t_sh *p, char *name)
 }
 
 int	open_with_redirection_flags(char *real_path, t_toktype type)
-{
+{//VERIFY
 	if (type == SH_GREAT)
 		return (open(real_path, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR));
 	else if (type == SH_LESS)
@@ -549,18 +551,18 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	if (path[0] == '/')
 		real_path = path;
 	else
-	{
+	{//				UNUSEFULL open understand local path
 		real_path = getcwd(0, 0);
 		real_path = ft_strjoin(real_path, "/");//<-- FREE
 		real_path = ft_strjoin(real_path, path);//<--SAME
 		was_malloc = 1;
 	}
-	if ((fd = file_is_already_open(p, real_path)) > -1)
+	/*if ((fd = file_is_already_open(p, real_path)) > -1)
 	{
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			dprintf(p->dbg_fd, "%s already opened : fd %i\n", real_path, fd);
 		return (fd);
-	}
+	}*/
 	//	verify_rights of real_path
 	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
@@ -570,8 +572,8 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	}
 	push_to_opened_files(p, real_path, fd);
 	dprintf(p->dbg_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
-	if (was_malloc)
-		free(real_path);
+	/*if (was_malloc)
+		free(real_path);*/
 	return (fd);
 }
 
@@ -687,14 +689,10 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 		printf("d->[%s] %p\n", token->content, token->content);
 	if (!token->content || !*token->content)
-	{
-		fd_in = -1;
-	}
+		fd_in = 1;//handle &
 	else
 		fd_in = ft_atoi(token->content);
-	if (str_isnum(token->sub->content))
-		fd_out = ft_atoi(token->sub->content);
-	else if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))
+	if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))
 	{
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			dprintf(p->dbg_fd, "redirection error in %s\n", token->sub->content);
@@ -1037,6 +1035,9 @@ int		handle_no_cmd_name(t_sh *p)
 	p->child_argv = 0;
 	sh_del_all_env(p->assign_lst);
 	p->assign_lst = 0;
+	close_all_pipe_lst(p->pipe_lst);
+	p->pipe_lst = 0;
+	//close open files
 	return (0);
 }
 
@@ -1158,7 +1159,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 
 	if ((tmp = is_function_definition(token_begin, token_end)))
 		return (store_func(p, tmp));
-	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
+	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign); //open files
 	if (!p->child_argv[0])
 		return (handle_no_cmd_name(p));
 	handle_assigns(p);
@@ -1181,7 +1182,5 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	restore_before_assigns(p);
 	del_n_assign_lst(p, nb_assign);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
-	//free tab2d p->child_argv
-	//printf("ex simple cmd end o\n");
 	return (ret);
 }
