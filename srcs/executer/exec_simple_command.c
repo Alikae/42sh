@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/08 10:49:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/09 01:34:19 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,6 @@ int     exec_path(t_sh *p, char *path)
 {
 	int ret;
 
-	//fork stuff
 	int child_pid = fork_process(p, 1);
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 	{
@@ -429,7 +428,7 @@ char	*get_next_path(char *path, char **all_paths, int i)
 	}
 	if (i > tablen(all_paths))
 		return (0);
-	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])
+	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])//!*all_paths --> ':path1:path2' will fail
 	{
 		cwd = getcwd(0, 0);
 		next_path = ft_strjoin_free(cwd, "/", cwd);
@@ -452,15 +451,14 @@ int		exec_prgm(t_sh *p)
 	path = p->child_argv[0];
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 		dprintf(p->dbg_fd, "[%i] try path--%s\n", getpid(), path);
-	if (!path)
-		return (0);
 	//dprintf(p->dbg_fd, "with_redirections:\n");
 	//printf("exec_prgm\n");
 	//printf("%p\n", p->redirect_lst);
 	print_redirections(p, p->redirect_lst);
 	ret = 0;
 	nb_paths = 0;
-	if (!(paths = ft_strsplit(sh_getev_value("PATH"), ':')) && path[0] != '/')
+	paths = 0;
+	if (path[0] != '/' && !(paths = ft_strsplit(sh_getev_value("PATH"), ':')))
 		printf("$PATH not found\n");
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
@@ -951,15 +949,11 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
 {
-	//Special signals stuff?
 	int ret;
 
-	//	generate_redirections_builtins(p);
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 		dprintf(p->dbg_fd, "[%i] BUILTIN\n", getpid());
 	ret = f(p->child_ac, p->child_argv, &(p->params));
-	//restore_redirections(olds);
-	//freeall (olds);
 	return (ret); //<-- Return What?
 }
 
