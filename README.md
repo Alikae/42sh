@@ -8,6 +8,29 @@ ___
 # MAN
 - http://pubs.opengroup.org/onlinepubs/9699919799/
 
+### BUGS
+
+alias ls='ls -G' ; ls
+
+cat -  control + c
+
+ls > test ; cat test
+
+ls >> test2 ; cat test2
+
+cat <<test
+lslsl
+test
+
+echo yolo >&-
+
+echo yolo 2>&-
+
+echo "'`ls`'"
+
+echo '"`ls`"'
+
+
 ### UNIT TESTS
 - Placed here: './yourproject/unit_tests'
 - 'make test' to run unit test ( then select 6 to be speed )

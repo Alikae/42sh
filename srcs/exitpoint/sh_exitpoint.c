@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/29 23:38:14 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/08 10:39:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	sh_exitpoint(void)
 		signal_all_jobs(SIGKILL);
 	}
 	delete_all_jobs(sh()->jobs);
+	//delete_open_files
+	delete_close_all_pipe_lst(sh()->pipe_lst);
 	sh_free_params();
 	ft_free_opts(sh()->opt);
 	ft_free_tabstr(sh()->aliases);
@@ -39,5 +41,6 @@ void	sh_exitpoint(void)
 	ft_memdel((void**)&sh()->buselect);
 	sh()->user = NULL;
 	sh()->dir = NULL;
+	tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
 	exit(EXIT_SUCCESS);
 }

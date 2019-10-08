@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 06:40:17 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/07 04:50:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,11 @@ typedef struct		s_sh
 	t_job			*jobs;
 	int				is_interactive;
 	struct termios	orig_termios;
+	struct termios	extern_termios;
 	int	pid_main_process;
 	int				pgid_current_pipeline;
+	int				force_setpgrp_setattr;
+	int				process_is_stopped;
 }					t_sh;
 
 t_sh	*sh(void);

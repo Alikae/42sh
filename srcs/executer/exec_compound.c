@@ -3,10 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   exec_compound.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
+/*   Updated: 2019/10/08 17:01:12 by tmeyer           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_compound.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 05:25:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/08 03:26:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +27,7 @@
 #include "sh_env.h"
 #include "sh_executer.h"
 #include "sh_word_expansion.h"
+#include "sh_exitpoint.h"
 #include <stdio.h>
 
 //FOR
@@ -27,14 +40,17 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	int	pid;
 	//Not more?
 //	printf("[%i]exec_compound_subsh\n", getpid());
-	if ((pid = fork_process(p, 0, 0)) < 0)
+	if ((pid = fork_process(p, 0)) < 0)
 	{
 		printf("fork error\n");
 		return (1/*fork_error*/);
 	}
 	if (!pid)
-		exit(exec_script(p, tok->sub, 0));
-	return (block_wait(p, pid));
+	{
+		exec_script(p, tok->sub);
+		sh_exitpoint();
+	}
+	return (block_wait(p, pid, 0));
 }
 
 int		exec_compound_case(t_sh *p, t_token *tok)
@@ -51,7 +67,7 @@ int		exec_compound_case(t_sh *p, t_token *tok)
 		{
 			//not strcmp : matchnmatch
 			if (!ft_strcmp(tok->content, word->content))
-				return (exec_script(p, tok->sub->sub->sub, 0));
+				return (exec_script(p, tok->sub->sub->sub));
 			word = word->next;
 		}
 		case_elem = case_elem->next;
@@ -74,9 +90,8 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	{
 		//
 		printf("exp error\n");
-		exit(0);
+		sh_exitpoint();
 	}
-	//
 	ins = tok->sub->sub;
 	tmp = 0;
 	if ((value = sh_getev_value(tok->sub->content)))
@@ -87,7 +102,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 		{
 			sh_setev(tok->sub->content, ins->content);
 			//printf("%s\n", tok->sub->sub->sub->content);
-			p->last_cmd_result = exec_script(p, tok->sub->sub->sub, 0);
+			p->last_cmd_result = exec_script(p, tok->sub->sub->sub);
 		}
 		ins = ins->next;
 	}
@@ -105,10 +120,10 @@ int     exec_compound_while(t_sh *p, t_token *tok, t_toktype type)
 
 	dprintf(p->dbg_fd, "treating WHILE\n");
 	ret = 0;
-	while (!p->abort_cmd && (((tmp = exec_script(p, tok->sub->sub, 0)) && type == SH_UNTIL) || (!tmp && type == SH_WHILE)) && !p->abort_cmd)
+	while (!p->abort_cmd && (((tmp = exec_script(p, tok->sub->sub)) && type == SH_UNTIL) || (!tmp && type == SH_WHILE)) && !p->abort_cmd)
 	{
 		dprintf(p->dbg_fd, "WHILE condition true\n");
-		ret = exec_script(p, tok->sub->next, 0);
+		ret = exec_script(p, tok->sub->next);
 	}
 	dprintf(p->dbg_fd, "WHILE condition false\n");
 	return (ret);
@@ -117,14 +132,14 @@ int     exec_compound_while(t_sh *p, t_token *tok, t_toktype type)
 int     exec_compound_if(t_sh *p, t_token *tok)
 {
 	dprintf(p->dbg_fd, "treating IF\n");
-	if (!exec_script(p, tok->sub->sub, 0) && !p->abort_cmd)
+	if (!exec_script(p, tok->sub->sub) && !p->abort_cmd)
 	{
 		dprintf(p->dbg_fd, "IF true\n");
-		return (p->last_cmd_result = exec_script(p, tok->sub->next->sub, 0));
+		return (p->last_cmd_result = exec_script(p, tok->sub->next->sub));
 	}
 	dprintf(p->dbg_fd, "IF false\n");
 	if (tok->sub->next->next && !p->abort_cmd)
-		return (p->last_cmd_result = exec_script(p, tok->sub->next->next, 0));
+		return (p->last_cmd_result = exec_script(p, tok->sub->next->next));
 	//return what?
 	return (0);
 }

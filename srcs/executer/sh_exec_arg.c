@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 14:06:25 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 00:06:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/06 03:19:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	sh_exec_arg(void)
 	if (ret && *ret && (sh()->ast = tokenize_input(ret)))//line
 	{
 		print_all_tokens(sh(), sh()->ast, 0);
-		exec_script(sh(), sh()->ast, 0);
+		exec_script(sh(), sh()->ast);
 	}
 	return (0);
 }
