@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/09 02:06:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/09 04:51:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -498,7 +498,7 @@ void	remove_opened_files(t_sh *p)
 		free(p->opened_files->name);
 		tmp = p->opened_files;
 		p->opened_files = p->opened_files->next;
-		close(fd);
+		close(tmp->fd);
 		free(tmp);
 	}
 }
