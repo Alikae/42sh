@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/09 01:34:19 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/09 02:06:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,6 +324,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 		dprintf(p->dbg_fd, "		o Wait finish\n");
 	return (WEXITSTATUS(status));
+	//if from_fg && finished process rm job
 }
 
 void	close_pipes_parent(t_sh *p)
@@ -366,7 +367,7 @@ char	**transform_env_for_child(t_env *env)
 	len = 0;
 	while (env)
 	{
-		tab[len++] = ft_join_with_char(env->key, env->value, '=');
+		tab[len++] = ft_join_with_char(env->key, env->value, '=');//protecc?
 		env = env->next;
 	}
 	tab[len] = 0;
@@ -379,20 +380,9 @@ int     exec_path(t_sh *p, char *path)
 
 	int child_pid = fork_process(p, 1);
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
-	{
-		close_pipes_parent(p);
 		ret = block_wait(p, child_pid, 0);
-	}
 	else
 	{
-		//MOVE
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGTSTP, SIG_DFL);
-		signal(SIGTTIN, SIG_DFL);
-		//signal(SIGTTOU, SIG_DFL);
-		signal(SIGCHLD, SIG_DFL);
-		//restore termcaps?
 		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 			dprintf(p->dbg_fd, "[%i]redirections before execve\n", getpid());
 		print_redirections(p, p->redirect_lst);
@@ -508,6 +498,7 @@ void	remove_opened_files(t_sh *p)
 		free(p->opened_files->name);
 		tmp = p->opened_files;
 		p->opened_files = p->opened_files->next;
+		close(fd);
 		free(tmp);
 	}
 }
@@ -1029,7 +1020,7 @@ int		handle_no_cmd_name(t_sh *p)
 	p->child_argv = 0;
 	sh_del_all_env(p->assign_lst);
 	p->assign_lst = 0;
-	close_all_pipe_lst(p->pipe_lst);
+	delete_close_all_pipe_lst(p->pipe_lst);
 	p->pipe_lst = 0;
 	//close open files
 	return (0);

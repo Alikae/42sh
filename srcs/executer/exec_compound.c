@@ -6,19 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/08 05:02:37 by ede-ram          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_compound.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/14 23:16:12 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/08 03:26:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/09 02:26:16 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +36,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	if (!pid)
 	{
 		exec_script(p, tok->sub);
-		exitpoint();
+		sh_exitpoint();
 	}
 	return (block_wait(p, pid, 0));
 }
@@ -86,7 +74,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	//printf("%s\n", tok->sub->content);
 	//to tmp v
 	tmp_tok = sh_expansion(tok->sub->content, &p->params);
-	if (!tmp_tok)
+	if (!tmp_tok)//Does thotho can retrn null?
 	{
 		//
 		printf("exp error\n");
@@ -94,8 +82,8 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	}
 	ins = tok->sub->sub;
 	tmp = 0;
-	if ((value = sh_getev_value(tok->sub->content)))
-		tmp = ft_strdup(value);
+	//if ((value = sh_getev_value(tok->sub->content))) NOT NEED
+	//	tmp = ft_strdup(value);
 	while (ins && !p->abort_cmd)
 	{
 		if (ins->type == SH_WORD)
@@ -106,10 +94,10 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 		}
 		ins = ins->next;
 	}
-	sh_unsetev(tok->sub->content, &(sh()->params));
+	/*sh_unsetev(tok->sub->content, &(sh()->params));
 	if (tmp)
 		sh_setev(tok->sub->content, tmp);
-	free(tmp);
+	free(tmp);*/
 	return (p->last_cmd_result);
 }
 

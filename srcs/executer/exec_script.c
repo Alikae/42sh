@@ -210,58 +210,8 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 		p->last_cmd_result = exec_command(p, token_begin, token_end);
 	printf("2\n");
 	if (bang)
-		p->last_cmd_result *= -1;
-	//free ressources
-}
-
-/*void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
-{
-	/////////////////////////////
-	//take pid of first piped cmd, set pgid of all cmds to it
-	/////////////////////////////
-	int		bang;
-	int		next_pipe_fd;
-	t_token	*next_separator;
-
-	if (token_begin == token_end)
-		return;
-	p->pgid_current_pipeline = 0;
-	p->index_pipeline_begin = token_begin->index;
-	p->index_pipeline_end = (token_end) ? token_end->index : -1;
-	//print_cmd(p->cmd, indexb, indexe);
-	handle_bang(&token_begin, &bang);
-	next_pipe_fd = 0;
-	while (token_begin && !p->abort_cmd && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
-	{
-		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			dprintf(p->dbg_fd, "		x pipeline cut at '%i'\n", p->type);
-		next_pipe_fd = exec_command_to_pipe(p, token_begin, next_separator, next_pipe_fd);//
-		token_begin = next_separator->next;
-	}
-	if (p->abort_cmd)
-	{
-		//free all
-		return ;
-	}
-	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		dprintf(p->dbg_fd, "		x pipeline cut at '%i'\n", p->type);
-	if (next_pipe_fd)
-		push_redirect_lst(&p->redirect_lst, 0, next_pipe_fd);
-	p->pipein = next_pipe_fd;
-	int child_pid;
-	child_pid = 0;
-	//lastcmdres = 0 if exec in background
-	p->last_cmd_result = (next_pipe_fd) ? (child_pid = exec_command_in_background(p, token_begin, token_end, 1)) : exec_command(p, token_begin, token_end);//
-	p->pgid_current_pipeline = 0;
-	if (child_pid)
-		block_wait(p, child_pid);
-	if (next_pipe_fd)
-		del_n_redirect_lst(&p->redirect_lst, 1);
-	delete_close_all_pipe_lst(p->pipe_lst);
-	p->pipe_lst = 0;
-	if (bang)
 		p->last_cmd_result = !p->last_cmd_result;
-}*/
+}
 
 void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 {
@@ -313,7 +263,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 			dprintf(p->dbg_fd, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
-		printf("fork error: exiting\n");
+		printf("[%i]fork error: exiting\n", getpid());
 		sh_exitpoint();
 	}
 	pid = (child_pid) ? child_pid : getpid();
@@ -324,7 +274,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		else
 			setpgid (pid, pid);
 		//printf("setpgid of [%i] to itself\n", pid);
-		if (foreground || p->force_setpgrp_setattr)//pipeline in background?
+		if (foreground || (p->force_setpgrp_setattr /*&& create_pgrp --already done in condition*/))//pipeline in background?
 		{
 			errno = 0;
 			int ret = tcsetpgrp(0, pid);
@@ -336,17 +286,17 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 			printf("[%i] tcsetattr ->[%i] ret = %i errno%i\n", getpid(), pid, ret, errno);
 			signal(SIGTTOU, SIG_DFL);
 		}
-	}
-	if (!child_pid)
-	{
-		//printf("re-enabling signals\n");
-			signal (SIGINT, SIG_DFL);
-			signal (SIGQUIT, SIG_DFL);
-			signal (SIGTSTP, SIG_DFL);
-			signal (SIGTTIN, SIG_DFL);
-	//		signal (SIGTTOU, SIG_DFL);
-			signal (SIGCHLD, SIG_DFL);
-//		p->is_interactive = 0;
+		if (!child_pid)
+		{
+			//printf("re-enabling signals\n");
+				signal (SIGINT, SIG_DFL);
+				signal (SIGQUIT, SIG_DFL);
+				signal (SIGTSTP, SIG_DFL);
+				signal (SIGTTIN, SIG_DFL);
+				signal (SIGTTOU, SIG_DFL);
+				signal (SIGCHLD, SIG_DFL);
+	//		p->is_interactive = 0;
+		}
 	}
 	if (!child_pid)
 		close_cpy_std_fds(p);
