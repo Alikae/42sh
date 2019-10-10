@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 02:53:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/10 12:04:44 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,4 +248,5 @@ void	sh_init(t_sh *shell)
 	shell->user = getlogin();
 	pwd = getpwnam(shell->user);
 	shell->dir = pwd->pw_dir;
+	shell->hist = NULL;
 }

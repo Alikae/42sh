@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/19 23:39:09 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/10 12:41:16 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 #include "libft.h"
 #include "sh_history.h"
 
-static	void	init_history(t_hist *hist, char **history)
+static void		init_history(t_hist *hist, char **history)
 {
 	if (hist->size_r > hist->size_l)
 		hist->size_r = hist->size_l;
@@ -103,6 +103,8 @@ void			push_history(t_hist *hist)
 	int		i;
 	int		fd;
 
+	if (!hist)
+		return ;
 	i = hist->topush - 1;
 	if (!(fd = open(hist->path,
 					O_WRONLY | O_CREAT | O_SYNC | O_APPEND, 0600)))
@@ -111,5 +113,7 @@ void			push_history(t_hist *hist)
 		ft_putendl_fd(hist->prev[i--], fd);
 	close(fd);
 	ft_free_tabstr(hist->prev);
+	ft_memdel((void**)&hist->path);
+	ft_memdel((void**)&hist->current);
 	hist->prev = 0;
 }

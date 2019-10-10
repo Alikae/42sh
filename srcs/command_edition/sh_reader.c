@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/08 19:54:44 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/10 11:58:37 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	i = -1;
 	k = 1;
 	j = 1;
+	buf = NULL;
 	while (k != 0 && *command && j > 0)
 	{
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
@@ -108,16 +109,10 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 			sh_exitpoint();
 		sh_tty_cbreak(1, sh()->orig_termios);
 		sh_reprompt(i, command);
+		ft_memdel((void**)&buf);
 		buf = sh_buffer();
 		k = loop_keys(command, buf, &i, hist);
 		sh_tty_cbreak(2, sh()->orig_termios);
-	}
-	ft_memdel((void**)&buf);
-	ft_memdel((void**)&sh()->buselect);
-	if (k != 3)
-	{
-		sh_cursor_motion(command, "\033[F", i, hist);
-		write(0, "\n", 1);
 	}
 	return (*command);
 }
@@ -130,15 +125,12 @@ int			sh_reader(char **command, t_hist *hist)
 	hist->index = -1;
 	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
-//	tputs(tgetstr("ei", NULL), 0, sh_outc);
 	if (tgetent(NULL, term ? term : "vt100") == ERR)
 		sh_exitpoint();
 	if (tcgetattr(0, &sh()->orig_termios))
 		sh_exitpoint();
 	*command = (char*)ft_memalloc(1);
-	sh_tty_cbreak(1, sh()->orig_termios);
 	getcommand(command, term, hist);
-	sh_tty_cbreak(2, sh()->orig_termios);
 	term = NULL;
 	return (1);
 }
