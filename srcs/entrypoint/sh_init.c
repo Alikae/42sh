@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/11 03:35:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 04:01:14 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	handle_signal(int sig)
 		errno = 0;
 		int ret = tcsetpgrp(0, getpgid(0));
 		printf("handle SIGTSTP: tcsetpgrp ret = %i errno %i\n", ret, errno);
-		printf("\nSIGTSTP detected\n");
+		printf("SIGTSTP detected\n");
 		//return to prompt
 	}
 	else if (sig == SIGINT)
@@ -118,7 +118,7 @@ void	handle_signal(int sig)
 			dprintf(sh()->dbg_fd, "[%i] CTRL-C: exiting non-interactive shell\n", getpid());
 			exit(1/*exitpoint*/);
 		}
-		dprintf(sh()->dbg_fd, "\nTerminated\n");
+		dprintf(sh()->dbg_fd, "^C\n");
 		sh()->abort_cmd = 1;
 		sh_prompt();
 	}

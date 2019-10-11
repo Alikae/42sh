@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 00:01:20 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/11 05:32:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int			is_redirection_operator(t_toktype type)
 }
 
 int			operator_cant_be_first(t_toktype type)
-{
+{//verify
 	if (type == SH_AND || type == SH_OR
 			|| type == SH_AND_IF || type == SH_OR_IF)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/11 03:35:34 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 08:12:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int		sh_loop(void)
 		complete = 0;
 		input = 0;
 		p->print_syntax_errors = 1;
-		while (!complete)
+		while (!complete)//Can we ctrl-C?
 		{
 			//swap_signals_to_prompter
 			if (1 || /**/!dbug)

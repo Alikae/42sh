@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 06:23:56 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 08:14:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int			read_n_skip_word(t_tokenize_tool *t)
 	int	n;
 	int	tmp;
 	int	max_expansions;
+	//rework from scratch / ask thotho
 
 	//
 	//$()
@@ -149,7 +150,7 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	t_toktype	type;
 
 	forward_blanks_newline(t);
-	if (t->input[t->i] == '{')
+	if (t->input[t->i] == '{')//Verify that it end
 	{
 		type = SH_BRACES;
 		t->i++;
@@ -164,7 +165,10 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 			if (!t->input[t->i])
 				sh()->unfinished_cmd = 1;
 			else
+			{
 				printf("SYNTAX ERROR: Function block need to be a compound at %.10s\n", t->input + word_begin);
+				sh()->invalid_cmd = 1;
+			}
 			return (SH_SYNTAX_ERROR);
 		}
 	}
@@ -174,11 +178,11 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 		return (SH_SYNTAX_ERROR);
 	(*p_actual)->next = create_token_n(SH_FUNC, name_begin, t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
-	(*p_actual)->sub = create_token(SH_GROUP, 0, 0);
+	(*p_actual)->sub = create_token(SH_GROUP, 0, 0);//Is it usefull?
 	t->i = word_begin;
 	if (!((*p_actual)->sub->sub = tokenize_compound(t, type, word_begin)))
 		return (SH_SYNTAX_ERROR);
-	//tokenize optional IO to exec when executing the func (yo() {echo yo } 1>/dev/null;) in (*p_actual)->sub
+	//tokenize optional IO/assigns to exec when executing the func (yo() {echo yo } 1>/dev/null;) in (*p_actual)->sub
 	//
 	//token_func(name)
 	//|
@@ -242,7 +246,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 			return (type);
 		if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin, t->i - word_begin)))
 		{
-			if (word_out_of_context(type) || (type == SH_BANG && (tmp = bang_unfollowed_by_word(t))))
+			if (word_out_of_context(type) || (type == SH_BANG && (tmp = bang_unfollowed_by_word(t))))//bang unfollowed does check operator n everythng?
 			{
 				if (tmp == -1)
 					return (SH_SYNTAX_ERROR);

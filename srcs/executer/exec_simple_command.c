@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/11 03:33:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 04:05:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,8 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	p->process_is_stopped = 0;
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
-		printf("WAIT ERROR\nExiting\n");
-		sh_exitpoint();
+		printf("WAIT ERROR\n");
+		return (1/*error wait*/);
 	}
 	if (WIFSTOPPED(status))
 	{

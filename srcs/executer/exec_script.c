@@ -234,8 +234,9 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		//	dprintf(p->dbg_fd, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
-		printf("[%i]fork error: exiting\n", getpid());
-		sh_exitpoint();
+		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
+		p->abort_cmd = 1;
+		return (-1);
 	}
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
@@ -243,7 +244,11 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		create_process_group_give_terminal_access(p, pid, foreground, child_pid);
 	}
 	if (!child_pid)
+	{
+		delete_all_jobs(p->jobs);
+		p->jobs = 0;
 		close_cpy_std_fds(p);
+	}
 	return (child_pid);
 }
 
@@ -253,6 +258,8 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 	int	fd_dev_null;
 
 	child_pid = fork_process(p, 0);
+	if (child_pid < 0)
+		return (-1);
 	//protec fork
 	if (child_pid == 0)
 	{
