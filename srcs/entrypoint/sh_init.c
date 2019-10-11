@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 02:53:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 03:27:17 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void	sh_init_env()
 
 void	handle_signal(int sig)
 {
-	dprintf(sh()->dbg_fd, "[%i]sig %i\n", getpid(), sig);
+	//dprintf(sh()->dbg_fd, "[%i]sig %i\n", getpid(), sig);
 	if (sig == SIGTSTP)
 	{
 		errno = 0;
