@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/09 02:26:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/10 12:16:11 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	sh_exitpoint(void)
 	ft_memdel((void**)&sh()->buselect);
 	sh()->user = NULL;
 	sh()->dir = NULL;
+	push_history(sh()->hist);
+	sh()->hist = NULL;
 	tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
 	exit(EXIT_SUCCESS);
 }
