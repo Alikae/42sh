@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/11 05:32:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 05:12:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,14 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 		if (is_redirection_operator(type))
 			return (fill_redirection(t, p_actual, type));
 		if (type == SH_OR || type == SH_AND_IF || type == SH_OR_IF)
+		{
 			forward_blanks_newline(t);
+			if (!t->input[t->i])
+			{
+				sh()->unfinished_cmd = 1;
+				return (SH_SYNTAX_ERROR);
+			}
+		}
 	}
 	return (0);
 }

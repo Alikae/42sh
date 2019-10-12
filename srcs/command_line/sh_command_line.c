@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 07:36:41 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/19 23:37:28 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/12 06:17:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ char		*sh_arguments(t_hist *hist)
 	{
 		tmp = ft_strdup(str);
 		free(str);
-		ret = sh_check_line(&line);
+		ret = sh_check_line(&line);//TO DELETE?
 		str = ft_strjoin((const char*)tmp, (const char*)line);
 		ft_memdel((void**)&tmp);
 		ft_memdel((void**)&line);

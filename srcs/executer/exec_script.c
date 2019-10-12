@@ -78,7 +78,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
 	exec_command(p, token_begin, token_end);
-	exit(0);
+	sh_exitpoint();
 	//CREATE JOB?
 	//fork
 	//in parent
@@ -151,13 +151,14 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 		exec_pipeline_recursively(p, token_begin, token_end, -1);
 		delete_close_all_pipe_lst(p->pipe_lst);
 		p->pipe_lst = 0;
-		p->last_cmd_result = block_wait(p, p->pgid_current_pipeline, 0);
+		int tmp = p->pgid_current_pipeline;
+		p->pgid_current_pipeline = 0;
+		p->last_cmd_result = block_wait(p, tmp, 0);
 		if (!p->process_is_stopped)
 		{
-			//printf("killing pipeline:\n");
-			kill(-1 * p->pgid_current_pipeline, SIGKILL);
+			printf("killing pipeline: [%i]\n", tmp);
+			kill(-1 * tmp, SIGKILL);
 		}
-		p->pgid_current_pipeline = 0;
 	}
 	else
 		p->last_cmd_result = exec_command(p, token_begin, token_end);
@@ -198,25 +199,17 @@ void	close_cpy_std_fds(t_sh *p)
 
 void	create_process_group_give_terminal_access(t_sh *p, pid_t pid, int foreground, int child_pid)
 {
+		//	signal(SIGTTOU, SIG_DFL);
 		if (p->pgid_current_pipeline)
 			setpgid (pid, p->pgid_current_pipeline);
 		else
 			setpgid (pid, pid);
 		if (foreground || (p->force_setpgrp_setattr))//pipeline in background?
 		{
-			tcsetpgrp(0, pid);
 			signal(SIGTTOU, SIG_IGN);
+			tcsetpgrp(0, pid);
 			tcsetattr(0, TCSADRAIN, &p->extern_termios);
 			signal(SIGTTOU, SIG_DFL);
-		}
-		if (!child_pid)
-		{
-				signal (SIGINT, SIG_DFL);
-				signal (SIGQUIT, SIG_DFL);
-				signal (SIGTSTP, SIG_DFL);
-				signal (SIGTTIN, SIG_DFL);
-				signal (SIGTTOU, SIG_DFL);
-				signal (SIGCHLD, SIG_DFL);
 		}
 }
 
@@ -230,8 +223,8 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	if (p->pid_main_process == getpid()/**/ && p->is_interactive)
 		create_pgrp = 1;
 	if ((child_pid = fork()) > 0)
-		;//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		//	dprintf(p->dbg_fd, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			dprintf(p->dbg_fd, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
 		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
@@ -241,7 +234,17 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 	{
+		//printf("create_pgrp\n");
 		create_process_group_give_terminal_access(p, pid, foreground, child_pid);
+	}
+	if (!child_pid)
+	{
+			signal (SIGINT, SIG_DFL);
+			signal (SIGQUIT, SIG_DFL);
+			signal (SIGTSTP, SIG_DFL);
+			signal (SIGTTIN, SIG_DFL);
+			signal (SIGTTOU, SIG_DFL);
+			signal (SIGCHLD, SIG_DFL);
 	}
 	if (!child_pid)
 	{
@@ -249,6 +252,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		p->jobs = 0;
 		close_cpy_std_fds(p);
 	}
+	printf("pgid of [%i] is [%i]\n", getpid(), getpgid(0));
 	return (child_pid);
 }
 
@@ -264,10 +268,11 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 	if (child_pid == 0)
 	{
 		close_cpy_std_fds(p);
-		fd_dev_null = open("/dev/null", O_RDWR);//protecc
-		push_redirect_lst(&p->redirect_lst, 0, fd_dev_null);
+//		if (p->pid_main_process != getpid())
+//			fd_dev_null = open("/dev/null", O_RDWR);//protecc
+//		push_redirect_lst(&p->redirect_lst, 0, fd_dev_null);
 		exec_and_or(p, token_begin, token_end);
-		close(fd_dev_null);
+//		close(fd_dev_null);
 		//free stuff or not?
 		//printf("[%i] exec background suicide\n", getpid());
 		sh_exitpoint();

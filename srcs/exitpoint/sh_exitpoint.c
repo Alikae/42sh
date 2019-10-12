@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/10 12:16:11 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/12 07:05:59 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	sh_exitpoint(void)
 		close(sh()->dbg_fd);
 	if (sh()->jobs)
 	{
-		signal_all_jobs(SIGINT);
+		//signal_all_jobs(SIGINT);
 		signal_all_jobs(SIGKILL);
 	}
 	delete_all_jobs(sh()->jobs);

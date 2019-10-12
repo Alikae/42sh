@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 19:58:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/12 04:51:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ t_sh	*sh(void)
 	static t_sh	*sh = NULL;
 
 	if (!sh)
-	{
 		if (!(sh = (t_sh*)malloc(sizeof(t_sh))))
 			return (NULL);
-	}
 	return (sh);
 }

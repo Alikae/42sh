@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/26 08:00:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 06:44:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,38 @@ int	sh_jobs(int ac, char **av, char **env)
 		job = *old_next;
 		if (waitpid(job->pid, &status, WNOHANG | WUNTRACED) < 0)
 		{
-			printf("wait error on process %i: deleting job\n", job->pid);
+			printf("[%i] Done: %s\n", job->pid, job->name);
 			*old_next = job->next;
 			delete_job(job);
 			continue;
 		}
 		else if (WIFSTOPPED(status))
-			printf("[%i] bg		'%s'\n", job->pid, job->name);
+		{
+			if (WSTOPSIG(status) == SIGTSTP)
+				printf("[%i] SIGTSTP	'%s'\n", job->pid, job->name);
+			else if (WSTOPSIG(status) == SIGTTIN)
+				printf("[%i] SIGTTIN	'%s'\n", job->pid, job->name);
+			else if (WSTOPSIG(status) == SIGTTOU)
+				printf("[%i] SIGTTOU	'%s'\n", job->pid, job->name);
+			else
+				printf("[%i] %i			'%s'\n", job->pid, WSTOPSIG(status), job->name);
+		}
 		else if (WIFSIGNALED(status))
-			printf("[%i] sig	%i	'%s'\n", job->pid, WTERMSIG(status), job->name);
+		{
+			if (WTERMSIG(status) == SIGSEGV)
+				printf("[%i] SEGFAULTED	'%s'\n", job->pid, job->name);
+			else if (WTERMSIG(status) == SIGINT)
+				printf("[%i] SIGINT		'%s'\n", job->pid, job->name);
+			else if (WTERMSIG(status) == SIGABRT)
+				printf("[%i] SIGABRT	'%s'\n", job->pid, job->name);
+			else if (WTERMSIG(status) == SIGABRT)
+				printf("[%i] SIGABRT	'%s'\n", job->pid, job->name);
+			else
+				printf("[%i] %i			'%s'\n", job->pid, WTERMSIG(status), job->name);
+		}
 		else if (WIFEXITED(status))
 		{
-			printf("[%i] Done		'%s'\n", job->pid, job->name);
+			printf("[%i] Done :		'%s'\n", job->pid, job->name);
 			*old_next = job->next;
 			delete_job(job);
 			continue;

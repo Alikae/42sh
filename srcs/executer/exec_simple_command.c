@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/11 04:05:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 07:20:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,13 +145,21 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	int			status;
 
 	p->process_is_stopped = 0;
+	int dbfg = open("/dev/ttys002", O_RDWR);
+	dprintf(dbfg, "[%i] waiting\n", getpid());
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
-		printf("WAIT ERROR\n");
+		dprintf(dbfg, "WAIT ERROR\n");
 		return (1/*error wait*/);
 	}
+	//printf("status:%i\n", status);
+	dprintf(dbfg, "WSTOPSIG:%i\n", WSTOPSIG(status));
+	dprintf(dbfg, "WTERMSIG:%i\n", WTERMSIG(status));
+	dprintf(dbfg, "IFSIG:%i\n", WIFSIGNALED(status));
+	dprintf(dbfg, "IFSTP:%i\n", WIFSTOPPED(status));
 	if (WIFSTOPPED(status))
 	{
+//		printf("a\n");
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
 			p->process_is_stopped = 1;
@@ -174,15 +182,19 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 		if (WSTOPSIG(status) == SIGTTOU)
 		{
 			printf("\nChild_process [%i] SIGTTOU\n", child_pid);
+			p->process_is_stopped = 1;
 			//kill SIGTSTP?
 			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
 		}
 	}
 	else if (WIFSIGNALED(status))
 	{
-		if (WSTOPSIG(status) == SIGINT)
+//	printf("b\n");
+//	printf("%i-%i\n", WTERMSIG(status), SIGINT);
+		if (/*WSTOPSIG(status) == SIGINT || */WTERMSIG(status) == SIGINT)
 		{
 			printf("\nChild_process [%i] Interrupted\n", child_pid);
+			p->abort_cmd = 1;
 		}
 //		handle_signal(WTERMSIG(status));
 		if (WTERMSIG(status) == SIGSEGV)
@@ -197,8 +209,10 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	if (p->is_interactive && p->pid_main_process == getpid())
 	{
 		signal(SIGTTOU, SIG_IGN);
-		tcsetpgrp (0, getpgid(0));
-		tcsetattr(0, TCSADRAIN, &p->orig_termios);
+		int ret = tcsetpgrp (0, getpgid(0));
+//		dprintf(open("/dev/ttys002", O_WRONLY), "[%i]tcsetpg ret = %i", getpid(), ret);
+		ret = tcsetattr(0, TCSADRAIN, &p->orig_termios);
+//		dprintf(open("/dev/ttys002", O_WRONLY), "[%i]tcsetat ret = %i", getpid(), ret);
 		signal(SIGTTOU, SIG_DFL);
 //		sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	//	init_signals_handling();
