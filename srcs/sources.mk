@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/10/08 18:17:19 by tmeyer           ###   ########.fr        #
+#    Updated: 2019/10/14 09:17:31 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,10 +58,7 @@ C_FILES_command_line = \
 	sh_free_all_ln.c \
 	sh_free_one_ln.c \
 	sh_command_line.c \
-	sh_init_ln.c \
-	sh_command_parse.c \
-	sh_command_parse2.c \
-	sh_strsplit_m.c \
+	sh_init_ln.c 
 
 C_FILES_history = \
 	sh_get_next_line.c \
