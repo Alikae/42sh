@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/25 07:34:44 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/14 21:11:58 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	sh_readonly(int ac, char **av, t_env **ev);
 int	sh_rm(int ac, char **av, t_env **env);
 int	sh_set(int ac, char **av, t_env **ev);
 int	sh_cd(int ac, char **av, t_env **ev);
-int	sh_echo(int ac, char **av, t_env **ev);
 int	sh_true(int ac, char **av, t_env **ev);
 int	sh_test(int ac, char **av, t_env **ev);
 int	sh_check_path(char *all_path, int *error);
@@ -37,5 +36,8 @@ int	sh_unalias(int ac, char **av, t_env **ev);
 int	sh_exit(int ac, char **av, t_env **ev);
 int	sh_jobs(int ac, char **av, t_env **ev);
 int	sh_fg(int ac, char **av, t_env **ev);
+
+int	sh_echo(int ac, char **av, t_env **ev);
+void	sh_debug_builtin(int ac, char **av, t_env **env);
 
 #endif

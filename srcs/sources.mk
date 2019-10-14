@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/10/14 09:17:31 by tmeyer           ###   ########.fr        #
+#    Updated: 2019/10/14 21:10:25 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ C_FILES_parameters = \
 	sh_unsetev.c \
 	sh_set_pwd.c \
 	sh_isset.c \
+	sh_debug_env.c \
 
 C_FILES_command_edition = \
 	sh_command_functions.c \
@@ -91,10 +92,12 @@ C_FILES_executer = \
 C_FILES_debug_mode = \
 	debug_mode.c
 
+C_FILES_builtins/echo = \
+	sh_echo.c \
 
 C_FILES_builtins = \
+	sh_debug_builtin.c \
 	sh_cd.c \
-	sh_echo.c \
 	sh_env.c \
 	sh_export.c \
 	sh_readonly.c \

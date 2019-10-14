@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 15:23:55 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/14 21:10:45 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 //
 #include "sh.h"
 #include "stdio.h"
+#include "sh_builtins.h"
 
 static void		sh_echo_print(char *tmp, char **handle, int *nl)
 {
@@ -37,7 +38,7 @@ static void		sh_echo_print(char *tmp, char **handle, int *nl)
 			ft_putchar('\r');
 		else if (tmp[1] == 'v')
 			ft_putchar('\v');
-		else if (tmp[1] == '\\')
+		else
 			ft_putchar('\\');
 	}
 	if (tmp && tmp[1] == 'c')
@@ -53,9 +54,8 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	i = 0;
 	nl = 1;
 	(void)ev;
-	//dprintf(sh()->dbg_fd, "echo begin\n");
-	//dprintf(2, "echo begin\n");
-	
+	if (!ft_strcmp("all", sh()->dbg) || !ft_strcmp(__func__, sh()->dbg))
+		sh_debug_builtin(ac, av, ev);
 	while (++i < ac)
 	{
 		if (i > 1)
@@ -69,7 +69,5 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	}
 	if (nl)
 		ft_putchar('\n');
-	//dprintf(sh()->dbg_fd, "echo end\n");
-	//dprintf(2, "echo end\n");
 	return (0);
 }
