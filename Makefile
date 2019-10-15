@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/10/14 20:59:40 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/10/15 21:35:30 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,8 +76,8 @@ CC = clang
 DEBUG_FLAGS = -g3
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
-		 #-Wall -Werror -Wextra \
-		 # $(DEBUG_FLAGS)
+		 -Wall -Werror -Wextra \
+		  $(DEBUG_FLAGS)
 
 LFLAGS = -ltermcap \
 		 -lncurses \

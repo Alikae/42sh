@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/11 03:19:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/15 21:27:30 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 	while (toke)
 	{
 		if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
-			//printf("								[%i]tok->content = %s\n", i, tok->content);
+			;//printf("								[%i]tok->content = %s\n", i, tok->content);
 		toke = toke->next;
 		i++;
 	}
