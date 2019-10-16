@@ -294,6 +294,50 @@ long int	sh_exec_arith(t_arith *arith)
 	return (1);
 }
 
+int      ft_number(long int n)
+{
+        int     count;
+
+        count = 0;
+        if (n == 0)
+                count++;
+        while (n != 0)
+        {
+                n = n / 10;
+                count++;
+        }
+        return (count);
+}
+
+char            *ft_long_itoa(long int n)
+{
+        char    *strnb;
+        int             i;
+        int             test;
+
+        i = ft_number(n);
+        test = 1;
+        if (n < 0)
+                test = 2;
+        if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
+                return (NULL);
+        ft_bzero(strnb, test + i);
+        if (n < 0)
+                strnb[0] = '-';
+        else
+                i--;
+        while ((i >= 0 && test == 1) || (test == 2 && i > 0))
+        {
+                if (test == 1)
+                        strnb[i] = (n - (n / 10 * 10)) + '0';
+                else
+                        strnb[i] = ((n - (n / 10 * 10)) * -1) + '0';
+                n = n / 10;
+                i--;
+        }
+        return (strnb);
+}
+
 void	sh_arithmetic_expansion(t_exp *exp)
 {
 	t_arith		*arith;
@@ -303,9 +347,8 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
-	printf("%s\n", exp->name);
 	arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 	result = sh_exec_arith(arith);
-	printf("arith = %li\n", result);
-	exit (0);
+	exp->value = ft_long_itoa(result);
+	printf("%s\n",exp->value);
 }
