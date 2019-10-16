@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_line.h                                     :+:      :+:    :+:   */
+/*   sh_debug_echo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/29 02:25:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/14 09:15:35 by tmeyer           ###   ########.fr       */
+/*   Created: 2019/10/14 14:48:41 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/10/14 21:10:03 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH21_COMMAND_LINE_H
-# define SH21_COMMAND_LINE_H
+#include "sh.h"
 
-# include "sh_history.h"
-# include "sh_line.h"
+void	sh_debug_builtin(int ac, char **av, t_env **ev)
+{
+	int	i;
 
-void	sh_prompt(void);
-char	*sh_arguments(t_hist *hist);
-char	*sh_add_newline(char *line);
-char	*sh_delete_last(char *command, int i);
-char	*sh_insert_char(char *command, char buf[3], int i);
-
-#endif
+	i = -1;
+	dprintf(sh()->dbg_fd, "Debug Builtin\nac = %d\n", ac);
+	if (av)
+		while (++i < ac)
+			dprintf(sh()->dbg_fd, "av[%d] = :%s:\n", i, av[i]);
+	sh_debug_env(ev);
+}

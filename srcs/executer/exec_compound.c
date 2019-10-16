@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/11 04:02:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/15 21:07:52 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,10 @@ int		exec_compound_case(t_sh *p, t_token *tok)
 int		exec_compound_for(t_sh *p, t_token *tok)
 {
 	t_token		*ins;
-	char	*tmp;
-	const char	*value;
 	t_token *tmp_tok;
 
 	dprintf(p->dbg_fd, "treating FOR\n");
 	//printf("%s\n", tok->sub->content);
-	//to tmp v
 	tmp_tok = sh_expansion(tok->sub->content, &p->params);
 	if (!tmp_tok)//Does thotho can retrn null?
 	{
@@ -81,9 +78,6 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 		sh_exitpoint();
 	}
 	ins = tok->sub->sub;
-	tmp = 0;
-	//if ((value = sh_getev_value(tok->sub->content))) NOT NEED
-	//	tmp = ft_strdup(value);
 	while (ins && !p->abort_cmd)
 	{
 		if (ins->type == SH_WORD)
@@ -94,10 +88,6 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 		}
 		ins = ins->next;
 	}
-	/*sh_unsetev(tok->sub->content, &(sh()->params));
-	if (tmp)
-		sh_setev(tok->sub->content, tmp);
-	free(tmp);*/
 	return (p->last_cmd_result);
 }
 

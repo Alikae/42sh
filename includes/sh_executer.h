@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 03:52:27 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/15 20:58:30 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_toke
 void	push_pipe_lst(t_pipe_lst **p_origin, int pipe[2]);
 void	close_pipes_parent(t_sh *p);
 int		fork_process(t_sh *p, int foreground);
+void	remove_opened_files(t_sh *p);
 
 #endif
