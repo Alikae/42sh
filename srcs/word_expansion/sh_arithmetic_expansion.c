@@ -170,7 +170,7 @@ int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	return (i_less_op);
 }
 
-long int		sh_find_number(char *str, int begin, int end)
+long int		sh_find_number(char *str, int begin)
 {
 	short	opt;
 	int		result;
@@ -197,7 +197,7 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 	if (end == -1)
 	{
 		arith->next_op = NUMBER;
-		arith->nb = sh_find_number(str, begin, end);
+		arith->nb = sh_find_number(str, begin);
 		arith->next = NULL;
 		arith->sub = NULL;
 	}
@@ -288,7 +288,7 @@ long int	sh_exec_arith(t_arith *arith)
 	}
 	else if (arith->next_op == NUMBER)
 	{
-		printf("%i\n", arith->nb);
+		printf("%li\n", arith->nb);
 		return (arith->nb);
 	}
 	return (1);
