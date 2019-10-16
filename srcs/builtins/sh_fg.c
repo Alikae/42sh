@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/07 08:08:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 05:04:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ int	sh_fg(int ac, char **av, char **env)
 		return (0);
 	}
 	//printf("ARGV1 %s\n", av[1]);
-	arg = (ac > 1) ? ft_atoi(av[1]) - 1 : 1;//atoi protec?
+	arg = (ac > 1) ? ft_atoi(av[1]) : -10;//atoi protec?
 	argcpy = arg;
-	while (arg-- > 1 && job)
+	while (arg-- > 0 && job)
 		job = job->next;
-	if (!job || arg < 0)
+	if (!job || (arg < 0 && arg != -11))
 	{
 		if (argcpy % 10 == 1)
 			argsuffix = "st";

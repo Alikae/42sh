@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/06 03:53:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 06:37:38 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ static t_hist	*init_history(void)
 	t_hist *hist;
 
 	hist = malloc(sizeof(t_hist));
-	hist->path = find_path();
-	hist->size_l = 200;
+	hist->current = NULL;
+	hist->path = find_path_dir();
+	hist->size_l = 200;	//A PEAUFINER -- C'EST VRAIMENT SI ON A RIEN A FAIRE
 	hist = command_history(hist);
 	return (hist);
 }
@@ -65,13 +66,12 @@ static t_hist	*init_history(void)
 int		sh_loop(void)
 {
 	char	*ln_tab;//RENAME
-	t_hist	*hist;
 	t_sh	*p;
 	char	*input;
 	int	complete;
 
 	p = sh();
-	hist = init_history();
+	sh()->hist = init_history();
 	sh_parse_rc();
 	while (!p->exit)
 	{
@@ -81,13 +81,13 @@ int		sh_loop(void)
 		complete = 0;
 		input = 0;
 		p->print_syntax_errors = 1;
-		while (!complete)
+		while (!complete)//Can we ctrl-C?
 		{
 			//swap_signals_to_prompter
 			if (1 || /**/!dbug)
 			{
 				fflush(0);
-				if (!(ln_tab = sh_arguments(hist)))
+				if (!(ln_tab = sh_arguments(sh()->hist)))
 					break ;
 			}
 			else
@@ -140,7 +140,7 @@ int		sh_loop(void)
 			sh_init_cmd(input);
 			if ((p->ast = tokenize_input(input)))//line
 			{
-				print_all_tokens(p, p->ast, 0);
+				//print_all_tokens(p, p->ast, 0);
 				p->abort_cmd = 0;
 				if (!p->unfinished_cmd)
 					exec_script(p, p->ast);
@@ -160,6 +160,5 @@ int		sh_loop(void)
 		free(input);
 		check_jobs_status(p);//doesnt detect pkilled
 	}
-	push_history(hist);
 	return (1);
 }

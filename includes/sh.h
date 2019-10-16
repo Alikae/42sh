@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 04:50:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/10 12:15:32 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "sh_types.h" //where struct are
 # include "libft.h"
 # include "sh_env.h"
+# include "sh_history.h"
 # include <curses.h>
 //# include "sh_line.h"
 //# include "sh_redirections.h"
@@ -94,6 +95,8 @@ typedef struct		s_sh
 	int				pgid_current_pipeline;
 	int				force_setpgrp_setattr;
 	int				process_is_stopped;
+	
+	t_hist			*hist;
 }					t_sh;
 
 t_sh	*sh(void);

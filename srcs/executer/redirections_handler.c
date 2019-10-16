@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 00:20:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/08 05:02:34 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 03:29:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	push_redirect_lst(t_redirect_lst **p_origin, int in, int out)
 	tmp->out = out;
 	tmp->next = *p_origin;
 	*p_origin = tmp;
-	print_redirections(sh(), *p_origin);
+	//print_redirections(sh(), *p_origin);
 }
 
 void	del_n_redirect_lst(t_redirect_lst **p_origin, int n)

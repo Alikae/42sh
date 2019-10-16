@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:24:31 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/06 21:27:01 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/08 18:12:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,5 @@ void			reset_selection(char **commmand, int i, t_hist *hist);
 void			sh_reprompt(int i, char **command);
 char			*sh_delete_last(char *command, int i);
 char			*sh_insert_char(char *command, char *buf, int i);
+char			*sh_buffer(void);
 #endif

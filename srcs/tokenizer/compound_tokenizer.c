@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/03 06:27:44 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 08:14:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,7 +382,10 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 		forward_blanks(t);
 		word_begin = t->i;
 		if (read_n_skip_word(t) ==-1)
+		{
+			free_ast(origin);
 			return (0);
+		}
 		if (t->i != word_begin)
 		{
 			actual->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
@@ -392,7 +395,7 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 	//v ? v Done 2 times
 	if (t->input[t->i] != ';' && t->input[t->i] != '\n')
 	{
-		//freeall
+		free_ast(origin);
 		printf("SYNTAX_ERROR: invalid WORD in FOR at -%.10s\n: expected ';' or '\\n'\n", t->input + t->i);
 		return (0);
 	}
@@ -416,7 +419,7 @@ t_token	*tokenize_for_do_group(t_tokenize_tool *t, t_token *compound)
 		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing DO group in for", compound));
 	}
-	printf("%i\n", next_separator);
+	//printf("%i\n", next_separator);
 	if (next_separator != SH_DONE)
 	{
 		if (!t->input[t->i])
@@ -441,7 +444,7 @@ int		tokenize_for_name(t_tokenize_tool *t, t_token *compound_token)
 	if (t->i == word_begin)
 		return (0);
 	compound_token->sub = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
-	//VERIFY UNICITY OF NAME
+	//VERIFY UNICITY OF NAME/SYNTAXERROR
 	return (1);
 }
 
@@ -452,13 +455,12 @@ int		tokenize_for_in(t_tokenize_tool *t, t_token *compound_token)
 	word_begin = t->i;
 	if (read_n_skip_word(t) == -1)
 		return (0);
-	if (t->i != word_begin && !ft_strncmp(t->input + word_begin, "in", t->i - word_begin))
-	{
-		if (!(compound_token->sub->sub = tokenize_for_wordlist(t)))
-			return (0);
-	}
-	else
-		t->i = word_begin;
+	if (/*t->i != word_begin && */ft_strncmp(t->input + word_begin, "in", t->i - word_begin))
+		return (0);
+	if (!(compound_token->sub->sub = tokenize_for_wordlist(t)))
+		return (0);
+	/*else
+		t->i = word_begin;*/
 	return (1);
 }
 

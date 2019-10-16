@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 00:00:45 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 06:24:00 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/11 08:14:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int			is_compound(t_toktype type)
 
 t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_compound)
 {
-	printf("in %i len %i\n", actual_compound, len);
+	//printf("in %i len %i\n", actual_compound, len);
 	if (actual_compound == SH_WHILE)
 	{
 		if (!ft_strncmp(word, "do", len) && len == 2)

@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 04:41:21 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/19 23:39:27 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/10 12:19:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void			sh_switch_history(t_hist *hist, char **command)
 	hist->index = -1;
 }
 
-char			*find_path(void)
+char			*find_path_dir(void)
 {
 	char			*path;
 

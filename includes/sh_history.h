@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 07:36:42 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/28 23:52:48 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/10 12:38:03 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define HISTORY_H
 
 # include <unistd.h>
-# define BUFF_SIZE 1024
 
 typedef struct 	s_hist
 {
@@ -35,7 +34,7 @@ int				cursor_history(char **command, char *buf, int i, t_hist *hist);
 int				get_next_line(const int fd, char **line, char **rest);
 char			*ft_strnjoin(const char *s1, const char *s2, size_t len);
 char			**tab_realloc(char **tabl, char *line);
-char			*find_path(void);
+char			*find_path_dir(void);
 char			**ft_reverse_tab(char **history);
 char			**tab_insert(char **history, char *line);
 
