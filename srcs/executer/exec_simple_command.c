@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/15 21:08:54 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/10/20 16:54:20 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -750,6 +750,8 @@ int		(*sh_is_builtin2(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_test);
 	else if (!ft_strcmp(cmd, "jobs"))
 		return (&sh_jobs);
+	else if (!ft_strcmp(cmd, "type"))
+		return (&sh_type);
 	else if (!ft_strcmp(cmd, "fg"))
 		return (&sh_fg);
 	else if (!ft_strcmp(cmd, "exit"))

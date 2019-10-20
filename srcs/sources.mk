@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/10/14 21:10:25 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/10/20 15:55:07 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,6 +105,7 @@ C_FILES_builtins = \
 	sh_unset.c \
 	sh_set.c \
 	sh_test.c \
+	sh_type.c \
 	sh_true.c \
 	sh_alias.c \
 	sh_pwd.c \
