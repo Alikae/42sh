@@ -236,7 +236,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 	{
-		//printf("create_pgrp\n");
+		printf("create_pgrp\n");
 		create_process_group_give_terminal_access(p, pid, foreground);
 	}
 	if (!child_pid)

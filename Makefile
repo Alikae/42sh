@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/01 12:07:17 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/11/01 12:09:45 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ DEBUG_FLAGS = -g3
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
 		 -Wall -Werror -Wextra \
-		 # $(DEBUG_FLAGS)
+		 $(DEBUG_FLAGS)
 
 LFLAGS = -ltermcap \
 		 -lncurses \

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/12 06:37:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 15:18:25 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,16 @@ int		sh_loop(void)
 		sh_prompt();
 		ln_tab = NULL;
 		int dbug = sh()->dbg != NULL;
+		//TMP DBG
+			dbug = 1;
+		//
 		complete = 0;
 		input = 0;
 		p->print_syntax_errors = 1;
 		while (!complete)//Can we ctrl-C?
 		{
 			//swap_signals_to_prompter
-			if (1 || /**/!dbug)
+			if (1 ||/* */!dbug)
 			{
 				fflush(0);
 				if (!(ln_tab = sh_arguments(sh()->hist)))
@@ -123,6 +126,7 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("$(ls)");
 				ln_tab = ft_strdup("$()");
 				ln_tab = ft_strdup("echo $(echo yolglej)");
+				ln_tab = ft_strdup("a()\n{ a ; }\na\n");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;

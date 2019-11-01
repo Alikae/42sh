@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/15 21:46:47 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 14:27:00 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,11 +116,12 @@ void	handle_signal(int sig)
 		if (sh()->pid_main_process != getpid())
 		{
 			dprintf(sh()->dbg_fd, "[%i] CTRL-C: exiting non-interactive shell\n", getpid());
+			printf("there\n");
 			exit(1/*exitpoint*/);
 		}
-		dprintf(sh()->dbg_fd, "^C\n");
+		//else
+			printf("-[%i]^C[%i]-\n", getpid(), sh()->pid_main_process);
 		sh()->abort_cmd = 1;
-		sh_prompt();
 	}
 	else if (sig == SIGSEGV)
 		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
@@ -221,7 +222,6 @@ void	sh_init(t_sh *shell)
 	shell->pipein = 0;
 	shell->pipeout = 0;
 	shell->child_ac = 0;
-	shell->child_argv = 0;
 	shell->redirect_lst = 0;
 	shell->assign_lst = 0;
 	shell->tmp_assign_lst = 0;
