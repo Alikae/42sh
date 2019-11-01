@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/20 15:32:04 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 16:15:16 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 17:38:52 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,28 @@ int	sh_type_builtin(char *str)
 	return (0);
 }
 
+int	sh_type_alias(char *str)
+{
+	char **tmp;
+	int len;
+
+	if ((tmp = sh()->aliases))
+		while (*tmp)
+		{
+			len = ft_strclen(str, '=');
+			if (!strncmp(str, *tmp, len))
+			{
+				write(STDOUT_FILENO, *tmp, len);
+				ft_putstr(" is aliased to `");
+				ft_putstr(*tmp + len + 1);
+				ft_putendl("'");
+				return (1);
+			}
+			tmp++;
+		}
+	return (0);
+}
+
 int	sh_type_fun(char *str)
 {
 	t_token *fun = sh()->functions;
@@ -64,7 +86,7 @@ int	sh_type_fun(char *str)
 void	sh_type_type(char *str)
 {
 	if (!sh_type_keyword(str) && !sh_type_builtin(str)
-			&& !sh_type_fun(str))
+			&& !sh_type_fun(str) && !sh_type_alias(str))
 	{
 		ft_putstr_fd("sh: type: ", 2);
 		ft_putstr_fd(str, 2);
