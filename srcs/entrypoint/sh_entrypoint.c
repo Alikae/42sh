@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 12:42:00 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 17:34:27 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 		//		signal (SIGTSTP, SIG_IGN);
 		//		signal (SIGTTIN, SIG_IGN);
 		//		signal (SIGCHLD, SIG_IGN);
-		while (/*!sh()->dbg && */tcgetpgrp(0) != (shell_pgid = getpgrp()))
+		while (0 && /*!!!!!!!!!*//*!sh()->dbg && */tcgetpgrp(0) != (shell_pgid = getpgrp()))
 			kill (shell_pgid, SIGTTIN);
 		init_signals_handling();
 		/*ignore sigs, need handling*/

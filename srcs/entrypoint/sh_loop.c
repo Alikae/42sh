@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 15:18:25 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 17:28:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,11 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 		while (lvcpy--)
 		{
 			if (!lvcpy && lvl > 1)
-				if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-					dprintf(p->dbg_fd, "‾‾‾‾‾‾");
-			if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-				dprintf(p->dbg_fd, "%c", (lvcpy == 0) ? '|' : ' ');
-			if (lvcpy < lvl - 1 || lvl == 1)
-				dprintf(p->dbg_fd, "      ");
+				dprintf(2, "‾‾‾‾‾‾");
+			dprintf(2, "%c", (lvcpy == 0) ? '|' : ' ');
+			dprintf(2, "      ");
 		}
-		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			dprintf(p->dbg_fd, "[%15s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
+		dprintf(2, "[%s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);
@@ -87,7 +83,7 @@ int		sh_loop(void)
 		while (!complete)//Can we ctrl-C?
 		{
 			//swap_signals_to_prompter
-			if (1 ||/* */!dbug)
+			if (1 || /**/!dbug)
 			{
 				fflush(0);
 				if (!(ln_tab = sh_arguments(sh()->hist)))
@@ -127,6 +123,7 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("$()");
 				ln_tab = ft_strdup("echo $(echo yolglej)");
 				ln_tab = ft_strdup("a()\n{ a ; }\na\n");
+				ln_tab = ft_strdup("$'\n");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;
@@ -144,7 +141,7 @@ int		sh_loop(void)
 			sh_init_cmd(input);
 			if ((p->ast = tokenize_input(input)))//line
 			{
-				//print_all_tokens(p, p->ast, 0);
+				print_all_tokens(p, p->ast, 0);
 				p->abort_cmd = 0;
 				if (!p->unfinished_cmd)
 					exec_script(p, p->ast);

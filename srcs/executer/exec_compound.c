@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/01 14:34:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 17:37:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 
 	dprintf(p->dbg_fd, "treating FOR\n");
 	//printf("%s\n", tok->sub->content);
-	tmp_tok = sh_expansion(tok->sub->content, &p->params);
+	tmp_tok = sh_expansion(tok->sub->content, &p->params, 1);
 	if (!tmp_tok)//Does thotho can retrn null?
 	{
 		//

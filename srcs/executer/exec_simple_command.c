@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 16:08:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 17:37:52 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,17 +145,17 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	int			status;
 
 	p->process_is_stopped = 0;
-	printf("[%i] waiting\n", getpid());
+	//printf("[%i] waiting\n", getpid());
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		dprintf(2, "WAIT ERROR\n");
 		return (1/*error wait*/);
 	}
 	//printf("status:%i\n", status);
-	dprintf(2, "WSTOPSIG:%i\n", WSTOPSIG(status));
-	dprintf(2, "WTERMSIG:%i\n", WTERMSIG(status));
-	dprintf(2, "IFSIG:%i\n", WIFSIGNALED(status));
-	dprintf(2, "IFSTP:%i\n", WIFSTOPPED(status));
+	//dprintf(2, "WSTOPSIG:%i\n", WSTOPSIG(status));
+	//dprintf(2, "WTERMSIG:%i\n", WTERMSIG(status));
+	//dprintf(2, "IFSIG:%i\n", WIFSIGNALED(status));
+	//dprintf(2, "IFSTP:%i\n", WIFSTOPPED(status));
 	if (WIFSTOPPED(status))
 	{
 //		printf("a\n");
@@ -209,7 +209,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	{
 		signal(SIGTTOU, SIG_IGN);
 		int ret = tcsetpgrp (0, getpgid(0));
-		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
+//		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
 		ret = tcsetattr(0, TCSADRAIN, &p->orig_termios);
 //		dprintf(2, "[%i]tcsetat ret = %i", getpid(), ret);
 		signal(SIGTTOU, SIG_DFL);
@@ -250,6 +250,7 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 	int ret;
 
 	int child_pid = fork_process(p, 1);
+	printf("exec_path -%s-\n", child_argv[0]);
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 		ret = block_wait(p, child_pid, 0);
 	else
@@ -316,7 +317,7 @@ char	*get_real_path(const char *path, struct stat *st)
 		free(real_path);
 	}
 	ft_free_tabstr(paths);
-	if (ret)
+	if (ret || !path[0])
 	{
 		printf("--%s not found\n", path);
 		return (0); //ret val?
@@ -665,12 +666,12 @@ t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
 	{
 		if (!origin)
 		{
-			origin = sh_expansion(stack_argvs->content, &(p->params));
+			origin = sh_expansion(stack_argvs->content, &(p->params), 1);
 			actual = origin;
 		}
 		else
 		{
-			actual->next = sh_expansion(stack_argvs->content, &(p->params));
+			actual->next = sh_expansion(stack_argvs->content, &(p->params), 1);
 		}
 		while (actual && actual->next)
 			actual = actual->next;
@@ -893,21 +894,22 @@ int		handle_no_cmd_name(t_sh *p, char **child_argv)
 int		exec_function(t_sh *p, t_token *func, char **child_argv)
 {
 	int	ret;
+	char	**tmp;
 
-	//store actual positional params : TMP ACTUAL CMD STUFF (CHILD ARGV ETC)
-	(void)child_argv;
-	//change_position_params_by argv except_$0
+	//store actual positional params : TMP ACTUAL CMD STUFF (CHILD ARGV ETC) ? VERIFY
 	if (p->nb_nested_functions >= SH_NESTED_FUNCTION_LIMIT)
 	{
 		p->abort_cmd = 1;
 		printf("SH_NESTED_FUNCTION_LIMIT REACHED\nAbort command\n");
 		return (1/*ERROR CODE*/);
 	}
+	tmp = sh()->av;
+	sh()->av = child_argv;
 	p->nb_nested_functions++;
 	ret = exec_compound_command(p, func->sub->sub, 0);
 	p->nb_nested_functions--;
+	sh()->av = tmp;
 	return (ret);
-	//restore_positional_params
 }
 
 t_token	*is_defined_function(char *name)
@@ -1021,7 +1023,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//print_redirections(p, p->redirect_lst);
 	save_std_fds(p);
 	generate_redirections(p);
-	printf("[%i]argv[0]%s-\n", getpid(), child_argv[0]);
+	//printf("[%i]argv[0]%s-\n", getpid(), child_argv[0]);
 	if ((tmp = is_defined_function(child_argv[0])))
 		ret = exec_function(p, tmp, child_argv);
 	else if ((f = sh_is_builtin(child_argv[0])))
