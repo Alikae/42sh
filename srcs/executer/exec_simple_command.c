@@ -6,7 +6,8 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 17:37:52 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 19:30:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 19:15:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -752,6 +753,8 @@ int		(*sh_is_builtin2(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_test);
 	else if (!ft_strcmp(cmd, "jobs"))
 		return (&sh_jobs);
+	else if (!ft_strcmp(cmd, "type"))
+		return (&sh_type);
 	else if (!ft_strcmp(cmd, "fg"))
 		return (&sh_fg);
 	else if (!ft_strcmp(cmd, "exit"))
@@ -781,6 +784,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_alias);
 	else if (!ft_strcmp(cmd, "unalias"))
 		return (&sh_unalias);
+	else if (!ft_strcmp(cmd, "source") || !ft_strcmp(cmd, "."))
+		return (&sh_source);
 	else if (!ft_strcmp(cmd, "pwd"))
 		return (&sh_pwd);
 	else if (!ft_strcmp(cmd, "readonly"))
