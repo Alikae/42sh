@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/15 20:58:30 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 12:39:19 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end);
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end);
 int		exec_command_to_pipe(t_sh *p, t_token *token_begin, t_token *token_end, int pipe_in_fd);
 int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end);
-int     exec_path(t_sh *p, char *path);
-int		exec_prgm(t_sh *p);
-int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **));
+int     exec_path(t_sh *p, char *path, char **child_argv);
+int		exec_prgm(t_sh *p, char **child_argv);
+int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **), char **child_argv);
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end);
 int		sh_exec_arg(void);
 int		sh_exec_file(void);
@@ -43,7 +43,7 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end);
 int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end);
 void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections);
-int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign);
+int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign, char ***child_argv);
 void	push_pipe_lst(t_pipe_lst **p_origin, int pipe[2]);
 void	close_pipes_parent(t_sh *p);
 int		fork_process(t_sh *p, int foreground);
