@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/20 15:57:58 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 19:19:04 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SH_BUILTINS_H
 # include "sh_env.h"
 
+int	sh_source(int ac, char **av, t_env **ev);
 int	sh_basename(int ac, char **av, t_env **ev);
 int	sh_env(int ac, char **av, t_env **ev);
 int	sh_pwd(int ac, char **av, t_env **ev);

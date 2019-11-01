@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 12:39:19 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 19:17:30 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ typedef struct s_sh t_sh;
 typedef struct s_env t_env;
 typedef struct s_pipe_lst t_pipe_lst;
 
+int		sh_script(const char *path);
 int		sh_exec_stdin(void);
 int		sh_exec_file(void);
 int		sh_exec_arg(void);
