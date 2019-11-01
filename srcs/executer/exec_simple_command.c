@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/12 09:50:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 12:08:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 void	generate_redirections(t_sh *p)
 {
 	t_redirect_lst	*lst;
-	t_redirect_lst	*origin;
 
 	lst = p->redirect_lst;
 	gen_redirections_recursively(p, lst);

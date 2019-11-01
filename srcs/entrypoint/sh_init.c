@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/12 06:42:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/15 21:46:47 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,10 +186,6 @@ void	sh_init_debug(t_sh *shell)
 		shell->dbg_fd = open("/dev/null", 0);
 		shell->dbg = NULL;
 	}
-	//
-	shell->dbg = "all";
-	shell->dbg_fd = dup(2); //CLOSE AT EXITPOINT
-	//
 }
 
 void	sh_init(t_sh *shell)

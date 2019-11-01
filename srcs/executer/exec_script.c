@@ -87,6 +87,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	//in child
 	//	exec_command(p, token_begin, token_end);
 	//	exit(0); ?
+	return (0);
 }
 
 void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
@@ -198,7 +199,7 @@ void	close_cpy_std_fds(t_sh *p)
 	p->cpy_std_fds[2] = -1;
 }
 
-void	create_process_group_give_terminal_access(t_sh *p, pid_t pid, int foreground, int child_pid)
+void	create_process_group_give_terminal_access(t_sh *p, pid_t pid, int foreground)
 {
 		//	signal(SIGTTOU, SIG_DFL);
 		if (p->pgid_current_pipeline)
@@ -236,7 +237,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	if (create_pgrp)
 	{
 		//printf("create_pgrp\n");
-		create_process_group_give_terminal_access(p, pid, foreground, child_pid);
+		create_process_group_give_terminal_access(p, pid, foreground);
 	}
 	if (!child_pid)
 	{
@@ -260,7 +261,6 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int child_pid;
-	int	fd_dev_null;
 
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
@@ -269,15 +269,10 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 	if (child_pid == 0)
 	{
 		close_cpy_std_fds(p);
-//		if (p->pid_main_process != getpid())
-//			fd_dev_null = open("/dev/null", O_RDWR);//protecc
-//		push_redirect_lst(&p->redirect_lst, 0, fd_dev_null);
 		exec_and_or(p, token_begin, token_end);
-//		close(fd_dev_null);
 		//free stuff or not?
 		printf("[%i] exec background suicide\n", getpid());
 		sh_exitpoint();
-		//
 	}
 	else
 		add_job(child_pid, p->cmd, token_begin->index,
