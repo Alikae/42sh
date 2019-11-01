@@ -6,11 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/20 15:32:04 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/20 17:07:49 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 16:15:16 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "sh_types.h"
 #include "libft.h"
 
 int	(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev);
@@ -45,9 +46,25 @@ int	sh_type_builtin(char *str)
 	return (0);
 }
 
+int	sh_type_fun(char *str)
+{
+	t_token *fun = sh()->functions;
+	while (fun)
+	{
+		if (!ft_strcmp(fun->content, str))
+		{
+			ft_putstr(fun->content);
+			ft_putendl(" is a shell function");
+			return (1);
+		}
+	}
+	return (0);
+}
+
 void	sh_type_type(char *str)
 {
-	if (!sh_type_keyword(str) && !sh_type_builtin(str))
+	if (!sh_type_keyword(str) && !sh_type_builtin(str)
+			&& !sh_type_fun(str))
 	{
 		ft_putstr_fd("sh: type: ", 2);
 		ft_putstr_fd(str, 2);

@@ -253,7 +253,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		p->jobs = 0;
 		close_cpy_std_fds(p);
 	}
-	printf("pgid of [%i] is [%i]\n", getpid(), getpgid(0));
+	//printf("pgid of [%i] is [%i]\n", getpid(), getpgid(0));
 	return (child_pid);
 }
 
