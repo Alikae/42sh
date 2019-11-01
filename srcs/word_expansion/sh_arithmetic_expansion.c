@@ -134,11 +134,11 @@ void	sh_count_priority(char *c, int i, int count, int *less_count)
 			&& (count + 3) < *less_count)
 		*less_count = count + 3;
 	else if (((c[i] == '-' && c[i + 1] != '-')
-		|| (c[i] == '+' && c[i + 1] != '+'))
+				|| (c[i] == '+' && c[i + 1] != '+'))
 			&& (count + 2) < *less_count)
 		*less_count = count + 2;
 	else if ((c[i] == '>' || c[i] == '<' || c[i] == '&'
-		|| c[i] == '|' || c[i] == '!' || c[i] == '=')
+				|| c[i] == '|' || c[i] == '!' || c[i] == '=')
 			&& (count + 1) < *less_count)
 		*less_count = count + 1;
 }
@@ -170,20 +170,90 @@ int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	return (i_less_op);
 }
 
-long int		sh_find_number(char *str, int begin)
+void		sh_check_opt(char *str, int *begin, short *opt, short where)
 {
+	if (str[*begin] == '-')
+	{
+		if (str[*begin + 1] == '-')
+		{
+			*opt = 1;
+			*begin = *begin + 2;
+		}
+		else if (where == 1)
+		{
+			*opt = 2;
+			*begin = *begin + 1;
+		}
+	}
+	else if (str[*begin] == '+')
+	{
+		if (str[*begin + 1] == '+')
+		{
+			*opt = 3;
+			*begin = *begin + 2;
+		}
+	}
+}
+
+int		sh_long_atoi(const char *s1)
+{
+	char	nega;
+	int		nb;
+
+	nb = 0;
+	nega = '+';
+	while ((*s1 == '\t' || *s1 == '\n' || *s1 == '\f'
+				|| *s1 == ' ' || *s1 == '\r' || *s1 == '\v') && *s1)
+			s1++;
+	if (*s1 == '-' || *s1 == '+')
+	{
+		nega = *s1;
+		s1++;
+	}
+	while (*s1 >= '0' && *s1 <= '9' && *s1)
+	{
+		nb = nb * 10 + (*s1 - '0');
+		s1++;
+	}
+	return (nega == '-' ? -nb : nb);
+}
+
+long int	sh_get_int_value(char *str, int *begin)
+{
+	long int result;
 	short	opt;
-	int		result;
+	opt = 0;
+	result = 0;
+	sh_check_opt(str, begin, &opt, 0);
+//	result = sh_long_atoi
+	if (opt == 1)
+		result--;
+	else if (opt == 2)
+		result = -result;
+	else if (opt == 3)
+		result++;
+	return (result);
+}
+
+long int	sh_find_number(char *str, int begin)
+{
+	short		opt;
+	long int	result;
 
 	result = 0;
-	opt = 1;
+	opt = 0;
 	while (str[begin] == '(' || str[begin] == ' ')
 		begin++;
-	if (str[begin] == '-')
-		opt = -1;
+	if (str[begin]== '-')
+	{
+		opt = 1;
+		begin++;
+	}
 	if (str[begin] >= '0' && str[begin] <= '9')
-		return (sh_atoi_index(str, &begin) * opt);
-	return (1);
+		result = sh_atoi_index(str, &begin) * opt;
+	else
+		result = sh_get_int_value(str, &begin);
+	return (result);
 }
 
 t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
@@ -294,48 +364,48 @@ long int	sh_exec_arith(t_arith *arith)
 	return (1);
 }
 
-int      ft_number(long int n)
+int		ft_number(long int n)
 {
-        int     count;
+	int		count;
 
-        count = 0;
-        if (n == 0)
-                count++;
-        while (n != 0)
-        {
-                n = n / 10;
-                count++;
-        }
-        return (count);
+	count = 0;
+	if (n == 0)
+		count++;
+	while (n != 0)
+	{
+		n = n / 10;
+		count++;
+	}
+	return (count);
 }
 
-char            *ft_long_itoa(long int n)
+char	*ft_long_itoa(long int n)
 {
-        char    *strnb;
-        int             i;
-        int             test;
+	char	*strnb;
+	int		i;
+	int		test;
 
-        i = ft_number(n);
-        test = 1;
-        if (n < 0)
-                test = 2;
-        if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
-                return (NULL);
-        ft_bzero(strnb, test + i);
-        if (n < 0)
-                strnb[0] = '-';
-        else
-                i--;
-        while ((i >= 0 && test == 1) || (test == 2 && i > 0))
-        {
-                if (test == 1)
-                        strnb[i] = (n - (n / 10 * 10)) + '0';
-                else
-                        strnb[i] = ((n - (n / 10 * 10)) * -1) + '0';
-                n = n / 10;
-                i--;
-        }
-        return (strnb);
+	i = ft_number(n);
+	test = 1;
+	if (n < 0)
+		test = 2;
+	if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
+		return (NULL);
+	ft_bzero(strnb, test + i);
+	if (n < 0)
+		strnb[0] = '-';
+	else
+		i--;
+	while ((i >= 0 && test == 1) || (test == 2 && i > 0))
+	{
+		if (test == 1)
+			strnb[i] = (n - (n / 10 * 10)) + '0';
+		else
+			strnb[i] = ((n - (n / 10 * 10)) * -1) + '0';
+		n = n / 10;
+		i--;
+	}
+	return (strnb);
 }
 
 void	sh_arithmetic_expansion(t_exp *exp)
