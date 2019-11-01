@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/25 23:08:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 18:04:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int		sh_script(const char *path)
 	char	*buff;
 	char	*input;
 	int		fd;
+	t_token	*ast;
 
 	p = sh();
 	input = NULL;
@@ -49,12 +50,12 @@ int		sh_script(const char *path)
 	close(fd);
 	sh_init_cmd(input);
 	//doesnt throw error omn script "WHILE"
-	if (input && *input && (p->ast = tokenize_input(input)))//line
+	if (input && *input && (ast = tokenize_input(input)))//line
 	{
 		//HANDLE SYNTAX ERROR
-	//	print_all_tokens(p, p->ast, 0);
+	//	print_all_tokens(p, ast, 0);
 		p->abort_cmd = 0;
-		exec_script(p, p->ast, 0);
+		exec_script(p, ast, 0);
 	}
 	return (1);
 }

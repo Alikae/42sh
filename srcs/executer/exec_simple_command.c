@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 17:37:52 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/01 17:51:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,13 +250,13 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 	int ret;
 
 	int child_pid = fork_process(p, 1);
-	printf("exec_path -%s-\n", child_argv[0]);
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 		ret = block_wait(p, child_pid, 0);
 	else
 	{
 		//print_redirections(p, p->redirect_lst);
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
+		printf("execve ERROR\n");
 		exit(1/*EXECVE ERROR*/);
 	}
 	return (ret); //<-- Return What?
