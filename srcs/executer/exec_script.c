@@ -78,6 +78,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
 	exec_command(p, token_begin, token_end);
+	printf("[%i] exec background suicide\n", getpid());
 	sh_exitpoint();
 	//CREATE JOB?
 	//fork
@@ -274,7 +275,7 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 		exec_and_or(p, token_begin, token_end);
 //		close(fd_dev_null);
 		//free stuff or not?
-		//printf("[%i] exec background suicide\n", getpid());
+		printf("[%i] exec background suicide\n", getpid());
 		sh_exitpoint();
 		//
 	}

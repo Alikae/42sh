@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/12 07:20:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 09:50:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 
 	p->process_is_stopped = 0;
 	int dbfg = open("/dev/ttys002", O_RDWR);
-	dprintf(dbfg, "[%i] waiting\n", getpid());
+	printf("[%i] waiting\n", getpid());
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		dprintf(dbfg, "WAIT ERROR\n");
@@ -332,6 +332,7 @@ int		exec_prgm(t_sh *p)
 	char	*real_path;
 
 	ret = 0;
+	//printf("[%i]try path %s\n", p->child_argv[0]);
 	if (!(real_path = get_real_path(p->child_argv[0], &st)))
 		return (127/*?*/);
 	if (!can_exec(&st))
@@ -895,7 +896,7 @@ int		exec_function(t_sh *p, t_token *func)
 {
 	int	ret;
 
-	//store actual positional params
+	//store actual positional params : TMP ACTUAL CMD STUFF (CHILD ARGV ETC)
 	//change_position_params_by argv except_$0
 	if (p->nb_nested_functions >= SH_NESTED_FUNCTION_LIMIT)
 	{
@@ -943,9 +944,10 @@ void	remove_old_function(const char *name)
 	if (func->next && !ft_strcmp(func->next->content, name))
 	{
 		tmp = func->next;
-		func->next = 0;
-		free_ast(func);
-		sh()->functions = tmp;
+		func->next = func->next->next;
+		tmp->next = 0;
+		free_ast(tmp);
+		//sh()->functions = tmp;
 	}
 }
 
@@ -1009,14 +1011,15 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_token	*tmp;
 
 	if ((tmp = is_function_definition(token_begin, token_end)))
-		return (store_func(p, tmp));
+		return (store_func(p, tmp));//del in exitpoint?
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign); //open files
 	if (!p->child_argv[0])
-		return (handle_no_cmd_name(p));
+		return (handle_no_cmd_name(p));//and free stuff
 	handle_assigns(p);
 	//print_redirections(p, p->redirect_lst);
 	save_std_fds(p);
 	generate_redirections(p);
+	printf("[%i]argv[0]%s-\n", getpid(), p->child_argv[0]);
 	if ((tmp = is_defined_function(p->child_argv[0])))
 		ret = exec_function(p, tmp);
 	else if ((f = sh_is_builtin(p->child_argv[0])))

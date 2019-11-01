@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/12 07:05:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 09:58:14 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	sh_exitpoint(void)
 	sh()->dir = NULL;
 	push_history(sh()->hist);
 	sh()->hist = NULL;
-	tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
+	if (sh()->is_interactive && sh()->pid_main_process == getpid())
+		tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
+	printf("[%i]Ciao!\n", getpid());
 	exit(EXIT_SUCCESS);
 }
