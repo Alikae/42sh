@@ -103,6 +103,58 @@ char	*sh_find_alias(t_tokenize_tool *t)
 	str[j] = '\0';
 	return (sh_find_sub_alias(str));
 }
+
+unsigned int	sh_find_max_len(char **stack)
+{
+	int				j;
+	unsigned int	max;
+
+	j = 0;
+	max = 0;
+	while (stack[j])
+	{
+		if (ft_strlen(stack[j]) > max)
+			max = ft_strlen(stack[j]);
+		j++;
+	}
+	return (max);
+}
+
+void	sh_print_ident_size(unsigned int max, unsigned int len, char c)
+{
+	while (len <= max)
+	{
+		ft_putchar(c);
+		len++;
+	}
+}
+void	sh_print_alias_loop_error(char **stack, int loop)
+{
+	unsigned int	max;
+	int				i;
+
+	max = sh_find_max_len(stack);
+	i = 0;
+	while (stack[i + 1])
+	{
+		ft_putstr(stack[i]);
+		if (i == loop)
+		{
+			ft_putstr("<--");
+			sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
+			ft_putstr("|\n");
+		}
+		else
+		{
+			sh_print_ident_size(max, ft_strlen(stack[i++]), ' ');
+			ft_putstr("   |\n");
+		}
+	}
+	ft_putstr(stack[i]);
+	ft_putstr("<--");
+	sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
+	ft_putstr("|\n\n");
+}
 /*
 void	sh_push_alias(char *alias)
 {
