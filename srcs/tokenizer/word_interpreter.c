@@ -1,4 +1,16 @@
-#include "t_token.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   word_interpreter.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/22 00:00:45 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/10/11 08:14:07 by ede-ram          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "sh_tokenizer.h"
 #include "libft.h"
 
 int			is_compound(t_toktype type)
@@ -13,48 +25,49 @@ int			is_compound(t_toktype type)
 
 t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_compound)
 {
+	//printf("in %i len %i\n", actual_compound, len);
 	if (actual_compound == SH_WHILE)
 	{
-		if (!ft_strncmp(word, "do", len))
+		if (!ft_strncmp(word, "do", len) && len == 2)
 			return (SH_DO);
 	}
 	if (actual_compound == SH_DO)
 	{
-		if (!ft_strncmp(word, "done", len))
+		if (!ft_strncmp(word, "done", len) && len == 4)
 			return (SH_DONE);
 	}
 	if (actual_compound == SH_IF || actual_compound == SH_ELIF)
 	{
-		if (!ft_strncmp(word, "then", len))
+		if (!ft_strncmp(word, "then", len) && len == 4)
 			return (SH_THEN);
 	}
 	if (actual_compound == SH_THEN)
 	{
-		if (!ft_strncmp(word, "elif", len))
+		if (!ft_strncmp(word, "elif", len) && len == 4)
 			return (SH_ELIF);
-		if (!ft_strncmp(word, "else", len))
+		if (!ft_strncmp(word, "else", len) && len == 4)
 			return (SH_ELSE);
-		if (!ft_strncmp(word, "fi", len))
+		if (!ft_strncmp(word, "fi", len) && len == 2)
 			return (SH_FI);
 	}
 	if (actual_compound == SH_ELSE)
 	{
-		if (!ft_strncmp(word, "fi", len))
+		if (!ft_strncmp(word, "fi", len) && len == 2)
 			return (SH_FI);
 	}
 	if (actual_compound == SH_BRACES)
 	{
-		if (!ft_strncmp(word, "}", len))
+		if (!ft_strncmp(word, "}", len) && len == 1)
 			return (SH_BRACES);
 	}
 	if (actual_compound == SH_CASE)
 	{
-		if (!ft_strncmp(word, "esac", len))
+		if (!ft_strncmp(word, "esac", len) && len == 4)
 			return (SH_ESAC);
 	}
 	if (actual_compound == SH_SUBSH)
 	{
-		if (!ft_strncmp(word, ")", len))
+		if (!ft_strncmp(word, ")", len) && len == 1)
 			return (SH_SUBSH_END);
 	}
 	return (0);

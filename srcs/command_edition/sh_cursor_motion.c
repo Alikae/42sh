@@ -6,13 +6,14 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/26 23:34:46 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/01 15:35:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "history.h"
+#include "sh_history.h"
 #include "sh_command_edition.h"
 #include "libft.h"
+#include "sh.h"
 
 int			sh_cursor_forward(int i, int pointer, t_pos cursor, t_pos term)
 {
@@ -74,14 +75,14 @@ static int	sh_backspace(char **command, int i, t_pos cursor, t_pos term)
 	j = -1;
 	if (i == -1)
 		return (i);
-	if (g_buselect && ft_strcmp(g_buselect, ""))
+	if (sh()->buselect && ft_strcmp(sh()->buselect, ""))
 	{
-		while (g_buselect[++j] != '\0')
+		while (sh()->buselect[++j] != '\0')
 		{
 			*command = sh_delete_last(*command, i);
 			i = sh_cursor_backward(1, i, cursor, term);
 		}
-		ft_memdel((void**)&g_buselect);
+		ft_memdel((void**)&sh()->buselect);
 	}
 	else
 	{
@@ -103,51 +104,23 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");
 	term.col = tgetnum("co");
-	if (g_buselect && !BACKSPACE)
+	if (sh()->buselect && !(buf[0] == 127 || buf[0] == 8))
 		reset_selection(command, i, hist);
-	if (HOME)
+	if (buf[0] == '\033' && buf[2] == 'H')
 		i = sh_cursor_backward(i + 1, i, cursor, term);
-	else if (END)
+	else if (buf[0] == '\033' && buf[2] == 'F')
 		i = sh_cursor_forward(ft_strlen(*command) - i - 1, i, cursor, term);
-	else if (ARROW_LEFT && i > -1)
+	else if (buf[0] == '\033' && buf[2] == 'D' && i > -1)
 		i = sh_cursor_backward(1, i, cursor, term);
-	else if (ARROW_RIGHT && command[0][i + 1] != 0)
+	else if (buf[0] == '\033' && buf[2] == 'C' && command[0][i + 1] != 0)
 		i = sh_cursor_forward(1, i, cursor, term);
-	else if (BACKSPACE || DELETE)
+	else if ((buf[0] == 127 || buf[0] == 8) || buf[2] == '3')
 	{
-		if (BACKSPACE)
+		if (buf[0] == 127 || buf[0] == 8)
 			i = sh_backspace(command, i, cursor, term);
 		else if (command[0][i] != '\0' && command[0][i + 1] != '\0')
 			i = sh_delete(command, i);
 		sh_switch_history(hist, command);
 	}
-	return (i);
-}
-
-int			sh_echo_input(char **command, char *buf, int i, t_hist *hist)
-{
-	t_cursors	c;
-	t_pos		head;
-
-	sh_cursor_position(&c.cursor);
-	c.term.rows = tgetnum("li");
-	c.term.col = tgetnum("co");
-	if (g_buselect)
-		reset_selection(command, i, hist);
-	*command = sh_insert_char(*command, buf, i);
-	tputs(tgetstr("sc", NULL), 0, sh_outc);
-	tputs(tgetstr("cd", NULL), 0, sh_outc);
-	ft_putstr_fd(&command[0][i + 1], 0);
-	sh_cursor_position(&head);
-	if (command[0][i + ft_strlen(buf) + 1] != 0 && head.rows == c.term.rows
-			&& (int)ft_strlen(buf) == head.col - 1)
-	{
-		tputs(tgetstr("rc", NULL), 0, sh_outc);
-		tputs(tgetstr("up", NULL), 0, sh_outc);
-	}
-	else
-		tputs(tgetstr("rc", NULL), 0, sh_outc);
-	i = sh_cursor_forward(ft_strlen(buf), i, c.cursor, c.term);
-	sh_switch_history(hist, command);
 	return (i);
 }

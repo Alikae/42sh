@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 14:05:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/16 00:51:52 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/01 15:34:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,35 @@
 #include <sgtty.h>
 #include <sys/ioctl.h>
 
+void	sh_reprompt(int i, char **command)
+{
+	static int	c = 0;
+	int			j;
+	int			len;
+	t_pos		cursor;
+	t_pos		term;
+
+	j = i;
+	if ((term.col = tgetnum("col")) == c || c == 0)
+	{
+		c = term.col;
+		return ;
+	}
+	term.rows = tgetnum("li");
+	len = ft_strlen(*command);
+	tputs(tgetstr("cr", NULL), 0, sh_outc);
+	tputs(tgetstr("cd", NULL), 0, sh_outc);
+	sh_prompt();
+	write(0, *command, len);
+	sh_cursor_position(&cursor);
+	i = len - 1;
+	sh_cursor_backward(len - j, i, cursor, term);
+	c = term.col;
+}
+
 void	reset_selection(char **command, int i, t_hist *hist)
 {
-	ft_memdel((void**)&g_buselect);
+	ft_memdel((void**)&sh()->buselect);
 	tputs(tgetstr("sc", NULL), 0, sh_outc);
 	sh_cursor_motion(command, "\033[H", i, hist);
 	ft_putstr_fd(*command, 0);

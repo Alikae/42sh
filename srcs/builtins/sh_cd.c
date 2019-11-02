@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/20 18:08:26 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/08 22:54:16 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,98 @@
 #include "libft.h"
 #include "limits.h"
 
-int			sh_cd(int ac, char **av, t_env **ev)
+static void	cd_change_env(char *new, char *old)
 {
-	char	*pwd;
-	char	*np;
-	char	*olddir;
 	t_env	*tmp;
 
-	(void)ac;
-	(void)ev;
 	tmp = NULL;
-	pwd = sh_getenv("PWD");
-	if (av)
+	if ((tmp = sh_setev("PWD", new)))
+		tmp->exported = 1;
+	if ((tmp = sh_setev("OLDPWD", old)))
+		tmp->exported = 1;
+}
+
+static int	cd_go_to(char *path)
+{
+	char	*olddir;
+
+	if (!(olddir = ft_strnew(PATH_MAX + 1)))
+		return (1);
+	olddir = getcwd(olddir, PATH_MAX);
+	if (chdir(path))
 	{
-		if (!(olddir = ft_strnew(PATH_MAX + 1)))
-			return (1);
-		olddir = getcwd(olddir, PATH_MAX);
-		if (av[1])
-		{
-			if (!(av[1][0] == '-' && !av[1][1] && (np = sh_getenv("OLDPWD"))))
-				np = ft_strdup(av[1]);
-		}
-		else if ((pwd = sh_getenv("HOME")))
-		{
-			np = ft_strdup(pwd);
-		}
-		else
-		{
-			ft_putendl("HOME is not set");
-			return (1);
-		}
-		if (chdir(np))
-		{
-			ft_putstr("cd: can't access: ");
-			ft_putendl(np);
-		}
-		if ((np = ft_strnew(PATH_MAX + 1)))
-			np = getcwd(np, PATH_MAX);
-		if ((tmp = sh_setenv("PWD", np)))
-			tmp->exported = 1;
-		if ((tmp = sh_setenv("OLDPWD", olddir)))
-			tmp->exported = 1;
-		free(olddir);
+		ft_putstr("cd: can't access: ");
+		ft_putendl(path);
 	}
+	cd_change_env(path, olddir);
+	free(olddir);
+	return (0);
+}
+
+static int	cd_go_home(void)
+{
+	char *pwd;
+
+	if ((pwd = sh_getev_value("HOME")))
+	{
+		cd_go_to(pwd);
+		return (0);
+	}
+	else
+		ft_putendl("HOME is not set");
+	return (1);
+}
+
+static int	cd_go_old(void)
+{
+	char *pwd;
+
+	if ((pwd = sh_getev_value("OLDPWD")))
+	{
+		cd_go_to(pwd);
+		return (0);
+	}
+	else
+		ft_putendl("OLDPWD is not set");
+	return (1);
+}
+
+static int	cd_logical(char *path)
+{
+	int i;
+	char *buff;
+
+	if (!(buff = ft_strnew(PATH_MAX + 1)))
+		return (1);
+	if ((i = readlink(path, buff, PATH_MAX)) == -1)
+		i = cd_go_to(path);
+	else if (buff[0] == '/')
+		i = cd_go_to(buff);
+	else if (ft_strrchr(path, '/'))
+	{
+		path = ft_strndup(path, ft_strrchr(path, '/') - path + 1);
+		ft_putendl(path);
+		buff = ft_strjoin_free(path, buff, path);
+		cd_go_to(buff);
+		ft_strdel(&buff);
+	}
+		return (i);
+}
+
+int			sh_cd(int ac, char **av, t_env **ev)
+{
+	(void)ev;
+	if (ac <= 1)
+		return (cd_go_home());
+	else if (ac >= 2 && !ft_strcmp(av[1], "-"))
+		return (cd_go_old());
+	else if (ac >= 3 && !ft_strcmp(av[1], "-L"))
+		return (cd_logical(av[2]));
+	else if (ac >= 3 && !ft_strcmp(av[1], "-P"))
+		return (cd_go_to(av[2]));
+	else if (ac >= 2 && av[1][0] == '/')
+		return (cd_go_to(av[1]));
+	else
+		return (cd_go_to(av[1]));
 	return (0);
 }

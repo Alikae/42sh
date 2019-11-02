@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 08:54:49 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/26 22:09:28 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/08 23:14:11 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -34,8 +34,6 @@ pipe_in_tgt="$UT_log_dir/pipe_in_tgt"
 #Externs Files
 . "$UT_dir/shell_utests.sh"
 . "$UT_dir/utester_tools.sh"
-. "$UT_dir/utester_msh.sh"
-. "$UT_dir/utest_env.sh"
 
 test_custom_cmds () {
 	echo '[ Testing custom commands ]'
@@ -67,85 +65,6 @@ test_custom_cmds () {
 }
 
 
-test_custom_script () {
-	echo "$utests_base" > $cmd_file_0
-	echo "$utests" > $cmd_file_1
-	for i in ${utests_base[@]}
-	do
-		if [ "$stdin" = 'false' ]
-		then
-			echo \'$i\' | $UT_sh_tgt >$UT_out_file_tgt 2>$UT_err_file_tgt
-			echo \'$i\' | $UT_sh_ref >$UT_out_file_ref 2>$UT_err_file_ref
-			diff "$UT_err_file_tgt" "$UT_err_file_ref" > $UT_err_file_diff
-			ret2=$(cat $UT_err_file_tgt)
-			ret1=$(cat $UT_out_file_tgt)
-			if [ "$ret1" != '' ] || [ "$ret2" != '' ]
-			then
-				stdin='true'
-			fi
-		fi
-
-		if [ "$arg" = 'false' ]
-		then
-			$UT_sh_tgt -c \'$i\' >$UT_out_file_tgt 2>$UT_err_file_tgt
-			$UT_sh_ref -c \'$i\' >$UT_out_file_ref 2>$UT_err_file_ref
-			ret2=$(cat $UT_err_file_tgt)
-			ret1=$(cat $UT_out_file_tgt)
-			if [ "$ret1" != '' ] || [ "$ret2" != '' ]
-			then
-				arg='true'
-			fi
-		fi
-
-		echo "$i" > $test_file
-		if [ "$script_file" = 'false' ]
-		then
-			$UT_sh_tgt $test_file >$UT_out_file_tgt 2>$UT_err_file_tgt
-			$UT_sh_ref $test_file >$UT_out_file_ref 2>$UT_err_file_ref
-			ret2=$(cat $UT_err_file_tgt)
-			ret1=$(cat $UT_out_file_tgt)
-			if [ "$ret1" != '' ] || [ "$ret2" != '' ]
-			then
-				script_file='true'
-			fi
-		fi
-
-		if [ "$stdin" = 'true' ] && [ "$arg" = 'true' ] && [ "$script_file" = 'true' ]
-		then
-			break ;
-		fi
-	done
-	if [ "$stdin" = 'false' ]
-	then
-		echo "\033[0;36;40m[ Testing: Stdin ] \033[0;31;40m[ KO ]\033[0;0m"
-		echo "\033[0;36;40m[ Testing: Stdin ] \033[0;31;40m[ KO ]\033[0;0m" >> $UT_res_file
-	fi
-	if [ "$arg" = 'false' ]
-	then
-		echo "\033[0;36;40m[ Testing: Arg ] \033[0;31;40m[ KO ]\033[0;0m"
-		echo "\033[0;36;40m[ Testing: Arg ] \033[0;31;40m[ KO ]\033[0;0m" >> $UT_res_file
-	fi
-	if [ "$script_file" = 'false' ]
-	then
-		echo "\033[0;36;40m[ Testing: File ] \033[0;31;40m[ KO ]\033[0;0m"
-		echo "\033[0;36;40m[ Testing: File ] \033[0;31;40m[ KO ]\033[0;0m" >> $UT_res_file
-	fi
-	sh_utests_tests "$cmd_file_1"
-	PS3='Choose your cmd file: '
-	tests_fd_lst="$(ls $UT_dir/tests/ | grep .utest) exit"
-	select i in $tests_fd_lst
-	do
-		echo "\033[0;36;40m[ $i ]\033[0;0m"
-		if [ "$i" = 'exit' ] ; then
-			exit ;
-		fi
-		sh_utests_tests "$UT_dir/tests/$i"
-		display_result
-		break ;
-	done
-	rm $test_file $cmd_file_1 $cmd_file_0 2>> "$UT_log_file"
-
-}
 
 
 if [ ! -d "$UT_log_dir" ]; then

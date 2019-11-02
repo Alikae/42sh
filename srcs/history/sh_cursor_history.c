@@ -6,14 +6,14 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 07:30:23 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/18 03:55:48 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/21 23:31:52 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "sh_command_edition.h"
-#include "history.h"
+#include "sh_history.h"
 
 static int	history_up(char **command, t_hist *hist, char *current)
 {
@@ -22,10 +22,9 @@ static int	history_up(char **command, t_hist *hist, char *current)
 
 	index = hist->index;
 	prev = hist->prev;
-	while (prev[++index] && !(!ft_strncmp(current, prev[index],
+	while (prev[++index] && !(!ft_strncmp_n(current, prev[index],
 				ft_strlen(current)) && ft_strcmp(prev[index], current)
-				&& ft_strcmp(prev[index], *command)
-				&& ft_strlen(current) < ft_strlen(prev[index])))
+				&& ft_strcmp(prev[index], *command)))
 		;
 	prev[index] ? ft_memdel((void**)command) : 0;
 	prev[index] ? *command = ft_strdup(prev[index]) : 0;
@@ -48,15 +47,13 @@ static int	history_down(char **command, t_hist *hist, char *current)
 		hist->index = index;
 		return (ft_strlen(current) - 1);
 	}
-	while (--index >= 0 && !(!ft_strncmp(current, prev[index],
-				ft_strlen(current) && ft_strcmp(prev[index], current))
-				&& ft_strcmp(prev[index], *command)
-				&& ft_strlen(current) < ft_strlen(prev[index])))
+	while (--index >= 0 && !(!ft_strncmp_n(current, prev[index],
+				ft_strlen(current)) && ft_strcmp(prev[index], current)
+				&& ft_strcmp(prev[index], *command)))
 		;
 	ft_memdel((void**)command);
 	index >= 0 ? *command = ft_strdup(prev[index]) : 0;
-	if (index > -1)
-		hist->index = index;
+	hist->index = index;
 	return (*command ? ft_strlen(*command) - 1 : ft_strlen(current) - 1);
 }
 
@@ -65,9 +62,9 @@ int			cursor_history(char **command, char *buf, int i, t_hist *hist)
 	int		j;
 
 	j = i;
-	if (ARROW_UP)
+	if (buf[2] == 'A')
 		i = history_up(command, hist, hist->current);
-	else if (ARROW_DOWN && hist->index >= 0)
+	else if (buf[2] == 'B' && hist->index >= 0)
 		i = history_down(command, hist, hist->current);
 	if (!*command)
 		*command = ft_strdup(hist->current);

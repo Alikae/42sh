@@ -6,11 +6,11 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 02:38:55 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/22 15:38:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "t_token.h"
+#include "sh_tokenizer.h"
 #include "libft.h"
 #include "sh.h"
 #include <stdio.h>
@@ -32,7 +32,14 @@ int			read_n_skip_word(t_tokenize_tool *t)
 	int	escaped;
 	int	n;
 	int	tmp;
+	int	max_expansions;
+	//rework from scratch / ask thotho
 
+	//
+	//$()
+	//${}
+	//
+	max_expansions = 0;
 	if (t->input[t->i] == '(' || t->input[t->i] == ')')
 	{
 		t->i++;
@@ -51,7 +58,8 @@ int			read_n_skip_word(t_tokenize_tool *t)
 		tmp = t->i;
 		if (!escaped && (type = read_skip_opening_char(t)))
 		{
-			skip_ending_char(t, type);//...
+			if (skip_ending_char(t, type, max_expansions) == SH_SYNTAX_ERROR)
+				return (-1);
 			n += t->i - tmp;
 		}
 		else
@@ -83,7 +91,7 @@ t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype ty
 		return (read_here_doc(t, p_actual, type)); //can also be detected in treat_word
 	forward_blanks(t);
 	word_begin = t->i;
-	if (!read_n_skip_word(t))
+	if (read_n_skip_word(t) < 1)
 	{
 		//printf("%s\n", t->input + t->i);
 		if (!t->input[t->i])
@@ -142,7 +150,7 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	t_toktype	type;
 
 	forward_blanks_newline(t);
-	if (t->input[t->i] == '{')
+	if (t->input[t->i] == '{')//Verify that it end
 	{
 		type = SH_BRACES;
 		t->i++;
@@ -150,26 +158,31 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 	else
 	{
 		word_begin = t->i;
-		read_n_skip_word(t);
+		if (read_n_skip_word(t) == -1)
+			return (SH_SYNTAX_ERROR);
 		if (!(type = word_is_reserved(t->input + word_begin, t->i - word_begin)) || !is_compound(type))
 		{
 			if (!t->input[t->i])
 				sh()->unfinished_cmd = 1;
 			else
+			{
 				printf("SYNTAX ERROR: Function block need to be a compound at %.10s\n", t->input + word_begin);
+				sh()->invalid_cmd = 1;
+			}
 			return (SH_SYNTAX_ERROR);
 		}
 	}
 	word_begin = t->i;
 	t->i = name_begin;
-	read_n_skip_word(t);
+	if (read_n_skip_word(t) == -1)
+		return (SH_SYNTAX_ERROR);
 	(*p_actual)->next = create_token_n(SH_FUNC, name_begin, t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
-	(*p_actual)->sub = create_token(SH_GROUP, 0, 0);
+	(*p_actual)->sub = create_token(SH_GROUP, 0, 0);//Is it usefull?
 	t->i = word_begin;
 	if (!((*p_actual)->sub->sub = tokenize_compound(t, type, word_begin)))
 		return (SH_SYNTAX_ERROR);
-	//tokenize optional IO to exec when executing the func (yo() {echo yo } 1>/dev/null;) in (*p_actual)->sub
+	//tokenize optional IO/assigns to exec when executing the func (yo() {echo yo } 1>/dev/null;) in (*p_actual)->sub
 	//
 	//token_func(name)
 	//|
@@ -181,7 +194,8 @@ t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual, int name_beg
 
 int			word_out_of_context(t_toktype type)
 {
-	if (type == SH_DONE || type == SH_IN
+	if (type == SH_DO
+			|| type == SH_DONE || type == SH_IN
 			|| type == SH_THEN || type == SH_ELIF
 			|| type == SH_ELSE || type == SH_FI
 			|| type == SH_DO || type == SH_DONE
@@ -190,28 +204,52 @@ int			word_out_of_context(t_toktype type)
 	return (0);
 }
 
+int			bang_unfollowed_by_word(t_tokenize_tool *t)
+{
+	int i;
+	int	tmp;
+
+	i = t->i;
+	forward_blanks(t);
+	if ((tmp =read_n_skip_word(t)))
+	{
+		if (tmp == -1)
+			return (-1);
+		t->i = i;
+		t->word_nb = 1;
+		return (0);
+	}
+	return (1);
+}
+
 t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {
+	//If word contain = or >< , !word_nb++ ?
 	int			word_begin;
 	t_toktype	type;
 	int			len;
+	int			tmp;
 
 	if ((len = is_io_nb(t)))
 		return (treat_redirection(t, p_actual, len));
 	word_begin = t->i;
-	if (read_n_skip_word(t))
+	if ((tmp = read_n_skip_word(t)))
 	{
+		if (tmp == -1)
+			return (SH_SYNTAX_ERROR);
 		if (t->word_nb == 1 && (len = next_is_parenthesis(t)))
 		{
 			t->i += len;
 			return (tokenize_function(t, p_actual, word_begin));
 		}
-		if ((type = word_is_actual_terminator(t->input + word_begin, t->i - word_begin, actual_compound)) && t->word_nb == 1)
+		if ((type = word_is_actual_terminator(t->input + word_begin, t->i - word_begin, actual_compound)) && (t->word_nb == 1 || type == SH_SUBSH_END))
 			return (type);
 		if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin, t->i - word_begin)))
 		{
-			if (word_out_of_context(type))
+			if (word_out_of_context(type) || (type == SH_BANG && (tmp = bang_unfollowed_by_word(t))))//bang unfollowed does check operator n everythng?
 			{
+				if (tmp == -1)
+					return (SH_SYNTAX_ERROR);
 				printf("Unexpected token at -%s\n", t->input + word_begin);
 				sh()->invalid_cmd = 1;
 				return (SH_SYNTAX_ERROR);
@@ -221,6 +259,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 		}
 		else
 		{
+			//handle aliases
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 			//if (t->word_nb == 1)
 			//	while (is_unquoted_valid_alias_name(token->content))

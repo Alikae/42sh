@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 07:51:30 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 00:59:05 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/08 22:53:19 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	sh_prompt(void)
 	char *prompt;
 	char *tmp;
 
-	if (!(tmp = sh_getenv("PS1")))
+	if (!(tmp = sh_getev_value("PS1")))
 	{
 		if (!(tmp = ft_strnew(PATH_MAX + 1)))
 			return ;

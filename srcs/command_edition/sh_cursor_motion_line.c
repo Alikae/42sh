@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 12:41:45 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/16 00:55:29 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/04 01:05:13 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,17 @@ int			sh_cursor_motion_line(char **command, char *buf,
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");
 	term.col = tgetnum("co");
-	if (g_buselect)
+	if (sh()->buselect)
 		reset_selection(command, i, hist);
 	if ((len = ft_strlen(*command)) < term.col - PROMPT_LENGTH)
 		return (i);
-	if (LINE_DOWN && i == -1
+	if (buf[5] == 'B' && i == -1
 			&& (int)ft_strlen(*command) > term.col - cursor.col)
 		i = sh_cursor_lower(*command, cursor, term, i);
-	else if (LINE_DOWN
+	else if (buf[5] == 'B'
 			&& (int)ft_strlen(&command[0][i]) > term.col - cursor.col)
 		i = sh_cursor_lower(*command, cursor, term, i);
-	else if (LINE_UP && i + 1 + PROMPT_LENGTH >= term.col)
+	else if (buf[5] == 'A' && i + 1 + PROMPT_LENGTH >= term.col)
 		i = sh_cursor_upper(cursor, term, i);
 	return (i);
 }

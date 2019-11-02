@@ -6,44 +6,31 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 23:53:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 19:48:31 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "libft.h"
 #include "sh_exitpoint.h"
 #include "sh_entrypoint.h"
 #include "sh_builtins.h"
 #include "sh_executer.h"
 #include <fcntl.h>
 #include <stdio.h>
-#include "t_token.h"
+#include "sh_tokenizer.h"
+#include "sh_redirections.h"
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>//
 #include <signal.h>//
 #include "sh_env.h"
-#include "error.h"
+#include "sh_error.h"
+#include "sh_word_expansion.h"
+#include "sh_tools.h"
+#include "sh_tokens.h"
+#include "sh_job_control.h"
 
 //FORBIDDEN FUNCS
-
-typedef struct  s_redirection_lst
-{
-	int                         in;
-	int                         out;
-	struct s_redirection_lst    *next;
-}               t_redirection_lst;
-
-typedef struct  s_general_env
-{
-	char                **argv;
-	t_env               *env;
-	//local env changes?
-	t_redirection_lst   *redirections;
-}               t_general_env;
-
 int		tablen(char **tab)
 {
 	int	l;
@@ -56,64 +43,34 @@ int		tablen(char **tab)
 	return (l);
 }
 
-void	print_redirections(t_sh *p, t_redirect_lst *origin)
+void	restore_std_fds(t_sh *p)
 {
-	while (origin)
+	int	i;
+
+	i = -1;
+	while (++i < 3)
 	{
-		dprintf(p->debug_fd, "fd %.3i --- to fd %.3i\n", origin->in, origin->out);
-		origin = origin->next;
+		if (p->cpy_std_fds[i] < 0)
+			continue;
+		int ret = dup2(p->cpy_std_fds[i], i);
+		//(void)ret;
+		ret = close(p->cpy_std_fds[i]);
+		p->cpy_std_fds[i] = -1;
 	}
 }
 
-void	swap_to_signals_exec(t_sh *p, sigset_t *sigset)
+void		print_redirections(t_sh *p, t_redirect_lst *origin)
 {
-	(void)p;
-	sigfillset(sigset);
-	sigprocmask(SIG_BLOCK, sigset, 0);
-}
-
-int     block_wait(t_sh *p, int child_pid)
-{
-	int			status;
-	sigset_t	sigset;
-
-	swap_to_signals_exec(p, &sigset);
-	if (waitpid(child_pid, &status, WUNTRACED) < 0)
+	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 	{
-		dprintf(p->debug_fd, "WAIT ERROR\n");
-		return (0);
-	}
-	dprintf(p->debug_fd, "waited\n");
-	if (WIFSTOPPED(status))
-	{
-	dprintf(p->debug_fd, "waited2\n");
-		if (WSTOPSIG(status) == SIGTSTP)
+		dprintf(p->dbg_fd, "[%i]REDIRECTIONS(%p)[fd%i]:\n", getpid(), origin, p->dbg_fd);
+		dprintf(p->dbg_fd, "DEBUGOK\n");
+		while (origin)
 		{
-			printf("\nChild_process [%i] suspended\n", child_pid);
-			//create_job
-			//{
-			//	extract cmd
-			//	create_job(cmd, pid)
-			//}
+			dprintf(p->dbg_fd, "fd %.3i --- to fd %.3i\n", origin->in, origin->out);
+			origin = origin->next;
 		}
 	}
-	else if (WIFSIGNALED(status))
-	{
-		handle_signal(WTERMSIG(status));
-		/*
-	dprintf(p->debug_fd, "waited3\n");
-		if (WTERMSIG(status) == SIGSEGV)
-		{
-			printf("\n[%i] aborted: Segmentation Fault\n", child_pid);
-		}
-		*/
-	}
-	sigprocmask(SIG_UNBLOCK, &sigset, 0);
-	////wait(&wait_status);
-	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
-	//	;
-	dprintf(p->debug_fd, "		o Wait finish\n");
-	return (WEXITSTATUS(status));
 }
 
 int		out_already_in_lst_n(int out, t_redirect_lst *origin, t_redirect_lst *end)
@@ -122,81 +79,184 @@ int		out_already_in_lst_n(int out, t_redirect_lst *origin, t_redirect_lst *end)
 	{
 		if (origin->out == out)
 			return (origin->in);
-		origin = (origin->next == end) ? 0 : origin->next;
+		origin = origin->next;
 	}
 	return (-1);
 }
 
-void	generate_redirections(t_sh *p)
+void	save_std_fds(t_sh *p)
 {
-	//REVERSE SENS
-	//PROTECC DUP2
-	//CLOSE EVERYWHW+ERE
+	int	i;
+
+	i = -1;
+	while (++i < 3)
+		if (p->cpy_std_fds < 0)
+			p->cpy_std_fds[i] = dup(i);
+	//	if (p->cpy_std_fds[2] > -1)
+	//	{
+	//		p->dbg_fd = p->cpy_std_fds[2];
+	//		printf("DEBUG FD IS NOW %i\n", p->dbg_fd);
+	//		dprintf(p->dbg_fd, "[TEST DBUGFD]%i\n", i);
+	//	}
+}
+
+void	close_all_redirections(t_sh *p)
+{
 	t_redirect_lst	*lst;
 	t_redirect_lst	*origin;
-	int				out;
 
 	origin = p->redirect_lst;
 	lst = origin;
 	while (lst)
 	{
-		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
-		//close(lst->out) <-- ! see man dup2
-		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
-		{
-			if ((lst->out = dup(out)) < 0)
-				dprintf(p->debug_fd, "DUPERROR %i, errno %i\n", lst->out, errno);
-			else
-				dprintf(p->debug_fd, "DUPPED %i-> %i\n", out, lst->out);
-		}
-		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
-		if (dup2(lst->out, lst->in) < 0)
-			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
-		else
-			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, lst->out);
-		int ret;
-		ret = close(lst->out);
-		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
+		close(lst->in);
+		close(lst->out);
 		lst = lst->next;
 	}
 }
 
-void	close_pipes_parent(t_sh *p)
+void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 {
-	if (p->pipeout)
-	{
-		close(p->pipeout); //<PROTECC
-		dprintf(p->debug_fd, "[%i] CLOSE PIPEOUT %i\n", getpid(), p->pipeout);
-	}
-	else
-		dprintf(p->debug_fd, "[%i] NO PIPEOUT\n", getpid());
-	if (p->pipein)
-	{
-		close(p->pipein); //<PROTECC
-		dprintf(p->debug_fd, "[%i] CLOSE PIPEIN %i\n", getpid(), p->pipein);
-	}
-	else
-		dprintf(p->debug_fd, "[%i] NO PIPEIN\n", getpid());
+	if (!lst)
+		return;
+	gen_redirections_recursively(p, lst->next);
+	//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+	//	printf("redirecting %i->%i\n", lst->in, lst->out);
+	if (dup2(lst->out, lst->in) < 0)
+		dprintf(p->dbg_fd, "[%i]DUP2ERROR %i->%i\n", getpid(), lst->in, lst->out);
+	close(lst->out);
 }
 
-int     exec_path(t_sh *p, char *path)
+void	generate_redirections(t_sh *p)
+{
+	t_redirect_lst	*lst;
+
+	lst = p->redirect_lst;
+	gen_redirections_recursively(p, lst);
+	delete_close_all_pipe_lst(p->pipe_lst);
+	p->pipe_lst = 0;
+}
+
+void lstp(){}
+
+int     block_wait(t_sh *p, int child_pid, int from_fg)
+{
+	//IF CONTINUED_JOB: ADD JOB DONT TRIGGER AND IF !ADD JOB DEL CONTINUED JOB
+	int			status;
+
+	p->process_is_stopped = 0;
+	//printf("[%i] waiting\n", getpid());
+	if (waitpid(child_pid, &status, WUNTRACED) < 0)
+	{
+		dprintf(2, "WAIT ERROR\n");
+		return (1/*error wait*/);
+	}
+	//printf("status:%i\n", status);
+	//dprintf(2, "WSTOPSIG:%i\n", WSTOPSIG(status));
+	//dprintf(2, "WTERMSIG:%i\n", WTERMSIG(status));
+	//dprintf(2, "IFSIG:%i\n", WIFSIGNALED(status));
+	//dprintf(2, "IFSTP:%i\n", WIFSTOPPED(status));
+	if (WIFSTOPPED(status))
+	{
+//		printf("a\n");
+		if (WSTOPSIG(status) == SIGTSTP)
+		{
+			p->process_is_stopped = 1;
+			kill(-1 * child_pid, SIGTSTP);
+			printf("\nChild_process [%i] suspended\n", child_pid);
+			//???index_pipeline_begin?
+			if (!from_fg)
+				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+		}
+		if (WSTOPSIG(status) == SIGTTIN)
+		{
+			p->process_is_stopped = 1;
+			printf("\nChild_process [%i] SIGTTIN\n", child_pid);
+			//kill SIGTSTP?
+			if (!from_fg)
+				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+		}
+		if (WSTOPSIG(status) == SIGKILL)
+				printf("\nChild_process [%i] KILLED\n", child_pid);
+		if (WSTOPSIG(status) == SIGTTOU)
+		{
+			printf("\nChild_process [%i] SIGTTOU\n", child_pid);
+			p->process_is_stopped = 1;
+			//kill SIGTSTP?
+			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+		}
+	}
+	else if (WIFSIGNALED(status))
+	{
+//	printf("b\n");
+//	printf("%i-%i\n", WTERMSIG(status), SIGINT);
+		if (/*WSTOPSIG(status) == SIGINT || */WTERMSIG(status) == SIGINT)
+		{
+			printf("\nChild_process [%i] Interrupted\n", child_pid);
+			p->abort_cmd = 1;
+		}
+//		handle_signal(WTERMSIG(status));
+		if (WTERMSIG(status) == SIGSEGV)
+			printf("\n[%i] aborted: Segmentation Fault\n", child_pid);
+	}
+	//ctrl-Z only	tcgetattr (0, &j->tmodes);
+	//	tcsetattr(0, TCSADRAIN, &shell_tmodes);
+	//	printf("%i\n", p->dbg_fd);
+	////wait(&wait_status);
+	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
+	//	;
+	if (p->is_interactive && p->pid_main_process == getpid())
+	{
+		signal(SIGTTOU, SIG_IGN);
+		int ret = tcsetpgrp (0, getpgid(0));
+//		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
+		ret = tcsetattr(0, TCSADRAIN, &p->orig_termios);
+//		dprintf(2, "[%i]tcsetat ret = %i", getpid(), ret);
+		signal(SIGTTOU, SIG_DFL);
+//		sigprocmask(SIG_UNBLOCK, &sigset, 0);
+	//	init_signals_handling();
+	}
+	return (WEXITSTATUS(status));
+	//if from_fg && finished process rm job
+}
+
+char	**transform_env_for_child(t_env *env)
+{
+	char	**tab;
+	int		len;
+	t_env	*tmp;
+
+	len = 0;
+	tmp = env;
+	while (tmp)
+	{
+		len++;
+		tmp = tmp->next;
+	}
+	if (!(tab = (char**)malloc((len + 1) * sizeof(char*))))
+		exit(1/*MALLOC_ERROR*/);
+	len = 0;
+	while (env)
+	{
+		tab[len++] = ft_join_with_char(env->key, env->value, '=');//protecc?
+		env = env->next;
+	}
+	tab[len] = 0;
+	return (tab);
+}
+
+int     exec_path(t_sh *p, char *path, char **child_argv)
 {
 	int ret;
 
-	//fork stuff
-	int child_pid = fork();
-	if (/*(p->lldbug) ? !child_pid : */child_pid)
-	{
-		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
-		close_pipes_parent(p);
-		ret = block_wait(p, child_pid);
-	}
+	int child_pid = fork_process(p, 1);
+	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
+		ret = block_wait(p, child_pid, 0);
 	else
 	{
-		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
-		generate_redirections(p);
-		//printf("lst->out = %d, in = %d\n", p->redirect_lst->out, p->redirect_lst->in);
-		execve(path, p->child_argv, 0/*prgm_env->env is a struct*/);
+		//print_redirections(p, p->redirect_lst);
+		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
+		printf("execve ERROR\n");
 		exit(1/*EXECVE ERROR*/);
 	}
 	return (ret); //<-- Return What?
@@ -204,9 +264,9 @@ int     exec_path(t_sh *p, char *path)
 
 int		can_exec(struct stat *st)
 {
-	if (!S_ISREG(st->st_mode))
-		return (0);
-	else if (st->st_uid == getuid() && st->st_mode & S_IXUSR)
+	//if (!S_ISREG(st->st_mode)) //SYMLINK
+	//	return (0);
+	if (st->st_uid == getuid() && st->st_mode & S_IXUSR)
 		return (1);
 	else if (st->st_gid == getgid() && st->st_mode & S_IXGRP)
 		return (1);
@@ -215,70 +275,72 @@ int		can_exec(struct stat *st)
 	return (0);
 }
 
-char	*get_next_path(char *path, char **all_paths, int i)
+char	*get_next_path(const char *path, char **all_paths, int i)
 {
 	char	*cwd;
 	char	*next_path;
 
-	if (i > tablen(all_paths))
-		return (0);
-	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])
-	{
-		cwd = getcwd(0, 0);
-		next_path = ft_strjoin_free(cwd, "/", cwd);
-		return (ft_strjoin_free(next_path, path, next_path));
-	}
-	else if (path[0] == '/')
+	if (path[0] == '/')
 	{
 		if (i)
 			return (0);
 		return (ft_strdup(path));
+	}
+	if (i > tablen(all_paths))
+		return (0);
+	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])//!*all_paths --> ':path1:path2' will fail
+	{
+		cwd = getcwd(0, 0);
+		next_path = ft_strjoin_free(cwd, "/", cwd);
+		return (ft_strjoin_free(next_path, path, next_path));
 	}
 	next_path = ft_strjoin(all_paths[i], "/");
 	next_path = ft_strjoin_free(next_path, path, next_path);
 	return (next_path);
 }
 
-int		exec_prgm(t_sh *p, t_token *token_begin, t_token *token_end)
+char	*get_real_path(const char *path, struct stat *st)
 {
-	char *path;
-	int ret;
-	struct stat st;
 	char	*real_path;
 	int		nb_paths;
 	char	**paths;
+	int		ret;
 
-	(void)token_end;
-	path = (token_begin) ? token_begin->content : 0;
-	dprintf(p->debug_fd, "[%i] try path--%s\n", getpid(), path);
-	if (!path)
-		return (0);
-	//dprintf(p->debug_fd, "with_redirections:\n");
-	//print_redirections(p, p->redirect_lst);
-	ret = 0;
 	nb_paths = 0;
-	if (!(paths = ft_strsplit(sh_getenv("PATH"), ':')))
+	paths = 0;
+	if (path[0] != '/' && !(paths = ft_strsplit(sh_getev_value("PATH"), ':')))
 		printf("$PATH not found\n");
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
-		dprintf(p->debug_fd, "try path %s\n", real_path);
-		if (!(ret = lstat(real_path, &st)))
+		if (!(ret = lstat(real_path, st)))
 			break ;
 		free(real_path);
-		//dprintf(p->debug_fd, "path error %i\n", errno);
 	}
 	ft_free_tabstr(paths);
-	if (ret)
+	if (ret || !path[0])
 	{
 		printf("--%s not found\n", path);
-		return (127);
+		return (0); //ret val?
 	}
+	return (real_path);
+}
+
+int		exec_prgm(t_sh *p, char **child_argv)
+{
+	int ret;
+	struct stat st;
+	char	*real_path;
+
+	ret = 0;
+	//printf("[%i]try path %s\n", p->child_argv[0]);
+	if (!(real_path = get_real_path(child_argv[0], &st)))
+		return (127/*?*/);
 	if (!can_exec(&st))
 	{
-		printf("cant exec %s\n", path);
-		return (127);
+		printf("cant exec '%s'\n", child_argv[0]);
+		return (127); //ret val?
 	}
-	ret = exec_path(p, real_path);
+	ret = exec_path(p, real_path, child_argv);
 	free(real_path);
 	return (ret);
 }
@@ -306,6 +368,7 @@ void	remove_opened_files(t_sh *p)
 		free(p->opened_files->name);
 		tmp = p->opened_files;
 		p->opened_files = p->opened_files->next;
+		close(tmp->fd);
 		free(tmp);
 	}
 }
@@ -325,7 +388,7 @@ int		file_is_already_open(t_sh *p, char *name)
 }
 
 int	open_with_redirection_flags(char *real_path, t_toktype type)
-{
+{//VERIFY
 	if (type == SH_GREAT)
 		return (open(real_path, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR));
 	else if (type == SH_LESS)
@@ -347,33 +410,27 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	if (path[0] == '/')
 		real_path = path;
 	else
-	{
+	{//				UNUSEFULL open understand local path
 		real_path = getcwd(0, 0);
 		real_path = ft_strjoin(real_path, "/");//<-- FREE
 		real_path = ft_strjoin(real_path, path);//<--SAME
 		was_malloc = 1;
 	}
-	if ((fd = file_is_already_open(p, real_path)) > -1)
-	{
-		dprintf(p->debug_fd, "%s already opened : fd %i\n", real_path, fd);
-		return (fd);
-	}
 	//	verify_rights of real_path
 	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
-		printf("OPEN ERROR\n");
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			printf("OPEN ERROR\n");
 		return (-1);
 	}
 	push_to_opened_files(p, real_path, fd);
-	dprintf(p->debug_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
-	if (was_malloc)
-		free(real_path);
+	dprintf(p->dbg_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
 	return (fd);
 }
 
 int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	//?
+	//?TO REDO
 	int	nb_redirections;
 	int	fd;
 
@@ -382,7 +439,7 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_t
 	{
 		if (is_redirection_operator(token_begin->type))
 		{
-			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > 0)
+			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > -1)
 			{
 				if (token_begin->content[0] == '&')
 				{}
@@ -407,7 +464,7 @@ int		count_argv(t_token *token_begin, t_token *token_end)
 	nb = 0;
 	while (token_begin)
 	{
-		if (token_begin->type == SH_WORD && !ft_strchr(token_begin->content, '='))
+		if (token_begin->type == SH_WORD && !ft_strchr(token_begin->content, '='))//hello= ? =hello ?
 			cmd_begin = 1;
 		if (token_begin->type == SH_WORD && cmd_begin)
 			nb++;
@@ -429,6 +486,7 @@ int		str_isnum(char *s)
 
 int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 {
+	//TODO TODO TODO TODO
 	int	nb_redirections;
 
 	nb_redirections = 0;
@@ -436,10 +494,10 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 	{
 		//if (type == SH_GREAT/*&& is_set(NOCLOBBER)*/)
 		//{
-			//if (file exist
-			//	return (0);
+		//if (file exist
+		//	return (0);
 		//}
-			
+
 		if (fd_in == -1)
 		{
 			push_redirect_lst(&p->redirect_lst, 1, fd_out);
@@ -467,7 +525,7 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 	}
 	else if (type == SH_LESSGREAT)
 	{
-		
+
 	}
 	return (nb_redirections);
 }
@@ -477,20 +535,20 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	int	fd_in;
 	int	fd_out;
 
-	if (!token->content)
-	{
-		fd_in = -1;
-	}
+	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+		printf("d->[%s] %p\n", token->content, token->content);
+	if (!token->content || !*token->content)
+		fd_in = 1;//handle &
 	else
 		fd_in = ft_atoi(token->content);
-	if (str_isnum(token->sub->content))
-		fd_out = ft_atoi(token->sub->content);
-	else if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > 0))
+	if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))
 	{
-		dprintf(p->debug_fd, "redirection error in %s\n", token->content);
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			dprintf(p->dbg_fd, "redirection error in %s\n", token->sub->content);
 		return ;
 	}
-	dprintf(p->debug_fd, "fd_out = %i\n", fd_out);
+	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+		dprintf(p->dbg_fd, "fd_out = %i\n", fd_out);
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
 
@@ -510,47 +568,197 @@ void	del_n_assign_lst(t_sh *p, int n)
 
 void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 {
+	//reverse sens
 	t_env	*tmp;
 	char	*equal;
 
-	(void)nb_assign;
+	(*nb_assign)++;
 	tmp = p->assign_lst;
 	equal = ft_strchr(token->content, '=');
 	*equal = 0;
+	//if (is_not_valid_assign_name(token->content))
+	//	print error
+	//	return;
 	p->assign_lst = sh_create_param(token->content);
 	*equal = '=';
 	p->assign_lst->value = ft_strdup(equal + 1);
+	//expand without IFS p->assign_lst->value
 	p->assign_lst->next = tmp;
+	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+		dprintf(p->dbg_fd, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
 }
 
-int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
-{
-	int	nb_redirections;
-	int	cmd_begin;
-	int	ac;
+/*int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
+  {
+//transform stockage
+//	child_argv_ast
+//	->retokenize_it
+//	transform to child_argv
+int	nb_redirections;
+int	cmd_begin;
+int	ac;
 
-	p->child_ac = count_argv(token_begin, token_end);
-	if (!(p->child_argv = (char**)malloc((p->child_ac + 1) * sizeof(char*))))
-		exit(ERROR_MALLOC);
-	nb_redirections = 0;
+p->child_ac = count_argv(token_begin, token_end);
+if (!(p->child_argv = (char**)malloc((p->child_ac + 1) * sizeof(char*))))
+exit(ERROR_MALLOC);
+nb_redirections = 0;
+ *nb_assign = 0;
+ cmd_begin = 0;
+ ac = 0;
+ while (token_begin)
+ {
+ if (is_redirection_operator(token_begin->type))
+ stock_redirection(p, token_begin, &nb_redirections);
+ else if (!cmd_begin && (ft_strchr(token_begin->content, '=') > token_begin->content))
+ stock_assign(p, token_begin, nb_assign);
+ else if (token_begin->type == SH_WORD)
+ {
+ p->child_argv[(ac)++] = ft_strdup(token_begin->content);
+ cmd_begin = 1;
+ }
+ token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+ }
+ p->child_argv[ac] = 0;
+ return (nb_redirections);
+ }*/
+
+void	stack_argvs(t_token **p_argv_stack, t_token *token)
+{
+	t_token	*tmp;
+
+	//printf("stack\n");
+	//print_all_tokens(sh(), *p_argv_stack, 0);
+	if (!*p_argv_stack)
+		*p_argv_stack = create_token(SH_WORD, token->index, token->content);
+	else
+	{
+		tmp = *p_argv_stack;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = create_token(SH_WORD, token->index, token->content);
+	}
+}
+/*
+   t_token	*stack_redirect(t_token *token_begin, t_token *token_end, int *nb_assign)
+   {
+
+   }
+
+   t_token	*stack_assigns(t_token *token_begin, t_token *token_end, int *nb_assign)
+   {
+   t_token	*origin;
+   int		cmd_begin;
+
+   while (token_begin && token_begin)
+   token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+   origin = (token_begin) ? create_token() : ;
+   }*/
+
+t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
+{
+	t_token	*actual;
+	t_token	*origin;
+	t_token	*stack_origin;
+
+	origin = 0;
+	stack_origin = stack_argvs;
+	while (stack_argvs)
+	{
+		if (!origin)
+		{
+			origin = sh_expansion(stack_argvs->content, &(p->params), 1);
+			actual = origin;
+		}
+		else
+		{
+			actual->next = sh_expansion(stack_argvs->content, &(p->params), 1);
+		}
+		while (actual && actual->next)
+			actual = actual->next;
+		stack_argvs = stack_argvs->next;
+	}
+	free_ast(stack_origin);
+	return (origin);
+}
+
+char	**build_child_argvs(t_token *ast)
+{
+	int		len;
+	t_token	*tmp;
+	char	**argvs;
+
+	//print_all_tokens(sh(), ast, 0);
+	len = 0;
+	tmp = ast;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		len++;
+	}
+	sh()->child_ac = len;
+	if (!(argvs = (char **)malloc((len + 1) * sizeof(char*))))
+		exit(1/*MALLOC_ERROR*/);
+	argvs[len] = 0;
+	len = 0;
+	while (ast)
+	{
+		argvs[len++] = ft_strdup(ast->content);//need return "" when null->dupfilsdup
+		//printf("->%s\n", argvs[len - 1]);
+		ast = ast->next;
+	}
+	return (argvs);
+}
+
+void	assign_sraa_to_zero(int *nb_assign, int *nb_redirections, t_token **argv_stack, int *cmd_begin)
+{
 	*nb_assign = 0;
-	cmd_begin = 0;
-	ac = 0;
+	*nb_redirections = 0;
+	*argv_stack = 0;
+	*cmd_begin = 0;
+}
+
+int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign, char ***child_argv)
+{
+	t_token	*argv_stack;
+	int		nb_redirections;
+	int		cmd_begin;
+
+	assign_sraa_to_zero(nb_assign, &nb_redirections, &argv_stack, &cmd_begin);
 	while (token_begin)
 	{
 		if (is_redirection_operator(token_begin->type))
 			stock_redirection(p, token_begin, &nb_redirections);
-		else if (!cmd_begin && (ft_strchr(token_begin->content, '=') > token_begin->content))
+		else if (!cmd_begin
+				&& (ft_strchr(token_begin->content, '=') > token_begin->content))
 			stock_assign(p, token_begin, nb_assign);
 		else if (token_begin->type == SH_WORD)
 		{
-			p->child_argv[(ac)++] = ft_strdup(token_begin->content);
+			stack_argvs(&argv_stack, token_begin);
 			cmd_begin = 1;
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
-	p->child_argv[ac] = 0;
+	//printf("new ast\n");
+	//print_all_tokens(sh(), argv_stack, 0);
+	argv_stack = expand_and_retokenize(p, argv_stack);
+	*child_argv = build_child_argvs(argv_stack);
+	free_ast(argv_stack);
 	return (nb_redirections);
+}
+
+int		(*sh_is_builtin2(const char *cmd))(int ac, char **av, t_env **ev)
+{
+	if (!ft_strcmp(cmd, "test"))
+		return (&sh_test);
+	else if (!ft_strcmp(cmd, "jobs"))
+		return (&sh_jobs);
+	else if (!ft_strcmp(cmd, "type"))
+		return (&sh_type);
+	else if (!ft_strcmp(cmd, "fg"))
+		return (&sh_fg);
+	else if (!ft_strcmp(cmd, "exit"))
+		return (&sh_exit);
+	return (NULL);
 }
 
 int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
@@ -575,89 +783,29 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_alias);
 	else if (!ft_strcmp(cmd, "unalias"))
 		return (&sh_unalias);
+	else if (!ft_strcmp(cmd, "source") || !ft_strcmp(cmd, "."))
+		return (&sh_source);
+	else if (!ft_strcmp(cmd, "pwd"))
+		return (&sh_pwd);
 	else if (!ft_strcmp(cmd, "readonly"))
 		return (&sh_readonly);
-	else if (!ft_strcmp(cmd, "test"))
-		return (&sh_test);
-	else if (!ft_strcmp(cmd, "exit"))
-	{
-		sh()->abort_cmd = 1;
-		sh()->exit = 1;
-		//return what?
-	}
-	return (NULL);
-}
-
-void	generate_redirections_builtins(t_sh *p)
-{
-	//REVERSE SENS
-	//PROTECC DUP2
-	//CLOSE EVERYWHW+ERE
-	t_redirect_lst	*lst;
-	t_redirect_lst	*origin;
-	//t_redirect_lst olds
-	int				out;
-
-	origin = p->redirect_lst;
-	lst = origin;
-	while (lst)
-	{
-		//printf("lst->out = %d, in = %d\n", lst->out, lst->in);
-		//close(lst->out) <-- ! see man dup2
-		if ((out = out_already_in_lst_n(lst->out, origin, lst)) > -1)
-		{
-			if ((lst->out = dup(out)) < 0)
-				dprintf(p->debug_fd, "DUPERROR %i, errno %i\n", lst->out, errno);
-			else
-				dprintf(p->debug_fd, "DUPPED %i-> %i\n", out, lst->out);
-		}
-		dprintf(p->debug_fd, "redirect %i->%i\n", lst->in, lst->out);
-		//old = dup(lst->out)
-		if (dup2(lst->out, lst->in) < 0)
-			dprintf(p->debug_fd, "DUP2ERROR %i->%i, errno %i\n", lst->in, lst->out, errno);
-		else
-			dprintf(p->debug_fd, "DUP2 %i->%i\n", lst->in, lst->out);
-		int ret;
-		ret = close(lst->out);
-		dprintf(p->debug_fd, "close fd %i error n%i\n", lst->out, (ret < 0) ? errno : 0);
-		lst = lst->next;
-	}
-	//return olds
+	return (sh_is_builtin2(cmd));
 }
 
 /*void	restore_redirections(t_redirect_lst *olds)
-{
-	while (olds)
-	{
-		dup2(old, old);
-		olds = olds->next;
-	}
-}*/
+  {
+  while (olds)
+  {
+  dup2(old, old);
+  olds = olds->next;
+  }
+  }*/
 
-int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **))
+int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **), char **child_argv)
 {
-	//Special signals stuff?
 	int ret;
 
-	//NO FORK!!!!!!!!!
-	//fork stuff
-	//int child_pid = fork();
-	//if (/*(p->lldbug) ? !child_pid : */child_pid)
-	//{
-//		dprintf(p->debug_fd, "[%i] FORK\n", getpid());
-//		close_pipes_parent(p);
-//		ret = block_wait(p, child_pid);
-//	}
-//	else
-//	{
-//		dprintf(p->debug_fd, "[%i] FORKED\n", getpid());
-//		generate_redirections(p);
-	dprintf(p->debug_fd, "[%i] BUILTIN\n", getpid());
-	ret = f(p->child_ac, p->child_argv, &(p->params));
-//		exit(1/*EXECVE ERROR*/);
-//	}
-	//restore_redirections(olds);
-	//freeall (olds);
+	ret = f(p->child_ac, child_argv, &(p->params));
 	return (ret); //<-- Return What?
 }
 
@@ -674,10 +822,10 @@ void	handle_assigns(t_sh *p)
 		{
 			tmp = p->tmp_assign_lst;
 			p->tmp_assign_lst = sh_create_param(assign->key);
-			p->tmp_assign_lst->value = ft_strdup(sh_getenv(assign->key));
+			p->tmp_assign_lst->value = ft_strdup(sh_getev_value(assign->key));
 			p->tmp_assign_lst->next = tmp;
 		}
-		sh_setenv(assign->key, assign->value);
+		sh_setev(assign->key, assign->value);
 		assign = assign->next;
 	}
 }
@@ -690,13 +838,13 @@ void	restore_before_assigns(t_sh *p)
 	assign = p->assign_lst;
 	while (assign)
 	{
-		sh_unsetenv(assign->key, &(sh()->params));
+		sh_unsetev(assign->key, &(sh()->params));
 		assign = assign->next;
 	}
 	assign = p->tmp_assign_lst;
 	while (assign)
 	{
-		sh_setenv(assign->key, assign->value);
+		sh_setev(assign->key, assign->value);
 		tmp = assign;
 		assign = assign->next;
 		free(tmp->key);
@@ -719,17 +867,22 @@ void	print_assign(t_sh *p)
 	}
 }
 
-int		handle_no_cmd_name(t_sh *p)
+int		handle_no_cmd_name(t_sh *p, char **child_argv)
 {
 	t_env	*assign;
 
 	assign = p->assign_lst;
 	while (assign)
 	{
-		sh_setenv(assign->key, assign->value);
+		sh_setev(assign->key, assign->value);
 		assign = assign->next;
 	}
-	//free_allstuff
+	ft_free_tabstr(child_argv);
+	sh_del_all_env(p->assign_lst);
+	p->assign_lst = 0;
+	delete_close_all_pipe_lst(p->pipe_lst);
+	p->pipe_lst = 0;
+	//close open files
 	return (0);
 }
 
@@ -738,82 +891,150 @@ int		handle_no_cmd_name(t_sh *p)
 //
 //echo ls && ls;
 //
-/*
-int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
-{
-	int	nb_redirections;
-	int	nb_assign;
-	int	ret;
-	int		(*f)(int ac, char **av, t_env **ev);
+//
+//
+//Expand assigns?
 
-	//v VERIFY
-	//expand_word
-	//if expand_word -> syntax_token
-	//	exec_script new-token
-	//	abort_cmd = true
-	//return;
-	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
-	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	//Expand_words+expand_alias_cmd_name+retokenize
-	if (!token_begin)//(after retok)
-		return (handle_no_cmd_name(p));
-	handle_assigns(p);
-	//if (token_begin->type == SH_FUNC)
-	//	store_func();
-	//else if cmd name is stored in func
-	//	replace func
-	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
-	print_redirections(p, p->redirect_lst);
-	if ((f = sh_is_builtin(token_begin->content)))
-		ret = exec_builtin(p, f);
-	else
-		ret = exec_prgm(p, token_begin, token_end);
-	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-	remove_opened_files(p);
-	////print_redirections(p, p->redirect_lst);
-	////print_assign(p);
-	restore_before_assigns(p);
-	del_n_assign_lst(p, nb_assign);
-	//KILL CHILD ENV ADDED AT EACH FUNC END
+int		exec_function(t_sh *p, t_token *func, char **child_argv)
+{
+	int	ret;
+	char	**tmp;
+
+	//store actual positional params : TMP ACTUAL CMD STUFF (CHILD ARGV ETC) ? VERIFY
+	if (p->nb_nested_functions >= SH_NESTED_FUNCTION_LIMIT)
+	{
+		p->abort_cmd = 1;
+		printf("SH_NESTED_FUNCTION_LIMIT REACHED\nAbort command\n");
+		return (1/*ERROR CODE*/);
+	}
+	tmp = sh()->av;
+	sh()->av = child_argv;
+	p->nb_nested_functions++;
+	ret = exec_compound_command(p, func->sub->sub, 0);
+	p->nb_nested_functions--;
+	sh()->av = tmp;
 	return (ret);
-}*/
+}
+
+t_token	*is_defined_function(char *name)
+{
+	t_token	*func;
+
+	func = sh()->functions;
+	while (func && ft_strcmp(func->content, name))
+		func = func->next;
+	return (func);
+}
+
+////////////////////////////////////////////
+void	remove_old_function(const char *name)
+{
+	//can refactor but seems ok
+	t_token	*func;
+	t_token	*tmp;
+
+	func = sh()->functions;
+
+	if (!func)
+		return ;
+	if (!ft_strcmp(func->content, name))
+	{
+		tmp = func->next;
+		func->next = 0;
+		free_ast(func);
+		sh()->functions = tmp;
+	}
+	while (func && func->next && ft_strcmp(func->next->content, name))
+		func = func->next;
+	if (func->next && !ft_strcmp(func->next->content, name))
+	{
+		tmp = func->next;
+		func->next = func->next->next;
+		tmp->next = 0;
+		free_ast(tmp);
+		//sh()->functions = tmp;
+	}
+}
+
+int		store_func(t_sh *p, t_token *function)
+{
+	t_token	*tmp;
+
+	remove_old_function(function->content);
+	tmp = p->functions;
+	p->functions = dup_token_with_sub(function);
+	p->functions->next = tmp;
+	//if error return !0
+	return (0);
+}
+
+//debug
+void	print_tok(t_token *tok)
+{
+	int		i;
+
+	i = 0;
+	while (tok)
+	{
+		if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all"))
+			printf("tok[%i] = %s\n", i, tok->content);
+		tok = tok->next;
+		i++;
+	}
+	if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all"))
+		printf("nb split = %i\n", i);
+}
+
+t_token	*is_function_definition(t_token *token_begin, t_token *token_end)
+{
+	while (token_begin && token_begin != token_end
+			&& token_begin->type != SH_FUNC)
+		token_begin = token_begin->next;
+	if (token_begin && token_begin->type == SH_FUNC)
+		return (token_begin);
+	return (0);
+}
+
+void	free_simple_cmd_ressources(t_sh *p, int nb_redirections, int nb_assign, char **child_argv)
+{
+	ft_free_tabstr(child_argv);
+	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+	close_all_redirections(p);
+	restore_std_fds(p);
+	remove_opened_files(p);
+	restore_before_assigns(p);
+	del_n_assign_lst(p, nb_assign);
+}
 
 int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
+	//ENV SEND TO FUNC
 {
 	int	nb_redirections;
 	int	nb_assign;
 	int	ret;
 	int		(*f)(int ac, char **av, t_env **ev);
+	t_token	*tmp;
+	char	**child_argv;
 
-	//v VERIFY
-	//if expand_word -> syntax_token
-	//	exec_script new-token
-	//	abort_cmd = true
-	//return;
-	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign);
-	while (token_begin && (is_redirection_operator(token_begin->type) || (ft_strchr(token_begin->content, '=') > token_begin->content)))
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	//Expand_words+expand_alias_cmd_name+retokenize
-	if (!token_begin)//(after retok)
-		return (handle_no_cmd_name(p));
+	if ((tmp = is_function_definition(token_begin, token_end)))
+		return (store_func(p, tmp));//del in exitpoint?
+	if (sh()->nb_nested_functions == 999)
+		lstp();
+	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign, &child_argv); //open files
+	if (!child_argv[0])
+		return (handle_no_cmd_name(p, child_argv));//and free stuff
 	handle_assigns(p);
-	//if (token_begin->type == SH_FUNC)
-	//	store_func();
-	//else if cmd name is stored in func
-	//	replace func
-	dprintf(p->debug_fd, "%i redirections\n", nb_redirections);
-	print_redirections(p, p->redirect_lst);
-	if ((f = sh_is_builtin(token_begin->content)))
-		ret = exec_builtin(p, f);
+	//print_redirections(p, p->redirect_lst);
+	save_std_fds(p);
+	generate_redirections(p);
+	//printf("[%i]argv[0]%s-\n", getpid(), child_argv[0]);
+	if ((tmp = is_defined_function(child_argv[0])))
+		ret = exec_function(p, tmp, child_argv);
+	else if ((f = sh_is_builtin(child_argv[0])))
+		ret = exec_builtin(p, f, child_argv);
 	else
-		ret = exec_prgm(p, token_begin, token_end);
-	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-	remove_opened_files(p);
-	////print_redirections(p, p->redirect_lst);
-	////print_assign(p);
-	restore_before_assigns(p);
-	del_n_assign_lst(p, nb_assign);
+		ret = exec_prgm(p, child_argv);
+	free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
 	return (ret);
 }

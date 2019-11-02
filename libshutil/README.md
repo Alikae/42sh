@@ -1,2 +1,0 @@
-# Libshutil
-Shell Utilities

@@ -1,7 +1,19 @@
-#include "t_token.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_token.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/19 23:40:24 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/10/04 04:21:40 by ede-ram          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "sh_tokenizer.h"
 #include "stdlib.h"
 #include "libft.h"
-#include "error.h"
+#include "sh_error.h"
 
 //ATTENTION STRDUP
 char	*dupfilsdup(const char *in)
@@ -9,10 +21,8 @@ char	*dupfilsdup(const char *in)
 	char	*new;
 	int		len;
 
-	if (!in)
-		return (0);
 	len = (in) ? ft_strlen(in) : 1;
-	if (!(new = (char*)malloc(sizeof(char))))
+	if (!(new = (char*)malloc(sizeof(char) * (len + 1))))
 		return (0);
 	new[len] = 0;
 	if (in)
@@ -47,8 +57,7 @@ t_token	*create_token(t_toktype type, int index, const char *content)
 		exit(ERROR_MALLOC);
 //ATTENTION STRDUP
 //APPRENEZ A CODER
-	if (!(tok->content = dupfilsdup(content)) && content)
-		exit(ERROR_MALLOC);
+	tok->content = dupfilsdup(content);
 	tok->type = type;
 	tok->index = index;
 	tok->sub = 0;
@@ -71,6 +80,29 @@ t_token	*create_token_n(t_toktype type, int index, const char *content, int n)
 	return (tok);	
 }
 
+t_token	*dup_ast(t_token *origin)
+{
+	t_token	*new;
+
+	if (!origin)
+		return (0);
+	new = create_token(origin->type, origin->index, origin->content);
+	new->sub = dup_ast(origin->sub);
+	new->next = dup_ast(origin->next);
+	return (new);
+}
+
+t_token	*dup_token_with_sub(t_token *origin)
+{
+	t_token	*new;
+
+	if (!origin)
+		return (0);
+	new = create_token(origin->type, origin->index, origin->content);
+	new->sub = dup_ast(origin->sub);
+	return (new);
+}
+
 void	delete_token(t_token *tok)
 {
 	free(tok->content);
@@ -79,14 +111,9 @@ void	delete_token(t_token *tok)
 
 void	free_ast(t_token *origin)
 {
-	t_token	*next;
-	t_token	*sub;
-
 	if (!origin)
 		return ;
-	next = origin->next;
-	sub = origin->sub;
+	free_ast(origin->sub);
+	free_ast(origin->next);
 	delete_token(origin);
-	free_ast(sub);
-	free_ast(next);
 }

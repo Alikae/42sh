@@ -6,13 +6,13 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/25 04:38:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/10/12 05:12:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "t_token.h"
+#include "sh_tokenizer.h"
 #include "libft.h"
-#include "error.h"
+#include "sh_error.h"
 #include "sh.h"
 
 #include <stdio.h>
@@ -130,7 +130,7 @@ int			is_redirection_operator(t_toktype type)
 }
 
 int			operator_cant_be_first(t_toktype type)
-{
+{//verify
 	if (type == SH_AND || type == SH_OR
 			|| type == SH_AND_IF || type == SH_OR_IF)
 		return (1);
@@ -147,7 +147,8 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 	word_len = 0;
 	forward_blanks(t);
 	word_begin = t->i;
-	read_n_skip_word(t);
+	if (read_n_skip_word(t) == -1)
+		return (SH_SYNTAX_ERROR);
 	if (word_begin == t->i)
 	{
 		sh()->unfinished_cmd = 1;
@@ -185,8 +186,12 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 			t->i--;
 			return (treat_redirection(t, p_actual, 1));
 		}
-		if (actual_compound == SH_CASE && type == SH_DSEMI)
-			return (SH_DSEMI);
+		if (type == SH_DSEMI)
+		{
+			if (actual_compound == SH_CASE)
+				return (SH_DSEMI);
+			type = SH_SEMI;
+		}
 		(*p_actual)->next = create_token(type, op_begin, 0);
 		*p_actual = (*p_actual)->next;
 		if (t->word_nb == 1 && operator_cant_be_first(type))
@@ -199,7 +204,14 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 		if (is_redirection_operator(type))
 			return (fill_redirection(t, p_actual, type));
 		if (type == SH_OR || type == SH_AND_IF || type == SH_OR_IF)
+		{
 			forward_blanks_newline(t);
+			if (!t->input[t->i])
+			{
+				sh()->unfinished_cmd = 1;
+				return (SH_SYNTAX_ERROR);
+			}
+		}
 	}
 	return (0);
 }

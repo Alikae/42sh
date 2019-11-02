@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/22 22:34:40 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/02 22:02:39 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SUB_DIRS := \
 	command_edition \
 	entrypoint \
 	builtins \
+	builtins/echo \
 	exitpoint \
 	history \
 	parameters \
@@ -36,7 +37,9 @@ SUB_DIRS := \
 	error \
 	redirections \
 	debug_mode \
-	tools
+	tools \
+	word_expansion \
+	job_control
 
 
 ### INCLUDE SRC MAKEFILE ###
@@ -68,13 +71,8 @@ FT_DIR = ./lib$(FT)
 FT_INC_DIR = $(FT_DIR)/includes
 FT_LNK = -L$(FT_DIR) -l$(FT)
 
-SHUTIL = shutil
-SHUTIL_DIR = ./lib$(SHUTIL)
-SHUTIL_INC_DIR = $(SHUTIL_DIR)/includes
-SHUTIL_LNK = -L$(SHUTIL_DIR) -l$(SHUTIL)
-
 ###  CC && FLAGS ###
-CC = gcc
+CC = clang
 DEBUG_FLAGS = -g3
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
@@ -94,11 +92,7 @@ all: $(FT) $(NAME) bye_msg
 $(FT): | lib_msg
 	@make -C $(FT_DIR)
 
-$(SHUTIL): $(FT) | lib_msg
-	@make -C $(SHUTIL_DIR)
-
 ### Mkdir obj ###
-.ONESHELL:
 $(OBJ_DIR): | mkdir_msg
 	@mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
 
@@ -106,38 +100,27 @@ $(OBJ_DIR): | mkdir_msg
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
 	@$(CC) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)$(@F)$(CLEAR) "
+	@printf "$(@F) "
 
 ### Link ###
 .ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg
 	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
-	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
+	@printf "$@: Done.\n"
 
 ### Clean ###
-.ONESHELL:
 $(FT)_clean: | lib_msg
 	@make -C $(FT_DIR) clean
 
-.ONESHELL:
-$(SHUTIL)_clean: | lib_msg
-	@make -C $(SHUTIL_DIR) clean
-
-.ONESHELL:
-clean: $(FT)_clean $(SHUTIL)_clean | clean_msg
+clean: $(FT)_clean | clean_msg
 	$(RM) -rf $(OBJ_DIR)
 
-.ONESHELL:
 $(FT)_fclean: | lib_msg
 	@make -C $(FT_DIR) fclean
 
-.ONESHELL:
-$(SHUTIL)_fclean:
-	@make -C $(SHUTIL_DIR) fclean
-
-.ONESHELL:
-fclean: $(FT)_fclean $(SHUTIL)_fclean | fclean_msg
+fclean: $(FT)_fclean | fclean_msg
 	$(RM) -rf $(OBJ_DIR)
+	$(RM) -rf $(NAME).dSYM
 	$(RM) -rf $(NAME)
 
 re: fclean all

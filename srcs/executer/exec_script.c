@@ -6,17 +6,20 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/26 01:50:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "t_token.h"
+#include "sh_job_control.h"
+#include "sh_tokenizer.h"
 #include "sh_executer.h"
-#include "redirections.h"
+#include "sh_redirections.h"
 #include "sh.h"
 #include "errno.h"
+#include <signal.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include "sh_exitpoint.h"
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
@@ -28,8 +31,10 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 		return (exec_compound_case(p, token_compound));
 	else if (type == SH_FOR)
 		return (exec_compound_for(p, token_compound));
-	dprintf(p->debug_fd, "treating GROUPING\n");
-	return(exec_script(p, token_compound->sub, 0));
+	else if (type == SH_SUBSH)
+		return (exec_compound_subsh(p, token_compound));
+	dprintf(p->dbg_fd, "treating GROUPING\n");
+	return(exec_script(p, token_compound->sub));
 }
 
 int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
@@ -37,14 +42,22 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	nb_redirections;
 	int	ret;
 
-	//	if (token_begin->type == SH_FUNC)
-	//		exec_func
-	//	else
+	//No token_begin, !!CMD_NAME!!
 	if (is_compound(token_begin->type))
 	{
-		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end);
+		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)//PUT IN ENV
+		{
+			p->abort_cmd = 1;
+			printf("SH_NESTED_COMPOUND_LIMIT REACHED\nAbort command\n");
+			return (1/*ERROR CODE*/);
+		}
+		p->nb_nested_compounds++;
+		//
+		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end);//TO SEE
+		//
 		ret = exec_compound_command(p, token_begin, token_begin->type);
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+		p->nb_nested_compounds--;
 	}
 	else
 		ret = exec_simple_command(p, token_begin, token_end);
@@ -53,54 +66,73 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 
 int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	//SIG gestion
-	int pid = fork();
-	if (pid)
+	int child_pid;
+
+	child_pid = fork_process(p, 0);
+	if (child_pid < 0)
+		sh_exitpoint();
+	if (child_pid)
 	{
-		dprintf(p->debug_fd, "[%i] PFORK\n", getpid());
-		close_pipes_parent(p);
-		return (0);
+		return (child_pid);
 	}
-	dprintf(p->debug_fd, "[%i] Pforked\n", getpid());
-	close(0);
+	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
+	//close(0);
 	exec_command(p, token_begin, token_end);
-	exit(0);
+	printf("[%i] exec background suicide\n", getpid());
+	sh_exitpoint();
+	//CREATE JOB?
 	//fork
 	//in parent
 	//	return;
 	//in child
 	//	exec_command(p, token_begin, token_end);
 	//	exit(0); ?
+	return (0);
 }
 
-int		exec_command_to_pipe(t_sh *p, t_token *token_begin, t_token *token_end, int pipe_in_fd)
+void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
 {
-	//WHERE TO CLOSE?
-	int	pipe_out[2];
-
-	if (pipe(pipe_out))
+	if (toggle_on)
 	{
-		printf("TOO MANY PIPES OPEN IN SYSTEM... BEATING MYSELF TO DEATH\n");
-		printf("errno - %i", errno);
-		exit(1/*TOOMANYPIPES_ERROR*/);
+		if (fd_in != -1)
+			push_redirect_lst(&sh()->redirect_lst, 0, fd_in);
+		if (fd_out != -1)
+			push_redirect_lst(&sh()->redirect_lst, 1, fd_out);
 	}
-	dprintf(p->debug_fd, "PIPE [%i %i]\n", pipe_out[0], pipe_out[1]);
-	push_pipe_lst(&p->pipe_lst, pipe_out);
-	push_redirect_lst(&p->redirect_lst, 1, pipe_out[1]);
-	p->pipein = pipe_in_fd;
-	p->pipeout = pipe_out[1];
-	if (pipe_in_fd)
-		push_redirect_lst(&p->redirect_lst, 0, pipe_in_fd);
-	exec_command_in_background(p, token_begin, token_end);
-	p->pipein = 0;
-	p->pipeout = 0;
-	del_n_redirect_lst(&p->redirect_lst, (pipe_in_fd) ? 2 : 1);
-	return (pipe_out[0]);
+	else
+		del_n_redirect_lst(&sh()->redirect_lst, (fd_in != -1) + (fd_out != -1));
 }
 
-void	handle_bang(t_token **p_token_begin, int *bang)
+void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end, int prev_pipe)
 {
+	t_token	*next_separator;
+	int		next_pipe[2];
+
+	next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators);
+	if (!next_separator || next_separator->type != SH_OR)
+	{
+		toggle_redirect_pipe(1, prev_pipe, -1);
+		p->force_setpgrp_setattr = 1;
+		p->pgid_current_pipeline = exec_command_in_background(p, token_begin, token_end);
+		p->force_setpgrp_setattr = 0;
+		toggle_redirect_pipe(0, prev_pipe, -1);
+		return;
+	}
+	pipe(next_pipe);
+	push_pipe_lst(&p->pipe_lst, next_pipe);
+	exec_pipeline_recursively(p, next_separator->next, token_end, next_pipe[0]);
+	toggle_redirect_pipe(1, prev_pipe, next_pipe[1]);
+	exec_command_in_background(p, token_begin, next_separator);
+	toggle_redirect_pipe(0, prev_pipe, next_pipe[1]);
+}
+
+void	setup_pipeline_handle_bang(t_sh *p, t_token **p_token_begin, t_token *token_end, int *bang)
+{
+	p->pgid_current_pipeline = 0;
+	p->index_pipeline_begin = (*p_token_begin)->index;
+	p->index_pipeline_end = (token_end) ? token_end->index : -1;
 	*bang = 0;
+	//NOR FIRST TOKEN
 	if ((*p_token_begin)->type == SH_BANG)
 	{
 		*bang = 1;
@@ -108,61 +140,33 @@ void	handle_bang(t_token **p_token_begin, int *bang)
 	}
 }
 
-void	print_cmd(const char *input, int m, int n)
-{
-	ft_putchar('[');
-	ft_putnbr(m);
-	ft_putchar('[');
-	ft_putnbr(n);
-	while (input[m] && (m <= n || n == -1))
-	{
-		ft_putchar(input[m]);
-		m++;
-	}
-	ft_putchar(']');
-}
-
-//Put pipeline in jobs, name delimited by token->index;
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	//If no pipeline, builtin exec locally (cd ; echo lala | cd ;) will give different results
 	int		bang;
-	int		next_pipe_fd;
-	t_token	*next_separator;
-	int indexb, indexe;
-
-	indexb = token_begin->index;
-	indexe = (token_end) ? token_end->index : -1;
-	//print_cmd(p->cmd, indexb, indexe);
-	handle_bang(&token_begin, &bang);
-	next_pipe_fd = 0;
-	//if (no pipe)
-	//	exec_locally
-	while (token_begin && !p->abort_cmd && (next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_separator->type == SH_OR)
+	t_token *next_sep;
+	//track abort_cmd
+	if (token_begin == token_end)
+		return ;
+	setup_pipeline_handle_bang(p, &token_begin, token_end, &bang);
+	if ((next_sep = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_sep->type == SH_OR)
 	{
-		dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
-		next_pipe_fd = exec_command_to_pipe(p, token_begin, next_separator, next_pipe_fd);//
-		token_begin = next_separator->next;
+		exec_pipeline_recursively(p, token_begin, token_end, -1);
+		delete_close_all_pipe_lst(p->pipe_lst);
+		p->pipe_lst = 0;
+		int tmp = p->pgid_current_pipeline;
+		p->pgid_current_pipeline = 0;
+		p->last_cmd_result = block_wait(p, tmp, 0);
+		if (!p->process_is_stopped)
+		{
+			printf("killing pipeline: [%i]\n", tmp);
+			kill(-1 * tmp, SIGKILL);
+		}
 	}
-	if (p->abort_cmd)
-		return /*FREE ALL*/;
-	dprintf(p->debug_fd, "		x pipeline cut at '%i'\n", p->type);
-	if (next_pipe_fd)
-		push_redirect_lst(&p->redirect_lst, 0, next_pipe_fd);
-	//
-	p->lldbug = 1;
-	//
-	p->pipein = next_pipe_fd;
-	//if was_piped, exec_in_background?
-	p->last_cmd_result = exec_command(p, token_begin, token_end);//
-	if (next_pipe_fd)
-		del_n_redirect_lst(&p->redirect_lst, 1);
-	delete_close_all_pipe_lst(p->pipe_lst);
-	p->pipe_lst = 0;
+	else
+		p->last_cmd_result = exec_command(p, token_begin, token_end);
 	if (bang)
-		p->last_cmd_result = (p->last_cmd_result) ? 0 : 1;
+		p->last_cmd_result = !p->last_cmd_result;
 }
-//CAN DO CMD1;!; <--WILL REVERSE LAST_CMD_RESULT
 
 void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 {
@@ -171,56 +175,109 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 	t_toktype	tmp;
 
 	prev_separator = 0;
-	while (token_begin && !p->abort_cmd)
+	while (token_begin && token_begin != token_end && !p->abort_cmd)
 	{
 		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->and_or_separators);
-		dprintf(p->debug_fd, "		x and_or cut at '%i'\n", p->type);
 		tmp = p->type;
 		if (!prev_separator || (prev_separator == SH_AND_IF && !p->last_cmd_result)
 				|| (prev_separator == SH_OR_IF && p->last_cmd_result))
 			exec_pipeline(p, token_begin, next_separator);
 		prev_separator = tmp;
-		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
+		token_begin = (next_separator) ? next_separator->next : 0;
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
 	}
 }
 
-int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
+void	close_cpy_std_fds(t_sh *p)
 {
-	int	ret;
-	int pid = fork();
-
-	//close(0);
-	if (pid < 0)
-	{
-		dprintf(p->debug_fd, "fork error\n");
-		exit(1);
-	}
-	else if (pid == 0)
-	{
-		dprintf(p->debug_fd, "dans fork\n");
-		exec_and_or(p, token_begin, token_end);
-		exit(0);
-	}
-	else
-	{
-		while (wait(&ret) != -1)
-			continue ;
-	}
-	return (0);
-	//close(1);
-	//close(2);
-	//dup p + env
-	//fork
-	//in child
-	//	exec_script
-	//in parent
-	//	if blocking
-	//		wait
-	//	return
+	close(p->cpy_std_fds[0]);
+	close(p->cpy_std_fds[1]);
+	close(p->cpy_std_fds[2]);
+	p->cpy_std_fds[0] = -1;
+	p->cpy_std_fds[1] = -1;
+	p->cpy_std_fds[2] = -1;
 }
 
+void	create_process_group_give_terminal_access(t_sh *p, pid_t pid, int foreground)
+{
+		//	signal(SIGTTOU, SIG_DFL);
+		if (p->pgid_current_pipeline)
+			setpgid (pid, p->pgid_current_pipeline);
+		else
+			setpgid (pid, pid);
+		if (foreground || (p->force_setpgrp_setattr))//pipeline in background?
+		{
+			signal(SIGTTOU, SIG_IGN);
+			tcsetpgrp(0, pid);
+			tcsetattr(0, TCSADRAIN, &p->extern_termios);
+			signal(SIGTTOU, SIG_DFL);
+		}
+}
+
+int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
+{//protec fork?
+	int		child_pid;
+	int		create_pgrp;
+	pid_t	pid;
+
+	create_pgrp = 0;
+	if (p->pid_main_process == getpid()/**/ && p->is_interactive)
+		create_pgrp = 1;
+	if ((child_pid = fork()) > 0)
+		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			dprintf(p->dbg_fd, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
+	if (child_pid < 0)
+	{
+		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
+		p->abort_cmd = 1;
+		return (-1);
+	}
+	pid = (child_pid) ? child_pid : getpid();
+	if (create_pgrp)
+		create_process_group_give_terminal_access(p, pid, foreground);
+	if (!child_pid)
+	{
+			signal (SIGINT, SIG_DFL);
+			signal (SIGQUIT, SIG_DFL);
+			signal (SIGTSTP, SIG_DFL);
+			signal (SIGTTIN, SIG_DFL);
+			signal (SIGTTOU, SIG_DFL);
+			signal (SIGCHLD, SIG_DFL);
+	}
+	if (!child_pid)
+	{
+		delete_all_jobs(p->jobs);
+		p->jobs = 0;
+		close_cpy_std_fds(p);
+	}
+	//printf("pgid of [%i] is [%i]\n", getpid(), getpgid(0));
+	return (child_pid);
+}
+
+int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
+{
+	int child_pid;
+
+	child_pid = fork_process(p, 0);
+	if (child_pid < 0)
+		return (-1);
+	//protec fork
+	if (child_pid == 0)
+	{
+		close_cpy_std_fds(p);
+		exec_and_or(p, token_begin, token_end);
+		//free stuff or not?
+		printf("[%i] exec background suicide\n", getpid());
+		sh_exitpoint();
+	}
+	else
+		add_job(child_pid, p->cmd, token_begin->index,
+				(token_end) ? token_end->index : -1);
+	return (0);
+}
+
+//TODO
 t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
 {
 	int	skip_newline;
@@ -239,7 +296,7 @@ t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
 	return (token_begin);
 }
 
-int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
+int		exec_script(t_sh *p, t_token *token_begin)
 {
 	t_token	*next_separator;
 
@@ -247,13 +304,12 @@ int		exec_script(t_sh *p, t_token *token_begin, t_token *token_end)
 	{
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
-		next_separator = find_next_script_separator(token_begin, token_end);
-		dprintf(p->debug_fd, "		x script cut at '%i'\n", p->type);
-		if (p->type == SH_AND)
+		next_separator = find_next_script_separator(token_begin, 0);
+		if (next_separator && next_separator->type == SH_AND)
 			exec_and_or_in_background(p, token_begin, next_separator);
 		else
 			exec_and_or(p, token_begin, next_separator);
-		token_begin = (next_separator && next_separator != token_end) ? next_separator->next : 0;
+		token_begin = (next_separator) ? next_separator->next : 0;
 	}
 	return (p->last_cmd_result);
 }

@@ -1,81 +1,93 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/19 10:27:28 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:47:21 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/08/26 23:46:00 by tmeyer            #+#    #+#             */
+/*   Updated: 2019/08/28 23:50:26 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "history.h"
+#include <unistd.h>
 #include "libft.h"
+#define BUFFER 1000
 
-static char		*rest(char *x, char *c)
+static char		*rest_str(char *str, char **rest)
 {
-	if (c)
+	char		*test;
+
+	if (str && (test = ft_strchr(str, '\n')))
 	{
-		free(x);
-		return (ft_strdup(""));
+		test = ft_strdup(test + 1);
+		ft_memdel((void**)&(*rest));
+		return (test);
 	}
-	else
-		return (x);
+	else if (*rest && (test = ft_strchr(*rest, '\n')))
+	{
+		test = ft_strdup(test + 1);
+		ft_memdel((void**)&(*rest));
+		return (test);
+	}
+	ft_memdel((void**)&(*rest));
+	return (NULL);
 }
 
-static char		*aux(const int fd, char *c, char *str, char *x)
+static char		*cut_string(char *rest)
+{
+	int	i;
+
+	if (!rest)
+		return (NULL);
+	i = 0;
+	while (rest[i] != '\0' && rest[i] != '\n')
+		i++;
+	return (ft_strndup(rest, i));
+}
+
+static int		get_string(const int fd, char **str)
 {
 	int		ret;
+	char	buf[BUFFER + 1];
 	char	*temp;
-	char	buffer[BUFF_SIZE + 1];
+	char	*test;
 
-	ret = 0;
-	while (!c && (ret = read(fd, buffer, BUFF_SIZE)) > 0)
+	while ((ret = read(fd, buf, BUFFER)) > 0)
 	{
-		buffer[ret] = '\0';
-		temp = ft_strdup(str);
-		free(str);
-		str = ft_strnjoin(temp, buffer, ret);
-		free(temp);
-		if (ft_strchr(buffer, '\n'))
+		buf[ret] = '\0';
+		temp = ft_strdup(*str);
+		ft_memdel((void**)str);
+		*str = ft_strjoin(temp, buf);
+		ft_memdel((void**)&temp);
+		if ((test = ft_strchr(buf, '\n')))
 			break ;
 	}
-	if (ret == -1)
-	{
-		free(x);
-		free(str);
-		return (NULL);
-	}
-	return (str);
+	test = NULL;
+	return (ret);
 }
 
-int				get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line, char **rest)
 {
-	int			len;
-	char		*str;
-	char		*c;
 	int			k;
-	static char *x;
-
+	char		*str;
+	char		*temp_r;
+	char		*temp_s;
+	
 	str = NULL;
-	if (fd < 0 || BUFF_SIZE <= 0 || read(fd, str, 0))
+	if ((read(fd, str, 0) < 0)
+			|| ((((!rest && !*rest) || !(temp_r = ft_strchr(*rest, '\n')))
+				&& get_string(fd, &str) == -1)))
 		return (-1);
-	c = (x ? ft_strchr(x, '\n') : NULL);
-	str = ((x && c) ? ft_strdup(x) : ft_strdup(""));
-	x = ((x) ? rest(x, c) : ft_strdup(""));
-	if (!(str = aux(fd, c, str, x)))
-		return (-1);
-	c = ft_strchr(str, '\n');
-	len = ((str && c) ? ft_strlen(c) : 0);
-	*line = ft_strnjoin(x, str, ft_strlen(str) - len);
-	free(x);
-	x = (c ? ft_strdup(c + 1) : ft_strdup(""));
-	k = (*line == NULL ? -1 : 1);
-	free(str);
-	if (k == 0 || k == -1)
-		free(x);
-	return (!ft_strcmp(*line, "") && !ft_strcmp(x, "")
-			&& !(ft_strcmp(str, "")) ? 0 : k);
+	temp_r = NULL;
+	temp_s = NULL;
+	temp_r = cut_string(*rest);
+	temp_s = cut_string(str);
+	*line = ft_strjoin(temp_r, temp_s);
+	*rest = rest_str(str, rest);
+	k = (str ? 1 : 0);
+	ft_memdel((void**)&str);
+	ft_memdel((void**)&temp_r);
+	ft_memdel((void**)&temp_s);
+	return (!k && !*rest ? 0 : 1);
 }

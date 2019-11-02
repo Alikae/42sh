@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 04:41:21 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/25 04:41:24 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/10/10 12:19:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <pwd.h>
 #include "sh.h"
 #include "libft.h"
-#include "history.h"
+#include "sh_history.h"
 
 void			sh_switch_history(t_hist *hist, char **command)
 {
@@ -35,17 +35,16 @@ void			sh_switch_history(t_hist *hist, char **command)
 	hist->index = -1;
 }
 
-char			*find_path(void) //USE FOR TESTS ONLY. TO BE REMOVED
+char			*find_path_dir(void)
 {
-	struct passwd	*pass;
-	char			*line;
 	char			*path;
 
-	pass = getpwuid(getuid());
-	line = ft_strjoin("/Users/", pass->pw_name);
-	path = ft_strjoin(line, "/.42sh_history");
-	ft_memdel((void**)&line);
-	return (path);
+	if (sh()->dir)
+	{
+		path = ft_strjoin(sh()->dir, "/.42sh_history");
+		return (path);
+	}
+	return (NULL);
 }
 
 char			**ft_reverse_tab(char **history)

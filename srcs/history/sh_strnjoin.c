@@ -6,13 +6,13 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:08:14 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/07/04 17:53:35 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/19 23:40:10 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
-#include "history.h"
+#include "sh_history.h"
 
 char		*ft_strnjoin(char const *s1, char const *s2, size_t len)
 {

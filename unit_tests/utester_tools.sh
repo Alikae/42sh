@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 09:09:16 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/26 00:21:43 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/09/06 14:05:06 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #!/bin/sh
@@ -94,4 +94,15 @@ print_kook () {
 		cat "$UT_err_file_diff" >> $UT_res_file
 	fi
 	UT_test_num="$( expr $UT_test_num + 1 )"
+}
+
+display_result () {
+	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_err_ok / $UT_test_num ]\033[0;0m"
+	echo "\033[0;36;40m[ $UT_sh_tgt ] [ Out: $UT_out_ok / $UT_test_num ] [ Err: $UT_err_ok / $UT_test_num ]\033[0;0m" >> $UT_res_file
+	read -p "Display result ? (y/n): " ans 2>&1
+	if [ "$ans" = 'y' ]
+	then
+		cat $UT_res_file
+	fi
+	rm $test_file $cmd_file_1 $cmd_file_0 2>> "$UT_log_file"
 }
