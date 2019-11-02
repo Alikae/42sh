@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/02 22:02:39 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/02 22:38:58 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,14 +99,14 @@ $(OBJ_DIR): | mkdir_msg
 ### Compilation ###
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
+	@echo "$(RCURSOR)$(ERASEL)$(@F) \c"
 	@$(CC) $(CFLAGS) -o $@ -c $<
-	@printf "$(@F) "
 
 ### Link ###
 .ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg
 	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
-	@printf "$@: Done.\n"
+	@printf "$@: Done !\n"
 
 ### Clean ###
 $(FT)_clean: | lib_msg

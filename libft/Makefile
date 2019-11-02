@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/12 15:20:07 by thdelmas          #+#    #+#              #
-#    Updated: 2019/08/12 15:39:14 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/02 22:37:36 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ include $(SRC_DIR)/sources.mk
 
 ### INCLUDE INC MAKEFILE ###
 include $(INC_DIR)/includes.mk
+
 
 
 ### ALL SUB DIRS ###
@@ -77,15 +78,14 @@ $(OBJ_DIR): mkdir_msg
 ### Compilation ###
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
-	@printf "$(BBLUE)$(@F): $(CLEAR)"
+	@echo "$(RCURSOR)$(ERASEL)$(@F) \c"
 	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)Done !$(CLEAR)\n"
 
 ### Link ###
 .ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
 	@ar rcs $(NAME) $(OBJ)
-	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
+	@printf "$@: Done !\n"
 
 .ONESHELL:
 test: re
