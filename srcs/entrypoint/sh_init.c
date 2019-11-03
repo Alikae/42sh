@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 14:27:00 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/03 18:11:11 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,28 +173,11 @@ void	init_signals_handling()
 //	signal(SIGUSR2, &handle_signal);
 }
 
-void	sh_init_debug(t_sh *shell)
-{
-	t_opt	*tmp;
-
-	if ((tmp = ft_fetch_opt("debug", 5, shell->opt)))
-	{
-		shell->dbg = tmp->arg;
-		shell->dbg_fd = dup(2); //CLOSE AT EXITPOINT
-	}
-	else
-	{
-		shell->dbg_fd = open("/dev/null", 0);
-		shell->dbg = NULL;
-	}
-}
 
 void	sh_init(t_sh *shell)
 {
-	char			*opts;
 	struct passwd	*pwd;
 
-	opts = ft_strdup("a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug:");
 	sh_init_env();
 	/*
 	   shell->abort_cmd = 0;
@@ -203,8 +186,7 @@ void	sh_init(t_sh *shell)
 	   shell->pipe_lst = 0;
 	   */
 	//MERGE?
-	shell->opt = ft_getopt(&(shell->ac), &(shell->av), opts);
-	free(opts);//To pass static?
+	sh_init_opts(shell);
 	shell->pipe_lst = 0;
 	//
 	//VERIFY ALL SHELL-> ARE SET

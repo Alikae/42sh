@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/12 15:20:07 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/02 22:37:36 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/03 22:16:51 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,8 +78,9 @@ $(OBJ_DIR): mkdir_msg
 ### Compilation ###
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
-	@echo "$(RCURSOR)$(ERASEL)$(@F) \c"
+	@echo "$(SCURSOR)$(@F) \c"
 	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
+	@echo "$(RCURSOR)$(ERASEL)\c"
 
 ### Link ###
 .ONESHELL:

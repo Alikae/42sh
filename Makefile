@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/02 22:38:58 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/03 22:15:55 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,8 +99,9 @@ $(OBJ_DIR): | mkdir_msg
 ### Compilation ###
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
-	@echo "$(RCURSOR)$(ERASEL)$(@F) \c"
+	@echo "$(SCURSOR)$(@F) \c"
 	@$(CC) $(CFLAGS) -o $@ -c $<
+	@echo "$(RCURSOR)$(ERASEL)\c"
 
 ### Link ###
 .ONESHELL:
