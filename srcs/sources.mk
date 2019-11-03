@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/02 21:38:04 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/03 17:14:11 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,6 +84,7 @@ C_FILES_executer = \
 	sh_exec_file.c \
 	sh_exec_stdin.c \
 	sh_exec_arg.c \
+	sh_exec_default.c \
 	exec_script.c \
 	exec_compound.c \
 	exec_simple_command.c \
