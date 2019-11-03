@@ -13,6 +13,8 @@
 #include "sh.h"
 #include "sh_job_control.h"
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 void	check_jobs_status(t_sh *p)
 {
