@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init_opts.c                                     :+:      :+:    :+:   */
+/*   sh_set_shlvl.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/03 17:26:30 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/03 22:22:38 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/03 22:33:34 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/03 22:35:44 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "sh.h"
+#include "sh_env.h"
 
-void	sh_init_opts(t_sh *s)
+void	sh_set_shlvl(void)
 {
-	char *str;
+	char *tmp;
+	int shlvl;
 
-	str = "a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug:";
-	if (s->ac <= 1)
-		return ;
-	s->opt = ft_getopt(&(s->ac), &(s->av), str);
+	shlvl = 0;
+	tmp = NULL;
+	if (!(sh_getev_value("SHLVL")))
+		sh_setev("SHLVL", "1");
+	else
+	{
+		tmp = ft_itoa(1 + ft_atoi(sh_getev("SHLVL")->value));
+		sh_setev("SHLVL", tmp);
+		ft_strdel(&tmp);
+	}
+	sh_getev("SHLVL")->exported = 1;
 }
