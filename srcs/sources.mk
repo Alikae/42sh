@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/03 22:47:02 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/04 20:01:11 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ C_FILES_entrypoint = \
 	sh_init_opts.c \
 	sh_init_env.c \
 	sh_init_signals.c \
+	sh_init_history.c \
 	sh_set_shlvl.c \
 	sh_init.c
 
@@ -123,6 +124,7 @@ C_FILES_builtins = \
 
 C_FILES_tools = \
 	sh_shclr.c \
+	sh_print_all_token.c \
 	sh_tab_fusion.c \
 	sh_are_you_sur.c \
 	sh_check_path.c \
