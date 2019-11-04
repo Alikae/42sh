@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/10 12:41:16 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/04 21:16:44 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,33 @@ static void		init_history(t_hist *hist, char **history)
 	hist->index = -1;
 }
 
+static void		command_hist_read(int fd, char ***history, t_hist *hist)
+{
+	char	*line;
+	char	*rest;
+
+	line = NULL;
+	rest = NULL;
+	while (get_next_line(fd, &line, &rest) > 0)
+	{
+		if (hist->size_r < hist->size_l - 1)
+			*history = tab_realloc(*history, line);
+		else
+			*history = tab_insert(*history, line);
+		ft_memdel((void**)&line);
+		hist->size_r += 1;
+	}
+	ft_memdel((void**)&rest);
+	ft_memdel((void**)&line);
+}
+
 t_hist			*command_history(t_hist *hist)
 {
 	int		fd;
-	char	*line;
 	char	**history;
-	char	*rest;
 
 	hist->size_r = 0;
 	history = NULL;
-	rest = NULL;
 	if (hist->size_l == 0 || !hist->path)
 	{
 		hist->prev = NULL;
@@ -54,17 +71,7 @@ t_hist			*command_history(t_hist *hist)
 	}
 	if (!(fd = open(hist->path, O_RDONLY | O_CREAT | O_SYNC, 0600)))
 		return (0);
-	while (get_next_line(fd, &line, &rest) > 0)
-	{
-		if (hist->size_r < hist->size_l - 1)
-			history = tab_realloc(history, line);
-		else
-			history = tab_insert(history, line);
-		ft_memdel((void**)&line);
-		hist->size_r += 1;
-	}
-	ft_memdel((void**)&rest);
-	ft_memdel((void**)&line);
+	command_hist_read(fd, &history, hist);
 	init_history(hist, history);
 	close(fd);
 	return (hist);

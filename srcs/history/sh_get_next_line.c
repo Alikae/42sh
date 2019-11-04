@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 23:46:00 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/08/28 23:50:26 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/04 21:09:44 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int				get_next_line(const int fd, char **line, char **rest)
 	char		*str;
 	char		*temp_r;
 	char		*temp_s;
-	
+
 	str = NULL;
 	if ((read(fd, str, 0) < 0)
 			|| ((((!rest && !*rest) || !(temp_r = ft_strchr(*rest, '\n')))
