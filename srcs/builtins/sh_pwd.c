@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 14:55:02 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 15:11:51 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/04 21:20:25 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 
 int		sh_pwd(int ac, char **av, t_env **ev)
 {
+	char *tmp;
+
 	(void)ac;
 	(void)av;
 	(void)ev;
-	char *tmp;
-
 	if (!(tmp = ft_strnew(PATH_MAX + 1)))
 		return (1);
 	tmp = getcwd(tmp, PATH_MAX);
