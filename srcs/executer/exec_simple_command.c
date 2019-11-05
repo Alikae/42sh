@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 19:48:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/05 05:53:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@ void	save_std_fds(t_sh *p)
 
 	i = -1;
 	while (++i < 3)
-		if (p->cpy_std_fds < 0)
+	{
+		if (p->cpy_std_fds[i] < 0)
 			p->cpy_std_fds[i] = dup(i);
+	}
 	//	if (p->cpy_std_fds[2] > -1)
 	//	{
 	//		p->dbg_fd = p->cpy_std_fds[2];
@@ -490,14 +492,8 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 	int	nb_redirections;
 
 	nb_redirections = 0;
-	if (type == SH_GREAT || type == SH_CLOBBER || type == SH_DGREAT)
+	if (type == SH_GREAT || type == SH_CLOBBER || type == SH_DGREAT || type == SH_DLESSDASH || type == SH_DLESS)
 	{
-		//if (type == SH_GREAT/*&& is_set(NOCLOBBER)*/)
-		//{
-		//if (file exist
-		//	return (0);
-		//}
-
 		if (fd_in == -1)
 		{
 			push_redirect_lst(&p->redirect_lst, 1, fd_out);
@@ -523,11 +519,49 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 			nb_redirections++;
 		}
 	}
-	else if (type == SH_LESSGREAT)
+	else if (type == SH_LESSAND)
 	{
-
 	}
 	return (nb_redirections);
+}
+
+void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections)
+{
+	int	pip[2];
+
+	(void)p;
+	(void)tok;
+	(void)nb_redirections;
+	if (pipe(pip) == -1)
+	{
+		printf("PIPE ERROR\nKILLING MYSELF");
+		sh_exitpoint();
+	}
+	write(pip[1], tok->content, ft_strlen(tok->content));
+	close(pip[1]);
+	*nb_redirections += push_redirections(p, 0, pip[0], tok->type);
+}
+
+void	stock_lessgreatand(t_sh *p, t_token *token, int *nb_redirections)
+{
+	//TO REDO
+	int	fd_in;
+	int	fd_out;
+
+
+	(void)p;
+	if (!token->content || !*token->content)
+		fd_in = 1;//handle &
+	else
+		fd_in = ft_atoi(token->content);
+	if (!token->content || !*token->content)
+		return ;//handle &
+	else
+		fd_out = ft_atoi(token->sub->content);
+	if (token->sub->content[0] == '-')
+		close(fd_in);
+	else
+		*nb_redirections += push_redirections(p, fd_out, fd_in, token->type);
 }
 
 void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
@@ -535,16 +569,25 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	int	fd_in;
 	int	fd_out;
 
+	if (token->type == SH_DLESS || token->type == SH_DLESSDASH)
+	{
+		stock_here_document(p, token, nb_redirections);
+		return ;
+	}
+	if (token->type == SH_LESSAND || token->type == SH_GREATAND)
+	{
+		stock_lessgreatand(p, token, nb_redirections);
+		return ;
+	}
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 		printf("d->[%s] %p\n", token->content, token->content);
 	if (!token->content || !*token->content)
-		fd_in = 1;//handle &
+		fd_in = -1;//handle &
 	else
 		fd_in = ft_atoi(token->content);
 	if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))
 	{
-		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			dprintf(p->dbg_fd, "redirection error in %s\n", token->sub->content);
+		dprintf(2, "redirection error in %s\n", token->sub->content);
 		return ;
 	}
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
@@ -571,6 +614,7 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	//reverse sens
 	t_env	*tmp;
 	char	*equal;
+	t_token	*tmpt;
 
 	(*nb_assign)++;
 	tmp = p->assign_lst;
@@ -583,6 +627,10 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	*equal = '=';
 	p->assign_lst->value = ft_strdup(equal + 1);
 	//expand without IFS p->assign_lst->value
+	tmpt = sh_expansion(p->assign_lst->value, &(p->params), 0);
+	free(p->assign_lst->value);
+	p->assign_lst->value = ft_strdup(tmpt->content);
+	free_ast(tmpt);
 	p->assign_lst->next = tmp;
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
 		dprintf(p->dbg_fd, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);

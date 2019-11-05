@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 17:47:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/05 05:33:35 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int		sh_loop(void)
 		while (!complete)//Can we ctrl-C?
 		{
 			//swap_signals_to_prompter
-			if (1 || /**/!dbug)
+			if (1 || !dbug)
 			{
 				fflush(0);
 				if (!(ln_tab = sh_arguments(sh()->hist)))
@@ -124,6 +124,10 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("echo $(echo yolglej)");
 				ln_tab = ft_strdup("a()\n{ a ; }\na\n");
 				ln_tab = ft_strdup("$'\n");
+				ln_tab = ft_strdup("a=\"'\"\n");
+				ln_tab = ft_strdup("cat <<-lala\necho yolo\nlala\n");
+				ln_tab = ft_strdup("fd < lala\n\n\n");
+				//ln_tab = ft_strdup("cat <lala\n");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;
@@ -135,8 +139,10 @@ int		sh_loop(void)
 			if (input)
 				input = ft_strjoin_free(input, "\n", input);
 			input = ft_strjoin_free(input, ln_tab, input);
+			input = ft_strjoin_free(input, "\n", input);
 			//printf("%i - %s -\n", strlen(input), input);
 			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
+			//printf("-%s-\n", input);
 			free(ln_tab);
 			sh_init_cmd(input);
 			if ((p->ast = tokenize_input(input)))//line
@@ -149,6 +155,7 @@ int		sh_loop(void)
 			}
 			//	else
 			//		printf("Tokenizer Error\n");
+			input[ft_strlen(input) - 1] = 0;
 			free_ast(p->ast);
 			if (p->invalid_cmd)
 				break;
