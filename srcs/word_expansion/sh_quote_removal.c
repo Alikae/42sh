@@ -62,7 +62,7 @@ int		sh_check_split(t_split *splt)
 	int		j;
 
 	j = 0;
-	while (splt->split[j])
+	while (splt->split && splt->split[j])
 	{
 		if (splt->split[j] == splt->tok->content[splt->i])
 			return (1);
@@ -166,12 +166,12 @@ t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
 	toke = splt.sub;
-	while (toke)
+/*	while (toke)
 	{
 		if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
 			;//printf("								[%i]tok->content = %s\n", i, tok->content);
 		toke = toke->next;
 		i++;
-	}
+	}*/
 	return (splt.sub);
 }
