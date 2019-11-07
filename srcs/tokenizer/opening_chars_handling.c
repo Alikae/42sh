@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:38:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/22 00:01:39 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 17:32:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ t_toktype	read_skip_opening_char(t_tokenize_tool *t)
 			t->i++;
 			return (SH_PARAM_EXP);
 		}
+		t->i--;
 	}
 	else if (t->input[t->i] == '\'')
 	{

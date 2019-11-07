@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/11 08:14:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/05 02:17:41 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,7 +250,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 			return (type);
 		if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin, t->i - word_begin)))
 		{
-			if (word_out_of_context(type) || (type == SH_BANG && (tmp = bang_unfollowed_by_word(t))))//bang unfollowed does check operator n everythng?
+			if (word_out_of_context(type) || (type == SH_BANG && (tmp = bang_unfollowed_by_word(t))))
 			{
 				if (tmp == -1)
 					return (SH_SYNTAX_ERROR);
@@ -320,19 +320,6 @@ t_token		*tokenize_input(const char *input)
 	ast = recursive_tokenizer(&tok_tool, SH_NULL, &terminator);
 	return (ast);
 }
-//INCLUDE NOTION OF NEXT_WORD_NEEDED
-
-//{
-//	while (1)
-//	{
-		//read_next_cmd_line
-		//if TOKENIZE == UNFINISHED
-		//	print ; continue
-		//else if TOKENIZE == SYNTAX_ERROR
-		//	print ; free ; continue ;
-		//exec_script
-//	}
-//}
 
 //RM COMMENTS (#comm)
 

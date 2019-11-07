@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 07:36:41 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/14 10:48:56 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/01 15:19:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static int		sh_parse_line_escape(char **line)
 {
 	int	i;
 
+	if (!line[0])
+		return (1);
 	i = 0;
 	while (line[0][i] != '\0')
 		i++;

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/15 21:27:30 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 17:36:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		sh_check_split(t_split *splt)
 	int		j;
 
 	j = 0;
-	while (splt->split[j])
+	while (splt->split && splt->split[j])
 	{
 		if (splt->split[j] == splt->tok->content[splt->i])
 			return (1);
@@ -147,7 +147,7 @@ void	sh_find_quote(t_split *splt, short quote)
 		sh_token_spliting(splt, 1);
 }
 
-t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
+t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 {
 	t_split	splt;
 	t_token	*toke;
@@ -155,23 +155,23 @@ t_token	*sh_quote_removal(t_token *tok, const char *split)//, short ifs)
 
 	i = 1;
 	splt.tok = tok;
-	if (split)// && ifs)
+	if (split && ifs)
 		splt.split = split;
-	else// if (ifs)
+	else if (ifs)
 		splt.split = ft_strdup(" \t\n");
-	//else
-	//	splt.split = NULL;
+	else
+		splt.split = NULL;
 	splt.i = 0;
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
 	toke = splt.sub;
-	while (toke)
+/*	while (toke)
 	{
 		if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
 			;//printf("								[%i]tok->content = %s\n", i, tok->content);
 		toke = toke->next;
 		i++;
-	}
+	}*/
 	return (splt.sub);
 }

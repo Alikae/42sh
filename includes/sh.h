@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/10 12:15:32 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/01 12:37:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ typedef struct		s_sh
 	t_token			*ast;
 	t_token			*functions;
 	int				child_ac;
-	char			**child_argv;
 	t_open_file		*opened_files;
 	int				nb_nested_functions;
 	int				nb_nested_compounds;

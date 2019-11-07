@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/12 06:37:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/05 05:33:35 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,11 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 		while (lvcpy--)
 		{
 			if (!lvcpy && lvl > 1)
-				if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-					dprintf(p->dbg_fd, "‾‾‾‾‾‾");
-			if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-				dprintf(p->dbg_fd, "%c", (lvcpy == 0) ? '|' : ' ');
-			if (lvcpy < lvl - 1 || lvl == 1)
-				dprintf(p->dbg_fd, "      ");
+				dprintf(2, "‾‾‾‾‾‾");
+			dprintf(2, "%c", (lvcpy == 0) ? '|' : ' ');
+			dprintf(2, "      ");
 		}
-		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			dprintf(p->dbg_fd, "[%15s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
+		dprintf(2, "[%s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);
@@ -78,13 +74,16 @@ int		sh_loop(void)
 		sh_prompt();
 		ln_tab = NULL;
 		int dbug = sh()->dbg != NULL;
+		//TMP DBG
+			dbug = 1;
+		//
 		complete = 0;
 		input = 0;
 		p->print_syntax_errors = 1;
 		while (!complete)//Can we ctrl-C?
 		{
 			//swap_signals_to_prompter
-			if (1 || /**/!dbug)
+			if (1 || !dbug)
 			{
 				fflush(0);
 				if (!(ln_tab = sh_arguments(sh()->hist)))
@@ -123,6 +122,12 @@ int		sh_loop(void)
 				ln_tab = ft_strdup("$(ls)");
 				ln_tab = ft_strdup("$()");
 				ln_tab = ft_strdup("echo $(echo yolglej)");
+				ln_tab = ft_strdup("a()\n{ a ; }\na\n");
+				ln_tab = ft_strdup("$'\n");
+				ln_tab = ft_strdup("a=\"'\"\n");
+				ln_tab = ft_strdup("cat <<-lala\necho yolo\nlala\n");
+				ln_tab = ft_strdup("fd < lala\n\n\n");
+				//ln_tab = ft_strdup("cat <lala\n");
 				//ET UTILISE L'OPTION DEBUG
 			}
 			//	int z = 0;
@@ -134,8 +139,10 @@ int		sh_loop(void)
 			if (input)
 				input = ft_strjoin_free(input, "\n", input);
 			input = ft_strjoin_free(input, ln_tab, input);
+			input = ft_strjoin_free(input, "\n", input);
 			//printf("%i - %s -\n", strlen(input), input);
 			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
+			//printf("-%s-\n", input);
 			free(ln_tab);
 			sh_init_cmd(input);
 			if ((p->ast = tokenize_input(input)))//line
@@ -148,6 +155,7 @@ int		sh_loop(void)
 			}
 			//	else
 			//		printf("Tokenizer Error\n");
+			input[ft_strlen(input) - 1] = 0;
 			free_ast(p->ast);
 			if (p->invalid_cmd)
 				break;

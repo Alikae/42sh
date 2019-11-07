@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/22 00:02:04 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/01 19:47:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int		sh_script(const char *path)
 	char	*buff;
 	char	*input;
 	int		fd;
+	t_token	*ast;
 
 	p = sh();
 	input = NULL;
@@ -48,11 +49,13 @@ int		sh_script(const char *path)
 	}
 	close(fd);
 	sh_init_cmd(input);
-	if (input && *input && (p->ast = tokenize_input(input)))//line
+	//doesnt throw error omn script "WHILE"
+	if (input && *input && (ast = tokenize_input(input)))//line
 	{
-		dprintf(p->dbg_fd, "YOLOTOLTKLITJOL\n");
-	//	print_all_tokens(p, p->ast, 0);
-		exec_script(p, p->ast, 0);
+		//HANDLE SYNTAX ERROR
+	//	print_all_tokens(p, ast, 0);
+		p->abort_cmd = 0;
+		exec_script(p, ast, 0);
 	}
 	return (1);
 }

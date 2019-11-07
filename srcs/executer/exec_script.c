@@ -78,6 +78,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
 	exec_command(p, token_begin, token_end);
+	printf("[%i] exec background suicide\n", getpid());
 	sh_exitpoint();
 	//CREATE JOB?
 	//fork
@@ -234,10 +235,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	}
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
-	{
-		//printf("create_pgrp\n");
 		create_process_group_give_terminal_access(p, pid, foreground);
-	}
 	if (!child_pid)
 	{
 			signal (SIGINT, SIG_DFL);
@@ -253,7 +251,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		p->jobs = 0;
 		close_cpy_std_fds(p);
 	}
-	printf("pgid of [%i] is [%i]\n", getpid(), getpgid(0));
+	//printf("pgid of [%i] is [%i]\n", getpid(), getpgid(0));
 	return (child_pid);
 }
 
@@ -270,7 +268,7 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
 		//free stuff or not?
-		//printf("[%i] exec background suicide\n", getpid());
+		printf("[%i] exec background suicide\n", getpid());
 		sh_exitpoint();
 	}
 	else
