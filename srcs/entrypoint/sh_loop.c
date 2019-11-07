@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/04 20:24:28 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/07 12:34:45 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "sh_env.h"
 #include "sh_job_control.h"
 
-#include <stdio.h>
+#include <stdio.h> //
 
 static int	sh_loop_read(int *complete, char **input, t_sh *p, char **ln)
 {
@@ -51,7 +51,21 @@ static int	sh_loop_read(int *complete, char **input, t_sh *p, char **ln)
 	return (1);
 }
 
-int			sh_loop(void)
+static t_hist	*init_history(void)
+{
+	t_hist *hist;
+	t_env *tmp;
+
+	hist = malloc(sizeof(t_hist));
+	hist->current = NULL;
+	hist->path = find_path_dir();
+	tmp = sh_getev("HISTSIZE");
+	hist->size_l = (!tmp ? 200 : ft_atoi(tmp->value));
+	hist = command_history(hist);
+	return (hist);
+}
+
+int		sh_loop(void)
 {
 	char	*ln_buff;
 	t_sh	*p;
@@ -63,6 +77,7 @@ int			sh_loop(void)
 	p = sh();
 	sh()->hist = sh_init_history();
 	sh_parse_rc();
+	sh()->hist = init_history();
 	while (!p->exit)
 	{
 		sh_prompt();
@@ -72,6 +87,91 @@ int			sh_loop(void)
 		p->print_syntax_errors = 1;
 		while (!complete && sh_loop_read(&complete, &input, p, &ln_buff))
 			;
+		while (!complete)//Can we ctrl-C?
+		{
+			//swap_signals_to_prompter
+			if (1 || !dbug)
+			{
+				fflush(0);
+				if (!(ln_tab = sh_arguments(sh()->hist)))
+					break ;
+			}
+			else
+			{
+				//		ln_tab = malloc(2 * sizeof(char*));
+				//	ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
+				//	ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
+				//	ln_tab[0] = ft_strdup("/bin/cat tet");
+				//	ln_tab[0] = ft_strdup("for lala in po la ka nu ; do /bin/echo $lala ; done");
+				//	ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
+				//	ln_tab[0] = ft_strdup("case yoz in ( lap | yoz ) /bin/echo yes ;esac");
+				//	ln_tab[0] = ft_strdup("  echo ; done");
+				//		ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ; esac");
+				//	ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
+				ln_tab = ft_strdup("LSCOLORS=lala ls -g");
+				ln_tab = ft_strdup("cat |");
+				ln_tab = ft_strdup("echo (PUSH SUR TA PUTAIN DE BRANCHE)");
+				ln_tab = ft_strdup("if ( ls ) ; then echo yo ; fi");
+				ln_tab = ft_strdup("!");
+				ln_tab = ft_strdup("ls");
+				ln_tab = ft_strdup("echo yo lala");
+				ln_tab = ft_strdup("\"BONJOURS TOUT LE\"");
+				ln_tab = ft_strdup("echo yo");
+				ln_tab = ft_strdup("readonly PWD ; cd .. ; pwd");
+				ln_tab = ft_strdup("readonly PWD ; pwd");
+				ln_tab = ft_strdup("fg");
+				ln_tab = ft_strdup("a=b;  a=c;  a=d; a=e");
+				ln_tab = ft_strdup("a=b;  e=c;  w=d; q=e");
+				ln_tab = ft_strdup("exit");
+				ln_tab = ft_strdup(";");
+				ln_tab = ft_strdup("echo \\;; ; ls");
+				ln_tab = ft_strdup("echo $?");
+				ln_tab = ft_strdup("$(ls)");
+				ln_tab = ft_strdup("$()");
+				ln_tab = ft_strdup("echo $(echo yolglej)");
+				ln_tab = ft_strdup("a()\n{ a ; }\na\n");
+				ln_tab = ft_strdup("$'\n");
+				ln_tab = ft_strdup("a=\"'\"\n");
+				ln_tab = ft_strdup("cat <<-lala\necho yolo\nlala\n");
+				ln_tab = ft_strdup("fd < lala\n\n\n");
+				//ln_tab = ft_strdup("cat <lala\n");
+				//ET UTILISE L'OPTION DEBUG
+			}
+			//	int z = 0;
+			//	while (ln_tab[z])
+			//		fprintf(stderr, "[%s]\n", ln_tab[z++]);
+			//	if (!*ln_tab || !ft_strncmp("exit", *ln_tab, 4))
+			//		break ;
+			//	else
+			if (input)
+				input = ft_strjoin_free(input, "\n", input);
+			input = ft_strjoin_free(input, ln_tab, input);
+			input = ft_strjoin_free(input, "\n", input);
+			//printf("%i - %s -\n", strlen(input), input);
+			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
+			//printf("-%s-\n", input);
+			free(ln_tab);
+			sh_init_cmd(input);
+			if ((p->ast = tokenize_input(input)))//line
+			{
+				//print_all_tokens(p, p->ast, 0);
+				p->abort_cmd = 0;
+				if (!p->unfinished_cmd)
+					exec_script(p, p->ast);
+				//printf("Script executed\n");
+			}
+			//	else
+			//		printf("Tokenizer Error\n");
+			input[ft_strlen(input) - 1] = 0;
+			free_ast(p->ast);
+			if (p->invalid_cmd)
+				break;
+			if (!p->unfinished_cmd)
+				complete = 1;
+			else
+				ft_putstr("$->");//prompt PSX
+		}
+		//
 		free(input);
 		check_jobs_status(p);
 	}

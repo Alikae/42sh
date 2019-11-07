@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/12 05:12:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/05 05:23:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ t_toktype	read_n_skip_operator(t_tokenize_tool *t)
 	return (SH_LESS);
 }
 
-//
 int	is_newline_separator(t_toktype type)
 {
 	if (type == SH_SEMI
@@ -116,7 +115,6 @@ int	is_newline_separator(t_toktype type)
 		return (1);
 	return (0);
 }
-//
 
 int			is_redirection_operator(t_toktype type)
 {
@@ -130,13 +128,52 @@ int			is_redirection_operator(t_toktype type)
 }
 
 int			operator_cant_be_first(t_toktype type)
-{//verify
+{
 	if (type == SH_AND || type == SH_OR
 			|| type == SH_AND_IF || type == SH_OR_IF)
 		return (1);
 	return (0);
 }
+
+t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
+{
+	int	word_begin;
+	int	word_len;
+	int	here_doc_begin;
+
+	(void)type;
+	forward_blanks(t);
+	word_begin = t->i;
+	if (read_n_skip_word(t) == -1)
+		return (SH_SYNTAX_ERROR);
+	if (word_begin == t->i)
+	{
+		sh()->unfinished_cmd = 1;
+		return (SH_SYNTAX_ERROR);
+	}
+	word_len = t->i - word_begin;
+	forward_blanks_newline(t);
+	here_doc_begin = t->i;
+	while (ft_strncmp(t->input + word_begin, t->input + t->i, word_len) || word_len > (int)ft_strlen(t->input + t->i) || t->input[t->i + word_len] != '\n')
+	{
+		t->i = (int)ft_strchr(t->input + t->i, '\n');
+		if (!t->i)
+		{
+			sh()->unfinished_cmd = 1;
+			return (SH_SYNTAX_ERROR);
+		}
+		t->i -= (int)t->input;
+		while (t->input[t->i] == '\n')
+			t->i++;
+	}
+	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i - here_doc_begin)))
+		exit(ERROR_MALLOC);
+	read_n_skip_word(t);
+	forward_blanks_newline(t);
+	return (0);
+}
 //TO TEST
+/*
 t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 {
 	int	word_begin;
@@ -154,24 +191,30 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 		sh()->unfinished_cmd = 1;
 		return (SH_SYNTAX_ERROR);
 	}
-	word_len = t->i - word_begin + 1;
+	word_len = t->i - word_begin;
 	forward_blanks_newline(t);
 	here_doc_begin = t->i;
-	while (ft_strncmp(t->input + word_begin, t->input + t->i, word_len) || t->i + word_len != '\n')
+	while (ft_strncmp(t->input + word_begin, t->input + t->i, word_len) || t->i + word_len > (int)ft_strlen(t->input) || t->input[t->i + word_len] != '\n')
 	{
 		printf("yo\n");
-		t->i = ft_strchr(t->input + t->i, '\n') - t->input;
-		if (t->i < 0)
+		//printf("-%s-%s-%i\n", t->input, t->input + t->i, t->i);
+		printf("%c-%s-%s-%i\n", t->input[t->i + word_len], t->input + word_begin, t->input + t->i, word_len);
+		t->i = (ft_strchr(t->input + t->i, '\n')) ? ft_strchr(t->input + t->i, '\n') - t->input + 1: 0;
+		printf("%i\n", t->i);
+		if (t->i == 0 || !t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;
 			return (SH_SYNTAX_ERROR);
 		}
+		forward_blanks_newline(t);
+	//if (read_n_skip_word(t) == -1)
+	//	return (SH_SYNTAX_ERROR);
 	}
 	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i - here_doc_begin)))
 		exit(ERROR_MALLOC);
 	return (0);
 	//+ was_quoted + was_dashed
-}
+}*/
 
 t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {

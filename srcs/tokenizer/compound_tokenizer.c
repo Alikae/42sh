@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/11 08:14:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/05 02:26:51 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free
 	(void)t;
 	(void)to_free;
 	//freeall(to_free);
+	free_ast(to_free);
 	if (sh()->print_syntax_errors)
-	printf("SYNTAX_ERROR: %s\n", s);
+		printf("SYNTAX_ERROR: %s\n", s);
 	return (0);
 }
 
@@ -53,8 +54,10 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 		if (!t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;//free everywhere
+			free_ast(compound_token);
 			return (0);
 		}
+		free_ast(compound_token);
 		return (handle_syntax_error(t, "missing condition in WHILE", compound_token));
 	}
 	if (next_separator != SH_DO)
@@ -64,8 +67,10 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 		{
 			printf("b2\n");
 			sh()->unfinished_cmd = 1;//free everywhere
+			free_ast(compound_token);
 			return (0);
 		}
+		free_ast(compound_token);
 		return (handle_syntax_error(t, "missing DO in WHILE", compound_token));
 	}
 	if (!(compound_token->sub->next = recursive_tokenizer(t, SH_DO, &next_separator)))
@@ -74,8 +79,10 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 		if (!t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;//free everywhere
+			free_ast(compound_token);
 			return (0);
 		}
+		free_ast(compound_token);
 		return (handle_syntax_error(t, "missing execution block in WHILE", compound_token));
 	}
 	if (next_separator != SH_DONE)
@@ -84,8 +91,10 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 		if (!t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;//free everywhere
+			free_ast(compound_token);
 			return (0);
 		}
+		free_ast(compound_token);
 		return (handle_syntax_error(t, "missing DONE in WHILE", compound_token));
 	}
 	return (compound_token);
@@ -158,12 +167,13 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 	int			word_begin;
 
 	origin = create_token(0, 0, 0);
-	//leak
+	//leak?
 	actual = origin;
 	if (!tokenize_case_pattern(t, next_separator, actual, compound))
 	{
 		if (!t->input[t->i])
 			sh()->unfinished_cmd = 1;
+		free_ast(origin);
 		return (0);
 	}
 	if (!origin->sub)
@@ -171,15 +181,20 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 		if (!t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;
+			free_ast(origin);
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
+		free_ast(origin);
 		return (handle_syntax_error(t, "PATTERN missing in CASE", compound));
 	}
 	forward_blanks_newline(t);
 	word_begin = t->i;
 	if (read_n_skip_word(t) == -1)
+	{
+		free_ast(origin);
 		return (0);
+	}
 	if (t->i != word_begin && !ft_strncmp(t->input + word_begin, "esac", t->i - word_begin))
 		*esac_finded = 1;
 	else
@@ -187,9 +202,9 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 		t->i = word_begin;
 		if (!(origin->sub->sub = recursive_tokenizer(t, SH_CASE, next_separator)) && *next_separator != SH_ESAC && *next_separator != SH_DSEMI)
 		{
-			//printf("%i ", *next_separator);
 			if (!t->input[t->i])
 				sh()->unfinished_cmd = 1;
+			free_ast(origin);
 			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
 		}
 	}
@@ -485,7 +500,6 @@ t_token	*tokenize_for(t_tokenize_tool *t, int word_begin)
 	t_token		*compound_token;
 
 	compound_token = create_token(SH_FOR, word_begin, 0);
-	//printf("%s\n", t->input);
 	if (!tokenize_for_name(t, compound_token))
 	{
 		sh()->invalid_cmd = 1;
