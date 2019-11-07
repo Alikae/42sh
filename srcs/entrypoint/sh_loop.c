@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/05 05:33:35 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/07 12:30:11 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "sh_env.h"
 #include "sh_job_control.h"
 
-#include <stdio.h>
+#include <stdio.h> //
 
 void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 {
@@ -50,11 +50,13 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 static t_hist	*init_history(void)
 {
 	t_hist *hist;
+	t_env *tmp;
 
 	hist = malloc(sizeof(t_hist));
 	hist->current = NULL;
 	hist->path = find_path_dir();
-	hist->size_l = 200;	//A PEAUFINER -- C'EST VRAIMENT SI ON A RIEN A FAIRE
+	tmp = sh_getev("HISTSIZE");
+	hist->size_l = (!tmp ? 200 : ft_atoi(tmp->value));
 	hist = command_history(hist);
 	return (hist);
 }
@@ -67,8 +69,8 @@ int		sh_loop(void)
 	int	complete;
 
 	p = sh();
-	sh()->hist = init_history();
 	sh_parse_rc();
+	sh()->hist = init_history();
 	while (!p->exit)
 	{
 		sh_prompt();
