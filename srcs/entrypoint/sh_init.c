@@ -245,4 +245,5 @@ void	sh_init(t_sh *shell)
 	pwd = getpwnam(shell->user);
 	shell->dir = pwd->pw_dir;
 	shell->hist = NULL;
+	shell->alias_end = 0;
 }

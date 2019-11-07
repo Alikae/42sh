@@ -128,6 +128,7 @@ void	sh_print_ident_size(unsigned int max, unsigned int len, char c)
 		len++;
 	}
 }
+
 void	sh_print_alias_loop_error(char **stack, int loop)
 {
 	unsigned int	max;
@@ -155,17 +156,31 @@ void	sh_print_alias_loop_error(char **stack, int loop)
 	sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
 	ft_putstr("|\n\n");
 }
-/*
+
+int		sh_check_alias(char ***stack, char *alias)
+{
+	int		i;
+
+	i = 0;
+	sh()->alias_end = 0;
+	
+}
+
 void	sh_push_alias(char *alias)
 {
 	static char	**stack;
+	int			ret;
 
-	if (!stack)
+	ret = 0;
+	if (sh()->alias_end)
 	{
-		if (!(stack = malloc(sizeof(char*) * 2))
-			exit(-1);
+		sh()->alias_end = 0;
+		sh_free_stack(&stack);
 	}
-}*/
+	sh_push_alias(&stack, alias);
+	if (!(ret = sh_sheck_stack(stack, alias)))
+		sh_print_alias_loop_error(&stack. ret);
+}
 
 int		sh_alias_substitution(t_tokenize_tool *t)
 {
@@ -179,7 +194,7 @@ int		sh_alias_substitution(t_tokenize_tool *t)
 		before = 0;
 		if ((alias = sh_find_alias(t)))
 		{
-	//		sh_push_alias(alias);
+			sh_push_alias(alias);
 			len = ft_strlen(alias) - 1;
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;

@@ -95,7 +95,9 @@ typedef struct		s_sh
 	int				pgid_current_pipeline;
 	int				force_setpgrp_setattr;
 	int				process_is_stopped;
-	
+
+	int				alias_end;
+
 	t_hist			*hist;
 }					t_sh;
 
