@@ -79,22 +79,28 @@ char	*sh_find_sub_alias(char *str)
 
 	i = 0;
 	tab = sh()->aliases;
+	printf("str in sh_find_sub_alias %s\n", str);
 	if (tab)
 	{
 		while (tab[i])
 		{
+			printf("lssssssssssssssssss\n");
 			j = 0;
 			i_str = 0;
+			printf("\nstr=%s\ntab=%s\n",str, tab[i]);
 			while (str[i_str] && str[i_str] == tab[i][j] && tab[i][j] != '=')
 			{
+				printf("oui\nstr=%c\ntab=%c", str[i_str], tab[i][j]);
 				j++;
 				i_str++;
 			}
-			if (!(str[i_str]))
+			if (tab[i][j] == '=' && !str[i_str])
 				return (tab[i]);
+			printf("et la\n");
 			i++;
 		}
 	}
+	printf("surtout la ?\n");
 	return (NULL);
 }
 
@@ -103,6 +109,7 @@ char	*sh_find_alias(t_tokenize_tool *t)
 	int		i;
 	char	*str;
 	int		j;
+	char	*tab;
 
 	j = 0;
 	i =  t->i;
@@ -114,7 +121,10 @@ char	*sh_find_alias(t_tokenize_tool *t)
 	while (t->input[i] != ' ' && t->input[i])
 		str[j++] = t->input[i++];
 	str[j] = '\0';
-	return (sh_find_sub_alias(str));
+	printf("str = %s\n", t->input);
+	tab = sh_find_sub_alias(str);
+	free(str);
+	return (tab);
 }
 
 unsigned int	sh_find_max_len(char **stack)
@@ -240,14 +250,17 @@ int		sh_alias_substitution(t_tokenize_tool *t)
 	if (before || t->word_nb == 1)
 	{
 		before = 0;
+		printf("ici2\n");
 		if ((alias = sh_find_alias(t)))
 		{
 			sh_push_alias(alias);
 			len = ft_strlen(alias) - 1;
+			printf("ici1\n");
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;
 			printf("ici\n");
 			sh_sub_alias_command(t, alias);
+			printf("%s\n", t->input);
 			return (1);
 		}
 	}
