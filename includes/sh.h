@@ -96,6 +96,7 @@ typedef struct		s_sh
 	int				process_is_stopped;
 
 	int				alias_end;
+	char			**alias_stack;
 
 	t_hist			*hist;
 }					t_sh;

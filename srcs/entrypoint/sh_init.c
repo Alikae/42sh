@@ -246,4 +246,5 @@ void	sh_init(t_sh *shell)
 	shell->dir = pwd->pw_dir;
 	shell->hist = NULL;
 	shell->alias_end = 0;
+	shell->alias_stack = NULL;
 }
