@@ -303,6 +303,7 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		free_ast(origin);
 		return (0);
 	}
+	sh()->alias_end = 1;
 	actual = origin->next;
 	delete_token(origin);
 	return (actual);

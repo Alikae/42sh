@@ -1,6 +1,19 @@
 #include "sh.h"
 #include "sh_types.h"
 
+
+void	debug(char **stack, char *alias)
+{
+	int		i;
+	i = 0;
+	printf("salut\n");
+	while (stack && stack[i])
+	{
+		printf("stack %i = %s\n", i, stack[i]);
+		i++;
+	}
+	printf("end = %s\nalias = %s\nalias_end = %i\n",stack[i], alias, sh()->alias_end);
+}
 int		sh_alias_len(char *alias, int *ind)
 {
 	int		i;
@@ -155,31 +168,66 @@ void	sh_print_alias_loop_error(char **stack, int loop)
 	ft_putstr("<--");
 	sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
 	ft_putstr("|\n\n");
+	sh()->alias_end = 1;
 }
 
-int		sh_check_alias(char ***stack, char *alias)
+int		sh_check_stack(char **stack, char *alias)
 {
 	int		i;
 
 	i = 0;
-	sh()->alias_end = 0;
-	
+	while (stack[i + 1] && (ft_strcmp(stack[i], alias) != 0))
+		i++;
+	if (stack[i + 1])
+		return (i);
+	else
+		return (-1);
+}
+
+void	sh_record_alias(char ***stack, char *alias)
+{
+	int		i;
+	char	**cpy;
+
+	i = 0;
+	cpy = NULL;
+	while (*stack && *stack[i])
+		i++;
+	if (!(cpy = malloc(sizeof(char *) * (i + 2))))
+		exit (-1);
+	i = 0;
+	while (*stack && *stack[i])
+	{
+		cpy[i] = *stack[i];
+		i++;
+	}
+	cpy[i++] = alias;
+	cpy[i] = 0;
+	free(*stack);
+	*stack = cpy;
 }
 
 void	sh_push_alias(char *alias)
 {
-	static char	**stack;
-	int			ret;
+	char	**stack;
+	int		ret;
 
 	ret = 0;
+	stack = sh()->alias_stack;
 	if (sh()->alias_end)
 	{
 		sh()->alias_end = 0;
-		sh_free_stack(&stack);
+		free(stack);
+		stack = NULL;
 	}
-	sh_push_alias(&stack, alias);
-	if (!(ret = sh_sheck_stack(stack, alias)))
-		sh_print_alias_loop_error(&stack. ret);
+	sh_record_alias(&stack, alias);
+	debug(stack, alias);
+	if ((ret = sh_check_stack(stack, alias) != -1))
+	{
+		sh()->abort_cmd = 1;
+		sh_print_alias_loop_error(stack, ret);
+	}
+	sh()->alias_stack = stack;
 }
 
 int		sh_alias_substitution(t_tokenize_tool *t)
@@ -198,6 +246,7 @@ int		sh_alias_substitution(t_tokenize_tool *t)
 			len = ft_strlen(alias) - 1;
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;
+			printf("ici\n");
 			sh_sub_alias_command(t, alias);
 			return (1);
 		}
