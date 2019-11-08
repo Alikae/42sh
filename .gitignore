@@ -6,6 +6,7 @@
 
 # Executables
 *.out
+21sh
 42sh
 
 # Debug files
