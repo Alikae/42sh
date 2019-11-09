@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:31:36 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/09 15:30:33 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/09 15:36:13 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int			sh_export(int ac, char **av, t_env **ev)
 	else
 		while (++i < ac)
 		{
-			if (!ft_isalnum(av[i][0]) || av[i][0] == '_')
+			if (!ft_isalpha(av[i][0]) || av[i][0] == '_')
 			{
 				ft_putstr_fd("export: ", STDERR_FILENO);
 				ft_putstr_fd(av[i], STDERR_FILENO);
