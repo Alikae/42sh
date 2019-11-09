@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 19:15:33 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/09 15:30:06 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1025,7 +1025,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//print_redirections(p, p->redirect_lst);
 	save_std_fds(p);
 	generate_redirections(p);
-	printf("[%i]argv[0]%s-\n", getpid(), child_argv[0]);
 	if ((tmp = is_defined_function(child_argv[0])))
 		ret = exec_function(p, tmp, child_argv);
 	else if ((f = sh_is_builtin(child_argv[0])))
