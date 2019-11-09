@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/09 15:32:29 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/09 17:28:00 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,8 +258,9 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 	{
 		//print_redirections(p, p->redirect_lst);
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
-		printf("execve ERROR\n");
-		exit(1/*EXECVE ERROR*/);
+		dprintf(2, "Execve ErrorR\n");
+		sh()->exit = 1;
+		sh_exitpoint();
 	}
 	return (ret); //<-- Return What?
 }
@@ -311,7 +312,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	nb_paths = 0;
 	paths = 0;
 	if (path[0] != '/' && !(paths = ft_strsplit(sh_getev_value("PATH"), ':')))
-		printf("$PATH not found\n");
+		sh_init_path();
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
 		if (!(ret = lstat(real_path, st)))
@@ -321,8 +322,9 @@ char	*get_real_path(const char *path, struct stat *st)
 	ft_free_tabstr(paths);
 	if (ret || !path[0])
 	{
-		printf("--%s not found\n", path);
-		return (0); //ret val?
+		dprintf(2, "%s: command not found\n", path);
+		sh()->exit = 1;
+		return (0);
 	}
 	return (real_path);
 }
@@ -819,6 +821,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_echo);
 	else if (!ft_strcmp(cmd, "env"))
 		return (&sh_env);
+	else if (!ft_strcmp(cmd, "unsetenv"))
+		return (&sh_unset);
 	else if (!ft_strcmp(cmd, "setenv"))
 		return (&sh_export);
 	else if (!ft_strcmp(cmd, "export"))

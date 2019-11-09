@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/07 11:29:44 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/09 16:57:01 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 
 void	sh_exitpoint(void)
 {
+	int i;
+
+	i = sh()->exit;
 	//free all potential resources
 	if (sh()->dbg_fd > 2)
 		close(sh()->dbg_fd);
@@ -45,5 +48,5 @@ void	sh_exitpoint(void)
 	sh()->hist = NULL;
 	if (sh()->is_interactive && sh()->pid_main_process == getpid())
 		tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
-	exit(EXIT_SUCCESS);
+	exit(i);
 }

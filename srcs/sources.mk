@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/01 19:15:48 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/09 17:21:51 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ C_FILES_entrypoint = \
 	sh_entrypoint.c \
 	sh_loop.c \
 	sh_init_cmd.c \
+	sh_init_path.c \
 	sh_init.c
 
 C_FILES_job_control = \
