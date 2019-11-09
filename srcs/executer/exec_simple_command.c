@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/05 05:53:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -819,6 +819,8 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_echo);
 	else if (!ft_strcmp(cmd, "env"))
 		return (&sh_env);
+	else if (!ft_strcmp(cmd, "setenv"))
+		return (&sh_export);
 	else if (!ft_strcmp(cmd, "export"))
 		return (&sh_export);
 	else if (!ft_strcmp(cmd, "false"))
