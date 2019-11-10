@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/09 17:28:00 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/10 17:56:09 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,8 +250,10 @@ char	**transform_env_for_child(t_env *env)
 int     exec_path(t_sh *p, char *path, char **child_argv)
 {
 	int ret;
+	int child_pid;
 
-	int child_pid = fork_process(p, 1);
+	child_pid = fork_process(p, 1);
+	ret = 0;
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 		ret = block_wait(p, child_pid, 0);
 	else
@@ -1089,5 +1091,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_prgm(p, child_argv);
 	free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
+	sh()->exit = ret;
 	return (ret);
 }

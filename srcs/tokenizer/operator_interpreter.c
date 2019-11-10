@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/05 05:23:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/10 22:41:18 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,8 +239,8 @@ t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actua
 		*p_actual = (*p_actual)->next;
 		if (t->word_nb == 1 && operator_cant_be_first(type))
 		{
-			printf("SYNTAX ERROR: operator cant be first in command -%.10s\n", t->input + ((t->i > 2) ? t->i - 2 : 0));
-			return (SH_SYNTAX_ERROR);
+			dprintf(2, "Syntax error: operator cant be first in command -%.10s\n", t->input + ((t->i > 2) ? t->i - 2 : 0));
+			exit(SH_SYNTAX_ERROR);
 		}
 		if (is_newline_separator(type))
 			t->word_nb = 1;
