@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/05 05:33:35 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/09 16:29:27 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "sh_env.h"
 #include "sh_job_control.h"
 
-#include <stdio.h>
+#include <stdio.h> //
 
 void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 {
@@ -38,7 +38,6 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 			dprintf(2, "%c", (lvcpy == 0) ? '|' : ' ');
 			dprintf(2, "      ");
 		}
-		dprintf(2, "[%s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);
@@ -50,11 +49,13 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 static t_hist	*init_history(void)
 {
 	t_hist *hist;
+	t_env *tmp;
 
 	hist = malloc(sizeof(t_hist));
 	hist->current = NULL;
 	hist->path = find_path_dir();
-	hist->size_l = 200;	//A PEAUFINER -- C'EST VRAIMENT SI ON A RIEN A FAIRE
+	tmp = sh_getev("HISTSIZE");
+	hist->size_l = (!tmp ? 200 : ft_atoi(tmp->value));
 	hist = command_history(hist);
 	return (hist);
 }
@@ -67,8 +68,8 @@ int		sh_loop(void)
 	int	complete;
 
 	p = sh();
-	sh()->hist = init_history();
 	sh_parse_rc();
+	sh()->hist = init_history();
 	while (!p->exit)
 	{
 		sh_prompt();
@@ -90,46 +91,7 @@ int		sh_loop(void)
 					break ;
 			}
 			else
-			{
-				//		ln_tab = malloc(2 * sizeof(char*));
-				//	ln_tab[0] = ft_strdup("/bin/echo lala && /bin/ls -la && CTA 3");
-				//	ln_tab[0] = ft_strdup("yolo () { echo lala ; }");
-				//	ln_tab[0] = ft_strdup("/bin/cat tet");
-				//	ln_tab[0] = ft_strdup("for lala in po la ka nu ; do /bin/echo $lala ; done");
-				//	ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
-				//	ln_tab[0] = ft_strdup("case yoz in ( lap | yoz ) /bin/echo yes ;esac");
-				//	ln_tab[0] = ft_strdup("  echo ; done");
-				//		ln_tab[0] = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ; esac");
-				//	ln_tab = ft_strdup("case yolo in yola ) echo ;; yali | yolo ) loul;;(po )tu ;esac");
-				ln_tab = ft_strdup("LSCOLORS=lala ls -g");
-				ln_tab = ft_strdup("cat |");
-				ln_tab = ft_strdup("echo (PUSH SUR TA PUTAIN DE BRANCHE)");
-				ln_tab = ft_strdup("if ( ls ) ; then echo yo ; fi");
-				ln_tab = ft_strdup("!");
-				ln_tab = ft_strdup("ls");
-				ln_tab = ft_strdup("echo yo lala");
-				ln_tab = ft_strdup("\"BONJOURS TOUT LE\"");
-				ln_tab = ft_strdup("echo yo");
-				ln_tab = ft_strdup("readonly PWD ; cd .. ; pwd");
-				ln_tab = ft_strdup("readonly PWD ; pwd");
-				ln_tab = ft_strdup("fg");
-				ln_tab = ft_strdup("a=b;  a=c;  a=d; a=e");
-				ln_tab = ft_strdup("a=b;  e=c;  w=d; q=e");
-				ln_tab = ft_strdup("exit");
-				ln_tab = ft_strdup(";");
-				ln_tab = ft_strdup("echo \\;; ; ls");
-				ln_tab = ft_strdup("echo $?");
-				ln_tab = ft_strdup("$(ls)");
-				ln_tab = ft_strdup("$()");
-				ln_tab = ft_strdup("echo $(echo yolglej)");
-				ln_tab = ft_strdup("a()\n{ a ; }\na\n");
-				ln_tab = ft_strdup("$'\n");
-				ln_tab = ft_strdup("a=\"'\"\n");
-				ln_tab = ft_strdup("cat <<-lala\necho yolo\nlala\n");
-				ln_tab = ft_strdup("fd < lala\n\n\n");
-				//ln_tab = ft_strdup("cat <lala\n");
-				//ET UTILISE L'OPTION DEBUG
-			}
+				;
 			//	int z = 0;
 			//	while (ln_tab[z])
 			//		fprintf(stderr, "[%s]\n", ln_tab[z++]);

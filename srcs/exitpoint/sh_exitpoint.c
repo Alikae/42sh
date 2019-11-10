@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 12:08:37 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/10 18:03:19 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 
 void	sh_exitpoint(void)
 {
+	int exit_status;
+
+	exit_status = sh()->exit;
 	//free all potential resources
-	if (!ft_strcmp(sh()->dbg, "all") || !ft_strcmp(sh()->dbg, __func__))
-		printf("[%i] exiting shell: %s subprocesses\n", getpid(), (sh()->jobs) ? "killing all" : "no");
 	if (sh()->dbg_fd > 2)
 		close(sh()->dbg_fd);
 	if (sh()->jobs)
@@ -47,6 +48,5 @@ void	sh_exitpoint(void)
 	sh()->hist = NULL;
 	if (sh()->is_interactive && sh()->pid_main_process == getpid())
 		tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
-	printf("[%i]Ciao!\n", getpid());
-	exit(EXIT_SUCCESS);
+	exit(exit_status);
 }

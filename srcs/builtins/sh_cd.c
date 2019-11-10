@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/08 22:54:16 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/07 11:04:29 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,23 @@ static void	cd_change_env(char *new, char *old)
 
 static int	cd_go_to(char *path)
 {
-	char	*olddir;
+	char	*dir;
+	char	*tmp;
 
-	if (!(olddir = ft_strnew(PATH_MAX + 1)))
+	if (!(dir = ft_strnew(PATH_MAX + 1)))
 		return (1);
-	olddir = getcwd(olddir, PATH_MAX);
+	dir = getcwd(dir, PATH_MAX);
 	if (chdir(path))
 	{
 		ft_putstr("cd: can't access: ");
 		ft_putendl(path);
 	}
-	cd_change_env(path, olddir);
-	free(olddir);
+	tmp = ft_strdup(dir);
+	ft_bzero(dir, PATH_MAX);
+	dir = getcwd(dir, PATH_MAX);
+	cd_change_env(dir, tmp);
+	free(tmp);
+	free(dir);
 	return (0);
 }
 

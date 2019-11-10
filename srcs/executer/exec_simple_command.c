@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/07 01:47:23 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/11 00:14:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,16 +250,19 @@ char	**transform_env_for_child(t_env *env)
 int     exec_path(t_sh *p, char *path, char **child_argv)
 {
 	int ret;
+	int child_pid;
 
-	int child_pid = fork_process(p, 1);
+	child_pid = fork_process(p, 1);
+	ret = 0;
 	if (/*(p->lldbug) ? !child_pid : *//**/child_pid)
 		ret = block_wait(p, child_pid, 0);
 	else
 	{
 		//print_redirections(p, p->redirect_lst);
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
-		printf("execve ERROR\n");
-		exit(1/*EXECVE ERROR*/);
+		dprintf(2, "Execve ErrorR\n");
+		sh()->exit = 1;
+		sh_exitpoint();
 	}
 	return (ret); //<-- Return What?
 }
@@ -311,7 +314,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	nb_paths = 0;
 	paths = 0;
 	if (path[0] != '/' && !(paths = ft_strsplit(sh_getev_value("PATH"), ':')))
-		printf("$PATH not found\n");
+		sh_init_path();
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
 		if (!(ret = lstat(real_path, st)))
@@ -321,8 +324,9 @@ char	*get_real_path(const char *path, struct stat *st)
 	ft_free_tabstr(paths);
 	if (ret || !path[0])
 	{
-		printf("--%s not found\n", path);
-		return (0); //ret val?
+		dprintf(2, "%s: command not found\n", path);
+		sh()->exit = 1;
+		return (0);
 	}
 	return (real_path);
 }
@@ -819,6 +823,10 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_echo);
 	else if (!ft_strcmp(cmd, "env"))
 		return (&sh_env);
+	else if (!ft_strcmp(cmd, "unsetenv"))
+		return (&sh_unset);
+	else if (!ft_strcmp(cmd, "setenv"))
+		return (&sh_export);
 	else if (!ft_strcmp(cmd, "export"))
 		return (&sh_export);
 	else if (!ft_strcmp(cmd, "false"))
@@ -1075,7 +1083,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	//print_redirections(p, p->redirect_lst);
 	save_std_fds(p);
 	generate_redirections(p);
-	//printf("[%i]argv[0]%s-\n", getpid(), child_argv[0]);
 	if ((tmp = is_defined_function(child_argv[0])))
 		ret = exec_function(p, tmp, child_argv);
 	else if ((f = sh_is_builtin(child_argv[0])))
@@ -1084,5 +1091,6 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_prgm(p, child_argv);
 	free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
+	sh()->exit = ret;
 	return (ret);
 }
