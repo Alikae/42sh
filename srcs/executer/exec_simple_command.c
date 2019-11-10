@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:17:47 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/05 05:53:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/07 01:47:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 		int ret = tcsetpgrp (0, getpgid(0));
 //		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
 		ret = tcsetattr(0, TCSADRAIN, &p->orig_termios);
-//		dprintf(2, "[%i]tcsetat ret = %i", getpid(), ret);
+		//dprintf(2, "[%i]tcsetat ret = %i", getpid(), ret);
 		signal(SIGTTOU, SIG_DFL);
 //		sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	//	init_signals_handling();
