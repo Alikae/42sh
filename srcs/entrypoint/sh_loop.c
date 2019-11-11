@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/09 16:29:27 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/11 14:27:46 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int		sh_loop(void)
 	int	complete;
 
 	p = sh();
-	sh_parse_rc();
+//	sh_parse_rc();
 	sh()->hist = init_history();
 	while (!p->exit)
 	{
