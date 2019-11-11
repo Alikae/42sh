@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:29:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/10 18:03:19 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/11 14:49:09 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	sh_exitpoint(void)
 {
 	int exit_status;
 
-	exit_status = sh()->exit;
+exit_status = 0;
+	//exit_status = sh()->exit; //NEW VAR
 	//free all potential resources
 	if (sh()->dbg_fd > 2)
 		close(sh()->dbg_fd);

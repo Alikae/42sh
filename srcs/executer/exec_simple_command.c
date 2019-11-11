@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/11 14:15:57 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/11 14:50:18 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,7 +325,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	if (ret || !path[0])
 	{
 		dprintf(2, "%s: command not found\n", path);
-		sh()->exit = 1;
+		//sh()->exit = 1;
 		return (0);
 	}
 	return (real_path);
@@ -1091,6 +1091,5 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_prgm(p, child_argv);
 	free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
-	sh()->exit = ret;
 	return (ret);
 }

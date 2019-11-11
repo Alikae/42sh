@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:45:31 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/10 21:41:33 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/11 14:49:36 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ int				sh_exit(int ac, char **av, t_env **ev)
 
 	(void)ac;
 	(void)ev;
-	status = sh()->exit;
+
+//
+status = 0;
+	//status = sh()->exit;//NOP	new var
 	if (ac > 2)
 	{
 		dprintf(2, "exit: too many arguments");
@@ -39,5 +42,5 @@ int				sh_exit(int ac, char **av, t_env **ev)
 		}
 		status = ft_atoi(av[1]);
 	}
-	exit(status);
+	exit(status);//EXITPOINT
 }
