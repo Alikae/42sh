@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/11 16:10:32 by jerry            ###   ########.fr        #
+#    Updated: 2019/11/11 23:14:48 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -121,6 +121,13 @@ C_FILES_builtins = \
 C_FILES_tools = \
 		sh_shdel.c \
 		sh_hist_del.c \
+		sh_job_del.c \
+		sh_ln_del.c \
+		sh_open_file_del.c \
+		sh_pipe_lst_del.c \
+		sh_redirect_lst_del.c \
+		sh_token_del.c \
+		sh_env_del.c \
 		sh_tab_fusion.c \
 		sh_are_you_sur.c \
 		sh_check_path.c \

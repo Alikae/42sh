@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destructor.c                                       :+:      :+:    :+:   */
+/*   sh_open_file_del.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/11 22:23:03 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 23:00:37 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/11 23:04:32 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
+#include "sh_types.h"
 #include "libft.h"
 
-void	destructor(void)
-{
-	t_sh	*s;
+#include <stdlib.h>
 
-	if ((s = sh()))
-		sh_shdel(&s);
+void	sh_open_file_del(t_open_file **op)
+{
+	t_open_file	*f;
+
+	if (!op || !(f = *op))
+		return ;
+	ft_strdel(&(f->name));
+	//sh_close_file(f->fd);
+	sh_open_file_del(&(f->next));
+	free(*op);
+	*op = NULL;
 }

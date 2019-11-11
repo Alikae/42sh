@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destructor.c                                       :+:      :+:    :+:   */
+/*   sh_job_del.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/11 22:23:03 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 22:47:02 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/11 22:52:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
+#include "sh_types.h"
 #include "libft.h"
 
-void	destructor(void)
-{
-	t_sh	*s;
+#include <stdlib.h>
 
-	if ((s = sh()))
-		sh_shdel(&s);
+void	sh_job_del(t_job **job)
+{
+	t_job *j;
+
+	if (!job || !(j = *job))
+		return ;
+	ft_strdel(&(j->name));
+	sh_job_del(&(j->next));
+	free(*job);
+	*job = NULL;
 }

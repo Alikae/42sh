@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destructor.c                                       :+:      :+:    :+:   */
+/*   sh_pipe_lst_del.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/11 22:23:03 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 23:05:46 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/11 23:12:43 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
+#include "sh_types.h"
 #include "libft.h"
 
-void	destructor(void)
-{
-	t_sh	*s;
+#include <stdlib.h>
 
-	if ((s = sh()))
-		sh_shdel(&s);
+void	sh_pipe_lst_del(t_pipe_lst **plst)
+{
+	t_pipe_lst	*p;
+
+	if (!plst || !(p = *plst))
+
+		return ;
+	sh_pipe_lst_del(&(p->next));
+	free(*plst);
+	*plst = NULL;
 }

@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destructor.c                                       :+:      :+:    :+:   */
+/*   sh_env_del.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/11 22:23:03 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 22:39:31 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/11 22:45:29 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
 #include "libft.h"
+#include "sh.h"
 
-void	destructor(void)
+#include <stdlib.h>
+
+void	sh_env_del(t_env **env)
 {
-	t_sh	*s;
+	t_env	*ev;
 
-	if ((s = sh()))
-		sh_shdel(&s);
+	if (!env || !(ev = *env))
+		return ;
+	ft_strdel(&(ev->key));
+	ft_strdel(&(ev->value));
+	sh_env_del(&(ev->next));
+	free(*env);
+	*env = NULL;
 }

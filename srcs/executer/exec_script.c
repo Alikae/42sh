@@ -78,7 +78,6 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
 	exec_command(p, token_begin, token_end);
-	printf("[%i] exec background suicide\n", getpid());
 	sh_exitpoint();
 	//CREATE JOB?
 	//fork
@@ -158,7 +157,6 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 		p->last_cmd_result = block_wait(p, tmp, 0);
 		if (!p->process_is_stopped)
 		{
-			printf("killing pipeline: [%i]\n", tmp);
 			kill(-1 * tmp, SIGKILL);
 		}
 	}
@@ -268,7 +266,6 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
 		//free stuff or not?
-		printf("[%i] exec background suicide\n", getpid());
 		sh_exitpoint();
 	}
 	else
