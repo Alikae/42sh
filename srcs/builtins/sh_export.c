@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:31:36 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/28 14:46:01 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/10 23:50:32 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ int			sh_export(int ac, char **av, t_env **ev)
 	else
 		while (++i < ac)
 		{
-			if (!ft_isalnum(av[i][0] && av[i][0] != '_'))
+			if (!ft_isalpha(av[i][0]) || av[i][0] == '_')
 			{
-				ft_putendl_fd("export: ", STDERR_FILENO);
-				ft_putendl_fd(av[i], STDERR_FILENO);
+				ft_putstr_fd("export: ", STDERR_FILENO);
+				ft_putstr_fd(av[i], STDERR_FILENO);
 				ft_putendl_fd(": not a valid identifier", STDERR_FILENO);
-				break ;
+				return (1);
 			}
 			if ((tmp = ft_strchr(av[i], '=')))
 			{

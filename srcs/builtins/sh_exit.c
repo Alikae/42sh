@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:45:31 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/06 03:52:00 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/11 14:49:36 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,33 @@
 
 int				sh_exit(int ac, char **av, t_env **ev)
 {
+	char *arg;
+	int	status;
+
 	(void)ac;
 	(void)ev;
-	sh()->abort_cmd = 1;
-	sh()->exit = 1;
-	if (av[0] && av[1])
-		return (ft_atoi(av[1]));
-	return (0);
+
+//
+status = 0;
+	//status = sh()->exit;//NOP	new var
+	if (ac > 2)
+	{
+		dprintf(2, "exit: too many arguments");
+		status = 1;
+	}
+	else if (ac == 2)
+	{
+		arg = av[1];
+		while (*arg)
+		{
+			if (!ft_isdigit(*arg))
+			{
+				dprintf(2, "exit: numeric argument required");
+				return (1);
+			}
+			arg++;
+		}
+		status = ft_atoi(av[1]);
+	}
+	exit(status);//EXITPOINT
 }
