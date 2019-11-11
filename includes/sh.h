@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 15:07:58 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/11 15:59:14 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct		s_sh
 }					t_sh;
 
 t_sh	*sh(void);
+void	sh_shdel(t_sh **s);
 void	init_signals_handling(void);
 void	constructor(void) __attribute__((constructor));
 void	destructor(void) __attribute__((destructor));

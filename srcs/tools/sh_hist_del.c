@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destructor.c                                       :+:      :+:    :+:   */
+/*   sh_hist_del.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/11 15:59:29 by jerry            ###   ########.fr       */
+/*   Created: 2019/11/11 16:03:00 by jerry             #+#    #+#             */
+/*   Updated: 2019/11/11 16:12:47 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "libft.h"
+#include "sh_history.h"
 
-void	destructor(void)
+void	sh_hist_del(t_hist **hist)
 {
-	t_sh	*s;
-
-	if ((s = sh()))
-		sh_shdel(&s);
+	t_hist	*h;
+	
+	if (!hist || !(h = *hist))
+		return ;
+	ft_tab_strdel(&(h->prev));
+	ft_memdel(&(h->path));
+	ft_memdel(&(h->path));
+	free(*hist);
+	*hist = NULL;
 }
