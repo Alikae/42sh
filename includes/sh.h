@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 12:37:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/11 15:07:58 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
 # define SH_NESTED_COMPOUND_LIMIT 1000
 # define SH_NESTED_FUNCTION_LIMIT 1000
+# define malloc(x) NULL
 
 extern	char		**g_aliases;
 
@@ -66,18 +67,18 @@ typedef struct		s_sh
 	int				nb_nested_functions;
 	int				nb_nested_compounds;
 	int				nb_nested_tokenized_compounds;
-	
+
 	int				unfinished_cmd;
 	int				invalid_cmd;
 	int				abort_cmd;
 	int				exit;
 	int				print_syntax_errors;
-	
+
 	char			**aliases;
 
 	char			*bucopy;
 	char			*buselect;	
-	
+
 	char			*user;
 	char			*dir;
 
@@ -94,11 +95,14 @@ typedef struct		s_sh
 	int				pgid_current_pipeline;
 	int				force_setpgrp_setattr;
 	int				process_is_stopped;
-	
+
 	t_hist			*hist;
 }					t_sh;
 
 t_sh	*sh(void);
 void	init_signals_handling(void);
+void	constructor(void) __attribute__((constructor));
+void	destructor(void) __attribute__((destructor));
+
 #endif
 
