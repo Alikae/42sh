@@ -1,19 +1,6 @@
 #include "sh.h"
 #include "sh_types.h"
 
-
-void	debug(char **stack, char *alias)
-{
-	int		i;
-	i = 0;
-	printf("salut\n");
-	while (stack && stack[i])
-	{
-		printf("stack %i = %s\n", i, stack[i]);
-		i++;
-	}
-	printf("end = %s\nalias = %s\nalias_end = %i\n",stack[i], alias, sh()->alias_end);
-}
 int		sh_alias_len(char *alias, int *ind)
 {
 	int		i;
@@ -66,7 +53,6 @@ void	sh_sub_alias_command(t_tokenize_tool *t, char *alias)
 	while (t->input[j])
 		cmd[i++] = t->input[j++];
 	cmd[i] = '\0';
-//	free((void*)t->input);
 	t->input = cmd;
 }
 
@@ -79,28 +65,22 @@ char	*sh_find_sub_alias(char *str)
 
 	i = 0;
 	tab = sh()->aliases;
-	printf("str in sh_find_sub_alias %s\n", str);
 	if (tab)
 	{
 		while (tab[i])
 		{
-			printf("lssssssssssssssssss\n");
 			j = 0;
 			i_str = 0;
-			printf("\nstr=%s\ntab=%s\n",str, tab[i]);
 			while (str[i_str] && str[i_str] == tab[i][j] && tab[i][j] != '=')
 			{
-				printf("oui\nstr=%c\ntab=%c", str[i_str], tab[i][j]);
 				j++;
 				i_str++;
 			}
 			if (tab[i][j] == '=' && !str[i_str])
 				return (tab[i]);
-			printf("et la\n");
 			i++;
 		}
 	}
-	printf("surtout la ?\n");
 	return (NULL);
 }
 
@@ -113,15 +93,14 @@ char	*sh_find_alias(t_tokenize_tool *t)
 
 	j = 0;
 	i =  t->i;
-	while (t->input[i] != ' ' && t->input[i])
+	while (t->input[i] != ' ' && t->input[i] != '\n' && t->input[i])
 		i++;
 	if (!(str = (char*)malloc(i - t->i + 1)))
 		exit(-1);
 	i = t->i;
-	while (t->input[i] != ' ' && t->input[i])
+	while (t->input[i] != ' ' && t->input[i] != '\n' && t->input[i])
 		str[j++] = t->input[i++];
 	str[j] = '\0';
-	printf("str = %s\n", t->input);
 	tab = sh_find_sub_alias(str);
 	free(str);
 	return (tab);
@@ -201,14 +180,14 @@ void	sh_record_alias(char ***stack, char *alias)
 
 	i = 0;
 	cpy = NULL;
-	while (*stack && *stack[i])
+	while ((*stack) && (*stack)[i])
 		i++;
 	if (!(cpy = malloc(sizeof(char *) * (i + 2))))
 		exit (-1);
 	i = 0;
-	while (*stack && *stack[i])
+	while (*stack && (*stack)[i])
 	{
-		cpy[i] = *stack[i];
+		cpy[i] = (*stack)[i];
 		i++;
 	}
 	cpy[i++] = alias;
@@ -231,7 +210,6 @@ void	sh_push_alias(char *alias)
 		stack = NULL;
 	}
 	sh_record_alias(&stack, alias);
-	debug(stack, alias);
 	if ((ret = sh_check_stack(stack, alias) != -1))
 	{
 		sh()->abort_cmd = 1;
@@ -247,20 +225,17 @@ int		sh_alias_substitution(t_tokenize_tool *t)
 	int			len;
 
 	len = 0;
+	alias = NULL;
 	if (before || t->word_nb == 1)
 	{
 		before = 0;
-		printf("ici2\n");
 		if ((alias = sh_find_alias(t)))
 		{
 			sh_push_alias(alias);
 			len = ft_strlen(alias) - 1;
-			printf("ici1\n");
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;
-			printf("ici\n");
 			sh_sub_alias_command(t, alias);
-			printf("%s\n", t->input);
 			return (1);
 		}
 	}
