@@ -6,13 +6,15 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/09 17:21:51 by jerry            ###   ########.fr        #
+#    Updated: 2019/11/11 15:02:17 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### MAIN FILES ###
 C_FILES = \
 	main.c \
+	destructor.c \
+	constructor.c \
 	sh.c \
 	sh_rc.c
 

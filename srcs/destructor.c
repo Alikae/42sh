@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   destructor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 15:13:34 by jerry            ###   ########.fr       */
+/*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
+/*   Updated: 2019/11/11 15:01:44 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
-#include <stdlib.h>
 
-t_sh	*sh(void)
+void	destructor(void)
 {
-	static t_sh	*sh = NULL;
-
-	if (sh)
-	return (sh);
-		if (!(sh = (t_sh*)malloc(sizeof(t_sh))))
-			return (NULL);
-	ft_bzero(sh, sizeof(t_sh));
-	return (sh);
+	ft_putendl("destructor");
 }
