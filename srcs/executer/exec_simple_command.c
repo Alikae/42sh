@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/13 00:13:22 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/13 00:35:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void	close_all_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
+		printf("[%i]  close %i %i\n", getpid(), lst->in, lst->out);
 		close(lst->in);
 		close(lst->out);
 		lst = lst->next;
@@ -259,6 +260,7 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 	else
 	{
 		//print_redirections(p, p->redirect_lst);
+		printf("[%i] EXECVE\n", getpid());
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
 		dprintf(2, "Execve ErrorR\n");
 		sh()->exit = 1;
