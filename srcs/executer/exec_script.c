@@ -23,6 +23,7 @@
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
+	printf("yo %i\n", type);
 	if (type == SH_WHILE || type == SH_UNTIL)
 		return (exec_compound_while(p, token_compound, type));
 	else if (type == SH_IF)
@@ -33,17 +34,31 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 		return (exec_compound_for(p, token_compound));
 	else if (type == SH_SUBSH)
 		return (exec_compound_subsh(p, token_compound));
-	dprintf(p->dbg_fd, "treating GROUPING\n");
+	//printf("treating GROUPING\n");
 	return(exec_script(p, token_compound->sub));
+}
+
+t_token	*find_cmd_name(t_token *tok)
+{
+	while (tok)
+	{
+		if (tok->content && !(ft_strchr(tok->content, '=') > tok->content))
+			return (tok);
+		tok = tok->next;
+	}
+	return (tok);
 }
 
 int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int	nb_redirections;
 	int	ret;
+	t_token	*tok;
 
 	//No token_begin, !!CMD_NAME!!
-	if (is_compound(token_begin->type))
+	tok = find_cmd_name(token_begin);
+	printf("[%i]%p %s %i\n", getpid(), tok, tok->content, tok->type);
+	if (tok && is_compound(tok->type))
 	{
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)//PUT IN ENV
 		{
@@ -55,7 +70,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		//
 		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end);//TO SEE
 		//
-		ret = exec_compound_command(p, token_begin, token_begin->type);
+		ret = exec_compound_command(p, tok, tok->type);
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 		p->nb_nested_compounds--;
 	}
@@ -64,7 +79,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	return (ret);
 }
 
-int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
+int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int child_pid;
 
@@ -77,6 +92,10 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	}
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
+	//
+	//CLOSE EVERY PIPES BUT NEEDEDS?
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//
 	exec_command(p, token_begin, token_end);
 	printf("[%i] exec background suicide\n", getpid());
 	sh_exitpoint();
@@ -113,16 +132,17 @@ void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end
 	{
 		toggle_redirect_pipe(1, prev_pipe, -1);
 		p->force_setpgrp_setattr = 1;
-		p->pgid_current_pipeline = exec_command_in_background(p, token_begin, token_end);
+		p->pgid_current_pipeline = exec_command_in_background_closing_pipe(p, token_begin, token_end);
 		p->force_setpgrp_setattr = 0;
 		toggle_redirect_pipe(0, prev_pipe, -1);
 		return;
 	}
 	pipe(next_pipe);
+	printf("open pipe [%i %i]\n", next_pipe[0], next_pipe[1]);
 	push_pipe_lst(&p->pipe_lst, next_pipe);
 	exec_pipeline_recursively(p, next_separator->next, token_end, next_pipe[0]);
 	toggle_redirect_pipe(1, prev_pipe, next_pipe[1]);
-	exec_command_in_background(p, token_begin, next_separator);
+	exec_command_in_background_closing_pipe(p, token_begin, next_separator);
 	toggle_redirect_pipe(0, prev_pipe, next_pipe[1]);
 }
 
@@ -225,8 +245,8 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	if (p->pid_main_process == getpid()/**/ && p->is_interactive)
 		create_pgrp = 1;
 	if ((child_pid = fork()) > 0)
-		if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			dprintf(p->dbg_fd, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
+		//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+			printf("[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
 		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());

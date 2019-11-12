@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/11 00:14:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/11 01:01:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 		return;
 	gen_redirections_recursively(p, lst->next);
 	//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-	//	printf("redirecting %i->%i\n", lst->in, lst->out);
+		printf("[%i]redirecting %i->%i\n", getpid(), lst->in, lst->out);
 	if (dup2(lst->out, lst->in) < 0)
 		dprintf(p->dbg_fd, "[%i]DUP2ERROR %i->%i\n", getpid(), lst->in, lst->out);
 	close(lst->out);
