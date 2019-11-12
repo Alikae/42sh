@@ -15,6 +15,7 @@
 
 # include "sh.h"
 
+int			sh_alias_substitution(t_tokenize_tool *t);
 t_token		*create_token(t_toktype type, int index, const char *content);
 t_token		*create_token_n(t_toktype type, int index, const char *content, int n);
 void		delete_token(t_token *token);

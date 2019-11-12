@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 01:27:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/12 23:29:55 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,11 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 	t_toktype	type;
 	int			len;
 	int			tmp;
+	int  i;
 
+	i = 0;
+	if (sh_alias_substitution(t))
+		return (0);
 	if ((len = is_io_nb(t)))
 		return (treat_redirection(t, p_actual, len));
 	word_begin = t->i;
@@ -260,7 +264,6 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 		}
 		else
 		{
-			//handle aliases
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 			printf("%s\n", (*p_actual)->next->content);
 			//if (t->word_nb == 1)
@@ -309,6 +312,7 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		free_ast(origin);
 		return (0);
 	}
+	sh()->alias_end = 1;
 	actual = origin->next;
 	delete_token(origin);
 	return (actual);

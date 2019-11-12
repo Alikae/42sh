@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_word_expansion.h                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
+/*   Updated: 2019/10/04 23:14:33 by tcillard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SH_WORD_EXPANSION_H
 # define SH_WORD_EXPANSION_H
 
@@ -14,22 +26,24 @@
 
 typedef enum	e_arthtype
 {
-	PLUS = 0,
+	INIT = 0,
+	NUMBER,
+	PLUS,
 	MINUS,
-	PARENTHESIS,
 	MULTI,
 	DIV,
 	MODULO,
-	INCREMENT,
-	DECREMENT,
 	MORE,
 	LESS,
 	MORE_EQUAL,
 	LESS_EQUAL,
 	AND,
 	OR,
+	AND_AND,
+	OR_OR,
+	DIFFERENT,
 	EQUAL,
-	DIFFERENT
+	NOP
 }				t_arthtype;
 
 typedef struct	s_arith

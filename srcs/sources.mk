@@ -75,12 +75,13 @@ C_FILES_signals = \
 #signals_handler.c
 
 C_FILES_tokenizer = \
-		    t_token.c \
-		    tokenize_input.c \
-		    compound_tokenizer.c \
-		    word_interpreter.c \
-		    operator_interpreter.c \
-		    opening_chars_handling.c
+	t_token.c \
+	tokenize_input.c \
+	compound_tokenizer.c \
+	word_interpreter.c \
+	operator_interpreter.c \
+	opening_chars_handling.c \
+	sh_alias_substitution.c
 
 C_FILES_executer = \
 		   sh_exec_file.c \
