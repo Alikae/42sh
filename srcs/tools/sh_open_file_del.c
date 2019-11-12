@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 23:00:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 23:04:32 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/12 19:00:36 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	sh_open_file_del(t_open_file **op)
 
 	if (!op || !(f = *op))
 		return ;
-	ft_strdel(&(f->name));
-	//sh_close_file(f->fd);
 	sh_open_file_del(&(f->next));
+	ft_strdel(&(f->name));
+	close(f->fd);
 	free(*op);
 	*op = NULL;
 }

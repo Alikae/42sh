@@ -6,10 +6,11 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 22:47:02 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 22:52:02 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/12 19:07:06 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "signal.h"
 #include "sh_types.h"
 #include "libft.h"
 
@@ -21,8 +22,10 @@ void	sh_job_del(t_job **job)
 
 	if (!job || !(j = *job))
 		return ;
-	ft_strdel(&(j->name));
 	sh_job_del(&(j->next));
+	kill(j->pid, SIGINT);
+	kill(j->pid, SIGKILL);
+	ft_strdel(&(j->name));
 	free(*job);
 	*job = NULL;
 }

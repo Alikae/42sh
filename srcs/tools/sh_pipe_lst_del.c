@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 23:05:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 23:12:43 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/12 19:02:38 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	sh_pipe_lst_del(t_pipe_lst **plst)
 
 		return ;
 	sh_pipe_lst_del(&(p->next));
+	close(p->pipe[0]);
+	close(p->pipe[1]);
 	free(*plst);
 	*plst = NULL;
 }
