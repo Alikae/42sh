@@ -6,11 +6,12 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/13 00:17:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/13 00:18:24 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "sh_tools.h"
 #include "libft.h"
 
 void	destructor(void)

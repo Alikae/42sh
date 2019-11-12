@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 23:16:00 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/13 00:20:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 //# include "sh_redirections.h"
 //# include "t_token.h"
 //# include "libft.h"
+# include <stdio.h>
 //# include "sh_env.h"
 //# include "sh_job_control.h"
 
@@ -106,6 +107,7 @@ void	sh_shdel(t_sh **s);
 void	init_signals_handling(void);
 void	constructor(void) __attribute__((constructor));
 void	destructor(void) __attribute__((destructor));
+void	sh_pipe_lst_del(t_pipe_lst **plst);
 
 #endif
 
