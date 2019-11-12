@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/05 02:17:41 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/11 01:27:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 				sh()->invalid_cmd = 1;
 				return (SH_SYNTAX_ERROR);
 			}
+			printf("there\n");
 			if (tokenize_reserved_word(t, p_actual, type, word_begin) == SH_SYNTAX_ERROR)
 				return (SH_SYNTAX_ERROR);
 		}
@@ -261,10 +262,12 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 		{
 			//handle aliases
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			printf("%s\n", (*p_actual)->next->content);
 			//if (t->word_nb == 1)
 			//	while (is_unquoted_valid_alias_name(token->content))
 			//		(*p_actual)->next = retokenize_alias((*p_actual)->next);
-			t->word_nb++;
+			if (!(ft_strchr(t->input + word_begin, '=') > t->input + word_begin) || ft_strchr(t->input + word_begin, '=') > t->input + t->i)
+				t->word_nb++;
 		}
 		*p_actual = (*p_actual)->next;
 	}
@@ -300,6 +303,12 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		free_ast(origin);
 		return (0);
 	}
+	if (!*terminator && actual_compound != SH_NULL)
+	{
+		sh()->unfinished_cmd = 1;
+		free_ast(origin);
+		return (0);
+	}
 	actual = origin->next;
 	delete_token(origin);
 	return (actual);
@@ -317,9 +326,6 @@ t_token		*tokenize_input(const char *input)
 	ast = recursive_tokenizer(&tok_tool, SH_NULL, &terminator);
 	return (ast);
 }
-
-//RM COMMENTS (#comm)
-
 //implement word_nb++ in func def
 //WTF echo $(echo la`while done`) ; echo lala
 //
