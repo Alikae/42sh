@@ -79,7 +79,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	return (ret);
 }
 
-int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_token *token_end)
+int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_token *token_end, int pipe1, int pipe2)
 {
 	int child_pid;
 
@@ -92,6 +92,25 @@ int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_to
 	}
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
+
+	t_pipe_lst	*pipe_lst = sh()->pipe_lst;
+	while (pipe_lst)
+	{
+		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
+		{
+			printf("[%i]close %i\n", getpid(), pipe_lst->pipe[0]);
+			close(pipe_lst->pipe[0]);
+		}
+		if (pipe_lst->pipe[1] != pipe1 && pipe_lst->pipe[1] != pipe2)
+		{
+			printf("[%i]close %i\n", getpid(), pipe_lst->pipe[1]);
+			close(pipe_lst->pipe[0]);
+		}
+		pipe_lst = pipe_lst->next;
+	}
+	//foreach pipe in pipe_lt
+	//	if (!= pipe_in || pipe_out)
+	//		close
 	//
 	//CLOSE EVERY PIPES BUT NEEDEDS?
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -131,7 +150,7 @@ void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end
 	{
 		toggle_redirect_pipe(1, prev_pipe, -1);
 		p->force_setpgrp_setattr = 1;
-		p->pgid_current_pipeline = exec_command_in_background_closing_pipe(p, token_begin, token_end);
+		p->pgid_current_pipeline = exec_command_in_background_closing_pipe(p, token_begin, token_end, prev_pipe, -1);
 		p->force_setpgrp_setattr = 0;
 		toggle_redirect_pipe(0, prev_pipe, -1);
 		return;
@@ -141,7 +160,7 @@ void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end
 	push_pipe_lst(&p->pipe_lst, next_pipe);
 	exec_pipeline_recursively(p, next_separator->next, token_end, next_pipe[0]);
 	toggle_redirect_pipe(1, prev_pipe, next_pipe[1]);
-	exec_command_in_background_closing_pipe(p, token_begin, next_separator);
+	exec_command_in_background_closing_pipe(p, token_begin, next_separator, prev_pipe, next_pipe[1]);
 	toggle_redirect_pipe(0, prev_pipe, next_pipe[1]);
 }
 
