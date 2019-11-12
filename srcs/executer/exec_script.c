@@ -99,12 +99,14 @@ int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_to
 		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
 		{
 			printf("[%i]close %i\n", getpid(), pipe_lst->pipe[0]);
-			close(pipe_lst->pipe[0]);
+			if (pipe_lst->pipe[0] > 2)
+				close(pipe_lst->pipe[0]);
 		}
 		if (pipe_lst->pipe[1] != pipe1 && pipe_lst->pipe[1] != pipe2)
 		{
 			printf("[%i]close %i\n", getpid(), pipe_lst->pipe[1]);
-			close(pipe_lst->pipe[0]);
+			if (pipe_lst->pipe[1] > 2)
+				close(pipe_lst->pipe[1]);
 		}
 		pipe_lst = pipe_lst->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/13 00:35:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/13 00:39:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -863,7 +863,9 @@ int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **), char **child_arg
 {
 	int ret;
 
+	printf("[%i] EXEC BI %s\n", getpid(), child_argv[0]);
 	ret = f(p->child_ac, child_argv, &(p->params));
+	printf("[%i] END EXEC BI %s\n", getpid(), child_argv[0]);
 	return (ret); //<-- Return What?
 }
 
