@@ -23,7 +23,7 @@
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
-	printf("yo %i\n", type);
+	//printf("yo %i\n", type);
 	if (type == SH_WHILE || type == SH_UNTIL)
 		return (exec_compound_while(p, token_compound, type));
 	else if (type == SH_IF)
@@ -57,7 +57,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 
 	//No token_begin, !!CMD_NAME!!
 	tok = find_cmd_name(token_begin);
-	printf("[%i]%p %s %i\n", getpid(), tok, tok->content, tok->type);
+	//printf("[%i]%p %s %i\n", getpid(), tok, tok->content, tok->type);
 	if (tok && is_compound(tok->type))
 	{
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)//PUT IN ENV
