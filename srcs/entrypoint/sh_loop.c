@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 23:19:24 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/12 23:25:16 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		sh_loop(void)
 			input = ft_strjoin_free(input, "\n", input);
 			//printf("%i - %s -\n", strlen(input), input);
 			//ft_tab_strdel(&ln_tab); //BECAME STRDEL
-			printf("-%s-\n", input);
+			//printf("-%s-\n", input);
 			free(ln_tab);
 			sh_init_cmd(input);
 			if ((p->ast = tokenize_input(input)))//line

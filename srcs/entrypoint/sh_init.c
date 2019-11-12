@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 14:10:50 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/12 23:26:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,11 +116,11 @@ void	handle_signal(int sig)
 		if (sh()->pid_main_process != getpid())
 		{
 			dprintf(sh()->dbg_fd, "[%i] CTRL-C: exiting non-interactive shell\n", getpid());
-			printf("there\n");
+			//printf("there\n");
 			exit(1/*exitpoint*/);
 		}
 		//else
-			printf("-[%i]^C[%i]-\n", getpid(), sh()->pid_main_process);
+			//printf("-[%i]^C[%i]-\n", getpid(), sh()->pid_main_process);
 		sh()->abort_cmd = 1;
 	}
 	else if (sig == SIGSEGV)
