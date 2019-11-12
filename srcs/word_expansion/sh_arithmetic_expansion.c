@@ -225,7 +225,8 @@ long int	sh_get_int_value(char *str, int *begin)
 	opt = 0;
 	result = 0;
 	sh_check_opt(str, begin, &opt, 0);
-//	result = sh_long_atoi
+	printf("str = %s\n", str);
+	result = sh_long_atoi(str);
 	if (opt == 1)
 		result--;
 	else if (opt == 2)
@@ -253,6 +254,7 @@ long int	sh_find_number(char *str, int begin)
 		result = sh_atoi_index(str, &begin) * opt;
 	else
 		result = sh_get_int_value(str, &begin);
+	printf("result = %li\n", result);
 	return (result);
 }
 
@@ -358,7 +360,7 @@ long int	sh_exec_arith(t_arith *arith)
 	}
 	else if (arith->next_op == NUMBER)
 	{
-		printf("%li\n", arith->nb);
+		printf("number : %li\n", arith->nb);
 		return (arith->nb);
 	}
 	return (1);
@@ -417,8 +419,10 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
+	printf("arithmetic string = %s\n", exp->name);
 	arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 	result = sh_exec_arith(arith);
+	printf("result = %li\n", result);
 	exp->value = ft_long_itoa(result);
-	printf("%s\n",exp->value);
+	printf("exp->value = %s\n",exp->value);
 }
