@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_hist_del.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 15:14:37 by jerry            ###   ########.fr       */
+/*   Created: 2019/11/11 16:03:00 by jerry             #+#    #+#             */
+/*   Updated: 2019/11/11 22:38:35 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
+#include "sh_history.h"
 #include "libft.h"
+
 #include <stdlib.h>
 
-t_sh	*sh(void)
+void	sh_hist_del(t_hist **hist)
 {
-	static t_sh	*sh = NULL;
-
-	if (sh)
-	return (sh);
-		if (!(sh = (t_sh*)malloc(sizeof(t_sh))))
-			return (NULL);
-	ft_bzero(sh, sizeof(t_sh));
-	return (sh);
+	t_hist	*h;
+	
+	if (!hist || !(h = *hist))
+		return ;
+	ft_tab_strdel(&(h->prev));
+	ft_strdel(&(h->path));
+	ft_strdel(&(h->path));
+	free(*hist);
+	*hist = NULL;
 }

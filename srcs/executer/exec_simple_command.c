@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/11 01:01:28 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/12 23:18:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
 		dprintf(2, "Execve ErrorR\n");
 		sh()->exit = 1;
-		sh_exitpoint();
+		exit(1);
 	}
 	return (ret); //<-- Return What?
 }
@@ -325,7 +325,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	if (ret || !path[0])
 	{
 		dprintf(2, "%s: command not found\n", path);
-		sh()->exit = 1;
+		//sh()->exit = 1;
 		return (0);
 	}
 	return (real_path);
@@ -539,7 +539,7 @@ void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections)
 	if (pipe(pip) == -1)
 	{
 		printf("PIPE ERROR\nKILLING MYSELF");
-		sh_exitpoint();
+		exit(1);
 	}
 	write(pip[1], tok->content, ft_strlen(tok->content));
 	close(pip[1]);
@@ -1091,6 +1091,5 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		ret = exec_prgm(p, child_argv);
 	free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
 	//KILL CHILD ENV ADDED AT EACH FUNC END
-	sh()->exit = ret;
 	return (ret);
 }

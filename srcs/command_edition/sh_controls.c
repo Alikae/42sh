@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:58:44 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/10 11:56:07 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/12 19:17:22 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ int			sh_controls(char **command, char *buf, t_hist *hist, int *i)
 		return (3);
 	}
 	if (c == 4)
-		sh_exitpoint();
+		exit(1);
 	return (1);
 }
