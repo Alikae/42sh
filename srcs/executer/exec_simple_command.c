@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/11 14:50:18 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/12 19:18:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
 		dprintf(2, "Execve ErrorR\n");
 		sh()->exit = 1;
-		sh_exitpoint();
+		exit(1);
 	}
 	return (ret); //<-- Return What?
 }
@@ -539,7 +539,7 @@ void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections)
 	if (pipe(pip) == -1)
 	{
 		printf("PIPE ERROR\nKILLING MYSELF");
-		sh_exitpoint();
+		exit(1);
 	}
 	write(pip[1], tok->content, ft_strlen(tok->content));
 	close(pip[1]);

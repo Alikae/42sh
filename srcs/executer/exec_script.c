@@ -70,7 +70,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
-		sh_exitpoint();
+		exit(1);
 	if (child_pid)
 	{
 		return (child_pid);
@@ -78,7 +78,7 @@ int		exec_command_in_background(t_sh *p, t_token *token_begin, t_token *token_en
 	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
 	exec_command(p, token_begin, token_end);
-	sh_exitpoint();
+	exit(1);
 	//CREATE JOB?
 	//fork
 	//in parent
@@ -266,7 +266,7 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
 		//free stuff or not?
-		sh_exitpoint();
+		exit(1);
 	}
 	else
 		add_job(child_pid, p->cmd, token_begin->index,

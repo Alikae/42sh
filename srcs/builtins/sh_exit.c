@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:45:31 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/11 14:49:36 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/12 19:20:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ status = 0;
 			arg++;
 		}
 		status = ft_atoi(av[1]);
+		status = (!status ? 1 : status);
 	}
 	exit(status);//EXITPOINT
 }
