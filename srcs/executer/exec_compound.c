@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/01 17:37:28 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/12 23:19:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 {
 	int	pid;
 	//Not more?
-//	printf("[%i]exec_compound_subsh\n", getpid());
+	printf("[%i]exec_compound_subsh\n", getpid());
 	if ((pid = fork_process(p, 1)) < 0)
 	{
 		printf("fork error\n");
@@ -36,7 +36,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	if (!pid)
 	{
 		exec_script(p, tok->sub);
-		sh_exitpoint();
+		exit(1);
 	}
 	return (block_wait(p, pid, 0));
 }
@@ -75,7 +75,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	{
 		//
 		printf("exp error\n");
-		sh_exitpoint();
+		exit(1);
 	}
 	ins = tok->sub->sub;
 	while (ins && !p->abort_cmd)
