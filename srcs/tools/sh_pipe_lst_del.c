@@ -6,11 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 23:05:46 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/13 00:23:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/13 00:24:31 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_types.h"
+#include "sh.h"
 #include "libft.h"
 
 #include <stdlib.h>
