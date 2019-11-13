@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/12 23:19:55 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/11/13 12:28:22 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,8 +76,7 @@ CC = clang
 DEBUG_FLAGS = -g3
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
-		 -Wall -Werror -Wextra \
-		 $(DEBUG_FLAGS)
+		 -Wall -Werror -Wextra
 
 LFLAGS = -ltermcap \
 		 -lncurses \
@@ -99,14 +98,16 @@ $(OBJ_DIR): | mkdir_msg
 
 ### Compilation ###
 .ONESHELL:
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
+	@echo "$(SCURSOR)$(@F) \c"
 	@$(CC) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)$(@F)$(CLEAR) "
+	@echo "$(RCURSOR)$(ERASEL)\c"
 
 ### Link ###
-$(NAME): $(OBJ_DIR) $(OBJ) $(INC) Makefile $(FT_DIR)/libft.a | link_msg
-	$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
-	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
+.ONESHELL:
+$(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg
+	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
+	@printf "$@: Done !\n"
 
 ### Clean ###
 $(FT)_clean: | lib_msg

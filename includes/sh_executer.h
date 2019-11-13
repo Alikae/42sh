@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 19:17:30 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/03 17:13:22 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end);
 int		sh_exec_arg(void);
 int		sh_exec_file(void);
 int		sh_exec_stdin(void);
+void	sh_exec_default(void);
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end);

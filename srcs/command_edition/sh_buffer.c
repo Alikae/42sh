@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 18:15:43 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/01 15:55:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/04 20:29:13 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static int		sh_byteswaiting(void)
 {
-    int		byteswaiting;
-    
+	int		byteswaiting;
+
 	ioctl(0, FIONREAD, &byteswaiting);
-    return (byteswaiting);
+	return (byteswaiting);
 }
 
 char			*sh_buffer(void)

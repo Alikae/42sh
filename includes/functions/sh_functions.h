@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_functions.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/06/05 20:39:21 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/06/05 20:39:23 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
+#ifndef SH_FUNCTIONS_H
+# define SH_FUNCTIONS_H
 
-#include "libft.h"
-#include <stdlib.h>
-
-t_sh	*sh(void)
+typedef struct	s_func
 {
-	static t_sh	*s = NULL;
+	char		*name;
+	t_token		*token;
+	struct s_func	*next;
+}		t_func;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
-}
+#endif

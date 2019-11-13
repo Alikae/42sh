@@ -6,13 +6,18 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/28 17:25:36 by thdelmas          #+#    #+#              #
-#    Updated: 2019/07/24 22:41:15 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/02 22:39:46 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ##################################### Tools ####################################
 
 AUTHORS ?= Thdelmas
+
+### Escape Sequences ###
+SCURSOR = \033[s
+RCURSOR = \033[u
+ERASEL = \033[2K
 
 ### Colors ###
 WHITE = \033[1;37m
@@ -37,33 +42,12 @@ ADD_TO_GIT = $(SRC_DIR) $(INC_DIR) $(FT_DIR) $(GITLOG_FILE) \
 .PHONY: hey link compil savegit gitsave norm
 
 
-### git-autosave ###
-savegit: gitsave
-
-.ONESHELL:
-gitsave: hey fclean
-	@printf "\n$(BBLUE)\t GIT SAVE FOR YOU$(CLEAR)\n"
-	@printf "$(BRED)\t $(ADD_TO_GIT)$(CLEAR)\n"
-	@git add $(ADD_TO_GIT)
-	@printf "\n$(BBLUE)\t GIT AUTO-SAVE ! : commit -m$(CLEAR)\n"
-	@printf "$(BRED)\t COMMIT : \"$(GITCOM)\"$(CLEAR)\n"
-	@sleep 0.5
-	@-git commit -m "$(GITCOM)"
-	@git push
-
 ### Norminette ###
 .ONESHELL:
 norm:
 	@printf "\n$(BRED)\t NORM 42$(CLEAR)\n"
 	@printf "$(BRED)\t $(ADD_TO_NORME)$(CLEAR)\n"
 	@norminette -R CheckForbiddenSourceHeader $(HEADER) $(SRC_NAME)
-
-### Test & Launcher ###
-run: all | run_msg
-	./$(NAME)
-
-test: all | test_msg
-	./unit_tests/utester.sh
 
 ### Messages rules ###
 hey_msg:
