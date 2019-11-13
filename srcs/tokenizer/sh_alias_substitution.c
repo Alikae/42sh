@@ -145,7 +145,6 @@ void	sh_print_alias_loop_error(char **stack, int loop)
 		{
 			ft_putstr("<--");
 			sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
->>>>>>> master
 			ft_putstr("|\n");
 		}
 		else
