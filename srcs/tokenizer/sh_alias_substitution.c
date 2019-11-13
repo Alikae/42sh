@@ -220,6 +220,9 @@ void	sh_push_alias(char *alias)
 
 int		sh_alias_substitution(t_tokenize_tool *t)
 {
+	//
+	//before is the nb of previous unaliases
+	//
 	char		*alias;
 	static int	before = 0;
 	int			len;

@@ -98,13 +98,13 @@ int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_to
 	{
 		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
 		{
-			printf("[%i]close %i\n", getpid(), pipe_lst->pipe[0]);
+			//printf("[%i]close %i\n", getpid(), pipe_lst->pipe[0]);
 			if (pipe_lst->pipe[0] > 2)
 				close(pipe_lst->pipe[0]);
 		}
 		if (pipe_lst->pipe[1] != pipe1 && pipe_lst->pipe[1] != pipe2)
 		{
-			printf("[%i]close %i\n", getpid(), pipe_lst->pipe[1]);
+			//printf("[%i]close %i\n", getpid(), pipe_lst->pipe[1]);
 			if (pipe_lst->pipe[1] > 2)
 				close(pipe_lst->pipe[1]);
 		}
@@ -158,7 +158,7 @@ void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end
 		return;
 	}
 	pipe(next_pipe);
-	printf("open pipe [%i %i]\n", next_pipe[0], next_pipe[1]);
+	//printf("open pipe [%i %i]\n", next_pipe[0], next_pipe[1]);
 	push_pipe_lst(&p->pipe_lst, next_pipe);
 	exec_pipeline_recursively(p, next_separator->next, token_end, next_pipe[0]);
 	toggle_redirect_pipe(1, prev_pipe, next_pipe[1]);
@@ -265,7 +265,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		create_pgrp = 1;
 	if ((child_pid = fork()) > 0)
 		//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			printf("[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
+			//printf("[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
 		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
