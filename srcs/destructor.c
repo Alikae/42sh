@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   destructor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
+/*   Updated: 2019/11/12 19:06:15 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
-#include "sh_tools.h"
-
 #include "libft.h"
-#include <stdlib.h>
 
-t_sh	*sh(void)
+void	destructor(void)
 {
-	static t_sh	*s = NULL;
+	t_sh	*s;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	if ((s = sh()))
+	{
+		push_history(sh()->hist);
+		if (sh()->is_interactive && sh()->pid_main_process == getpid())
+			tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
+		sh_shdel(&s);
+	}
 }

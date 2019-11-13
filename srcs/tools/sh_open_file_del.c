@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_open_file_del.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 23:00:37 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/12 19:00:36 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
-
+#include "sh_types.h"
 #include "libft.h"
+
 #include <stdlib.h>
 
-t_sh	*sh(void)
+void	sh_open_file_del(t_open_file **op)
 {
-	static t_sh	*s = NULL;
+	t_open_file	*f;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	if (!op || !(f = *op))
+		return ;
+	sh_open_file_del(&(f->next));
+	ft_strdel(&(f->name));
+	close(f->fd);
+	free(*op);
+	*op = NULL;
 }

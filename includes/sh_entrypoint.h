@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 21:35:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/04 20:00:12 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/12 19:50:26 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void				sh_init_debug(t_sh *shell);
 void				sh_init_env(void);
 void				sh_init_signals(void);
 t_hist				*sh_init_history(void);
+void				sh_init_path(void);
 int					sh_loop(void);
 int					sh_script(const char *path);
 int					sh_parse_rc(void);

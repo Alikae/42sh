@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 12:37:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/11 23:16:00 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,18 @@ typedef struct		s_sh
 	int				nb_nested_functions;
 	int				nb_nested_compounds;
 	int				nb_nested_tokenized_compounds;
-	
+
 	int				unfinished_cmd;
 	int				invalid_cmd;
 	int				abort_cmd;
 	int				exit;
 	int				print_syntax_errors;
-	
+
 	char			**aliases;
 
 	char			*bucopy;
 	char			*buselect;	
-	
+
 	char			*user;
 	char			*dir;
 
@@ -94,11 +94,15 @@ typedef struct		s_sh
 	int				pgid_current_pipeline;
 	int				force_setpgrp_setattr;
 	int				process_is_stopped;
-	
+
 	t_hist			*hist;
 }					t_sh;
 
 t_sh	*sh(void);
+void	sh_shdel(t_sh **s);
 void	init_signals_handling(void);
+void	constructor(void) __attribute__((constructor));
+void	destructor(void) __attribute__((destructor));
+
 #endif
 

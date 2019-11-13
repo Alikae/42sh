@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:44:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/04 19:56:09 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/12 19:55:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ static void		sh_handle_sigint(void)
 	{
 		dprintf(sh()->dbg_fd, str, getpid());
 		printf("there\n");
-		sh()->exit = 1;
-		sh_exitpoint();
+		exit(1);
 	}
 	sh()->abort_cmd = 1;
 }

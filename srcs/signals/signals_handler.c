@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 14:48:41 by maboye            #+#    #+#             */
-/*   Updated: 2019/05/12 22:06:02 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/12 19:55:10 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void			ft_end(int sig)
 	// 	ft_error(sig == SIGABRT ? "sigabort" : "segfault");
 	// else
 	// 	ft_error("EXIT");
-    exit(0);
+    exit(1);
 }
 
 /*

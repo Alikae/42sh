@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/01 15:54:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/12 19:23:51 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 		cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
 		cbreak.c_cc[VMIN] = 1;
 		if (tcsetattr(0, TCSANOW, &cbreak) < 0)
-			exit(0);
+			exit(1);
 	}
 	if (code == 2)
 		tcsetattr(0, TCSANOW, &orig_termios);
@@ -104,9 +104,9 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	while (k != 0 && *command && j > 0)
 	{
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
-			sh_exitpoint();
+			exit(1);
 		if (tcgetattr(0, &sh()->orig_termios))
-			sh_exitpoint();
+			exit(1);
 		sh_tty_cbreak(1, sh()->orig_termios);
 		sh_reprompt(i, command);
 		ft_memdel((void**)&buf);
@@ -126,9 +126,9 @@ int			sh_reader(char **command, t_hist *hist)
 	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
 	if (tgetent(NULL, term ? term : "vt100") == ERR)
-		sh_exitpoint();
+		exit(1);
 	if (tcgetattr(0, &sh()->orig_termios))
-		sh_exitpoint();
+		exit(1);
 	*command = (char*)ft_memalloc(1);
 	getcommand(command, term, hist);
 	term = NULL;

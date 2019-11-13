@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_init_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/09 16:57:17 by jerry             #+#    #+#             */
+/*   Updated: 2019/11/09 17:22:12 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
+#include "sh_env.h"
 
-#include "libft.h"
-#include <stdlib.h>
-
-t_sh	*sh(void)
+void	sh_init_path()
 {
-	static t_sh	*s = NULL;
+	t_env *tmp;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	if (!(tmp = sh_getev("PATH")) || !tmp->value)
+		sh_setev("PATH", "/usr/local/bin:/usr/bin:/bin");
 }

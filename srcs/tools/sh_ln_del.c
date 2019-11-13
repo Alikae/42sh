@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_ln_del.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 22:52:14 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/11 23:00:18 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
-
+#include "sh_types.h"
 #include "libft.h"
+
 #include <stdlib.h>
 
-t_sh	*sh(void)
+void	sh_ln_del(t_ln **ln)
 {
-	static t_sh	*s = NULL;
+	t_ln *l;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	if (!ln || !(l = *ln))
+		return ;
+	ft_strdel(&(l->line));
+	ft_strdel(&(l->tok));
+	sh_ln_del(&(l->next));
+	free(*ln);
+	*ln = NULL;
 }

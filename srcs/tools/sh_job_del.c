@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_job_del.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 22:47:02 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/12 19:07:06 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
-
+#include "signal.h"
+#include "sh_types.h"
 #include "libft.h"
+
 #include <stdlib.h>
 
-t_sh	*sh(void)
+void	sh_job_del(t_job **job)
 {
-	static t_sh	*s = NULL;
+	t_job *j;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	if (!job || !(j = *job))
+		return ;
+	sh_job_del(&(j->next));
+	kill(j->pid, SIGINT);
+	kill(j->pid, SIGKILL);
+	ft_strdel(&(j->name));
+	free(*job);
+	*job = NULL;
 }

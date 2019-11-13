@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_env_del.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/11 22:39:31 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/11 22:45:29 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
-
 #include "libft.h"
+#include "sh.h"
+
 #include <stdlib.h>
 
-t_sh	*sh(void)
+void	sh_env_del(t_env **env)
 {
-	static t_sh	*s = NULL;
+	t_env	*ev;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	if (!env || !(ev = *env))
+		return ;
+	ft_strdel(&(ev->key));
+	ft_strdel(&(ev->value));
+	sh_env_del(&(ev->next));
+	free(*env);
+	*env = NULL;
 }
