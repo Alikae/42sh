@@ -23,7 +23,6 @@
 
 int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 {
-	//printf("yo %i\n", type);
 	if (type == SH_WHILE || type == SH_UNTIL)
 		return (exec_compound_while(p, token_compound, type));
 	else if (type == SH_IF)
@@ -34,7 +33,6 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 		return (exec_compound_for(p, token_compound));
 	else if (type == SH_SUBSH)
 		return (exec_compound_subsh(p, token_compound));
-	//printf("treating GROUPING\n");
 	return(exec_script(p, token_compound->sub));
 }
 
@@ -57,7 +55,6 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 
 	//No token_begin, !!CMD_NAME!!
 	tok = find_cmd_name(token_begin);
-	//printf("[%i]%p %s %i\n", getpid(), tok, tok->content, tok->type);
 	if (tok && is_compound(tok->type))
 	{
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)//PUT IN ENV
@@ -90,7 +87,6 @@ int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_to
 	{
 		return (child_pid);
 	}
-	//dprintf(p->dbg_fd, "[%i] Pforked\n", getpid());
 	//close(0);
 
 	t_pipe_lst	*pipe_lst = sh()->pipe_lst;
@@ -98,13 +94,11 @@ int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_to
 	{
 		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
 		{
-			//printf("[%i]close %i\n", getpid(), pipe_lst->pipe[0]);
 			if (pipe_lst->pipe[0] > 2)
 				close(pipe_lst->pipe[0]);
 		}
 		if (pipe_lst->pipe[1] != pipe1 && pipe_lst->pipe[1] != pipe2)
 		{
-			//printf("[%i]close %i\n", getpid(), pipe_lst->pipe[1]);
 			if (pipe_lst->pipe[1] > 2)
 				close(pipe_lst->pipe[1]);
 		}
@@ -158,7 +152,6 @@ void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end
 		return;
 	}
 	pipe(next_pipe);
-	//printf("open pipe [%i %i]\n", next_pipe[0], next_pipe[1]);
 	push_pipe_lst(&p->pipe_lst, next_pipe);
 	exec_pipeline_recursively(p, next_separator->next, token_end, next_pipe[0]);
 	toggle_redirect_pipe(1, prev_pipe, next_pipe[1]);
@@ -240,7 +233,6 @@ void	close_cpy_std_fds(t_sh *p)
 
 void	create_process_group_give_terminal_access(t_sh *p, pid_t pid, int foreground)
 {
-		//	signal(SIGTTOU, SIG_DFL);
 		if (p->pgid_current_pipeline)
 			setpgid (pid, p->pgid_current_pipeline);
 		else
@@ -264,8 +256,6 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	if (p->pid_main_process == getpid()/**/ && p->is_interactive)
 		create_pgrp = 1;
 	if ((child_pid = fork()) > 0)
-		//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-			//printf("[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
 		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
@@ -290,7 +280,6 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		p->jobs = 0;
 		close_cpy_std_fds(p);
 	}
-	//printf("pgid of [%i] is [%i]\n", getpid(), getpgid(0));
 	return (child_pid);
 }
 

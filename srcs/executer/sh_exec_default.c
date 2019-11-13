@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 17:10:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/03 22:46:08 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/13 11:58:25 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	sh_exec_default(void)
 		//		signal (SIGTSTP, SIG_IGN);
 		//		signal (SIGTTIN, SIG_IGN);
 		//		signal (SIGCHLD, SIG_IGN);
-		while (0 && /*!!!!!!!!!*//*!sh()->dbg && */tcgetpgrp(0) != (shell_pgid = getpgrp()))
+		while (tcgetpgrp(0) != (shell_pgid = getpgrp()))
 			kill (shell_pgid, SIGTTIN);
 		sh_init_signals();
 		/*ignore sigs, need handling*/
