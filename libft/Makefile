@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/12 15:20:07 by thdelmas          #+#    #+#              #
-#    Updated: 2019/05/12 17:57:32 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/03 22:16:51 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ OBJ_DIR := ./.obj
 SUB_DIRS := \
 	conv \
 	int \
+	opt \
 	lst \
 	math \
 	mem \
@@ -35,6 +36,7 @@ include $(SRC_DIR)/sources.mk
 
 ### INCLUDE INC MAKEFILE ###
 include $(INC_DIR)/includes.mk
+
 
 
 ### ALL SUB DIRS ###
@@ -55,8 +57,11 @@ INC = $(addprefix $(INC_DIR)/,$(H_FILES))
 
 ###  CC && FLAGS ###
 CC = clang
+DEBUG_FLAGS= -g3
 CFLAGS = $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS)) \
+		 $(DEBUG_FLAGS) \
 		 -Wall -Werror -Wextra
+
 
 LFLAGS = \
 
@@ -73,14 +78,15 @@ $(OBJ_DIR): mkdir_msg
 ### Compilation ###
 .ONESHELL:
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
+	@echo "$(SCURSOR)$(@F) \c"
 	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)$(@F)$(CLEAR) "
+	@echo "$(RCURSOR)$(ERASEL)\c"
 
 ### Link ###
 .ONESHELL:
 $(NAME): $(OBJ_DIR) $(OBJ) | link_msg
 	@ar rcs $(NAME) $(OBJ)
-	@printf "$(BBLUE)$@: Done.$(CLEAR)\n"
+	@printf "$@: Done !\n"
 
 .ONESHELL:
 test: re

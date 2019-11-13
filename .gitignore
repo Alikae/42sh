@@ -1,0 +1,19 @@
+# Object
+*.o
+
+# Librairies
+*.a
+
+# Executables
+*.out
+21sh
+42sh
+
+# Debug files
+*.dSYM/
+
+# ignore all logs
+log
+*.log
+*.report
+*.swp

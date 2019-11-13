@@ -6,12 +6,14 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/06/05 20:36:24 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/13 12:28:22 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := 42sh
 PROJECT := 42SH
+AUTHORS := Ede-ram Tcillard Thdelmas Tmeyer
+
 RM = /bin/rm
 
 ### Directories ###
@@ -21,14 +23,24 @@ OBJ_DIR := ./.obj
 
 ### SUB FILES ###
 SUB_DIRS := \
-	signals \
-	tools \
-	entrypoint \
-	functions \
 	command_line \
 	command_edition \
-	env \
-	tokenizer
+	entrypoint \
+	builtins \
+	builtins/echo \
+	exitpoint \
+	history \
+	parameters \
+	tokenizer \
+	executer \
+	tokens \
+	error \
+	redirections \
+	debug_mode \
+	tools \
+	word_expansion \
+	job_control
+
 
 ### INCLUDE SRC MAKEFILE ###
 include $(SRC_DIR)/sources.mk
@@ -54,57 +66,63 @@ INC = $(addprefix $(INC_DIR)/,$(H_FILES))
 
 
 ### Lib ###
-LIB_FT_DIR = ./libft
-LIB_FT = $(addprefix $(LIB_FT_DIR)/,libft.a)
-LIB_FT_INC_DIR = ./libft/includes
-LIB_FT_LNK = -L ./libft -l ft
-
+FT = ft
+FT_DIR = ./lib$(FT)
+FT_INC_DIR = $(FT_DIR)/includes
+FT_LNK = -L$(FT_DIR) -l$(FT)
 
 ###  CC && FLAGS ###
 CC = clang
+DEBUG_FLAGS = -g3
 CFLAGS = \
-		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(LIB_FT_INC_DIR)) \
-		 -g3 #-Wall -Werror -Wextra
+		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
+		 -Wall -Werror -Wextra
 
 LFLAGS = -ltermcap \
 		 -lncurses \
-		 $(LIB_FT_LNK)
+		 $(FT_LNK) \
+
 
 
 .PHONY: all clean fclean re
 
-all: hey_msg $(LIB_FT) $(NAME) bye_msg
+all: $(FT) $(NAME) bye_msg
 
 ### Lib compil ###
-$(LIB_FT): lib_msg
-	@make -C $(LIB_FT_DIR)
+$(FT): | lib_msg
+	@make -C $(FT_DIR)
 
 ### Mkdir obj ###
-.ONESHELL:
-$(OBJ_DIR): mkdir_msg
-	mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
+$(OBJ_DIR): | mkdir_msg
+	@mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
 
 ### Compilation ###
 .ONESHELL:
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
-	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
-	@printf "$(BBLUE)$(@F)$(CLEAR) "
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
+	@echo "$(SCURSOR)$(@F) \c"
+	@$(CC) $(CFLAGS) -o $@ -c $<
+	@echo "$(RCURSOR)$(ERASEL)\c"
 
 ### Link ###
 .ONESHELL:
-$(NAME): $(OBJ_DIR) $(OBJ) | link_msg
-	$(CC) $(LFLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg
+	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
+	@printf "$@: Done !\n"
 
 ### Clean ###
-.ONESHELL:
-clean: clean_msg
-	$(RM) -rf $(OBJ_DIR)
-	@make -C $(LIB_FT_DIR) clean
+$(FT)_clean: | lib_msg
+	@make -C $(FT_DIR) clean
 
-.ONESHELL:
-fclean: clean fclean_msg
+clean: $(FT)_clean | clean_msg
+	$(RM) -rf $(OBJ_DIR)
+
+$(FT)_fclean: | lib_msg
+	@make -C $(FT_DIR) fclean
+
+fclean: $(FT)_fclean | fclean_msg
+	$(RM) -rf $(OBJ_DIR)
+	$(RM) -rf $(NAME).dSYM
 	$(RM) -rf $(NAME)
-	@make -C $(LIB_FT_DIR) fclean
 
 re: fclean all
 

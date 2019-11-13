@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/05/20 16:45:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/09/21 23:28:03 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,17 @@ typedef	struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
+
+typedef	struct	s_opt
+{
+	char			*name;
+	char			*arg;
+	struct s_opt	*next;
+}				t_opt;
+
+void			ft_free_tabstr(char **tab_tofree);
+char			**ft_tab_strdup(char **tabl);
+char			**tab_realloc(char **tabl, char *line);
 
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *s);
@@ -56,6 +67,7 @@ int				ft_strnequ(char const *s1, char const *s2, size_t n);
 char			*ft_strsub(char const *s, unsigned int start, size_t len);
 int				ft_match(const char *s1, const char *s2);
 int				ft_nmatch(const char *s1, const char *s2);
+int				ft_strncmp_n(const char *s1, const char *s2, size_t n);
 
 int				ft_isalpha(int c);
 int				ft_islower(int c);
@@ -104,4 +116,11 @@ int				ft_sqrt(int nb);
 int				ft_is_prime(int nb);
 int				ft_power(int nb, int power);
 int				ft_factorial(int nb);
+
+void			ft_print_opt(t_opt *optlst);
+void			ft_free_opts(t_opt *opts);
+t_opt			*ft_create_sopt(char name, char *content);
+t_opt			*ft_create_dopt(char *name, char *content);
+t_opt			*ft_getopt(int *ac, char ***av, char *optstr);
+t_opt			*ft_fetch_opt(char *name, size_t size, t_opt *optlst);
 #endif

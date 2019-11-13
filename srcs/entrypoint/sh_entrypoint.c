@@ -3,31 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   sh_entrypoint.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/24 16:10:48 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/06/03 23:20:15 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/13 11:57:02 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-
 #include "libft.h"
-#include "21sh.h"
-#include "sh_command_line.h"
-#include "sh_tokenizer.h"
+#include "sh.h"
+#include "sh_env.h"
+#include "sh_executer.h"
+#include "sh_entrypoint.h"
 
-void	sh_entrypoint(const char *input)
+#include <signal.h>
+#include <termios.h>
+
+void	sh_entrypoint(int ac, char **av, char **ev)
 {
-	t_token *tok;
+	int		i;
+	t_sh	*tsh;
 
-	ft_putstr("INPUT: ");
-	if (input)
-	{
-		ft_putendl(input);
-		tok = sh_tokenizer(input);
-		if (tok)
-			print_all_tokens(tok, 0);
-	}
-	return ;
+	tsh = sh();
+	i = -1;
+	tsh->ac = ac;
+	tsh->av = av;
+	tsh->ev = ev;
+	tcgetattr(0, &tsh->extern_termios);
+	tsh->is_interactive = isatty(0);
+	sh_init(tsh);
+	signal(SIGTTOU, SIG_IGN);
+	if (ft_fetch_opt("c", 1, tsh->opt))
+		sh_exec_arg();
+	else if (tsh->ac > 1)
+		sh_exec_file();
+	else if (!tsh->is_interactive)
+		sh_exec_stdin();
+	else
+		sh_exec_default();
 }

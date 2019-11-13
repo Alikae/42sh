@@ -6,12 +6,13 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 11:25:56 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/13 13:18:53 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/09/04 01:16:55 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "sh_command_edition.h"
+#include "sh.h"
 
 static int	sh_movecursor_down(void)
 {
@@ -87,7 +88,8 @@ static int	sh_backward_word(char **command, int i, t_pos term, t_pos cursor)
 	return (i);
 }
 
-int			sh_cursor_motion_word(char **command, char *buf, int i)
+int			sh_cursor_motion_word(char **command, char *buf,
+			int i, t_hist *hist)
 {
 	t_pos	cursor;
 	t_pos	term;
@@ -95,9 +97,11 @@ int			sh_cursor_motion_word(char **command, char *buf, int i)
 	sh_cursor_position(&cursor);
 	term.rows = tgetnum("li");
 	term.col = tgetnum("co");
-	if (FORWARD_WORD)
+	if (sh()->buselect)
+		reset_selection(command, i, hist);
+	if (buf[5] == 'C')
 		i = sh_forward_word(command, i, term, cursor);
-	else if (BACKWARD_WORD)
+	else if (buf[5] == 'D')
 		i = sh_backward_word(command, i, term, cursor);
 	return (i);
 }

@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_reader.c                                           :+:      :+:    :+:   */
+/*   sh_reader.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 09:31:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/05/13 13:41:26 by tmeyer           ###   ########.fr       */
+/*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
+/*   Updated: 2019/11/12 19:23:51 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#include "libft.h"
-#include "21sh.h"
+#include "sh.h"
 #include "sh_command_edition.h"
-#include "sh_command_line.h"
-#include <term.h>
-#include <curses.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <fcntl.h>
+#include "sh_exitpoint.h"
 
-static struct termios orig_termios;
-
-int		sh_outc(int c)
+int			sh_outc(int c)
 {
 	char x;
 
@@ -31,7 +24,7 @@ int		sh_outc(int c)
 	return (1);
 }
 
-void sh_tty_cbreak(int code)
+void		sh_tty_cbreak(int code, struct termios orig_termios)
 {
 	struct termios	cbreak;
 	char			*res;
@@ -45,57 +38,99 @@ void sh_tty_cbreak(int code)
 		cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
 		cbreak.c_cc[VMIN] = 1;
 		if (tcsetattr(0, TCSANOW, &cbreak) < 0)
-			exit(0);
-		res = tgetstr("im", &bufptr);
-		tputs(res, 0, sh_outc);
+			exit(1);
 	}
 	if (code == 2)
-	{
-		res = tgetstr("ei", &bufptr);
-		tputs(res, 0, sh_outc);
-		tcsetattr(0, TCSADRAIN, &orig_termios);
-	}
+		tcsetattr(0, TCSANOW, &orig_termios);
 	bufptr = NULL;
 	res = NULL;
 }
 
-static char *getcommand(char **command)
+/*
+***
+*** To use copy/paste option, please do as follows:
+*** 	- Go to profiles and open profiles and edit profiles
+*** 	- In profiles section, select keys
+*** 	- Then, in the lower left corner of the Key mappings, hit the '+' button
+*** 	- Configure CTRL + SHIFT + < to send and escape sequence.
+*** 		Set it to ^[<
+*** 	- Do the same for CTRL + SHIFT + >. It must be set to ^[>
+*** 	- Do the same for ALT + LEFT. Set it to ^[D
+*** 	- Do the same for ALT + RIGHT. Set it to ^[C
+*** NOTE: As an escaped sequence is defined by ^[,
+***  you just have to add the last letter to the sequence.
+*/
+
+static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
+{
+	if (!buf)
+		return (0);
+	if ((buf[0] == '\033' && buf[1] == '[' && ((buf[2] == 'C' || buf[2] == 'D'
+		|| buf[2] == 'H' || buf[2] == 'F') || (buf[2] == '3' && buf[3] == '~')))
+			|| buf[0] == 127 || buf[0] == 8)
+		*i = sh_cursor_motion(command, buf, *i, hist);
+	else if (buf[0] == '\033' && buf[1] == '[' && buf[2] == '1' && buf[3] == ';'
+			&& buf[4] == '2' && (buf[5] == 'C' || buf[5] == 'D'))
+		*i = sh_cursor_motion_word(command, buf, *i, hist);
+	else if (buf[0] == '\033' && buf[1] == '[' && buf[2] == '1' && buf[3] == ';'
+			&& buf[4] == '2' && (buf[5] == 'A' || buf[5] == 'B'))
+		*i = sh_cursor_motion_line(command, buf, *i, hist);
+	else if (buf[0] == '\033' && buf[1] == '[' && (buf[2] == 'A'
+				|| buf[2] == 'B'))
+		*i = cursor_history(command, buf, *i, hist);
+	else if (buf[0] == '\033' && (buf[1] == 'C' || buf[1] == 'D'
+				|| buf[1] == '<' || buf[1] == '>'))
+		*i = sh_copy_option(command, buf, *i, hist);
+	else if (buf[0] == '\t')
+		;
+	else if (buf[0] == 3 || buf[0] == 4 || buf[0] == '\n')
+		return (sh_controls(command, buf, hist, i));
+	else if (!ft_strchr(buf, '\033') && buf[0] >= 32)
+		*i = sh_paste(command, buf, *i, hist);
+	return (1);
+}
+
+static char	*getcommand(char **command, char *term, t_hist *hist)
 {
 	int		i;
-	char	buf[BUFFER];
+	int		k;
+	int		j;
+	char	*buf;
 
 	i = -1;
-	ft_bzero(buf, BUFFER);
-	while (*command && read(0, buf, BUFFER) > 0)
+	k = 1;
+	j = 1;
+	buf = NULL;
+	while (k != 0 && *command && j > 0)
 	{
-		if (HOME || END || ARROW_LEFT || ARROW_RIGHT || BACKSPACE)
-			i = sh_cursor_motion(command, buf, i);
-		else if (BACKWARD_WORD || FORWARD_WORD)
-			i = sh_cursor_motion_word(command, buf, i);
-		else if (LINE_UP || LINE_DOWN)
-			i = sh_cursor_motion_line(command, buf, i);
-		else if (TAB)
-			;
-		else if (ENTER)
-			break ;
-		else if (buf[0] != '\033')
-			i = sh_echo_input(command, buf, i);
-		ft_bzero(buf, BUFFER);
+		if (tgetent(NULL, term ? term : "vt100") == ERR)
+			exit(1);
+		if (tcgetattr(0, &sh()->orig_termios))
+			exit(1);
+		sh_tty_cbreak(1, sh()->orig_termios);
+		sh_reprompt(i, command);
+		ft_memdel((void**)&buf);
+		buf = sh_buffer();
+		k = loop_keys(command, buf, &i, hist);
+		sh_tty_cbreak(2, sh()->orig_termios);
 	}
-	sh_cursor_motion(command, "\033[F", i);
 	return (*command);
 }
 
-int		sh_reader(char **command)
+int			sh_reader(char **command, t_hist *hist)
 {
-	if (tgetent(NULL, getenv("TERM")) == ERR)
-		exit(0);
-	if (tcgetattr(0, &orig_termios))
-		exit(0);
+	char	*term;
+
+	term = getenv("TERM");
+	hist->index = -1;
+	sh()->buselect = ft_strdup("");
+	hist->current = ft_strdup("");
+	if (tgetent(NULL, term ? term : "vt100") == ERR)
+		exit(1);
+	if (tcgetattr(0, &sh()->orig_termios))
+		exit(1);
 	*command = (char*)ft_memalloc(1);
-	sh_tty_cbreak(1);
-	getcommand(command);
-	write(0, "\n", 1);
-	sh_tty_cbreak(2);
+	getcommand(command, term, hist);
+	term = NULL;
 	return (1);
 }

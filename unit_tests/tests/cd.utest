@@ -1,0 +1,9 @@
+pwd
+cd ; pwd
+cd /tmp ; pwd
+cd - ; pwd
+cd  ~ ; pwd
+cd -L /tmp ; pwd
+cd -P /tmp ; pwd
+cd -L ~/goinfre ; pwd
+cd -P ~/goinfre ; pwd
