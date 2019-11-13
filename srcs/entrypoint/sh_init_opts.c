@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_init_opts.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/03 17:26:30 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/03 22:22:38 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
-
 #include "libft.h"
-#include <stdlib.h>
+#include "sh.h"
 
-t_sh	*sh(void)
+void	sh_init_opts(t_sh *s)
 {
-	static t_sh	*s = NULL;
+	char *str;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	str = "a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug:";
+	if (s->ac <= 1)
+		return ;
+	s->opt = ft_getopt(&(s->ac), &(s->av), str);
 }

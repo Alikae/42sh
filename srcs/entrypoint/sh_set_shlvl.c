@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_set_shlvl.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/03 22:33:34 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/04 19:15:07 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
-
 #include "libft.h"
-#include <stdlib.h>
+#include "sh_env.h"
 
-t_sh	*sh(void)
+void	sh_set_shlvl(void)
 {
-	static t_sh	*s = NULL;
+	char	*tmp;
+	int		shlvl;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	shlvl = 0;
+	tmp = NULL;
+	if (!(sh_getev_value("SHLVL")))
+		sh_setev("SHLVL", "1");
+	else
+	{
+		tmp = ft_itoa(1 + ft_atoi(sh_getev("SHLVL")->value));
+		sh_setev("SHLVL", tmp);
+		ft_strdel(&tmp);
+	}
+	sh_getev("SHLVL")->exported = 1;
 }

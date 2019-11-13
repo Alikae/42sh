@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh.c                                               :+:      :+:    :+:   */
+/*   sh_init_history.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:51:32 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/04 19:59:35 by thdelmas          #+#    #+#             */
+/*   Updated: 2019/11/04 20:02:34 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
-#include "sh_tools.h"
+#include "sh_history.h"
 
-#include "libft.h"
 #include <stdlib.h>
 
-t_sh	*sh(void)
+t_hist	*sh_init_history(void)
 {
-	static t_sh	*s = NULL;
+	t_hist *hist;
 
-	if (s)
-		return (s);
-	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
-		return (NULL);
-	ft_bzero(s, sizeof(t_sh));
-	return (s);
+	hist = malloc(sizeof(t_hist));
+	hist->current = NULL;
+	hist->path = find_path_dir();
+	hist->size_l = 200;
+	hist = command_history(hist);
+	return (hist);
 }

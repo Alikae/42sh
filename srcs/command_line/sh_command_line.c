@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 07:36:41 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/11 14:54:49 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/12 19:49:06 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ static int		sh_parse_line_escape(char **line)
 	i -= 1;
 	if (line[0][i] == '\\' && (i == 0 || !sh_ice(*line, i)))
 	{
-		line[0][i] = 0; 
+		line[0][i] = 0;
 		return (0);
 	}
 	return (1);
 }
 
-char		*sh_arguments(t_hist *hist)
+char			*sh_arguments(t_hist *hist)
 {
 	int		ret;
 	char	*str;

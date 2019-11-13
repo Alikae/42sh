@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:33:55 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 09:37:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/04 20:34:21 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include "libft.h"
 
-/*void	ask_for_extern_terminal(t_sh *p)
+void	ask_for_extern_terminal(t_sh *p)
 {
 	int		n;
 	char	*nc;
@@ -25,7 +25,7 @@
 	char	input[1];
 	char	real_input;
 
-	p->debug_fd = 2;
+	p->dbg_fd = 2;
 	n = 0;
 	while (n < 10)
 	{
@@ -49,7 +49,7 @@
 		if (real_input == 'y')
 		{
 			printf("Terminal %i chosen, fd %i\n\n\n\n\n--SHELL BEGIN--\n\n\n", n, fd);
-			p->debug_fd = fd;
+			p->dbg_fd = fd;
 			return ;
 		}
 		close(fd);
@@ -57,4 +57,4 @@
 			return ;
 		n++;
 	}
-}*/
+}

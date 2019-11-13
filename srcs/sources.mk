@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/12 19:05:48 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/12 19:54:50 by thdelmas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,11 +19,17 @@ C_FILES = \
 	  sh_rc.c
 
 C_FILES_entrypoint = \
-		     sh_entrypoint.c \
-		     sh_loop.c \
-		     sh_init_cmd.c \
-		     sh_init_path.c \
-		     sh_init.c
+	sh_entrypoint.c \
+	sh_loop.c \
+	sh_init_debug.c \
+	sh_init_cmd.c \
+	sh_init_opts.c \
+	sh_init_env.c \
+	sh_init_signals.c \
+	sh_init_history.c \
+	sh_set_shlvl.c \
+	sh_init_path.c \
+	sh_init.c
 
 C_FILES_job_control = \
 		      t_job.c \
@@ -84,13 +90,14 @@ C_FILES_tokenizer = \
 	sh_alias_substitution.c
 
 C_FILES_executer = \
-		   sh_exec_file.c \
-		   sh_exec_stdin.c \
-		   sh_exec_arg.c \
-		   exec_script.c \
-		   exec_compound.c \
-		   exec_simple_command.c \
-		   redirections_handler.c
+	sh_exec_file.c \
+	sh_exec_stdin.c \
+	sh_exec_arg.c \
+	sh_exec_default.c \
+	exec_script.c \
+	exec_compound.c \
+	exec_simple_command.c \
+	redirections_handler.c
 
 C_FILES_debug_mode = \
 		     debug_mode.c
@@ -119,6 +126,7 @@ C_FILES_builtins = \
 		   sh_unalias.c
 
 C_FILES_tools = \
+		sh_print_all_token.c \
 		sh_shdel.c \
 		sh_hist_del.c \
 		sh_job_del.c \

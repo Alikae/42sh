@@ -1,5 +1,7 @@
-# 42sh
-___
+# 21sh
+---
+Made by: Ede-Ram Tcillard Tmeyer Thdelmas
+---
 	
 - sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  [script [arg...]]
 - sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  -c [command_name [arg...]]
