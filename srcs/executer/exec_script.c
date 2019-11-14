@@ -151,7 +151,8 @@ void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end
 		toggle_redirect_pipe(0, prev_pipe, -1);
 		return;
 	}
-	pipe(next_pipe);
+	pipe(next_pipe);//PROTECT
+	printf("[%i] pipe [%i %i]\n", getpid(), next_pipe[0], next_pipe[1]);
 	push_pipe_lst(&p->pipe_lst, next_pipe);
 	exec_pipeline_recursively(p, next_separator->next, token_end, next_pipe[0]);
 	toggle_redirect_pipe(1, prev_pipe, next_pipe[1]);
