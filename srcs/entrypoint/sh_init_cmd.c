@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 23:36:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/04 00:22:16 by tmeyer           ###   ########.fr       */
+/*   Updated: 2019/11/15 02:49:14 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,5 @@ void	sh_init_cmd(char *input)
 	p->unfinished_cmd = 0;
 	p->invalid_cmd = 0;
 	p->cmd = input;
+	p->extern_pipe = -1;
 }

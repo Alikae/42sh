@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/13 00:20:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/15 02:49:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct		s_sh
 	struct termios	extern_termios;
 	int	pid_main_process;
 	int				pgid_current_pipeline;
+	int				extern_pipe;
 	int				force_setpgrp_setattr;
 	int				process_is_stopped;
 

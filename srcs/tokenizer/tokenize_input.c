@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/13 01:29:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/15 03:05:38 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,12 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 		}
 		else
 		{
+			if (word_is_reserved(t->input + word_begin, t->i - word_begin) == SH_SUBSH_END)
+			{
+				printf("Unexpected token at -%s\n", t->input + word_begin);
+				sh()->invalid_cmd = 1;
+				return (SH_SYNTAX_ERROR);
+			}
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
 			//printf("%s\n", (*p_actual)->next->content);
 			//if (t->word_nb == 1)
