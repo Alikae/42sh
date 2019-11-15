@@ -176,6 +176,19 @@ void	setup_pipeline_handle_bang(t_sh *p, t_token **p_token_begin, t_token *token
 	}
 }
 
+int		find_previous_pipe(t_sh *p)
+{
+	t_redirect_lst *rlst = p->redirect_lst;
+	while (rlst)
+	{
+		printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
+		if (rlst->in == 0)
+			return (rlst->out);
+		rlst = rlst->next;
+	}
+	return (-1);
+}
+
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int		bang;
@@ -186,7 +199,10 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	setup_pipeline_handle_bang(p, &token_begin, token_end, &bang);
 	if ((next_sep = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_sep->type == SH_OR)
 	{
-		exec_pipeline_recursively(p, token_begin, token_end, -1);
+		//
+		int fd = find_previous_pipe(p);
+		//
+		exec_pipeline_recursively(p, token_begin, token_end, fd);
 		delete_close_all_pipe_lst(p->pipe_lst);
 		p->pipe_lst = 0;
 		int tmp = p->pgid_current_pipeline;

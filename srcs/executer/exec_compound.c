@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/13 00:16:17 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/15 02:02:08 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,14 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	}
 	if (!pid)
 	{
+		//TAKE ACTUAL REDIRECTION TO 1
+		//tmp = p->buffer
+		//WRITE IT TO p->BUFFER
 		exec_script(p, tok->sub);
 		exit(1);
 	}
 	//close all pipes?
+	//
 	sh_pipe_lst_del(&p->pipe_lst);
 	//
 	return (block_wait(p, pid, 0));
