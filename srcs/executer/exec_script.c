@@ -259,7 +259,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	if (p->pid_main_process == getpid()/**/ && p->is_interactive)
 		create_pgrp = 1;
 	if ((child_pid = fork()) > 0)
-		printf("[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
+		dprintf(2, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
 		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());

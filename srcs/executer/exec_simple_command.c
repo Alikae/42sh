@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/13 00:39:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/15 01:31:41 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 	else
 	{
 		//print_redirections(p, p->redirect_lst);
-		printf("[%i] EXECVE\n", getpid());
+		dprintf(2, "[%i] EXECVE\n", getpid());
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
 		dprintf(2, "Execve ErrorR\n");
 		sh()->exit = 1;
@@ -340,7 +340,6 @@ int		exec_prgm(t_sh *p, char **child_argv)
 	char	*real_path;
 
 	ret = 0;
-	//printf("[%i]try path %s\n", p->child_argv[0]);
 	if (!(real_path = get_real_path(child_argv[0], &st)))
 		return (127/*?*/);
 	if (!can_exec(&st))
@@ -348,6 +347,7 @@ int		exec_prgm(t_sh *p, char **child_argv)
 		printf("cant exec '%s'\n", child_argv[0]);
 		return (127); //ret val?
 	}
+	dprintf(2, "[%i]exec path %s\n", getpid(), child_argv[0]);
 	ret = exec_path(p, real_path, child_argv);
 	free(real_path);
 	return (ret);
@@ -1083,6 +1083,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign, &child_argv); //open files
 	if (!child_argv[0])
 		return (handle_no_cmd_name(p, child_argv));//and free stuff
+	dprintf(2, "[%i]exec simple -%s-\n", getpid(), child_argv[0]);
 	handle_assigns(p);
 	//print_redirections(p, p->redirect_lst);
 	save_std_fds(p);
