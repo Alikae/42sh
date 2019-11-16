@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/16 02:41:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/16 02:55:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,15 @@ int			count_token_words_in_str(const char *str)
 	t_tokenize_tool	t;
 	int				nb_words;
 
-	t->input = str;
-	t->i = 0;
+	t.input = str;
+	t.i = 0;
 	nb_words = 0;
-	while (t->input && t->input[t->i])
+	while (t.input && t.input[t.i])
 	{
-		if (read_n_skip_word(t))
+		if (read_n_skip_word(&t))
 			nb_words++;
-		if (t->input[t->i])
-			t->i++;
+		if (t.input[t.i])
+			t.i++;
 	}
 	return (nb_words);
 }
@@ -288,7 +288,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 				return (SH_SYNTAX_ERROR);
 			}
 			printf("there\n");
-			if (tokenize_reserved_word(t, p_actual, type, word_begin) == SH_SYNTAX_ERROR);
+			if (tokenize_reserved_word(t, p_actual, type, word_begin) == SH_SYNTAX_ERROR)
 				return (SH_SYNTAX_ERROR);
 		}
 		else
