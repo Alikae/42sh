@@ -71,24 +71,12 @@ int			read_n_skip_word(t_tokenize_tool *t)
 	return (n);
 }
 
+
 int			count_token_words_in_str(const char *str)
 {
 	t_tokenize_tool	t;
 	int				nb_words;
-	char			*alias;
-	int				i;
-	int				j;
-
-	i = 0;
-	j = 0;
-	while (str[i] != '=')
-		i++;
-	i++;
-	if (!(alias = malloc(ft_strlen(alias) - j)))
-		exit(-1);
-	while (str[i])
-		alias[j++] = str[i++];
-	alias[j] = '\0';
+	
 	t.input = str;
 	t.i = 0;
 	nb_words = 0;
