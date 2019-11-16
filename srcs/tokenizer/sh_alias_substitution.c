@@ -48,7 +48,7 @@ void	sh_sub_alias_command(t_tokenize_tool *t, char *alias, int in)
 	while (alias[j])
 		cmd[i++] = alias[j++];
 	j = t->i;
-	t->i = i;
+	t->i = in;
 	while (t->input[j])
 		cmd[i++] = t->input[j++];
 	cmd[i] = '\0';
