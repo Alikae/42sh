@@ -252,9 +252,10 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;
 			sh_sub_alias_command(t, alias, word_begin);
-			printf("ici\n");
+			printf("ah\n");
 			sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
-			printf("ici1\n");
+			printf("ah\n");
+			printf("t->input = %s\n", t->input);
 			return (1);
 		}
 	}
