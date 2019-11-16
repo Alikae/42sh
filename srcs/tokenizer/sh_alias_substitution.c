@@ -50,7 +50,7 @@ void	sh_sub_alias_command(t_tokenize_tool *t, char *alias, int in)
 	j = t->i;
 	t->i = i;
 	while (t->input[j])
-		cmd[i++] = t->input[j];
+		cmd[i++] = t->input[j++];
 	cmd[i] = '\0';
 	t->input = cmd;
 }
@@ -96,9 +96,7 @@ char	*sh_find_alias(t_tokenize_tool *t, int i)
 	while (t->input[i] && i < t->i)
 		str[j++] = t->input[i++];
 	str[j] = '\0';
-	printf("alias = %s\n", str);
 	tab = sh_find_sub_alias(str);
-	printf("tab = %s\n", tab);
 	free(str);
 	return (tab);
 }
@@ -252,10 +250,7 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;
 			sh_sub_alias_command(t, alias, word_begin);
-			printf("ah\n");
 			sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
-			printf("ah\n");
-			printf("t->input = %s\n", t->input);
 			return (1);
 		}
 	}
