@@ -49,10 +49,10 @@ static void		sh_handle_signal(int sig)
 		sh_handle_sigstp();
 	else if (sig == SIGINT)
 		sh_handle_sigint();
-	else if (sig == SIGSEGV)
+/*	else if (sig == SIGSEGV)
 		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGABRT)
-		printf("SIGABORT\nYOU'RE ENTIRE LIFE IS A MESS\n");
+		printf("SIGABORT\nYOU'RE ENTIRE LIFE IS A MESS\n");*/
 	else if (sig == SIGILL)
 		printf("ILLEGAL INSTRUCTION\nWhat are you trying to do ?!?\n");
 	else if (sig == SIGBUS)

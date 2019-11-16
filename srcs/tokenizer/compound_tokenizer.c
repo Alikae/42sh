@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/16 02:05:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/16 02:50:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 	{
 		forbidden_esac = 1;
 		t->i++;
+		if (sh()->alias_end)
+			sh()->alias_end--;
 	}
 	forward_blanks(t);
 	word_begin = t->i;
@@ -119,6 +121,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 	{
 		if (!forbidden_esac)
 		{
+			if (sh()->alias_end)
+				sh()->alias_end--;
 			*next_separator = SH_ESAC;
 			return (0);
 		}
@@ -158,6 +162,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 		sh()->invalid_cmd = 1;
 		return ((int)handle_syntax_error(t, "UNEXPECTED char in CASE: expected ')' after WORDLIST", compound));
 	}
+	if (t->input[t->i] == '(' || sh()->alias_end)
+		sh()->alias_end--;
 	t->i++;
 	return (1);
 }
@@ -198,7 +204,11 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 		return (0);
 	}
 	if (t->i != word_begin && !ft_strncmp(t->input + word_begin, "esac", t->i - word_begin))
+	{
 		*esac_finded = 1;
+		if (sh()->alias_end)
+			sh()->alias_end--;
+	}
 	else
 	{
 		t->i = word_begin;
@@ -225,6 +235,8 @@ int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token, int case_i
 		return (0);
 	*compound_token = create_token_n(SH_CASE, case_index, t->input + word_begin, t->i - word_begin);
 	//VERIFY UNICITY OF NAME
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	return (1);
 }
 
@@ -240,6 +252,8 @@ int		read_n_skip_in(t_tokenize_tool *t)
 		t->i = word_begin;
 		return (0);
 	}
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	return (1);
 }
 
@@ -478,6 +492,8 @@ int		tokenize_for_in(t_tokenize_tool *t, t_token *compound_token)
 		return (0);
 	if (/*t->i != word_begin && */ft_strncmp(t->input + word_begin, "in", t->i - word_begin))
 		return (0);
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	if (!(compound_token->sub->sub = tokenize_for_wordlist(t)))
 		return (0);
 	/*else
@@ -496,6 +512,8 @@ int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
 		return ((int)handle_syntax_error(t, "missing DO in for", compound));
 	if (!compound->sub->sub)
 		compound->sub->sub = create_token(0, 0, 0);
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	if (!(compound->sub->sub->sub = tokenize_for_do_group(t, compound)))
 		return (0);
 	return (1);

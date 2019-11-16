@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/10 22:41:18 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/16 02:34:24 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,10 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 	}
 	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i - here_doc_begin)))
 		exit(ERROR_MALLOC);
+	//count words in here doc and substract them from sh()->alias_end
 	read_n_skip_word(t);
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	forward_blanks_newline(t);
 	return (0);
 }

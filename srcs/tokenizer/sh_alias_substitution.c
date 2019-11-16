@@ -234,6 +234,7 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 	static int	before = 0;
 	int			len;
 
+	(void)word_begin;//RM
 	len = 0;
 	alias = NULL;
 	if (!sh()->alias_end && sh()->alias_stack)
