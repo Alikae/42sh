@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/11 00:40:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/16 02:05:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 		if (t->i != word_begin && ft_strncmp(t->input + word_begin, ")", t->i - word_begin))
 		{
 			(*previous_next) = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			if (sh()->alias_end)
+				sh()->alias_end--;
 			dprintf(sh()->dbg_fd, "case WORD : %s\n", (*previous_next)->content);
 			previous_next = &((*previous_next)->next);
 		}
@@ -404,6 +406,8 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 		if (t->i != word_begin)
 		{
 			actual->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			if (sh()->alias_end)
+				sh()->alias_end--;
 			actual = actual->next;
 		}
 	}
@@ -459,6 +463,8 @@ int		tokenize_for_name(t_tokenize_tool *t, t_token *compound_token)
 	if (t->i == word_begin)
 		return (0);
 	compound_token->sub = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	//VERIFY UNICITY OF NAME/SYNTAXERROR
 	return (1);
 }

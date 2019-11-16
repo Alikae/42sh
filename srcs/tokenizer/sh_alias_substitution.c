@@ -157,7 +157,7 @@ void	sh_print_alias_loop_error(char **stack, int loop)
 	ft_putstr("<--");
 	sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
 	ft_putstr("|\n\n");
-	sh()->alias_end = 1;
+	//sh()->alias_end = 1;
 }
 
 int		sh_check_stack(char **stack, char *alias)
@@ -203,9 +203,9 @@ void	sh_push_alias(char *alias)
 
 	ret = 0;
 	stack = sh()->alias_stack;
-	if (sh()->alias_end)
+	//if (sh()->alias_end)
 	{
-		sh()->alias_end = 0;
+	//	sh()->alias_end = 0;
 		free(stack);
 		stack = NULL;
 	}
@@ -218,7 +218,10 @@ void	sh_push_alias(char *alias)
 	sh()->alias_stack = stack;
 }
 
-int		sh_alias_substitution(t_tokenize_tool *t)
+int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
+	//USE WORD_BEGIN INSTEAD OF T->I
+	//
+	//IF ALIAS IS REPLACED, SET T->I TO WORD_BEGIN
 {
 	//
 	//before is the nb of previous unaliases

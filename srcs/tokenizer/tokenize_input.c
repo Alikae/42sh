@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/16 01:52:53 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/16 02:11:43 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype ty
 		return (SH_SYNTAX_ERROR);
 	}
 	(*p_actual)->sub = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	return (0);
 }
 
@@ -250,8 +252,6 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 	int  i;
 
 	i = 0;
-	if (sh_alias_substitution(t))
-		return (0);
 	if ((len = is_io_nb(t)))
 		return (treat_redirection(t, p_actual, len));
 	word_begin = t->i;
@@ -288,7 +288,11 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 				sh()->invalid_cmd = 1;
 				return (SH_SYNTAX_ERROR);
 			}
+			if (sh_alias_substitution(t))//free_stuff?
+				return (0);
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			if (sh()->alias_end)
+				sh()->alias_end--;
 			//printf("%s\n", (*p_actual)->next->content);
 			//if (t->word_nb == 1)
 			//	while (is_unquoted_valid_alias_name(token->content))
@@ -336,7 +340,6 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		free_ast(origin);
 		return (0);
 	}
-	sh()->alias_end = 1;
 	actual = origin->next;
 	delete_token(origin);
 	return (actual);

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:31:21 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/07 06:33:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/16 02:16:49 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "sh.h"
 
-int			sh_alias_substitution(t_tokenize_tool *t);
+int			sh_alias_substitution(t_tokenize_tool *t, int word_begin);
 t_token		*create_token(t_toktype type, int index, const char *content);
 t_token		*create_token_n(t_toktype type, int index, const char *content, int n);
 void		delete_token(t_token *token);
