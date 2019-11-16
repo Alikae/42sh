@@ -75,16 +75,29 @@ int			count_token_words_in_str(const char *str)
 {
 	t_tokenize_tool	t;
 	int				nb_words;
+	char			*alias;
+	int				i;
+	int				j;
 
-	t->input = str;
-	t->i = 0;
+	i = 0;
+	j = 0;
+	while (str[i] != '=')
+		i++;
+	i++;
+	if (!(alias = malloc(ft_strlen(alias) - j)))
+		exit(-1);
+	while (str[i])
+		alias[j++] = str[i++];
+	alias[j] = '\0';
+	t.input = str;
+	t.i = 0;
 	nb_words = 0;
-	while (t->input && t->input[t->i])
+	while (t.input && t.input[t.i])
 	{
-		if (read_n_skip_word(t))
+		if (read_n_skip_word(&t))
 			nb_words++;
-		if (t->input[t->i])
-			t->i++;
+		if (t.input[t.i])
+			t.i++;
 	}
 	return (nb_words);
 }

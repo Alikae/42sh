@@ -251,10 +251,9 @@ long int	sh_find_number(char *str, int begin)
 		begin++;
 	}
 	if (str[begin] >= '0' && str[begin] <= '9')
-		result = sh_atoi_index(str, &begin) * opt;
+		result = sh_atoi_index(str, &begin);
 	else
 		result = sh_get_int_value(str, &begin);
-	printf("result = %li\n", result);
 	return (result);
 }
 

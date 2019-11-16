@@ -56,6 +56,7 @@ void	sh_sub_alias_command(t_tokenize_tool *t, char *alias)
 	t->input = cmd;
 }
 
+
 char	*sh_find_sub_alias(char *str)
 {
 	char	**tab;
@@ -86,9 +87,9 @@ char	*sh_find_sub_alias(char *str)
 
 char	*sh_find_alias(t_tokenize_tool *t)
 {
-	int		i;
 	char	*str;
 	int		j;
+	int 	i;
 	char	*tab;
 
 	j = 0;
@@ -229,6 +230,11 @@ int		sh_alias_substitution(t_tokenize_tool *t)
 
 	len = 0;
 	alias = NULL;
+	if (!sh()->alias_end && sh()->alias_stack)
+	{
+		free(sh()->alias_stack);
+		sh()->alias_stack = NULL;
+	}
 	if (before || t->word_nb == 1)
 	{
 		before = 0;
@@ -239,6 +245,7 @@ int		sh_alias_substitution(t_tokenize_tool *t)
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;
 			sh_sub_alias_command(t, alias);
+			sh()->alias_end = sh()->alias_end + count_token_words_in_str(alias);
 			return (1);
 		}
 	}
