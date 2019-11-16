@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/16 01:52:53 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/16 02:27:24 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ t_toktype		fill_redirection(t_tokenize_tool *t, t_token **p_actual, t_toktype ty
 		return (SH_SYNTAX_ERROR);
 	}
 	(*p_actual)->sub = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	return (0);
 }
 
@@ -255,7 +257,6 @@ int			bang_unfollowed_by_word(t_tokenize_tool *t)
 
 t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
 {
-	//If word contain = or >< , !word_nb++ ?
 	int			word_begin;
 	t_toktype	type;
 	int			len;
@@ -263,10 +264,8 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 	int  i;
 
 	i = 0;
-	if (sh_alias_substitution(t))
-		return (0);
 	if ((len = is_io_nb(t)))
-		return (treat_redirection(t, p_actual, len));
+		return (treat_redirection(t, p_actual, len));//aliasverify
 	word_begin = t->i;
 	if ((tmp = read_n_skip_word(t)))
 	{
@@ -275,7 +274,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 		if (t->word_nb == 1 && (len = next_is_parenthesis(t)))
 		{
 			t->i += len;
-			return (tokenize_function(t, p_actual, word_begin));
+			return (tokenize_function(t, p_actual, word_begin));//aliasverify
 		}
 		if ((type = word_is_actual_terminator(t->input + word_begin, t->i - word_begin, actual_compound)) && (t->word_nb == 1 || type == SH_SUBSH_END))
 			return (type);
@@ -290,7 +289,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 				return (SH_SYNTAX_ERROR);
 			}
 			printf("there\n");
-			if (tokenize_reserved_word(t, p_actual, type, word_begin) == SH_SYNTAX_ERROR)
+			if (tokenize_reserved_word(t, p_actual, type, word_begin) == SH_SYNTAX_ERROR)//aliasverify
 				return (SH_SYNTAX_ERROR);
 		}
 		else
@@ -301,11 +300,12 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_co
 				sh()->invalid_cmd = 1;
 				return (SH_SYNTAX_ERROR);
 			}
+			if (sh_alias_substitution(t, word_begin))//free_stuff?
+				return (0);
 			(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			if (sh()->alias_end)
+				sh()->alias_end--;
 			//printf("%s\n", (*p_actual)->next->content);
-			//if (t->word_nb == 1)
-			//	while (is_unquoted_valid_alias_name(token->content))
-			//		(*p_actual)->next = retokenize_alias((*p_actual)->next);
 			if (!(ft_strchr(t->input + word_begin, '=') > t->input + word_begin) || ft_strchr(t->input + word_begin, '=') > t->input + t->i)
 				t->word_nb++;
 		}
@@ -349,9 +349,9 @@ t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound, t_t
 		free_ast(origin);
 		return (0);
 	}
-	sh()->alias_end = 1;
 	actual = origin->next;
 	delete_token(origin);
+	free(sh()->alias_stack);//DO EVERYWHERE WHEN QUITTING? DO OUTSIDE?
 	return (actual);
 }
 
