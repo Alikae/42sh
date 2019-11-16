@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/15 03:05:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/16 01:52:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,24 @@ int			read_n_skip_word(t_tokenize_tool *t)
 		}
 	}
 	return (n);
+}
+
+int			count_token_words_in_str(const char *str)
+{
+	t_tokenize_tool	t;
+	int				nb_words;
+
+	t->input = str;
+	t->i = 0;
+	nb_words = 0;
+	while (t->input && t->input[t->i])
+	{
+		if (read_n_skip_word(t))
+			nb_words++;
+		if (t->input[t->i])
+			t->i++;
+	}
+	return (nb_words);
 }
 
 int			is_io_nb(t_tokenize_tool *t)
@@ -211,7 +229,7 @@ int			bang_unfollowed_by_word(t_tokenize_tool *t)
 
 	i = t->i;
 	forward_blanks(t);
-	if ((tmp =read_n_skip_word(t)))
+	if ((tmp = read_n_skip_word(t)))
 	{
 		if (tmp == -1)
 			return (-1);
