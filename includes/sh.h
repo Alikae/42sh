@@ -109,6 +109,6 @@ void	init_signals_handling(void);
 void	constructor(void) __attribute__((constructor));
 void	destructor(void) __attribute__((destructor));
 void	sh_pipe_lst_del(t_pipe_lst **plst);
-
+int		count_token_words_in_str(const char *str);
 #endif
 
