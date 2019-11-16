@@ -196,7 +196,7 @@ void	sh_push_alias(char *alias)
 	char	**stack;
 	int		ret;
 
-	ret = 0;
+	ret = 0; 
 	stack = sh()->alias_stack;
 	sh_record_alias(&stack, alias);
 	if ((ret = sh_check_stack(stack, alias) != -1))
@@ -210,20 +210,12 @@ void	sh_push_alias(char *alias)
 int		count_alias_word_in_str(const char *str)
 {
 	int		i;
-	int		j;
-	char	*alias;
 
 	i = 0;
-	j = 0;
 	while (str[i] != '=')
 		i++;
 	i++;
-	if (!(alias = malloc(ft_strlen(alias) - j)))
-		exit(-1);
-	while (str[i])
-		alias[j++] = str[i++];
-	alias[j] = '\0';
-	return (count_token_words_in_str(alias));
+	return (count_token_words_in_str(str + i));
 }
 
 int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
@@ -251,6 +243,7 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 				before = 1;
 			sh_sub_alias_command(t, alias, word_begin);
 			sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
+			printf("%s\n", t->input);
 			return (1);
 		}
 	}
