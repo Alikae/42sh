@@ -5,6 +5,7 @@
 
 void	delete_job(t_job *job)
 {
+	printf("delete job %s\n", job->name);
 	if (!job)
 		return ;
 	free(job->name);

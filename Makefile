@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/13 12:28:22 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/16 04:15:51 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,7 @@ FT_INC_DIR = $(FT_DIR)/includes
 FT_LNK = -L$(FT_DIR) -l$(FT)
 
 ###  CC && FLAGS ###
-CC = clang
+CC = clang -g
 DEBUG_FLAGS = -g3
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
