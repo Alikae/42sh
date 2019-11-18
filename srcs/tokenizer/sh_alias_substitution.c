@@ -221,31 +221,39 @@ int		count_alias_word_in_str(const char *str)
 	return (count_token_words_in_str(str + i));
 }
 
+void	sh_treat_alias(char *alias, t_tokenize_tool *t, int begin, int *before)
+{
+	int		len;
+	
+	len = 0;
+	if (!(sh_push_alias(alias)))
+		return ;
+	len = (ft_strlen(alias) - 1);
+	if ((alias[len] == ' ' || alias[len] == '\n'
+			|| alias[len] == '\t') && !(sh()->alias_end))
+		(*before) = 1;
+	sh_sub_alias_command(t, alias, begin);
+	sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
+}
+
 int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 {
 	char		*alias;
 	static int	before = 0;
-	int			len;
 
-	len = 0;
 	alias = NULL;
-	if (!sh()->alias_end && sh()->alias_stack)
+	if (!(sh()->alias_end) && sh()->alias_stack)
 	{
-		free(sh()->alias_stack);
+		free((sh()->alias_stack));
 		sh()->alias_stack = NULL;
 	}
 	if (before || t->word_nb == 1)
 	{
-		before = 0;
+		if (before && !(sh()->alias_end))
+			before = 0;
 		if ((alias = sh_find_alias(t, word_begin)))
 		{
-			if (!(sh_push_alias(alias)))
-				return (1);
-			len = ft_strlen(alias) - 1;
-			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
-				before = 1;
-			sh_sub_alias_command(t, alias, word_begin);
-			sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
+			sh_treat_alias(alias, t, word_begin, &before);
 			return (1);
 		}
 	}
