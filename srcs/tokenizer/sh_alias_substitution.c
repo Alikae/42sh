@@ -133,10 +133,9 @@ void	sh_print_alias_loop_error(char **stack, int loop)
 
 	max = sh_find_max_len(stack);
 	i = 0;
-	printf("inside\n");
+	printf("42sh: recurcive alias error: %s\n", stack[0]);
 	while (stack[i + 1])
 	{
-		printf("i = %i\n", i);
 		ft_putstr(stack[i]);
 		if (i == loop)
 		{
@@ -193,7 +192,7 @@ void	sh_record_alias(char ***stack, char *alias)
 	*stack = cpy;
 }
 
-void	sh_push_alias(char *alias)
+int		sh_push_alias(char *alias)
 {
 	char	**stack;
 	int		ret;
@@ -201,13 +200,14 @@ void	sh_push_alias(char *alias)
 	ret = 0; 
 	stack = sh()->alias_stack;
 	sh_record_alias(&stack, alias);
-	if ((ret = sh_check_stack(stack, alias) != -1))
+	if ((ret = sh_check_stack(stack, alias)) != -1)
 	{
 		sh()->abort_cmd = 1;
-		sh_print_alias_loop_error(stack, ret - 1); 
+		sh_print_alias_loop_error(stack, ret);
+		return (0);
 	}
-	else
-		sh()->alias_stack = stack;
+	sh()->alias_stack = stack;
+	return (1);
 }
 
 int		count_alias_word_in_str(const char *str)
@@ -239,13 +239,13 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 		before = 0;
 		if ((alias = sh_find_alias(t, word_begin)))
 		{
-			sh_push_alias(alias);
+			if (!(sh_push_alias(alias)))
+				return (1);
 			len = ft_strlen(alias) - 1;
 			if (alias[len] == ' ' && alias[len] == '\n' && alias[len] == '\t')
 				before = 1;
 			sh_sub_alias_command(t, alias, word_begin);
 			sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
-			printf("%s\n", t->input);
 			return (1);
 		}
 	}
