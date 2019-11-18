@@ -133,26 +133,28 @@ void	sh_print_alias_loop_error(char **stack, int loop)
 
 	max = sh_find_max_len(stack);
 	i = 0;
+	printf("inside\n");
 	while (stack[i + 1])
 	{
+		printf("i = %i\n", i);
 		ft_putstr(stack[i]);
 		if (i == loop)
 		{
 			ft_putstr("<--");
-			sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
+			sh_print_ident_size(max, ft_strlen(stack[i]), '-');
 			ft_putstr("|\n");
 		}
 		else
 		{
-			sh_print_ident_size(max, ft_strlen(stack[i++]), ' ');
+			sh_print_ident_size(max, ft_strlen(stack[i]), ' ');
 			ft_putstr("   |\n");
 		}
+		i++;
 	}
 	ft_putstr(stack[i]);
 	ft_putstr("<--");
 	sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
 	ft_putstr("|\n\n");
-	//sh()->alias_end = 1;
 }
 
 int		sh_check_stack(char **stack, char *alias)
@@ -202,9 +204,10 @@ void	sh_push_alias(char *alias)
 	if ((ret = sh_check_stack(stack, alias) != -1))
 	{
 		sh()->abort_cmd = 1;
-		sh_print_alias_loop_error(stack, ret);
+		sh_print_alias_loop_error(stack, ret - 1); 
 	}
-	sh()->alias_stack = stack;
+	else
+		sh()->alias_stack = stack;
 }
 
 int		count_alias_word_in_str(const char *str)
@@ -224,7 +227,6 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 	static int	before = 0;
 	int			len;
 
-	(void)word_begin;//RM
 	len = 0;
 	alias = NULL;
 	if (!sh()->alias_end && sh()->alias_stack)
