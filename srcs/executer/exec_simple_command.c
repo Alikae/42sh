@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/19 19:47:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/19 21:02:10 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,10 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 
 	p->process_is_stopped = 0;
 	//printf("[%i] waiting\n", getpid());
+	//
+//	def_prog_mode();
+//	endwin();
+	//
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		dprintf(2, "WAIT ERROR\n");
@@ -203,6 +207,8 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 			printf("\n[%i] aborted: Segmentation Fault\n", child_pid);
 		if (WTERMSIG(status) == SIGBUS)
 			printf("\n[%i] aborted: Bus Error\n", child_pid);
+		if (WTERMSIG(status) == SIGKILL)
+				printf("\nChild_process [%i] KILLED\n", child_pid);
 	}
 	//ctrl-Z only	tcgetattr (0, &j->tmodes);
 	//	tcsetattr(0, TCSADRAIN, &shell_tmodes);
@@ -215,11 +221,13 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 		signal(SIGTTOU, SIG_IGN);
 		int ret = tcsetpgrp (0, getpgid(0));
 //		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
-		ret = tcsetattr(0, TCSADRAIN, &p->orig_termios);
-		//dprintf(2, "[%i]tcsetat ret = %i", getpid(), ret);
+		ret = tcsetattr(0, TCSANOW, &p->orig_termios);
+		dprintf(2, "[%i]tcsetat ret = %i", getpid(), ret);
 		signal(SIGTTOU, SIG_DFL);
 //		sigprocmask(SIG_UNBLOCK, &sigset, 0);
 	//	init_signals_handling();
+//		endwin();
+//		reset_prog_mode();
 	}
 	return (WEXITSTATUS(status));
 	//if from_fg && finished process rm job
