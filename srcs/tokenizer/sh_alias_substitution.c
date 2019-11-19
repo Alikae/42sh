@@ -259,7 +259,5 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 			return (1);
 		}
 	}
-	if (sh()->alias_end)
-		sh()->alias_end--;
 	return (0);
 }
