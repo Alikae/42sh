@@ -6,7 +6,7 @@
 #    By: jerry <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 16:28:15 by jerry             #+#    #+#              #
-#    Updated: 2019/11/19 10:15:41 by jerry            ###   ########.fr        #
+#    Updated: 2019/11/19 10:16:56 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ then
 		exit 1
 	fi
 fi
-if which norminette >&-
+if false && which norminette >&-
 then
 	echo 'Checking norm: \c';
 	GF_NORMINETTE_LOG="$(norminette)"
