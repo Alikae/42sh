@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:28:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/02 21:53:52 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/18 00:00:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ typedef struct	s_job
 	char			*name;
 	pid_t			pid;
 	pid_t			pgid;
+	const char		*status;
 	struct termios	t_mode;
 	struct s_job	*next;
 } t_job;

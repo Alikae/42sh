@@ -297,7 +297,7 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	if (p->pid_main_process == getpid()/**/ && p->is_interactive)
 		create_pgrp = 1;
 	if ((child_pid = fork()) > 0)
-		dprintf(2, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
+		;//dprintf(2, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
 	if (child_pid < 0)
 	{
 		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
@@ -341,8 +341,10 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 		exit(1);
 	}
 	else
+	{
 		add_job(child_pid, p->cmd, token_begin->index,
-				(token_end) ? token_end->index : -1);
+				(token_end) ? token_end->index : -1, "background");
+	}
 	return (0);
 }
 

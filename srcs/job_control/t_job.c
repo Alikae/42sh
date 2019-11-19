@@ -5,7 +5,7 @@
 
 void	delete_job(t_job *job)
 {
-	printf("delete job %s\n", job->name);
+//	printf("delete job %s\n", job->name);
 	if (!job)
 		return ;
 	free(job->name);
@@ -34,17 +34,19 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b, int index_e)
 	ft_bzero(&job->t_mode, sizeof(job->t_mode));
 	job->pid = pid;
 	job->pgid = getpgid(pid);
+	job->status = "UNKNOW";
 	job->next = 0;
 	return (job);
 }
 #include <stdio.h>
-t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e)
+t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e, const char *status)
 {
 	t_job	*jobs;
 
 	jobs = sh()->jobs;
 	sh()->jobs = create_job(pid, name, index_b, index_e);
 	sh()->jobs->next = jobs;
+	sh()->jobs->status = status;
 	printf("[%i] add job:%s\n", getpid(), sh()->jobs->name);
 	return (jobs);
 }

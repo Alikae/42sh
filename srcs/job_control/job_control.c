@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 05:22:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/17 06:01:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/18 00:18:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	check_jobs_status(t_sh *p)
 		job = *old_next;
 		errno = 0;
 		int ret;
-		printf("job %s\n", job->name);
+		//printf("job %s %s\n", job->name, job->status);
 		if ((ret = waitpid(-job->pid, &status, WNOHANG | WUNTRACED)) < 0)
 		{
 			printf("[%i] Done: %s\n", job->pid, job->name);
@@ -44,12 +44,21 @@ void	check_jobs_status(t_sh *p)
 			old_next = &job->next;
 			continue;
 		}
-		printf("ret %i \n", ret);
-		printf("errno %i wait [%i] stat =%i IFSTP %i IFSIG %i\n",errno, job->pid, status,   WIFSTOPPED(status), WIFSIGNALED(status));
+		//printf("ret %i \n", ret);
+		//printf("errno %i wait [%i] stat =%i IFSTP %i IFSIG %i\n",errno, job->pid, status,   WIFSTOPPED(status), WIFSIGNALED(status));
 		if (WIFSTOPPED(status))
-			printf("[%i] bg		'%s'\n", job->pid, job->name);
+		{
+			if (WSTOPSIG(status) == SIGTTIN)
+				job->status = "SIGTTIN";
+			if (WSTOPSIG(status) == SIGTTOU)
+				job->status = "SIGTTOU";
+		}
 		else if (WIFSIGNALED(status))
-			printf("[%i] sig	%i	'%s'\n", job->pid, WTERMSIG(status), job->name);
+		{
+			if (WTERMSIG(status) == SIGKILL)
+				job->status = "Killed";
+			//printf("[%i] sig	%i	'%s'\n", job->pid, WTERMSIG(status), job->name);
+		}
 		else if (WIFEXITED(status))
 		{
 			printf("[%i] Done		'%s'\n", job->pid, job->name);
@@ -57,6 +66,7 @@ void	check_jobs_status(t_sh *p)
 			delete_job(job);
 			continue;
 		}
+		printf("-->[%i] %s		'%s'\n", job->pid, job->status, job->name);
 		old_next = &((*old_next)->next);
 	}
 }

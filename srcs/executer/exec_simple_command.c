@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/15 01:31:41 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/18 00:04:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 			printf("\nChild_process [%i] suspended\n", child_pid);
 			//???index_pipeline_begin?
 			if (!from_fg)
-				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end, "stopped");
 		}
 		if (WSTOPSIG(status) == SIGTTIN)
 		{
@@ -177,7 +177,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 			printf("\nChild_process [%i] SIGTTIN\n", child_pid);
 			//kill SIGTSTP?
 			if (!from_fg)
-				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end, "SIGTTIN");
 		}
 		if (WSTOPSIG(status) == SIGKILL)
 				printf("\nChild_process [%i] KILLED\n", child_pid);
@@ -186,7 +186,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 			printf("\nChild_process [%i] SIGTTOU\n", child_pid);
 			p->process_is_stopped = 1;
 			//kill SIGTSTP?
-			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end);
+			add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end, "SIGTTOU");
 		}
 	}
 	else if (WIFSIGNALED(status))
@@ -260,7 +260,7 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 	else
 	{
 		//print_redirections(p, p->redirect_lst);
-		dprintf(2, "[%i] EXECVE\n", getpid());
+//		dprintf(2, "[%i] EXECVE\n", getpid());
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
 		dprintf(2, "Execve ErrorR\n");
 		sh()->exit = 1;
@@ -347,7 +347,7 @@ int		exec_prgm(t_sh *p, char **child_argv)
 		printf("cant exec '%s'\n", child_argv[0]);
 		return (127); //ret val?
 	}
-	dprintf(2, "[%i]exec path %s\n", getpid(), child_argv[0]);
+	//dprintf(2, "[%i]exec path %s\n", getpid(), child_argv[0]);
 	ret = exec_path(p, real_path, child_argv);
 	free(real_path);
 	return (ret);
@@ -432,7 +432,7 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 		return (-1);
 	}
 	push_to_opened_files(p, real_path, fd);
-	dprintf(p->dbg_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
+//	dprintf(p->dbg_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
 	return (fd);
 }
 
@@ -863,9 +863,9 @@ int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **), char **child_arg
 {
 	int ret;
 
-	printf("[%i] EXEC BI %s\n", getpid(), child_argv[0]);
+	//printf("[%i] EXEC BI %s\n", getpid(), child_argv[0]);
 	ret = f(p->child_ac, child_argv, &(p->params));
-	printf("[%i] END EXEC BI %s\n", getpid(), child_argv[0]);
+	//printf("[%i] END EXEC BI %s\n", getpid(), child_argv[0]);
 	return (ret); //<-- Return What?
 }
 
@@ -1083,7 +1083,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign, &child_argv); //open files
 	if (!child_argv[0])
 		return (handle_no_cmd_name(p, child_argv));//and free stuff
-	dprintf(2, "[%i]exec simple -%s-\n", getpid(), child_argv[0]);
+	//dprintf(2, "[%i]exec simple -%s-\n", getpid(), child_argv[0]);
 	handle_assigns(p);
 	//print_redirections(p, p->redirect_lst);
 	save_std_fds(p);
