@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/16 04:15:51 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/11/19 09:41:42 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,9 +74,15 @@ FT_LNK = -L$(FT_DIR) -l$(FT)
 ###  CC && FLAGS ###
 CC = clang -g
 DEBUG_FLAGS = -g3
+NO_WARNING ?= false
+ifeq ($(NO_WARNING), false)
 CFLAGS = \
 		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
 		 -Wall -Werror -Wextra
+else
+CFLAGS = \
+		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR))
+endif
 
 LFLAGS = -ltermcap \
 		 -lncurses \
