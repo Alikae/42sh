@@ -6,7 +6,7 @@
 #    By: jerry <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 16:28:15 by jerry             #+#    #+#              #
-#    Updated: 2019/11/19 10:12:01 by jerry            ###   ########.fr        #
+#    Updated: 2019/11/19 10:15:41 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ PARENT_BRANCH="$(git show-branch -a | grep --color=auto --exclude-dir={.bzr,CVS,
 if [ "$PARENT_BRANCH" ]
 then
 	git fetch
-	git pull origin $PARENT_BRANCH || exit 1
+	git pull origin $PARENT_BRANCH
 fi
 
 if which make >&-
