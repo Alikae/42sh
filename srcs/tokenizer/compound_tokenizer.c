@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/16 02:50:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/19 18:19:59 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,7 +509,7 @@ int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
 	if (read_n_skip_word(t) == -1)
 		return (0);
 	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i - word_begin))
-		return ((int)handle_syntax_error(t, "missing DO in for", compound));
+		return (0);
 	if (!compound->sub->sub)
 		compound->sub->sub = create_token(0, 0, 0);
 	if (sh()->alias_end)
@@ -561,6 +561,8 @@ t_token	*tokenize_for(t_tokenize_tool *t, int word_begin)
 			sh()->unfinished_cmd = 1;
 			return (0);
 		}
+		printf("%i\n", t->i);
+		handle_syntax_error(t, "missing DO in for\n", compound_token);
 		sh()->invalid_cmd = 1;
 		return (0);
 	}

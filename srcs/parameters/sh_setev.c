@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/01 04:06:12 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/19 18:08:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_env	*sh_setev(const char *key, const char *value)
 {
 	t_env	*env;
 
+	printf("set %s %s\n", key, value);
 	if (!key)
 		return (NULL);
 	if (!(env = sh()->params))

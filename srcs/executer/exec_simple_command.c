@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/18 00:04:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/19 18:30:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,7 +316,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	nb_paths = 0;
 	paths = 0;
 	if (path[0] != '/' && !(paths = ft_strsplit(sh_getev_value("PATH"), ':')))
-		sh_init_path();
+		printf("$PATH not found\n");
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
 		if (!(ret = lstat(real_path, st)))
@@ -638,8 +638,8 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	p->assign_lst->value = ft_strdup(tmpt->content);
 	free_ast(tmpt);
 	p->assign_lst->next = tmp;
-	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		dprintf(p->dbg_fd, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
+	//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
+		dprintf(2, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
 }
 
 /*int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
@@ -878,6 +878,7 @@ void	handle_assigns(t_sh *p)
 	assign = p->assign_lst;
 	while (assign)
 	{
+		printf("assigns: %s %s\n", assign->key, assign->value);
 		if (sh_isset(assign->key))
 		{
 			tmp = p->tmp_assign_lst;
