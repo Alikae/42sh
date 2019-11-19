@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/19 09:41:42 by jerry            ###   ########.fr        #
+#    Updated: 2019/11/19 10:11:18 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,7 +111,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
 
 ### Link ###
 .ONESHELL:
-$(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg
+$(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg init
 	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
 	@printf "$@: Done !\n"
 
@@ -131,6 +131,9 @@ fclean: $(FT)_fclean | fclean_msg
 	$(RM) -rf $(NAME)
 
 re: fclean all
+
+init:
+	-@ sh ./.githooks/initme.sh 2>&- || true
 
 ### INCLUDE TOOLS MAKEFILE ###
 include ./tools.mk
