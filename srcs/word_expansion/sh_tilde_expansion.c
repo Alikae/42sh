@@ -41,14 +41,17 @@ void	sh_sub_tilde(char **content, char *home)
 	(*content) = new;
 }
 
-void	sh_find_home(t_env *env, char **home)
+void	sh_find_home(t_env *env, char **content)
 {
 	t_env 			*env_cpy;
 	struct passwd	*data;
+	char			*home;
 
 	env_cpy = env;
+	data = NULL;
+	home = NULL;
 	if (sh_find_env(&env_cpy, "HOME"))
-		(*home) = ft_strdup(env_cpy->value);
+		home = ft_strdup(env_cpy->value);
 	else
 	{
 		env_cpy = env;
@@ -56,24 +59,42 @@ void	sh_find_home(t_env *env, char **home)
 			return ;
 		data = getpwnam(env_cpy->value);
 		if (data)
-			(*home) = ft_strdup(data->pw_dir);
+			home = ft_strdup(data->pw_dir);
 	}
+	if (home)
+	{
+		sh_sub_tilde(content, home);
+		free(home);
+	}
+}
+
+void	sh_find_opt(t_env *env, char **content)
+{
+	if ((*content)[1] == '-')
+		sh_find_env(&env, "OLDPWD");
+	else
+		sh_find_env(&env, "PWD");
+	if (env)
+		sh_sub_tilde(content, env->value);
 }
 
 int		sh_tilde_expansion(char **content, t_env *env)
 {
-	char	*home;
-
-	home = NULL;
-	if ((*content)[0] == '~')
+	int		i;
+	
+	i = 0;
+	if ((*content)[i] == '~')
 	{
-		if (!(*content)[1] || (*content)[1] == '/'
-				|| (*content)[1] == ':' || (*content)[1] == '\n'
-				|| (*content)[1] == '}')
+		i++;
+		if ((*content)[i] == '-' || (*content)[i] == '+')
+			i++;
+		if (!(*content)[i] || (*content)[i] == '/' || (*content)[i] == ':'
+			|| (*content)[i] == '\n' || (*content)[i] == '}')
 		{
-			sh_find_home(env, &home);
-			if (home)
-				sh_sub_tilde(content, home);
+			if (i == 1)
+				sh_find_home(env, content);
+			else
+				sh_find_opt(env, content);
 		}
 		if ((*content)[1] == '/')
 			return (2);
