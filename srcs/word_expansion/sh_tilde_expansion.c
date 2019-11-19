@@ -22,15 +22,15 @@ int		sh_find_env(t_env **env_cpy, char *find)
 		return (0);
 }
 
-void	sh_sub_tilde(char **content, char *home)
+void	sh_sub_tilde(char **content, char *home, int opt)
 {
 	char	*new;
 	int		i;
 	int		j;
 
-	i = 1;
+	i = 1 + opt;
 	j = -1;
-	if (!(new = malloc(ft_strlen(*content) + ft_strlen(home))))
+	if (!(new = malloc(ft_strlen(*content) + ft_strlen(home) + 1 - opt)))
 		exit(-1);
 	while (home[++j])
 		new[j] = home[j];
@@ -63,7 +63,7 @@ void	sh_find_home(t_env *env, char **content)
 	}
 	if (home)
 	{
-		sh_sub_tilde(content, home);
+		sh_sub_tilde(content, home, 0);
 		free(home);
 	}
 }
@@ -75,7 +75,7 @@ void	sh_find_opt(t_env *env, char **content)
 	else
 		sh_find_env(&env, "PWD");
 	if (env)
-		sh_sub_tilde(content, env->value);
+		sh_sub_tilde(content, env->value, 1);
 }
 
 int		sh_tilde_expansion(char **content, t_env *env)
