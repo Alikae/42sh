@@ -232,6 +232,8 @@ void	sh_treat_alias(char *alias, t_tokenize_tool *t, int begin, int *before)
 	if ((alias[len] == ' ' || alias[len] == '\n'
 			|| alias[len] == '\t') && !(sh()->alias_end))
 		(*before) = 1;
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	sh_sub_alias_command(t, alias, begin);
 	sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
 }
@@ -257,5 +259,7 @@ int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
 			return (1);
 		}
 	}
+	if (sh()->alias_end)
+		sh()->alias_end--;
 	return (0);
 }
