@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/18 00:12:53 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/19 19:46:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ int	sh_jobs(int ac, char **av, char **env)
 		}
 		else if (WIFSTOPPED(status))
 		{
-			if (WSTOPSIG(status) == SIGTSTP)
+			if (WSTOPSIG(status) == SIGTSTP)//UNUSEFULL?
 				printf("[%i] SIGTSTP	'%s'\n", job->pid, job->name);
 			else if (WSTOPSIG(status) == SIGTTIN)
 				printf("[%i] SIGTTIN	'%s'\n", job->pid, job->name);
 			else if (WSTOPSIG(status) == SIGTTOU)
 				printf("[%i] SIGTTOU	'%s'\n", job->pid, job->name);
 			else
-				printf("[%i]st %i			'%s'\n", job->pid, WSTOPSIG(status), job->name);
+				printf("[%i] stopped by %i	'%s'\n", job->pid, WSTOPSIG(status), job->name);
 		}
-		else if (WIFSIGNALED(status))
+		else if (WIFSIGNALED(status) && WTERMSIG(status) != 126)
 		{
 			if (WTERMSIG(status) == SIGSEGV)
 				printf("[%i] SEGFAULTED	'%s'\n", job->pid, job->name);

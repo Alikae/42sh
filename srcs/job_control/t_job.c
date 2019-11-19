@@ -47,7 +47,7 @@ t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e, con
 	sh()->jobs = create_job(pid, name, index_b, index_e);
 	sh()->jobs->next = jobs;
 	sh()->jobs->status = status;
-	printf("[%i] add job:%s\n", getpid(), sh()->jobs->name);
+	printf("[%i] %s\n", getpid(), sh()->jobs->name);
 	return (jobs);
 }
 

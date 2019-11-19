@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/19 18:30:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/19 19:47:36 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,8 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 //		handle_signal(WTERMSIG(status));
 		if (WTERMSIG(status) == SIGSEGV)
 			printf("\n[%i] aborted: Segmentation Fault\n", child_pid);
+		if (WTERMSIG(status) == SIGBUS)
+			printf("\n[%i] aborted: Bus Error\n", child_pid);
 	}
 	//ctrl-Z only	tcgetattr (0, &j->tmodes);
 	//	tcsetattr(0, TCSADRAIN, &shell_tmodes);

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 05:22:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/18 00:18:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/19 19:28:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	check_jobs_status(t_sh *p)
 			delete_job(job);
 			continue;
 		}
-		printf("-->[%i] %s		'%s'\n", job->pid, job->status, job->name);
+		printf("[%i] %s		'%s'\n", job->pid, job->status, job->name);
 		old_next = &((*old_next)->next);
 	}
 }
