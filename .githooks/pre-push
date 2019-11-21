@@ -6,7 +6,7 @@
 #    By: jerry <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 16:28:15 by jerry             #+#    #+#              #
-#    Updated: 2019/11/19 10:16:56 by jerry            ###   ########.fr        #
+#    Updated: 2019/11/21 14:55:21 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ then
 		echo "Run \'make\' for further info"
 		exit 1
 	fi
+	make fclean 2>&- >&- || make clean 2>&- >&-
 fi
 if false && which norminette >&-
 then
