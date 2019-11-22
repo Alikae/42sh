@@ -14,6 +14,7 @@
 #include "libft.h"
 #include "sh_command_edition.h"
 #include "sh_history.h"
+#include <stdio.h> //
 
 static int	history_up(char **command, t_hist *hist, char *current)
 {
@@ -60,7 +61,9 @@ static int	history_down(char **command, t_hist *hist, char *current)
 int			cursor_history(char **command, char *buf, int i, t_hist *hist)
 {
 	int		j;
+	int		temp;
 
+	temp = hist->index;
 	j = i;
 	if (buf[2] == 'A')
 		i = history_up(command, hist, hist->current);
@@ -68,8 +71,11 @@ int			cursor_history(char **command, char *buf, int i, t_hist *hist)
 		i = history_down(command, hist, hist->current);
 	if (!*command)
 		*command = ft_strdup(hist->current);
-	sh_cursor_motion(command, "\033[H", j, hist);
-	tputs(tgetstr("cd", NULL), 0, sh_outc);
-	write(0, *command, ft_strlen(*command));
-	return (i);
+	if (hist->index != -1 || temp != -1)
+	{
+		sh_cursor_motion(command, "\033[H", j, hist);
+		tputs(tgetstr("cd", NULL), 0, sh_outc);
+		write(0, *command, ft_strlen(*command));
+	}
+	return (hist->index == -1 && temp == -1 ? j : i);
 }
