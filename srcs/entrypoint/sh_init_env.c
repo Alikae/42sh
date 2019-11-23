@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:36:42 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/03 22:40:24 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/23 19:06:51 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void		sh_init_env(void)
 {
 	if (!sh()->params)
 		sh()->params = sh_env_params(sh()->ev);
+	sh_set_pwd();
 	sh_set_shpid();
 	sh_set_shppid();
 	sh_set_shlvl();
