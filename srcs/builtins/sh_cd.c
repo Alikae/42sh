@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/24 12:42:55 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/24 15:46:57 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,15 @@
 #include "libft.h"
 #include "limits.h"
 
-static void	cd_change_env(char *new, char *old)
-{
-	t_env	*tmp;
-
-	tmp = NULL;
-	if ((tmp = sh_setev("PWD", new)))
-		tmp->exported = 1;
-	if ((tmp = sh_setev("OLDPWD", old)))
-		tmp->exported = 1;
-}
-
 static int	cd_go_to(char *path)
 {
 	char	dir[PATH_MAX + 1];
+	char	*tmp;
+	t_env	*ev;
 
+	tmp = path + ft_strlen(path) - 1;
+	if (*tmp == '/')
+		*tmp = '\0';
 	ft_bzero(dir, PATH_MAX + 1);
 	getcwd(dir, PATH_MAX);
 	path = sh_resolve_dotpath(path);
@@ -39,7 +33,10 @@ static int	cd_go_to(char *path)
 		ft_putendl(path);
 		return (-1);
 	}
-	cd_change_env(path, dir);
+	if ((ev = sh_setev("PWD", path)))
+		ev->exported = 1;
+	if ((ev = sh_setev("OLDPWD", dir)))
+		ev->exported = 1;
 	free(path);
 	return (0);
 }
@@ -74,9 +71,10 @@ static int	cd_go_old(void)
 
 static int	cd_physical(char *path)
 {
-	int i;
-	char buff[PATH_MAX + 1];
+	int		i;
+	char	buff[PATH_MAX + 1];
 
+	ft_bzero(buff, PATH_MAX + 1);
 	if (!path)
 		return (-1);
 	if ((i = readlink(path, buff, PATH_MAX)) == -1)
