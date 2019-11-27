@@ -171,7 +171,7 @@ int		sh_is_number(char *str, int i, int end)
 	return (1);
 }
 
-int		sh_is_valid_operator(char *str, int begin)
+int		sh_is_valid_operator(char *str, int begin, int end)
 {
 	int		num;
 	int		op;
@@ -188,11 +188,19 @@ int		sh_is_valid_operator(char *str, int begin)
 			num = 0;
 		i++;
 	}
-	while (sh_all_operator_char(str[i]))
+	while (i > end && str[i] && sh_all_operator_char(str[i]))
 		i++;
-	if (!(sh_all_operator_char(str[i])))
+	if (str[i] && num && !(sh_all_operator_char(str[i])))
 		return (1);
 	return (0);
+}
+
+void	sh_print_begin_end(char *str, int begin, int end)
+{
+	printf("-----------------reception-----------------\n");
+	while (begin < end)
+		printf("%c", str[begin++]);
+	printf("\n-------------------------------------------\n");
 }
 
 int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
@@ -205,6 +213,8 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	less_count = 2147483647;
 	old_less_op = 0;
 	i_less_op = -1;
+	printf("is a number = %i\n", sh_is_number(str, begin, end));
+	sh_print_begin_end(str, begin, end);
 	if (sh_is_number(str, begin, end))
 		return (-1);
 	while (begin < end)
@@ -213,9 +223,11 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 			par = par + 3;
 		else if (par && str[begin] == ')')
 			par = par - 3;
-		old_less_op = less_count;
+		if (sh_is_valid_operator(str,begin, end))
+			old_less_op = less_count;
 		sh_count_priority(str, begin, par, &less_count);
-		if (old_less_op > less_count && sh_is_valid_operator(str, begin))
+		printf("begin = %i\n", begin);
+		if (old_less_op > less_count && sh_is_valid_operator(str, begin, end))
 			i_less_op = begin;
 		begin++;
 	}
