@@ -187,7 +187,7 @@ void	sh_word_opt(t_exp *exp)
 
 void	sh_find_value(t_exp *exp)
 {
-	printf("exp->content = %s\n", exp->content);
+	printf("exp->name = %s\n", exp->name);
 	while (exp->find && ft_strcmp(exp->name, exp->find->key) != 0)
 		exp->find = exp->find->next;
 }
@@ -198,7 +198,7 @@ void	sh_record_name(t_exp *exp)
 	int		i_sub;
 
 	i_sub = 0;
-	cpy = ++exp->i;
+	cpy = exp->i;
 	while (exp->content[cpy] != ':' && exp->content[cpy] != '-'
 			&& exp->content[cpy] != '=' && exp->content[cpy] != '?'
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
