@@ -6,44 +6,38 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/07 11:04:29 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/24 15:46:57 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "sh_tools.h"
 #include "sh_builtins.h"
 #include "libft.h"
 #include "limits.h"
 
-static void	cd_change_env(char *new, char *old)
-{
-	t_env	*tmp;
-
-	tmp = NULL;
-	if ((tmp = sh_setev("PWD", new)))
-		tmp->exported = 1;
-	if ((tmp = sh_setev("OLDPWD", old)))
-		tmp->exported = 1;
-}
-
 static int	cd_go_to(char *path)
 {
-	char	*dir;
+	char	dir[PATH_MAX + 1];
 	char	*tmp;
+	t_env	*ev;
 
-	if (!(dir = ft_strnew(PATH_MAX + 1)))
-		return (1);
-	dir = getcwd(dir, PATH_MAX);
+	tmp = path + ft_strlen(path) - 1;
+	if (*tmp == '/')
+		*tmp = '\0';
+	ft_bzero(dir, PATH_MAX + 1);
+	getcwd(dir, PATH_MAX);
+	path = sh_resolve_dotpath(path);
 	if (chdir(path))
 	{
 		ft_putstr("cd: can't access: ");
 		ft_putendl(path);
+		return (-1);
 	}
-	tmp = ft_strdup(dir);
-	ft_bzero(dir, PATH_MAX);
-	dir = getcwd(dir, PATH_MAX);
-	cd_change_env(dir, tmp);
-	free(tmp);
-	free(dir);
+	if ((ev = sh_setev("PWD", path)))
+		ev->exported = 1;
+	if ((ev = sh_setev("OLDPWD", dir)))
+		ev->exported = 1;
+	free(path);
 	return (0);
 }
 
@@ -75,26 +69,19 @@ static int	cd_go_old(void)
 	return (1);
 }
 
-static int	cd_logical(char *path)
+static int	cd_physical(char *path)
 {
-	int i;
-	char *buff;
+	int		i;
+	char	buff[PATH_MAX + 1];
 
-	if (!(buff = ft_strnew(PATH_MAX + 1)))
-		return (1);
+	ft_bzero(buff, PATH_MAX + 1);
+	if (!path)
+		return (-1);
 	if ((i = readlink(path, buff, PATH_MAX)) == -1)
 		i = cd_go_to(path);
-	else if (buff[0] == '/')
+	else
 		i = cd_go_to(buff);
-	else if (ft_strrchr(path, '/'))
-	{
-		path = ft_strndup(path, ft_strrchr(path, '/') - path + 1);
-		ft_putendl(path);
-		buff = ft_strjoin_free(path, buff, path);
-		cd_go_to(buff);
-		ft_strdel(&buff);
-	}
-		return (i);
+	return (i);
 }
 
 int			sh_cd(int ac, char **av, t_env **ev)
@@ -104,9 +91,9 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		return (cd_go_home());
 	else if (ac >= 2 && !ft_strcmp(av[1], "-"))
 		return (cd_go_old());
-	else if (ac >= 3 && !ft_strcmp(av[1], "-L"))
-		return (cd_logical(av[2]));
 	else if (ac >= 3 && !ft_strcmp(av[1], "-P"))
+		return (cd_physical(av[2]));
+	else if (ac >= 3 && !ft_strcmp(av[1], "-L"))
 		return (cd_go_to(av[2]));
 	else if (ac >= 2 && av[1][0] == '/')
 		return (cd_go_to(av[1]));

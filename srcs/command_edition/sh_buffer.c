@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 18:15:43 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/04 20:29:13 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/26 14:08:19 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char			*sh_buffer(void)
 			return (NULL);
 		}
 	}
-	str = ft_strjoin((const char*)buf, temp);
+	str = ft_strconv_w(ft_strjoin((const char*)buf, temp));
 	ft_memdel((void**)&temp);
 	return (str);
 }
