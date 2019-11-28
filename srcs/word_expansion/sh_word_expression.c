@@ -187,7 +187,6 @@ void	sh_word_opt(t_exp *exp)
 
 void	sh_find_value(t_exp *exp)
 {
-	printf("exp->name = %s\n", exp->name);
 	while (exp->find && ft_strcmp(exp->name, exp->find->key) != 0)
 		exp->find = exp->find->next;
 }
