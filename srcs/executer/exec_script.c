@@ -67,8 +67,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		//
 		nb_assign = 0;
 		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end, &nb_assign);//TO SEE
-		//
-		ret = exec_compound_command(p, tok, tok->type);
+		ret = (!p->abort_cmd) ? exec_compound_command(p, tok, tok->type) : -125;
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 		del_n_assign_lst(p, nb_assign);
 		p->nb_nested_compounds--;
