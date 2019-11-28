@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:31:21 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 21:55:32 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/28 22:35:34 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		delete_token(t_token *token);
 t_token		*tokenize_input(const char *input);
 t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound, t_toktype *terminator);
 t_toktype	word_is_reserved(const char *word, int len);
-t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_compound);
+t_toktype	word_is_actual_term(const char *word, int len, t_toktype actual_compound);
 t_toktype	treat_operator(t_toktool *t, t_token **p_actual, t_toktype actual_compound);
 int			is_compound(t_toktype type);
 t_token		*tokenize_compound(t_toktool *t, t_toktype type, int word_begin);

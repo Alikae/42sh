@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 00:00:45 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/11 01:31:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 22:35:40 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,49 @@ int			is_compound(t_toktype type)
 	return (0);
 }
 
-t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_compound)
+t_toktype	word_terminator_2(const char *word, int len, t_toktype cur_com)
 {
-	if (actual_compound == SH_WHILE)
+	if (cur_com == SH_ELSE)
+	{
+		if (!ft_strncmp(word, "fi", len) && len == 2)
+			return (SH_FI);
+	}
+	if (cur_com == SH_BRACES)
+	{
+		if (!ft_strncmp(word, "}", len) && len == 1)
+			return (SH_BRACES);
+	}
+	if (cur_com == SH_CASE)
+	{
+		if (!ft_strncmp(word, "esac", len) && len == 4)
+			return (SH_ESAC);
+	}
+	if (cur_com == SH_SUBSH)
+	{
+		if (!ft_strncmp(word, ")", len) && len == 1)
+			return (SH_SUBSH_END);
+	}
+	return (0);
+}
+
+t_toktype	word_is_actual_term(const char *word, int len, t_toktype cur_com)
+{
+	if (cur_com == SH_WHILE)
 	{
 		if (!ft_strncmp(word, "do", len) && len == 2)
 			return (SH_DO);
 	}
-	if (actual_compound == SH_DO)
+	if (cur_com == SH_DO)
 	{
 		if (!ft_strncmp(word, "done", len) && len == 4)
 			return (SH_DONE);
 	}
-	if (actual_compound == SH_IF || actual_compound == SH_ELIF)
+	if (cur_com == SH_IF || cur_com == SH_ELIF)
 	{
 		if (!ft_strncmp(word, "then", len) && len == 4)
 			return (SH_THEN);
 	}
-	if (actual_compound == SH_THEN)
+	if (cur_com == SH_THEN)
 	{
 		if (!ft_strncmp(word, "elif", len) && len == 4)
 			return (SH_ELIF);
@@ -49,27 +74,7 @@ t_toktype	word_is_actual_terminator(const char *word, int len, t_toktype actual_
 		if (!ft_strncmp(word, "fi", len) && len == 2)
 			return (SH_FI);
 	}
-	if (actual_compound == SH_ELSE)
-	{
-		if (!ft_strncmp(word, "fi", len) && len == 2)
-			return (SH_FI);
-	}
-	if (actual_compound == SH_BRACES)
-	{
-		if (!ft_strncmp(word, "}", len) && len == 1)
-			return (SH_BRACES);
-	}
-	if (actual_compound == SH_CASE)
-	{
-		if (!ft_strncmp(word, "esac", len) && len == 4)
-			return (SH_ESAC);
-	}
-	if (actual_compound == SH_SUBSH)
-	{
-		if (!ft_strncmp(word, ")", len) && len == 1)
-			return (SH_SUBSH_END);
-	}
-	return (0);
+	return (word_terminator_2(word, len, cur_com));
 }
 
 t_toktype	word_is_reserved_2(const char *word, int len)

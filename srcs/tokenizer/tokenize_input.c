@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 21:38:51 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/28 22:35:18 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,7 @@ t_toktype	handle_functions_n_terminator(t_toktool *t,
 			sh()->alias_end--;
 		return (tokenize_function(t, p_actual, word_begin));
 	}
-	if ((type = word_is_actual_terminator(t->input + word_begin, t->i
+	if ((type = word_is_actual_term(t->input + word_begin, t->i
 					- word_begin, actual_compound)) && (t->word_nb == 1
 					|| type == SH_SUBSH_END))
 	{
