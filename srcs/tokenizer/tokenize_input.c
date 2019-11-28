@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 04:06:17 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 05:33:43 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,7 @@ t_toktype	handle_normal_word(t_tokenize_tool *t, int word_begin,
 	if (!(ft_strchr(t->input + word_begin, '=') > t->input + word_begin)
 			|| ft_strchr(t->input + word_begin, '=') > t->input + t->i)
 		t->word_nb++;
-	return (-1);
+	return (SH_GROUP);
 }
 
 t_toktype	handle_reserved_and_normals_word(t_tokenize_tool *t,
@@ -326,10 +326,10 @@ t_toktype	handle_reserved_and_normals_word(t_tokenize_tool *t,
 	else
 	{
 		if ((type = handle_normal_word(t, word_begin, p_actual))
-				!= (t_toktype)-1)
+				!= SH_GROUP)
 			return (type);
 	}
-	return (-1);
+	return (SH_GROUP);
 }
 
 t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual,
@@ -353,7 +353,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual,
 						word_begin)) != SH_NULL)
 			return (type);
 		if ((type = handle_reserved_and_normals_word(t, word_begin, p_actual))
-				!= (t_toktype)-1)
+				!= SH_GROUP)
 			return (type);
 		*p_actual = (*p_actual)->next;
 	}

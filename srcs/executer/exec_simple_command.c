@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/26 02:37:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 05:44:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1085,6 +1085,11 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	if (sh()->nb_nested_functions == 999)
 		lstp();
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign, &child_argv); //open files
+	if (p->abort_cmd)
+	{
+		free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
+		return (-125);
+	}
 	if (!child_argv[0])
 		return (handle_no_cmd_name(p, child_argv));//and free stuff
 	//dprintf(2, "[%i]exec simple -%s-\n", getpid(), child_argv[0]);

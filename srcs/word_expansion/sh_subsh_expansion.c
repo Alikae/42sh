@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/27 01:47:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 05:42:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,5 +150,7 @@ void	sh_subsh_expansion(t_exp *exp)
 		close(pipe_fd[0]);
 	}
 	else//error
-	{}
+	{
+		sh()->abort_cmd = 1;
+	}
 }
