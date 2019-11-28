@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:28:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/18 00:00:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 21:37:53 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 #include <termios.h>
 
-typedef struct s_tokenize_tool
+typedef struct s_toktool
 {
 	const char  *input;
 	int         i;
 	int         word_nb;
-}               t_tokenize_tool;
+}               t_toktool;
 
 typedef struct	s_redirect_lst
 {

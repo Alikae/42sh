@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/16 02:34:24 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 21:39:33 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 #include "sh.h"
 
 #include <stdio.h>
-t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual, int len);
+t_toktype		treat_redirection(t_toktool *t, t_token **p_actual, int len);
 
-t_toktype	read_n_skip_operator_4(t_tokenize_tool *t)
+t_toktype	read_n_skip_operator_4(t_toktool *t)
 {
 	if (t->input[t->i] != ';')
 		return (0);
@@ -31,7 +31,7 @@ t_toktype	read_n_skip_operator_4(t_tokenize_tool *t)
 	return (SH_SEMI);
 }
 	
-t_toktype	read_n_skip_operator_3(t_tokenize_tool *t)
+t_toktype	read_n_skip_operator_3(t_toktool *t)
 {
 	if (t->input[t->i] == '&')
 	{
@@ -56,7 +56,7 @@ t_toktype	read_n_skip_operator_3(t_tokenize_tool *t)
 	return (read_n_skip_operator_4(t));
 }
 	
-t_toktype	read_n_skip_operator_2(t_tokenize_tool *t)
+t_toktype	read_n_skip_operator_2(t_toktool *t)
 {
 	if (t->input[t->i] != '>')
 		return (read_n_skip_operator_3(t));
@@ -79,7 +79,7 @@ t_toktype	read_n_skip_operator_2(t_tokenize_tool *t)
 	return (SH_GREAT);
 }
 	
-t_toktype	read_n_skip_operator(t_tokenize_tool *t)
+t_toktype	read_n_skip_operator(t_toktool *t)
 {
 	if (t->input[t->i] != '<')
 		return (read_n_skip_operator_2(t));
@@ -135,7 +135,7 @@ int			operator_cant_be_first(t_toktype type)
 	return (0);
 }
 
-t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
+t_toktype	read_here_doc(t_toktool *t, t_token **p_actual, t_toktype type)
 {
 	int	word_begin;
 	int	word_len;
@@ -177,7 +177,7 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 }
 //TO TEST
 /*
-t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
+t_toktype	read_here_doc(t_toktool *t, t_token **p_actual, t_toktype type)
 {
 	int	word_begin;
 	int	word_len;
@@ -219,7 +219,7 @@ t_toktype	read_here_doc(t_tokenize_tool *t, t_token **p_actual, t_toktype type)
 	//+ was_quoted + was_dashed
 }*/
 
-t_toktype	treat_operator(t_tokenize_tool *t, t_token **p_actual, t_toktype actual_compound)
+t_toktype	treat_operator(t_toktool *t, t_token **p_actual, t_toktype actual_compound)
 {
 	t_toktype	type;
 	int			op_begin;
