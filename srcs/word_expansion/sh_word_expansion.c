@@ -165,6 +165,15 @@ int		sh_word_expansion(t_exp *exp)
 	return (0);
 }
 
+void	sh_print_envi(t_env *env)
+{
+	while (env)
+	{
+		printf("env = %s\n", env-> key);
+		env = env->next;
+	}
+}
+
 t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 {
 	t_exp	exp;
