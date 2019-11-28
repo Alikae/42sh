@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/03 17:13:22 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/26 02:21:24 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,13 @@ void	sh_exec_default(void);
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end);
-int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end);
+int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign);
 void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections);
 int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign, char ***child_argv);
 void	push_pipe_lst(t_pipe_lst **p_origin, int pipe[2]);
 void	close_pipes_parent(t_sh *p);
 int		fork_process(t_sh *p, int foreground);
 void	remove_opened_files(t_sh *p);
+void	del_n_assign_lst(t_sh *p, int n);
 
 #endif

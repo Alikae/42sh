@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/23 19:14:43 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/26 02:37:59 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 			if (!from_fg)
 				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end, "SIGTTIN");
 		}
-		if (WSTOPSIG(status) == SIGKILL)
+		if (WSTOPSIG(status) == SIGKILL)//Uneusefull?
 			printf("\nChild_process [%i] KILLED\n", child_pid);
 		if (WSTOPSIG(status) == SIGTTOU)
 		{
@@ -208,7 +208,9 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 		if (WTERMSIG(status) == SIGBUS)
 			printf("\n[%i] aborted: Bus Error\n", child_pid);
 		if (WTERMSIG(status) == SIGKILL)
-			printf("\nChild_process [%i] KILLED\n", child_pid);
+			printf("\nChild_process [%i] KILLED (SIGKILL)\n", child_pid);
+		if (WTERMSIG(status) == SIGSTOP)
+			printf("\nChild_process [%i] KILLED (SIGSTOP)\n", child_pid);
 	}
 	//ctrl-Z only	tcgetattr (0, &j->tmodes);
 	//	tcsetattr(0, TCSADRAIN, &shell_tmodes);
@@ -448,33 +450,6 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	return (fd);
 }
 
-int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end)
-{
-	//?TO REDO
-	int	nb_redirections;
-	int	fd;
-
-	nb_redirections = 0;
-	while (token_begin && (is_redirection_operator(token_begin->type) || is_compound(token_begin->type)))
-	{
-		if (is_redirection_operator(token_begin->type))
-		{
-			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > -1)
-			{
-				if (token_begin->content[0] == '&')
-				{}
-				else
-				{
-					push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
-					nb_redirections++;
-				}
-			}
-		}
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	}
-	return (nb_redirections);
-}
-
 int		count_argv(t_token *token_begin, t_token *token_end)
 {
 	int	cmd_begin;
@@ -651,7 +626,7 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	free_ast(tmpt);
 	p->assign_lst->next = tmp;
 	//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-	dprintf(2, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
+	//dprintf(2, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
 }
 
 /*int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
@@ -781,6 +756,22 @@ void	assign_sraa_to_zero(int *nb_assign, int *nb_redirections, t_token **argv_st
 	*nb_redirections = 0;
 	*argv_stack = 0;
 	*cmd_begin = 0;
+}
+
+int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
+{
+	int	nb_redirections;
+
+	nb_redirections = 0;
+	while (token_begin)
+	{
+		if (is_redirection_operator(token_begin->type))
+			stock_redirection(p, token_begin, &nb_redirections);
+		else if (ft_strchr(token_begin->content, '=') > token_begin->content)
+			stock_assign(p, token_begin, nb_assign);
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	}
+	return (nb_redirections);
 }
 
 int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign, char ***child_argv)
