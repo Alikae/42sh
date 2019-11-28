@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/28 05:44:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 05:50:43 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	close_all_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
-		printf("[%i]  close %i %i\n", getpid(), lst->in, lst->out);
+		//printf("[%i]  close %i %i\n", getpid(), lst->in, lst->out);
 		close(lst->in);
 		close(lst->out);
 		lst = lst->next;
@@ -124,7 +124,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 		return;
 	gen_redirections_recursively(p, lst->next);
 	//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-	printf("[%i]redirecting %i->%i\n", getpid(), lst->in, lst->out);
+	//printf("[%i]redirecting %i->%i\n", getpid(), lst->in, lst->out);
 	if (dup2(lst->out, lst->in) < 0)
 		dprintf(p->dbg_fd, "[%i]DUP2ERROR %i->%i\n", getpid(), lst->in, lst->out);
 	close(lst->out);
@@ -224,7 +224,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 		int ret = tcsetpgrp (0, getpgid(0));
 		//		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
 		ret = tcsetattr(0, TCSANOW, &p->orig_termios);
-		dprintf(2, "[%i]tcsetat ret = %i\n", getpid(), ret);
+		//dprintf(2, "[%i]tcsetat ret = %i\n", getpid(), ret);
 		signal(SIGTTOU, SIG_DFL);
 		//		sigprocmask(SIG_UNBLOCK, &sigset, 0);
 		//	init_signals_handling();
