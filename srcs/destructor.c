@@ -6,7 +6,7 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/20 11:05:10 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/28 05:51:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ void	destructor(void)
 		if (sh()->is_interactive && sh()->pid_main_process == getpid())
 			tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
 		sh_shdel(&s);
-		printf("[%i]SUICIDE\n", getpid());
+//		printf("[%i]SUICIDE\n", getpid());
 	}
 }
