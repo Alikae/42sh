@@ -193,19 +193,9 @@ int		sh_is_valid_operator(char *str, int begin)
 		i++;
 	while (str[i] == ' ')
 		i++;
-	printf("\n-------test for |%c|------\n", str[begin]);
-	printf("str[%i] = |%c|\nnum = %i\nsh_all_op = %i\n",i ,str[i], num, sh_all_operator_char(str[i]));
 	if (str[i] && num && !(sh_all_operator_char(str[i])))
 		return (1);
 	return (0);
-}
-
-void	sh_print_begin_end(char *str, int begin, int end)
-{
-	printf("-----------------reception-----------------\n");
-	while (begin < end)
-		printf("%c", str[begin++]);
-	printf("\n-------------------------------------------\n");
 }
 
 int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
@@ -218,8 +208,6 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	less_count = 2147483647;
 	old_less_op = 0;
 	i_less_op = -1;
-	printf("is a number = %i\n", sh_is_number(str, begin, end));
-	sh_print_begin_end(str, begin, end);
 	if (sh_is_number(str, begin, end))
 		return (-1);
 	while (begin < end)
@@ -229,16 +217,16 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 		else if (par && str[begin] == ')')
 			par = par - 3;
 		if (sh_is_valid_operator(str,begin))
+		{
 			old_less_op = less_count;
-		sh_count_priority(str, begin, par, &less_count);
-		printf("begin = %i\n", begin);
-		if (old_less_op > less_count && sh_is_valid_operator(str, begin))
-			i_less_op = begin;
+			sh_count_priority(str, begin, par, &less_count);
+			if (old_less_op > less_count)
+				i_less_op = begin;
+		}
 		begin++;
 	}
 	if (i_less_op > -1)
 		sh_write_less_op(str, i_less_op, arith);
-	printf("i_less_op = %i\n", i_less_op);
 	return (i_less_op);
 }
 
@@ -352,85 +340,37 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 long int	sh_exec_arith(t_arith *arith)
 {
 	if (arith->next_op == PLUS)
-	{
-		printf("PLUS\n");
 		return (sh_exec_arith(arith->next) + sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MINUS)
-	{
-		printf("minus\n");
 		return (sh_exec_arith(arith->next) - sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MULTI)
-	{
-		printf("multi\n");
 		return (sh_exec_arith(arith->next) * sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == DIV)
-	{
-		printf("div\n");
 		return (sh_exec_arith(arith->next) / sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MODULO)
-	{
-		printf("modulo\n");
 		return (sh_exec_arith(arith->next) % sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MORE)
-	{
-		printf("more\n");
 		return (sh_exec_arith(arith->next) > sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == LESS)
-	{
-		printf("less\n");
 		return (sh_exec_arith(arith->next) < sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MORE_EQUAL)
-	{
-		printf("more_equal\n");
 		return (sh_exec_arith(arith->next) >= sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == LESS_EQUAL)
-	{
-		printf("less_equal\n");
 		return (sh_exec_arith(arith->next) <= sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == AND)
-	{
-		printf("and\n");
 		return (sh_exec_arith(arith->next) & sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == OR)
-	{
-		printf("or\n");
 		return (sh_exec_arith(arith->next) | sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == AND_AND)
-	{
-		printf("and_and\n");
 		return (sh_exec_arith(arith->next) && sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == OR_OR)
-	{
-		printf("or_or\n");
 		return (sh_exec_arith(arith->next) || sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == DIFFERENT)
-	{
-		printf("different\n");
 		return (sh_exec_arith(arith->next) != sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == EQUAL)
-	{
-		printf("equal\n");
 		return (sh_exec_arith(arith->next) == sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == NUMBER)
-	{
-		printf("number : %li\n", arith->nb);
 		return (arith->nb);
-	}
 	return (1);
 }
 
