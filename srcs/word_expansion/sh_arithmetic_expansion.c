@@ -171,7 +171,7 @@ int		sh_is_number(char *str, int i, int end)
 	return (1);
 }
 
-int		sh_is_valid_operator(char *str, int begin, int end)
+int		sh_is_valid_operator(char *str, int begin)
 {
 	int		num;
 	int		op;
@@ -184,12 +184,17 @@ int		sh_is_valid_operator(char *str, int begin, int end)
 	{
 		if (!(sh_all_operator_char(str[i])))
 			num = 1;
-		else
+		else if (str[i] >= '0' && str[i] <= '9')
 			num = 0;
 		i++;
 	}
-	while (i > end && str[i] && sh_all_operator_char(str[i]))
+	i++;
+	if (str[i] && sh_all_operator_char(str[i]))
 		i++;
+	while (str[i] == ' ')
+		i++;
+	printf("\n-------test for |%c|------\n", str[begin]);
+	printf("str[%i] = |%c|\nnum = %i\nsh_all_op = %i\n",i ,str[i], num, sh_all_operator_char(str[i]));
 	if (str[i] && num && !(sh_all_operator_char(str[i])))
 		return (1);
 	return (0);
@@ -223,16 +228,17 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 			par = par + 3;
 		else if (par && str[begin] == ')')
 			par = par - 3;
-		if (sh_is_valid_operator(str,begin, end))
+		if (sh_is_valid_operator(str,begin))
 			old_less_op = less_count;
 		sh_count_priority(str, begin, par, &less_count);
 		printf("begin = %i\n", begin);
-		if (old_less_op > less_count && sh_is_valid_operator(str, begin, end))
+		if (old_less_op > less_count && sh_is_valid_operator(str, begin))
 			i_less_op = begin;
 		begin++;
 	}
 	if (i_less_op > -1)
 		sh_write_less_op(str, i_less_op, arith);
+	printf("i_less_op = %i\n", i_less_op);
 	return (i_less_op);
 }
 
