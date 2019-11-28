@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:36:42 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/03 22:40:24 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/11/24 16:04:46 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,6 @@ static void	sh_set_shppid(void)
 	tmp = ft_itoa((int)getppid());
 	sh_setev("PPID", tmp);
 	sh_getev("PPID")->readonly = 1;
-	ft_strdel(&tmp);
-}
-
-static void	sh_set_shpid(void)
-{
-	char *tmp;
-
-	tmp = NULL;
-	tmp = ft_itoa((int)getpid());
-	sh_setev("$", tmp);
 	ft_strdel(&tmp);
 }
 
@@ -54,7 +44,7 @@ void		sh_init_env(void)
 {
 	if (!sh()->params)
 		sh()->params = sh_env_params(sh()->ev);
-	sh_set_shpid();
+	sh_set_pwd();
 	sh_set_shppid();
 	sh_set_shlvl();
 	sh_set_ifs();

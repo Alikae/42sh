@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/11/01 17:36:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 05:25:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -163,6 +163,15 @@ int		sh_word_expansion(t_exp *exp)
 		exp->i++;
 	}
 	return (0);
+}
+
+void	sh_print_envi(t_env *env)
+{
+	while (env)
+	{
+		printf("env = %s\n", env-> key);
+		env = env->next;
+	}
 }
 
 t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)

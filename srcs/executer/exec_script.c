@@ -52,8 +52,8 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	int	nb_redirections;
 	int	ret;
 	t_token	*tok;
+	int	nb_assign;
 
-	//No token_begin, !!CMD_NAME!!
 	tok = find_cmd_name(token_begin);
 	if (tok && is_compound(tok->type))
 	{
@@ -65,10 +65,11 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		}
 		p->nb_nested_compounds++;
 		//
-		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end);//TO SEE
-		//
-		ret = exec_compound_command(p, tok, tok->type);
+		nb_assign = 0;
+		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end, &nb_assign);//TO SEE
+		ret = (!p->abort_cmd) ? exec_compound_command(p, tok, tok->type) : -125;
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
+		del_n_assign_lst(p, nb_assign);
 		p->nb_nested_compounds--;
 	}
 	else
@@ -94,13 +95,13 @@ int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_to
 	{
 		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
 		{
-			printf("[%i] close %i\n", getpid(), pipe_lst->pipe[0]);
+			//printf("[%i] close %i\n", getpid(), pipe_lst->pipe[0]);
 			if (pipe_lst->pipe[0] > 2)
 				close(pipe_lst->pipe[0]);
 		}
 		if (pipe_lst->pipe[1] != pipe1 && pipe_lst->pipe[1] != pipe2)
 		{
-			printf("[%i] close %i\n", getpid(), pipe_lst->pipe[1]);
+			//printf("[%i] close %i\n", getpid(), pipe_lst->pipe[1]);
 			if (pipe_lst->pipe[1] > 2)
 				close(pipe_lst->pipe[1]);
 		}

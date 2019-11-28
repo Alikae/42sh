@@ -36,7 +36,7 @@ void	sh_init_arith(t_arith **arith)
 	if (!((*arith) = malloc(sizeof(t_arith))))
 		exit (-1);
 	(*arith)->nb = 0;
-	(*arith)->next_op = INIT;
+	(*arith)->next_op = NUMBER;
 	(*arith)->next = NULL;
 	(*arith)->sub = NULL;
 }
@@ -89,7 +89,7 @@ long int	sh_atoi_index(char *str, int *i)
 void	sh_write_less_op(char *str, int i, t_arith **arith)
 {
 	if (str[i] == '-')
-		(*arith)->next_op = LESS;
+		(*arith)->next_op = MINUS;
 	else if (str[i] == '+')
 		(*arith)->next_op = PLUS;
 	else if (str[i] == '>' && str[i + 1] == '=')
@@ -143,7 +143,62 @@ void	sh_count_priority(char *c, int i, int count, int *less_count)
 		*less_count = count + 1;
 }
 
-int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
+int		sh_all_operator_char(char c)
+{
+	if (c == '-' || c == '+' || c == '*' || c == '/' || c == '%' || c == '|'
+				|| c == '=' || c == '&' || c == '>' || c == '<' || c == '!')
+		return (1);
+	return (0);
+}
+
+int		sh_is_number(char *str, int i, int end)
+{
+	int		num;
+	int		op;
+
+	num = 0;
+	op = 0;
+	while (i <= end)
+	{
+		if (!(sh_all_operator_char(str[i])))
+			num = 1;
+		else if (num == 1 && op == 0)
+			op = 1;
+		if (num == 1 && op == 1)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int		sh_is_valid_operator(char *str, int begin)
+{
+	int		num;
+	int		op;
+	int		i;
+
+	num = 0;
+	op = 0;
+	i = 0;
+	while (i < begin)
+	{
+		if (!(sh_all_operator_char(str[i])))
+			num = 1;
+		else if (str[i] >= '0' && str[i] <= '9')
+			num = 0;
+		i++;
+	}
+	i++;
+	if (str[i] && sh_all_operator_char(str[i]))
+		i++;
+	while (str[i] == ' ')
+		i++;
+	if (str[i] && num && !(sh_all_operator_char(str[i])))
+		return (1);
+	return (0);
+}
+
+int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 {
 	int		less_count;
 	int		old_less_op;
@@ -153,16 +208,21 @@ int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	less_count = 2147483647;
 	old_less_op = 0;
 	i_less_op = -1;
-	while (begin <= end)
+	if (sh_is_number(str, begin, end))
+		return (-1);
+	while (begin < end)
 	{
 		if (str[begin] == '(')
 			par = par + 3;
 		else if (par && str[begin] == ')')
 			par = par - 3;
-		old_less_op = less_count;
-		sh_count_priority(str, begin, par, &less_count);
-		if (old_less_op > less_count)
-			i_less_op = begin;
+		if (sh_is_valid_operator(str,begin))
+		{
+			old_less_op = less_count;
+			sh_count_priority(str, begin, par, &less_count);
+			if (old_less_op > less_count)
+				i_less_op = begin;
+		}
 		begin++;
 	}
 	if (i_less_op > -1)
@@ -170,7 +230,7 @@ int		sh_find_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	return (i_less_op);
 }
 
-void		sh_check_opt(char *str, int *begin, short *opt, short where)
+void		sh_check_options(char *str, int *begin, short *opt, short where)
 {
 	if (str[*begin] == '-')
 	{
@@ -224,8 +284,7 @@ long int	sh_get_int_value(char *str, int *begin)
 	short	opt;
 	opt = 0;
 	result = 0;
-	sh_check_opt(str, begin, &opt, 0);
-	printf("str = %s\n", str);
+	sh_check_options(str, begin, &opt, 0);
 	result = sh_long_atoi(str);
 	if (opt == 1)
 		result--;
@@ -245,16 +304,19 @@ long int	sh_find_number(char *str, int begin)
 	opt = 0;
 	while (str[begin] == '(' || str[begin] == ' ')
 		begin++;
-	if (str[begin]== '-')
-	{
-		opt = 1;
-		begin++;
-	}
 	if (str[begin] >= '0' && str[begin] <= '9')
 		result = sh_atoi_index(str, &begin);
 	else
 		result = sh_get_int_value(str, &begin);
 	return (result);
+}
+
+void	sh_init_ast(long int number, t_arith **arith)
+{
+	(*arith)->next_op = NUMBER;
+	(*arith)->nb = number;
+	(*arith)->next = NULL;
+	(*arith)->sub = NULL;
 }
 
 t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
@@ -264,14 +326,9 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 
 	sh_init_arith(&arith);
 	end_cpy = end;
-	end = sh_find_next_less_operator(str, begin, end, &arith);
+	end = sh_next_less_operator(str, begin, end, &arith);
 	if (end == -1)
-	{
-		arith->next_op = NUMBER;
-		arith->nb = sh_find_number(str, begin);
-		arith->next = NULL;
-		arith->sub = NULL;
-	}
+		sh_init_ast(sh_find_number(str, begin), &arith);
 	else
 	{
 		arith->next = sh_creat_arithmetic_ast(str, begin, end - 1);
@@ -283,85 +340,37 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 long int	sh_exec_arith(t_arith *arith)
 {
 	if (arith->next_op == PLUS)
-	{
-		printf("PLUS\n");
 		return (sh_exec_arith(arith->next) + sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MINUS)
-	{
-		printf("moins\n");
 		return (sh_exec_arith(arith->next) - sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MULTI)
-	{
-		printf("multi\n");
 		return (sh_exec_arith(arith->next) * sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == DIV)
-	{
-		printf("div\n");
 		return (sh_exec_arith(arith->next) / sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MODULO)
-	{
-		printf("modulo\n");
 		return (sh_exec_arith(arith->next) % sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MORE)
-	{
-		printf("more\n");
 		return (sh_exec_arith(arith->next) > sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == LESS)
-	{
-		printf("less\n");
 		return (sh_exec_arith(arith->next) < sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == MORE_EQUAL)
-	{
-		printf("more_equal\n");
 		return (sh_exec_arith(arith->next) >= sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == LESS_EQUAL)
-	{
-		printf("less_equal\n");
 		return (sh_exec_arith(arith->next) <= sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == AND)
-	{
-		printf("and\n");
 		return (sh_exec_arith(arith->next) & sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == OR)
-	{
-		printf("or\n");
 		return (sh_exec_arith(arith->next) | sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == AND_AND)
-	{
-		printf("and_and\n");
 		return (sh_exec_arith(arith->next) && sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == OR_OR)
-	{
-		printf("or_or\n");
 		return (sh_exec_arith(arith->next) || sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == DIFFERENT)
-	{
-		printf("different\n");
 		return (sh_exec_arith(arith->next) != sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == EQUAL)
-	{
-		printf("equal\n");
 		return (sh_exec_arith(arith->next) == sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == NUMBER)
-	{
-		printf("number : %li\n", arith->nb);
 		return (arith->nb);
-	}
 	return (1);
 }
 
@@ -418,10 +427,7 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
-	printf("arithmetic string = %s\n", exp->name);
 	arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 	result = sh_exec_arith(arith);
-	printf("result = %li\n", result);
 	exp->value = ft_long_itoa(result);
-	printf("exp->value = %s\n",exp->value);
 }

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 19:47:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/26 14:04:15 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int		sh_script(const char *path)
 		ft_strclr(buff);
 	}
 	close(fd);
+	input = ft_strconv_w(input);
 	sh_init_cmd(input);
 	//doesnt throw error omn script "WHILE"
 	if (input && *input && (ast = tokenize_input(input)))//line

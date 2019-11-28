@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init_env.c                                      :+:      :+:    :+:   */
+/*   ft_strlen_w.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/13 15:06:20 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/14 22:08:16 by thdelmas         ###   ########.fr       */
+/*   Created: 2019/11/26 12:48:00 by tmeyer            #+#    #+#             */
+/*   Updated: 2019/11/26 12:53:28 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh_env.h"
+#include "libft.h"
 
-void	sh_init_env(const char **env)
+size_t		ft_strlen_w(const char *str)
 {
-	sh_fill_env(env);
-	sh_set_shlvl();
-	sh_set_pwd();
+	size_t len;
+	size_t i;
+
+	len = 0;
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] != '\0')
+	{
+		if (!(str[i] & (1 << 7)) || (str[i] & (1 << 6)))
+			len++;
+		i++;
+	}
+	return (len);
 }

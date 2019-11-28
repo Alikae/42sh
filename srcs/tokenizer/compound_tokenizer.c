@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/19 18:19:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 05:08:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 
 void	forward_blanks_newline(t_tokenize_tool *t)
 {
-	while (t->input[t->i] == '\n' || t->input[t->i] == ' ' || t->input[t->i] == '\t')
+	while (t->input[t->i] == '\n' || t->input[t->i] == ' ' || t->input[t->i]
+			== '\t')
 		t->i++;
 }
 
@@ -31,15 +32,29 @@ void	forward_blanks(t_tokenize_tool *t)
 		t->i++;
 }
 
-t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s, t_token *to_free)
+t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s,
+		t_token *to_free)
 {
 	(void)t;
-	(void)to_free;
-	//freeall(to_free);
 	free_ast(to_free);
 	if (sh()->print_syntax_errors)
 		printf("SYNTAX_ERROR: %s\n", s);
 	return (0);
+}
+
+t_token	*set_unfinished_cmd(t_token *token)
+{
+	sh()->unfinished_cmd = 1;
+	free_ast(token);
+	return (0);
+}
+
+t_token	*handle_compound_tokenizer_error(t_tokenize_tool *t,
+		t_token *compound_token, const char *str)
+{
+	if (!t->input[t->i])
+		return (set_unfinished_cmd(compound_token));
+	return (handle_syntax_error(t, str, compound_token));
 }
 
 t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
@@ -49,54 +64,20 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 
 	compound_token = create_token(type, word_begin, 0);
 	compound_token->sub = create_token(SH_GROUP, 0, 0);
-	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_WHILE, &next_separator)))
-	{
-		if (!t->input[t->i])
-		{
-			sh()->unfinished_cmd = 1;//free everywhere
-			free_ast(compound_token);
-			return (0);
-		}
-		free_ast(compound_token);
-		return (handle_syntax_error(t, "missing condition in WHILE", compound_token));
-	}
+	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_WHILE,
+					&next_separator)))
+		return (handle_compound_tokenizer_error(t, compound_token,
+					"missing condition in WHILE"));
 	if (next_separator != SH_DO)
-	{
-		printf("b\n");
-		if (!t->input[t->i])
-		{
-			printf("b2\n");
-			sh()->unfinished_cmd = 1;//free everywhere
-			free_ast(compound_token);
-			return (0);
-		}
-		free_ast(compound_token);
-		return (handle_syntax_error(t, "missing DO in WHILE", compound_token));
-	}
-	if (!(compound_token->sub->next = recursive_tokenizer(t, SH_DO, &next_separator)))
-	{
-		printf("c\n");
-		if (!t->input[t->i])
-		{
-			sh()->unfinished_cmd = 1;//free everywhere
-			free_ast(compound_token);
-			return (0);
-		}
-		free_ast(compound_token);
-		return (handle_syntax_error(t, "missing execution block in WHILE", compound_token));
-	}
+		return (handle_compound_tokenizer_error(t, compound_token,
+					"missing DO in WHILE"));
+	if (!(compound_token->sub->next = recursive_tokenizer(t, SH_DO,
+					&next_separator)))
+		return (handle_compound_tokenizer_error(t, compound_token,
+					"missing execution block in WHILE"));
 	if (next_separator != SH_DONE)
-	{
-		printf("d\n");
-		if (!t->input[t->i])
-		{
-			sh()->unfinished_cmd = 1;//free everywhere
-			free_ast(compound_token);
-			return (0);
-		}
-		free_ast(compound_token);
-		return (handle_syntax_error(t, "missing DONE in WHILE", compound_token));
-	}
+		return (handle_compound_tokenizer_error(t, compound_token,
+					"missing DONE in WHILE"));
 	return (compound_token);
 }
 
@@ -117,7 +98,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 	word_begin = t->i;
 	if (read_n_skip_word(t) == -1)
 		return (0);
-	if (word_begin != t->i && !ft_strncmp(t->input + word_begin, "esac", t->i - word_begin))
+	if (word_begin != t->i && !ft_strncmp(t->input + word_begin, "esac",
+				t->i - word_begin))
 	{
 		if (!forbidden_esac)
 		{
@@ -127,7 +109,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return ((int)handle_syntax_error(t, "unexpected ESAC in CASE: expected WORD after '('", compound));
+		return ((int)handle_syntax_error(t, "unexpected ESAC in CASE: expected\
+WORD after '('", compound));
 	}
 	t->i = word_begin;
 	t_token	**previous_next = &(actual->sub);
@@ -137,12 +120,15 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 		word_begin = t->i;
 		if (read_n_skip_word(t) == -1)
 			return (0);
-		if (t->i != word_begin && ft_strncmp(t->input + word_begin, ")", t->i - word_begin))
+		if (t->i != word_begin && ft_strncmp(t->input + word_begin, ")",
+					t->i - word_begin))
 		{
-			(*previous_next) = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			(*previous_next) = create_token_n(SH_WORD, word_begin, t->input
+					+ word_begin, t->i - word_begin);
 			if (sh()->alias_end)
 				sh()->alias_end--;
-			dprintf(sh()->dbg_fd, "case WORD : %s\n", (*previous_next)->content);
+			dprintf(sh()->dbg_fd, "case WORD : %s\n",
+					(*previous_next)->content);
 			previous_next = &((*previous_next)->next);
 		}
 		else
@@ -160,7 +146,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 	if (t->input[t->i] != ')')
 	{
 		sh()->invalid_cmd = 1;
-		return ((int)handle_syntax_error(t, "UNEXPECTED char in CASE: expected ')' after WORDLIST", compound));
+		return ((int)handle_syntax_error(t, "UNEXPECTED char in CASE: expected\
+')' after WORDLIST", compound));
 	}
 	if (t->input[t->i] == '(' || sh()->alias_end)
 		sh()->alias_end--;
@@ -168,7 +155,8 @@ int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_toke
 	return (1);
 }
 
-t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *esac_finded, t_token *compound)
+t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator,
+		int *esac_finded, t_token *compound)
 {
 	t_token		*origin;
 	t_token		*actual;
@@ -203,7 +191,8 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 		free_ast(origin);
 		return (0);
 	}
-	if (t->i != word_begin && !ft_strncmp(t->input + word_begin, "esac", t->i - word_begin))
+	if (t->i != word_begin && !ft_strncmp(t->input + word_begin, "esac",
+				t->i - word_begin))
 	{
 		*esac_finded = 1;
 		if (sh()->alias_end)
@@ -212,18 +201,22 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator, int *
 	else
 	{
 		t->i = word_begin;
-		if (!(origin->sub->sub = recursive_tokenizer(t, SH_CASE, next_separator)) && *next_separator != SH_ESAC && *next_separator != SH_DSEMI)
+		if (!(origin->sub->sub = recursive_tokenizer(t, SH_CASE,
+						next_separator)) && *next_separator != SH_ESAC
+				&& *next_separator != SH_DSEMI)
 		{
 			if (!t->input[t->i])
 				sh()->unfinished_cmd = 1;
 			free_ast(origin);
-			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
+			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expect\
+ed ';;' or 'esac'", compound));
 		}
 	}
 	return (origin);
 }
 
-int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token, int case_index)
+int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token,
+		int case_index)
 {
 	int	word_begin;
 
@@ -233,7 +226,8 @@ int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token, int case_i
 		return (0);
 	if (t->i == word_begin)
 		return (0);
-	*compound_token = create_token_n(SH_CASE, case_index, t->input + word_begin, t->i - word_begin);
+	*compound_token = create_token_n(SH_CASE, case_index, t->input + word_begin,
+			t->i - word_begin);
 	//VERIFY UNICITY OF NAME
 	if (sh()->alias_end)
 		sh()->alias_end--;
@@ -247,7 +241,8 @@ int		read_n_skip_in(t_tokenize_tool *t)
 	word_begin = t->i;
 	if (read_n_skip_word(t) == -1)
 		return (0);
-	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "in", t->i - word_begin))
+	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "in", t->i
+				- word_begin))
 	{
 		t->i = word_begin;
 		return (0);
@@ -257,7 +252,8 @@ int		read_n_skip_in(t_tokenize_tool *t)
 	return (1);
 }
 
-int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *compound)
+int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next,
+		t_token *compound)
 {
 	t_toktype	next_separator;
 	int			esac_finded;
@@ -267,7 +263,8 @@ int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *c
 	{
 		forward_blanks_newline(t);
 		next_separator = 0;
-		if (!(*previous_next = tokenize_case_elem(t, &next_separator, &esac_finded, compound)) && next_separator != SH_ESAC)
+		if (!(*previous_next = tokenize_case_elem(t, &next_separator,
+						&esac_finded, compound)) && next_separator != SH_ESAC)
 			return (0);
 		if (esac_finded || next_separator == SH_ESAC)
 			break ;
@@ -280,7 +277,8 @@ int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next, t_token *c
 			}
 			sh()->invalid_cmd = 1;
 			printf("%i ", next_separator);
-			return ((int)handle_syntax_error(t, "unexpected non-WORD in CASE :expected ';;' or 'esac'", compound));
+			return ((int)handle_syntax_error(t, "unexpected non-WORD in CASE :e\
+xpected ';;' or 'esac'", compound));
 		}
 		previous_next = &((*previous_next)->next);
 	}
@@ -328,7 +326,8 @@ t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 
 	compound_token = create_token(SH_IF, word_begin, 0);
 	compound_token->sub = create_token(SH_GROUP, word_begin, 0);
-	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_IF, &next_separator)))
+	if (!(compound_token->sub->sub = recursive_tokenizer(t, SH_IF,
+					&next_separator)))
 	{
 		if (!t->input[t->i])
 		{
@@ -336,7 +335,8 @@ t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "missing condition in IF", compound_token));
+		return (handle_syntax_error(t, "missing condition in IF",
+					compound_token));
 	}
 	if (!next_separator)
 	{
@@ -349,7 +349,8 @@ t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 		return (handle_syntax_error(t, "missing THEN in IF", compound_token));
 	}
 	compound_token->sub->next = create_token(SH_GROUP, word_begin, 0);
-	if (!(compound_token->sub->next->sub = recursive_tokenizer(t, SH_THEN, &next_separator)))
+	if (!(compound_token->sub->next->sub = recursive_tokenizer(t, SH_THEN,
+					&next_separator)))
 	{
 		if (!t->input[t->i])
 		{
@@ -357,17 +358,20 @@ t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "missing exec block in IF", compound_token));
+		return (handle_syntax_error(t, "missing exec block in IF",
+					compound_token));
 	}
 	if (!next_separator)
 	{
 		sh()->unfinished_cmd = 1;
 		return (0);
 	}
-	if (next_separator != SH_ELIF && next_separator != SH_ELSE && next_separator != SH_FI)
+	if (next_separator != SH_ELIF && next_separator != SH_ELSE &&
+			next_separator != SH_FI)
 	{
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "missing ELIF/ELSE/FI in IF THEN", compound_token));
+		return (handle_syntax_error(t, "missing ELIF/ELSE/FI in IF THEN",
+					compound_token));
 	}
 	if (next_separator == SH_ELIF)
 	{
@@ -379,12 +383,14 @@ t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 				return (0);
 			}
 			sh()->invalid_cmd = 1;
-			return (handle_syntax_error(t, "missing exec block in ELIF", compound_token));
+			return (handle_syntax_error(t, "missing exec block in ELIF",
+						compound_token));
 		}
 	}
 	else if (next_separator == SH_ELSE)
 	{
-		if (!(compound_token->sub->next->next = recursive_tokenizer(t, SH_ELSE, &next_separator)))
+		if (!(compound_token->sub->next->next = recursive_tokenizer(t, SH_ELSE,
+						&next_separator)))
 		{
 			if (!t->input[t->i])
 			{
@@ -392,7 +398,8 @@ t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 				return (0);
 			}
 			sh()->invalid_cmd = 1;
-			return (handle_syntax_error(t, "missing exec block in ELSE", compound_token));
+			return (handle_syntax_error(t, "missing exec block in ELSE",
+						compound_token));
 		}
 	}
 	return (compound_token);
@@ -408,7 +415,8 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 	origin = create_token(0, 0, 0);
 	actual = origin;
 	word_begin = t->i + 1;
-	while (t->input[t->i] != ';' && t->input[t->i] != '\n' && (word_begin != t->i))
+	while (t->input[t->i] != ';' && t->input[t->i] != '\n' && (word_begin
+				!= t->i))
 	{
 		forward_blanks(t);
 		word_begin = t->i;
@@ -419,7 +427,8 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 		}
 		if (t->i != word_begin)
 		{
-			actual->next = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+			actual->next = create_token_n(SH_WORD, word_begin, t->input
+					+ word_begin, t->i - word_begin);
 			if (sh()->alias_end)
 				sh()->alias_end--;
 			actual = actual->next;
@@ -429,7 +438,8 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 	if (t->input[t->i] != ';' && t->input[t->i] != '\n')
 	{
 		free_ast(origin);
-		printf("SYNTAX_ERROR: invalid WORD in FOR at -%.10s\n: expected ';' or '\\n'\n", t->input + t->i);
+		printf("SYNTAX_ERROR: invalid WORD in FOR at -%.10s\n: expected ';' or \
+'\\n'\n", t->input + t->i);
 		return (0);
 	}
 	actual = origin->next;
@@ -476,7 +486,8 @@ int		tokenize_for_name(t_tokenize_tool *t, t_token *compound_token)
 		return (0);
 	if (t->i == word_begin)
 		return (0);
-	compound_token->sub = create_token_n(SH_WORD, word_begin, t->input + word_begin, t->i - word_begin);
+	compound_token->sub = create_token_n(SH_WORD, word_begin, t->input
+			+ word_begin, t->i - word_begin);
 	if (sh()->alias_end)
 		sh()->alias_end--;
 	//VERIFY UNICITY OF NAME/SYNTAXERROR
@@ -490,7 +501,8 @@ int		tokenize_for_in(t_tokenize_tool *t, t_token *compound_token)
 	word_begin = t->i;
 	if (read_n_skip_word(t) == -1)
 		return (0);
-	if (/*t->i != word_begin && */ft_strncmp(t->input + word_begin, "in", t->i - word_begin))
+	if (/*t->i != word_begin && */ft_strncmp(t->input + word_begin, "in", t->i
+				- word_begin))
 		return (0);
 	if (sh()->alias_end)
 		sh()->alias_end--;
@@ -508,7 +520,8 @@ int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
 	word_begin = t->i;
 	if (read_n_skip_word(t) == -1)
 		return (0);
-	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i - word_begin))
+	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i
+				- word_begin))
 		return (0);
 	if (!compound->sub->sub)
 		compound->sub->sub = create_token(0, 0, 0);
@@ -538,7 +551,8 @@ t_token	*tokenize_for(t_tokenize_tool *t, int word_begin)
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "missing WORD in FOR IN", compound_token));
+		return (handle_syntax_error(t, "missing WORD in FOR IN",
+					compound_token));
 	}
 	forward_blanks(t);
 	if (t->input[t->i] == ';')
@@ -551,7 +565,8 @@ t_token	*tokenize_for(t_tokenize_tool *t, int word_begin)
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "missing separator (';' or NEWLINE) before DO in FOR", compound_token));
+		return (handle_syntax_error(t, "missing separator (';' or NEWLINE) \
+before DO in FOR", compound_token));
 	}
 	forward_blanks_newline(t);
 	if (!tokenize_for_do(t, compound_token))
@@ -583,7 +598,8 @@ t_token	*tokenize_braces(t_tokenize_tool *t, int word_begin)
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "missing exec block in BRACES", compound));
+		return (handle_syntax_error(t, "missing exec block in BRACES",
+					compound));
 	}
 	if (terminator != SH_BRACES)
 	{
@@ -612,7 +628,8 @@ t_token	*tokenize_subshell(t_tokenize_tool *t, int word_begin)
 			return (0);
 		}
 		sh()->invalid_cmd = 1;
-		return (handle_syntax_error(t, "missing exec block in SUBSHELL", compound));
+		return (handle_syntax_error(t, "missing exec block in SUBSHELL",
+					compound));
 	}
 	if (terminator != SH_SUBSH_END)
 	{
@@ -632,11 +649,13 @@ t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
 	t_token		*compound;
 	int			tmp;
 
-	if (sh()->nb_nested_tokenized_compounds >= SH_NESTED_TOKENIZED_COMPOUND_LIMIT)
+	if (sh()->nb_nested_tokenized_compounds
+			>= SH_NESTED_TOKENIZED_COMPOUND_LIMIT)
 	{
 		sh()->abort_cmd = 1;
 		sh()->print_syntax_errors = 0;
-		printf("SH_NESTED_TOKENIZED_COMPOUND_LIMIT REACHED\nAbort tokenization\n");
+		printf("SH_NESTED_TOKENIZED_COMPOUND_LIMIT REACHED\nAbort tokenization\
+\n");
 		return (0);
 	}
 	tmp = t->word_nb;

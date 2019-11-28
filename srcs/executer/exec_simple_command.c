@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/21 14:54:27 by jerry            ###   ########.fr       */
+/*   Updated: 2019/11/28 05:50:43 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	close_all_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
-		printf("[%i]  close %i %i\n", getpid(), lst->in, lst->out);
+		//printf("[%i]  close %i %i\n", getpid(), lst->in, lst->out);
 		close(lst->in);
 		close(lst->out);
 		lst = lst->next;
@@ -124,7 +124,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 		return;
 	gen_redirections_recursively(p, lst->next);
 	//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		printf("[%i]redirecting %i->%i\n", getpid(), lst->in, lst->out);
+	//printf("[%i]redirecting %i->%i\n", getpid(), lst->in, lst->out);
 	if (dup2(lst->out, lst->in) < 0)
 		dprintf(p->dbg_fd, "[%i]DUP2ERROR %i->%i\n", getpid(), lst->in, lst->out);
 	close(lst->out);
@@ -150,8 +150,8 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	p->process_is_stopped = 0;
 	//printf("[%i] waiting\n", getpid());
 	//
-//	def_prog_mode();
-//	endwin();
+	//	def_prog_mode();
+	//	endwin();
 	//
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
@@ -165,7 +165,7 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	//dprintf(2, "IFSTP:%i\n", WIFSTOPPED(status));
 	if (WIFSTOPPED(status))
 	{
-//		printf("a\n");
+		//		printf("a\n");
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
 			p->process_is_stopped = 1;
@@ -183,8 +183,8 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 			if (!from_fg)
 				add_job(child_pid, p->cmd, p->index_pipeline_begin, p->index_pipeline_end, "SIGTTIN");
 		}
-		if (WSTOPSIG(status) == SIGKILL)
-				printf("\nChild_process [%i] KILLED\n", child_pid);
+		if (WSTOPSIG(status) == SIGKILL)//Uneusefull?
+			printf("\nChild_process [%i] KILLED\n", child_pid);
 		if (WSTOPSIG(status) == SIGTTOU)
 		{
 			printf("\nChild_process [%i] SIGTTOU\n", child_pid);
@@ -195,20 +195,22 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	}
 	else if (WIFSIGNALED(status))
 	{
-//	printf("b\n");
-//	printf("%i-%i\n", WTERMSIG(status), SIGINT);
+		//	printf("b\n");
+		//	printf("%i-%i\n", WTERMSIG(status), SIGINT);
 		if (/*WSTOPSIG(status) == SIGINT || */WTERMSIG(status) == SIGINT)
 		{
 			printf("\nChild_process [%i] Interrupted\n", child_pid);
 			p->abort_cmd = 1;
 		}
-//		handle_signal(WTERMSIG(status));
+		//		handle_signal(WTERMSIG(status));
 		if (WTERMSIG(status) == SIGSEGV)
 			printf("\n[%i] aborted: Segmentation Fault\n", child_pid);
 		if (WTERMSIG(status) == SIGBUS)
 			printf("\n[%i] aborted: Bus Error\n", child_pid);
 		if (WTERMSIG(status) == SIGKILL)
-				printf("\nChild_process [%i] KILLED\n", child_pid);
+			printf("\nChild_process [%i] KILLED (SIGKILL)\n", child_pid);
+		if (WTERMSIG(status) == SIGSTOP)
+			printf("\nChild_process [%i] KILLED (SIGSTOP)\n", child_pid);
 	}
 	//ctrl-Z only	tcgetattr (0, &j->tmodes);
 	//	tcsetattr(0, TCSADRAIN, &shell_tmodes);
@@ -220,14 +222,14 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	{
 		signal(SIGTTOU, SIG_IGN);
 		int ret = tcsetpgrp (0, getpgid(0));
-//		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
+		//		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
 		ret = tcsetattr(0, TCSANOW, &p->orig_termios);
-		dprintf(2, "[%i]tcsetat ret = %i\n", getpid(), ret);
+		//dprintf(2, "[%i]tcsetat ret = %i\n", getpid(), ret);
 		signal(SIGTTOU, SIG_DFL);
-//		sigprocmask(SIG_UNBLOCK, &sigset, 0);
-	//	init_signals_handling();
-//		endwin();
-//		reset_prog_mode();
+		//		sigprocmask(SIG_UNBLOCK, &sigset, 0);
+		//	init_signals_handling();
+		//		endwin();
+		//		reset_prog_mode();
 	}
 	return (WEXITSTATUS(status));
 	//if from_fg && finished process rm job
@@ -243,7 +245,8 @@ char	**transform_env_for_child(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		len++;
+		if (tmp->exported && tmp->value)
+			len++;
 		tmp = tmp->next;
 	}
 	if (!(tab = (char**)malloc((len + 1) * sizeof(char*))))
@@ -251,7 +254,8 @@ char	**transform_env_for_child(t_env *env)
 	len = 0;
 	while (env)
 	{
-		tab[len++] = ft_join_with_char(env->key, env->value, '=');//protecc?
+		if (env->exported && env->value)
+			tab[len++] = ft_join_with_char(env->key, env->value, '=');//protecc?
 		env = env->next;
 	}
 	tab[len] = 0;
@@ -270,7 +274,7 @@ int     exec_path(t_sh *p, char *path, char **child_argv)
 	else
 	{
 		//print_redirections(p, p->redirect_lst);
-//		dprintf(2, "[%i] EXECVE\n", getpid());
+		//		dprintf(2, "[%i] EXECVE\n", getpid());
 		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
 		dprintf(2, "Execve ErrorR\n");
 		sh()->exit = 1;
@@ -442,35 +446,8 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 		return (-1);
 	}
 	push_to_opened_files(p, real_path, fd);
-//	dprintf(p->dbg_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
+	//	dprintf(p->dbg_fd, "[%i]open path %s fd %i\n", getpid(), real_path, fd);
 	return (fd);
-}
-
-int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end)
-{
-	//?TO REDO
-	int	nb_redirections;
-	int	fd;
-
-	nb_redirections = 0;
-	while (token_begin && (is_redirection_operator(token_begin->type) || is_compound(token_begin->type)))
-	{
-		if (is_redirection_operator(token_begin->type))
-		{
-			if ((fd = create_open_file(p, token_begin->sub->content, token_begin->type)) > -1)
-			{
-				if (token_begin->content[0] == '&')
-				{}
-				else
-				{
-					push_redirect_lst(&p->redirect_lst, ft_atoi(token_begin->content), fd/*<-, opened fd*/);
-					nb_redirections++;
-				}
-			}
-		}
-		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-	}
-	return (nb_redirections);
 }
 
 int		count_argv(t_token *token_begin, t_token *token_end)
@@ -649,7 +626,7 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	free_ast(tmpt);
 	p->assign_lst->next = tmp;
 	//if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		dprintf(2, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
+	//dprintf(2, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
 }
 
 /*int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
@@ -779,6 +756,22 @@ void	assign_sraa_to_zero(int *nb_assign, int *nb_redirections, t_token **argv_st
 	*nb_redirections = 0;
 	*argv_stack = 0;
 	*cmd_begin = 0;
+}
+
+int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
+{
+	int	nb_redirections;
+
+	nb_redirections = 0;
+	while (token_begin)
+	{
+		if (is_redirection_operator(token_begin->type))
+			stock_redirection(p, token_begin, &nb_redirections);
+		else if (ft_strchr(token_begin->content, '=') > token_begin->content)
+			stock_assign(p, token_begin, nb_assign);
+		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
+	}
+	return (nb_redirections);
 }
 
 int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign, char ***child_argv)
@@ -1092,6 +1085,11 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	if (sh()->nb_nested_functions == 999)
 		lstp();
 	nb_redirections = stock_redirections_assignements_argvs(p, token_begin, token_end, &nb_assign, &child_argv); //open files
+	if (p->abort_cmd)
+	{
+		free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
+		return (-125);
+	}
 	if (!child_argv[0])
 		return (handle_no_cmd_name(p, child_argv));//and free stuff
 	//dprintf(2, "[%i]exec simple -%s-\n", getpid(), child_argv[0]);
