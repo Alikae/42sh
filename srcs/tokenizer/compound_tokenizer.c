@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/28 06:20:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/29 01:13:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@
 //PROTECC ALL RECURSIVETOKENIZER FROM SYNTAXERROR
 //FREE CREATED TOKS WHEN ERROR
 
-void	forward_blanks_newline(t_tokenize_tool *t)
+void	forward_blanks_newline(t_toktool *t)
 {
 	while (t->input[t->i] == '\n' || t->input[t->i] == ' ' || t->input[t->i]
 			== '\t')
 		t->i++;
 }
 
-void	forward_blanks(t_tokenize_tool *t)
+void	forward_blanks(t_toktool *t)
 {
 	while (t->input[t->i] == ' ' || t->input[t->i] == '\t')
 		t->i++;
 }
 
-t_token	*handle_syntax_error(t_tokenize_tool *t, const char *s,
+t_token	*handle_syntax_error(t_toktool *t, const char *s,
 		t_token *to_free)
 {
 	(void)t;
@@ -49,7 +49,7 @@ t_token	*set_unfinished_cmd(t_token *token)
 	return (0);
 }
 
-t_token	*handle_compound_tokenizer_error(t_tokenize_tool *t,
+t_token	*handle_compound_tokenizer_error(t_toktool *t,
 		t_token *compound_token, const char *str)
 {
 	if (!t->input[t->i])
@@ -57,7 +57,7 @@ t_token	*handle_compound_tokenizer_error(t_tokenize_tool *t,
 	return (handle_syntax_error(t, str, compound_token));
 }
 
-t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
+t_token	*tokenize_while(t_toktool *t, t_toktype type, int word_begin)
 {
 	t_token		*compound_token;
 	t_toktype	next_separator;
@@ -81,7 +81,7 @@ t_token	*tokenize_while(t_tokenize_tool *t, t_toktype type, int word_begin)
 	return (compound_token);
 }
 
-int		tokenize_case_pattern(t_tokenize_tool *t, t_toktype *next_separator, t_token *actual, t_token *compound)
+int		tokenize_case_pattern(t_toktool *t, t_toktype *next_separator, t_token *actual, t_token *compound)
 {
 	int			word_begin;
 	int			forbidden_esac;
@@ -152,7 +152,7 @@ WORD after '('", compound));
 	return (1);
 }
 
-t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator,
+t_token	*tokenize_case_elem(t_toktool *t, t_toktype *next_separator,
 		int *esac_finded, t_token *compound)
 {
 	t_token		*origin;
@@ -206,7 +206,7 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator,
 	return (origin);
 }
 
-int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token,
+int		tokenize_case_name(t_toktool *t, t_token **compound_token,
 		int case_index)
 {
 	int	word_begin;
@@ -225,7 +225,7 @@ int		tokenize_case_name(t_tokenize_tool *t, t_token **compound_token,
 	return (1);
 }
 
-int		read_n_skip_in(t_tokenize_tool *t)
+int		read_n_skip_in(t_toktool *t)
 {
 	int	word_begin;
 
@@ -243,7 +243,7 @@ int		read_n_skip_in(t_tokenize_tool *t)
 	return (1);
 }
 
-int		tokenize_case_lists(t_tokenize_tool *t, t_token **previous_next,
+int		tokenize_case_lists(t_toktool *t, t_token **previous_next,
 		t_token *compound)
 {
 	t_toktype	next_separator;
@@ -276,7 +276,7 @@ xpected ';;' or 'esac'", compound));
 	return (1);
 }
 
-t_token	*tokenize_case(t_tokenize_tool *t, int word_begin)
+t_token	*tokenize_case(t_toktool *t, int word_begin)
 {
 	t_token		*compound_token;
 
@@ -310,7 +310,7 @@ t_token	*tokenize_case(t_tokenize_tool *t, int word_begin)
 	//Exec			Exec
 }
 	
-t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
+t_token *tokenize_if(t_toktool *t, int word_begin)
 {
 	t_token		*compound_token;
 	t_toktype	next_separator;
@@ -396,7 +396,7 @@ t_token *tokenize_if(t_tokenize_tool *t, int word_begin)
 	return (compound_token);
 }
 
-t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
+t_token	*tokenize_for_wordlist(t_toktool *t)
 {
 	//THINK ABOUT POTENTIAL PROBLEMS? SUPPOSE ITS GOOD
 	t_token	*origin;
@@ -438,7 +438,7 @@ t_token	*tokenize_for_wordlist(t_tokenize_tool *t)
 	return(actual);
 }
 
-t_token	*tokenize_for_do_group(t_tokenize_tool *t, t_token *compound)
+t_token	*tokenize_for_do_group(t_toktool *t, t_token *compound)
 {
 	t_token		*do_group;
 	t_toktype	next_separator;
@@ -467,7 +467,7 @@ t_token	*tokenize_for_do_group(t_tokenize_tool *t, t_token *compound)
 	return (do_group);
 }
 
-int		tokenize_for_name(t_tokenize_tool *t, t_token *compound_token)
+int		tokenize_for_name(t_toktool *t, t_token *compound_token)
 {
 	int			word_begin;
 
@@ -485,7 +485,7 @@ int		tokenize_for_name(t_tokenize_tool *t, t_token *compound_token)
 	return (1);
 }
 
-int		tokenize_for_in(t_tokenize_tool *t, t_token *compound_token)
+int		tokenize_for_in(t_toktool *t, t_token *compound_token)
 {
 	int			word_begin;
 
@@ -504,7 +504,7 @@ int		tokenize_for_in(t_tokenize_tool *t, t_token *compound_token)
 	return (1);
 }
 
-int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
+int		tokenize_for_do(t_toktool *t, t_token *compound)
 {
 	int			word_begin;
 
@@ -523,7 +523,7 @@ int		tokenize_for_do(t_tokenize_tool *t, t_token *compound)
 	return (1);
 }
 
-t_token	*tokenize_for(t_tokenize_tool *t, int word_begin)
+t_token	*tokenize_for(t_toktool *t, int word_begin)
 {
 	t_token		*compound_token;
 
@@ -575,7 +575,7 @@ before DO in FOR", compound_token));
 	return (compound_token);
 }
 
-t_token	*tokenize_braces(t_tokenize_tool *t, int word_begin)
+t_token	*tokenize_braces(t_toktool *t, int word_begin)
 {
 	t_token		*compound;
 	t_toktype	terminator;
@@ -605,7 +605,7 @@ t_token	*tokenize_braces(t_tokenize_tool *t, int word_begin)
 	return (compound);
 }
 
-t_token	*tokenize_subshell(t_tokenize_tool *t, int word_begin)
+t_token	*tokenize_subshell(t_toktool *t, int word_begin)
 {
 	t_token		*compound;
 	t_toktype	terminator;
@@ -635,7 +635,7 @@ t_token	*tokenize_subshell(t_tokenize_tool *t, int word_begin)
 	return (compound);
 }
 
-t_token	*tokenize_compound(t_tokenize_tool *t, t_toktype type, int word_begin)
+t_token	*tokenize_compound(t_toktool *t, t_toktype type, int word_begin)
 {
 	t_token		*compound;
 	int			tmp;

@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/24 12:11:11 by thdelmas         ###   ########.fr        #
+#    Updated: 2019/11/28 21:54:58 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,8 @@ C_FILES_tokenizer = \
 	word_interpreter.c \
 	operator_interpreter.c \
 	opening_chars_handling.c \
+	is_opening_char.c \
+	assign_patend.c \
 	sh_alias_substitution.c
 
 C_FILES_executer = \

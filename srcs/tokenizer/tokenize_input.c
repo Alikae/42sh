@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 05:33:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 22:35:18 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int			is_word_char(char c)
 	return (1);
 }
 
-int			process_read_n_skip_word(int *escaped, t_tokenize_tool *t, int *n)
+int			process_read_n_skip_word(int *escaped, t_toktool *t, int *n)
 {
 	int	tmp;
 	int	type;
@@ -52,7 +52,7 @@ int			process_read_n_skip_word(int *escaped, t_tokenize_tool *t, int *n)
 	return (-2);
 }
 
-int			read_n_skip_word(t_tokenize_tool *t)
+int			read_n_skip_word(t_toktool *t)
 {
 	int	escaped;
 	int	n;
@@ -73,7 +73,7 @@ int			read_n_skip_word(t_tokenize_tool *t)
 
 int			count_token_words_in_str(const char *str)
 {
-	t_tokenize_tool	t;
+	t_toktool	t;
 	int				nb_words;
 
 	t.input = str;
@@ -89,7 +89,7 @@ int			count_token_words_in_str(const char *str)
 	return (nb_words);
 }
 
-int			is_io_nb(t_tokenize_tool *t)
+int			is_io_nb(t_toktool *t)
 {
 	int	j;
 
@@ -101,7 +101,7 @@ int			is_io_nb(t_tokenize_tool *t)
 	return (0);
 }
 
-t_toktype	fill_redirection(t_tokenize_tool *t, t_token **p_actual,
+t_toktype	fill_redirection(t_toktool *t, t_token **p_actual,
 		t_toktype type)
 {
 	int	word_begin;
@@ -127,7 +127,7 @@ at -%.10s\n",
 	return (0);
 }
 
-t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual,
+t_toktype		treat_redirection(t_toktool *t, t_token **p_actual,
 		int len)
 {
 	t_toktype	type;
@@ -142,7 +142,7 @@ t_toktype		treat_redirection(t_tokenize_tool *t, t_token **p_actual,
 	return (fill_redirection(t, p_actual, type));
 }
 
-t_toktype	tokenize_reserved_word(t_tokenize_tool *t, t_token **p_actual,
+t_toktype	tokenize_reserved_word(t_toktool *t, t_token **p_actual,
 		t_toktype type, int word_begin)
 {
 	if (sh()->alias_end)
@@ -157,7 +157,7 @@ t_toktype	tokenize_reserved_word(t_tokenize_tool *t, t_token **p_actual,
 	return (0);
 }
 
-int			next_is_parenthesis(t_tokenize_tool *t)
+int			next_is_parenthesis(t_toktool *t)
 {
 	int	tmp;
 
@@ -173,7 +173,7 @@ int			next_is_parenthesis(t_tokenize_tool *t)
 	return (tmp);
 }
 
-t_toktype	handle_function_error(t_tokenize_tool *t, t_toktype *type)
+t_toktype	handle_function_error(t_toktool *t, t_toktype *type)
 {
 	int	word_begin;
 
@@ -200,7 +200,7 @@ mpound at %.10s\n", t->input + word_begin) : 0;
 	return (SH_NULL);
 }
 
-t_toktype	tokenize_function(t_tokenize_tool *t, t_token **p_actual,
+t_toktype	tokenize_function(t_toktool *t, t_token **p_actual,
 		int name_begin)
 {
 	int			word_begin;
@@ -237,7 +237,7 @@ int			word_out_of_context(t_toktype type)
 	return (0);
 }
 
-int			bang_unfollowed_by_word(t_tokenize_tool *t)
+int			bang_unfollowed_by_word(t_toktool *t)
 {
 	int i;
 	int	tmp;
@@ -255,7 +255,7 @@ int			bang_unfollowed_by_word(t_tokenize_tool *t)
 	return (1);
 }
 
-t_toktype	handle_functions_n_terminator(t_tokenize_tool *t,
+t_toktype	handle_functions_n_terminator(t_toktool *t,
 		t_token **p_actual, t_toktype actual_compound, int word_begin)
 {
 	int			len;
@@ -268,7 +268,7 @@ t_toktype	handle_functions_n_terminator(t_tokenize_tool *t,
 			sh()->alias_end--;
 		return (tokenize_function(t, p_actual, word_begin));
 	}
-	if ((type = word_is_actual_terminator(t->input + word_begin, t->i
+	if ((type = word_is_actual_term(t->input + word_begin, t->i
 					- word_begin, actual_compound)) && (t->word_nb == 1
 					|| type == SH_SUBSH_END))
 	{
@@ -279,7 +279,7 @@ t_toktype	handle_functions_n_terminator(t_tokenize_tool *t,
 	return (SH_NULL);
 }
 
-t_toktype	handle_normal_word(t_tokenize_tool *t, int word_begin,
+t_toktype	handle_normal_word(t_toktool *t, int word_begin,
 		t_token **p_actual)
 {
 	if (word_is_reserved(t->input + word_begin, t->i - word_begin)
@@ -302,7 +302,7 @@ t_toktype	handle_normal_word(t_tokenize_tool *t, int word_begin,
 	return (SH_GROUP);
 }
 
-t_toktype	handle_reserved_and_normals_word(t_tokenize_tool *t,
+t_toktype	handle_reserved_and_normals_word(t_toktool *t,
 		int word_begin, t_token **p_actual)
 {
 	t_toktype	type;
@@ -332,7 +332,7 @@ t_toktype	handle_reserved_and_normals_word(t_tokenize_tool *t,
 	return (SH_GROUP);
 }
 
-t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual,
+t_toktype	treat_word(t_toktool *t, t_token **p_actual,
 		t_toktype actual_compound)
 {
 	int			word_begin;
@@ -360,7 +360,7 @@ t_toktype	treat_word(t_tokenize_tool *t, t_token **p_actual,
 	return (0);
 }
 
-void	treat_input(t_tokenize_tool *t, t_toktype actual_compound,
+void	treat_input(t_toktool *t, t_toktype actual_compound,
 		t_toktype *terminator, t_token **p_actual)
 {
 	forward_blanks(t);
@@ -375,7 +375,7 @@ void	treat_input(t_tokenize_tool *t, t_toktype actual_compound,
 		*terminator = treat_word(t, p_actual, actual_compound);
 }
 
-t_token		*recursive_tokenizer(t_tokenize_tool *t, t_toktype actual_compound,
+t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
 		t_toktype *terminator)
 {
 	t_token	*origin;
@@ -408,7 +408,7 @@ t_token		*tokenize_input(const char *input)
 {
 	t_token			*ast;
 	t_toktype		terminator;
-	t_tokenize_tool	tok_tool;
+	t_toktool	tok_tool;
 
 	tok_tool.input = input;
 	tok_tool.i = 0;

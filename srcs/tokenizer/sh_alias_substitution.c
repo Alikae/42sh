@@ -18,7 +18,7 @@ int		sh_alias_value_len(char *alias, int *ind)
 	return (i - j);
 }
 
-int		sh_cmd_len(t_tokenize_tool *t, int in)
+int		sh_cmd_len(t_toktool *t, int in)
 {
 	int		i;
 	
@@ -28,7 +28,7 @@ int		sh_cmd_len(t_tokenize_tool *t, int in)
 	return (i - in);
 }
 
-void	sh_sub_alias_command(t_tokenize_tool *t, char *alias, int in)
+void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 { 
 	int		len;
 	int		i;
@@ -84,7 +84,7 @@ char	*sh_find_sub_alias(char *str)
 	return (NULL);
 }
 
-char	*sh_find_alias(t_tokenize_tool *t, int i)
+char	*sh_find_alias(t_toktool *t, int i)
 {
 	char	*str;
 	int		j;
@@ -221,7 +221,7 @@ int		count_alias_word_in_str(const char *str)
 	return (count_token_words_in_str(str + i));
 }
 
-void	sh_treat_alias(char *alias, t_tokenize_tool *t, int begin, int *before)
+void	sh_treat_alias(char *alias, t_toktool *t, int begin, int *before)
 {
 	int		len;
 	
@@ -238,7 +238,7 @@ void	sh_treat_alias(char *alias, t_tokenize_tool *t, int begin, int *before)
 	sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
 }
 
-int		sh_alias_substitution(t_tokenize_tool *t, int word_begin)
+int		sh_alias_substitution(t_toktool *t, int word_begin)
 {
 	char		*alias;
 	static int	before = 0;

@@ -10,14 +10,156 @@ A NORMER
 [v]: DONE
 [tc-td-tm-e]: tcill-tmey-tdel-ede already working on it
 
+srcs:
+[]		constructor
+[]		destructor
+[]		main
+[]		sh
+[]		sh_rc
+
+builtins:
+[]		sh_alias
+[]		sh_basename
+[]		sh_cd
+[]		sh_check_path
+[]		sh_debug_builtin
+[]		sh_env
+[]		sh_exit
+[]		sh_export
+[]		sh_false
+[]		sh_fg
+[]		sh_jobs
+[]		sh_mv
+[]		sh_pwd
+[]		sh_readonly
+[]		sh_rmdir
+[]		sh_set
+[]		sh_setenv
+[]		sh_source
+[]		sh_test
+[]		sh_true
+[]		sh_type
+[]		sh_unalias
+[]		sh_unset
+
+command_edition:
+[]		sh_buffer
+[]		sh_command_functions
+[]		sh_controls
+[]		sh_copy_option
+[]		sh_cursor_motion
+[]		sh_cursor_motion2
+[]		sh_cursor_motion_line
+[]		sh_cursor_motion_word
+[]		sh_free_all_cmd
+[]		sh_free_one_cmd
+[]		sh_init_cmd
+[]		sh_reader
+
+command_line:
+[]		sh_command_line
+[]		sh_free_all_ln
+[]		sh_free_one_ln
+[]		sh_init_ln
+[]		sh_prompt
+
+entrypoint:
+[]		sh_entrypoint
+[]		sh_init
+[]		sh_init_cmd
+[]		sh_init_debug
+[]		sh_init_env
+[]		sh_init_history
+[]		sh_init_opts
+[]		sh_init_path
+[]		sh_init_signals
+[]		sh_loop
+[]		sh_set_shlvl
+
+executer:
+[]		exec_compound
+[-]		exec_script bientot
+[-]		exec_simple_command bientot
+[-]		fd_handler to RM? bientot
+[]		redirections_handler
+[]		sh_exec_arg
+[]		sh_exec_default
+[]		sh_exec_file
+[]		sh_exec_stdin
+
+exitpoint:
+[]		sh_free_params
+
+functions:
+[]		sh_functions
+[]		test
+
+history:
+[]		sh_21_history
+[]		sh_cursor_history
+[]		sh_get_next_line
+[]		sh_history_2
+[]		sh_strnjoin
+
+job_control:
+[]		job_control
+[]		t_job
+
+parameters:
+[]		sh_create_param
+[]		sh_debug_env
+[]		sh_del_env
+[]		sh_env_params
+[]		sh_getev
+[]		sh_getev_value
+[]		sh_init_env
+[]		sh_isset
+[]		sh_putparams
+[]		sh_set_pwd
+[]		sh_setev
+[]		sh_unsetev
+
+signals:
+[]		signals_handler
+
 tokenizer:
 [x]		treat_operator except read_here_doc
 [e]		tokenize_input except treat_word
 [-]		compound_tokenizer XXX Pas encore
-[x]		opening_chars_handling
-[x]		word_interpreter
+[v]		opening_chars_handling
+[]		operator_interpreter
+[]		sh_alias_substitution
+[]		t_token
+[x]		tokenize_input except treat_word
+[v]		word_interpreter
 
-executer:
-[-]		exec_script bientot
-[-]		exec_simple_command bientot
-[-]		fd_handler to RM? bientot
+tools:
+[]		ft_join_with_char
+[]		list_tools
+[]		sh_are_you_sur
+[]		sh_check_path
+[]		sh_env_del
+[]		sh_error_path
+[]		sh_find_law
+[]		sh_getopt
+[]		sh_hist_del
+[]		sh_job_del
+[]		sh_ln_del
+[]		sh_open_file_del
+[]		sh_pipe_lst_del
+[]		sh_print_all_token
+[]		sh_redirect_lst_del
+[]		sh_shclr
+[]		sh_shdel
+[]		sh_tab_fusion
+[]		sh_token_del
+
+word_expansion:
+[]		sh_arithmetic_expansion
+[]		sh_expansion_size
+[]		sh_quote_removal
+[]		sh_simple_word
+[]		sh_subsh_expansion
+[]		sh_tilde_expansion
+[]		sh_word_expansion
+[]		sh_word_expression
