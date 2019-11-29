@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/28 05:08:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/11/28 06:20:10 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ WORD after '('", compound));
 	}
 	t->i = word_begin;
 	t_token	**previous_next = &(actual->sub);
-	while (1)
+	while ((int)"ALWAYS BITCH")
 	{
 		forward_blanks(t);
 		word_begin = t->i;
@@ -139,10 +139,7 @@ WORD after '('", compound));
 		t->i++;
 	}
 	if (!t->input[t->i])
-	{
-		sh()->unfinished_cmd = 1;
-		return (0);
-	}
+		return ((int)set_unfinished_cmd(0));
 	if (t->input[t->i] != ')')
 	{
 		sh()->invalid_cmd = 1;
@@ -175,11 +172,7 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator,
 	if (!origin->sub)
 	{
 		if (!t->input[t->i])
-		{
-			sh()->unfinished_cmd = 1;
-			free_ast(origin);
-			return (0);
-		}
+			return (set_unfinished_cmd(origin));
 		sh()->invalid_cmd = 1;
 		free_ast(origin);
 		return (handle_syntax_error(t, "PATTERN missing in CASE", compound));
@@ -205,11 +198,9 @@ t_token	*tokenize_case_elem(t_tokenize_tool *t, t_toktype *next_separator,
 						next_separator)) && *next_separator != SH_ESAC
 				&& *next_separator != SH_DSEMI)
 		{
-			if (!t->input[t->i])
-				sh()->unfinished_cmd = 1;
 			free_ast(origin);
-			return (handle_syntax_error(t, "unexpected non-WORD in CASE :expect\
-ed ';;' or 'esac'", compound));
+			return (handle_compound_tokenizer_error(t, compound,
+					"unexpected non-WORD in CASE :expected ';;' or 'esac'"));
 		}
 	}
 	return (origin);
