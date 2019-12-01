@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 22:35:18 by jerry            ###   ########.fr       */
+/*   Updated: 2019/12/01 02:17:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_toktype	fill_redirection(t_toktool *t, t_token **p_actual,
 	int	word_begin;
 
 	if (type == SH_DLESS || type == SH_DLESSDASH)
-		return (read_here_doc(t, p_actual, type));
+		return (read_here_doc(t, p_actual));
 	forward_blanks(t);
 	word_begin = t->i;
 	if (read_n_skip_word(t) < 1)

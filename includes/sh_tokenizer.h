@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 16:31:21 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 22:35:34 by jerry            ###   ########.fr       */
+/*   Updated: 2019/12/01 02:17:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_token		*tokenize_for(t_toktool *t, int word_begin);
 t_token		*tokenize_if(t_toktool *t, int word_begin);
 t_token		*tokenize_case(t_toktool *t, int word_begin);
 t_token		*tokenize_while(t_toktool *t, t_toktype type, int word_begin);
-t_toktype	read_here_doc(t_toktool *t, t_token **p_actual, t_toktype type);
+t_toktype	read_here_doc(t_toktool *t, t_token **p_actual);
 void		forward_blanks_newline(t_toktool *t);
 void		forward_blanks(t_toktool *t);
 t_toktype	read_n_skip_operator(t_toktool *t);
