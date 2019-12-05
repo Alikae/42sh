@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/01 02:17:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/05 02:28:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int			read_n_skip_word(t_toktool *t)
 int			count_token_words_in_str(const char *str)
 {
 	t_toktool	t;
-	int				nb_words;
+	int			nb_words;
 
 	t.input = str;
 	t.i = 0;
@@ -177,7 +177,7 @@ t_toktype	handle_function_error(t_toktool *t, t_toktype *type)
 {
 	int	word_begin;
 
-	if (t->input[t->i] == '{')//Verify that it end
+	if (t->input[t->i] == '{')
 	{
 		*type = SH_BRACES;
 		t->i++;
@@ -216,12 +216,10 @@ t_toktype	tokenize_function(t_toktool *t, t_token **p_actual,
 	(*p_actual)->next = create_token_n(SH_FUNC, name_begin,
 			t->input + name_begin, t->i - name_begin);
 	*p_actual = (*p_actual)->next;
-	(*p_actual)->sub = create_token(SH_GROUP, 0, 0);//Is it usefull?
+	(*p_actual)->sub = create_token(SH_GROUP, 0, 0);
 	t->i = word_begin;
 	if (!((*p_actual)->sub->sub = tokenize_compound(t, type, word_begin)))
 		return (SH_SYNTAX_ERROR);
-	//tokenize optional IO/assigns to exec when executing the func (yo() {echo yo } 1>/dev/null;) in (*p_actual)->sub
-	//???????????????????????????????? NOP? FLEMME?
 	return (0);
 }
 
@@ -295,7 +293,6 @@ t_toktype	handle_normal_word(t_toktool *t, int word_begin,
 			+ word_begin, t->i - word_begin);
 	if (sh()->alias_end)
 		sh()->alias_end--;
-	//printf("%s\n", (*p_actual)->next->content);
 	if (!(ft_strchr(t->input + word_begin, '=') > t->input + word_begin)
 			|| ft_strchr(t->input + word_begin, '=') > t->input + t->i)
 		t->word_nb++;
@@ -408,7 +405,7 @@ t_token		*tokenize_input(const char *input)
 {
 	t_token			*ast;
 	t_toktype		terminator;
-	t_toktool	tok_tool;
+	t_toktool		tok_tool;
 
 	tok_tool.input = input;
 	tok_tool.i = 0;

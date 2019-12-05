@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:40:24 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/04 04:21:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/05 02:24:12 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "libft.h"
 #include "sh_error.h"
 
-//ATTENTION STRDUP
 char	*dupfilsdup(const char *in)
 {
 	char	*new;
@@ -30,7 +29,8 @@ char	*dupfilsdup(const char *in)
 	return (new);
 }
 
-t_token	*find_token_by_key_until(t_token *tok_begin, t_token *tok_end, t_toktype *type, t_toktype (*types)[2])
+t_token	*find_token_by_key_until(t_token *tok_begin, t_token *tok_end,
+		t_toktype *type, t_toktype (*types)[2])
 {
 	if (type)
 		*type = 0;
@@ -55,14 +55,12 @@ t_token	*create_token(t_toktype type, int index, const char *content)
 
 	if (!(tok = (t_token*)malloc(sizeof(t_token))))
 		exit(ERROR_MALLOC);
-//ATTENTION STRDUP
-//APPRENEZ A CODER
 	tok->content = dupfilsdup(content);
 	tok->type = type;
 	tok->index = index;
 	tok->sub = 0;
 	tok->next = 0;
-	return (tok);	
+	return (tok);
 }
 
 t_token	*create_token_n(t_toktype type, int index, const char *content, int n)
@@ -77,7 +75,7 @@ t_token	*create_token_n(t_toktype type, int index, const char *content, int n)
 	tok->index = index;
 	tok->sub = 0;
 	tok->next = 0;
-	return (tok);	
+	return (tok);
 }
 
 t_token	*dup_ast(t_token *origin)
