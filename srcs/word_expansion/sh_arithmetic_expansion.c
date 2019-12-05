@@ -143,7 +143,7 @@ void	sh_count_priority(char *c, int i, int count, int *less_count)
 		*less_count = count + 1;
 }
 
-int		sh_all_operator_char(char c)
+int		sh_all_char_operator(char c)
 {
 	if (c == '-' || c == '+' || c == '*' || c == '/' || c == '%' || c == '|'
 				|| c == '=' || c == '&' || c == '>' || c == '<' || c == '!')
@@ -160,7 +160,7 @@ int		sh_is_number(char *str, int i, int end)
 	op = 0;
 	while (i <= end)
 	{
-		if (!(sh_all_operator_char(str[i])))
+		if (!(sh_all_char_operator(str[i])))
 			num = 1;
 		else if (num == 1 && op == 0)
 			op = 1;
@@ -182,18 +182,18 @@ int		sh_is_valid_operator(char *str, int begin)
 	i = 0;
 	while (i < begin)
 	{
-		if (!(sh_all_operator_char(str[i])))
+		if (!(sh_all_char_operator(str[i])))
 			num = 1;
 		else if (str[i] >= '0' && str[i] <= '9')
 			num = 0;
 		i++;
 	}
 	i++;
-	if (str[i] && sh_all_operator_char(str[i]))
+	if (str[i] && sh_all_char_operator(str[i]))
 		i++;
 	while (str[i] == ' ')
 		i++;
-	if (str[i] && num && !(sh_all_operator_char(str[i])))
+	if (str[i] && num && !(sh_all_char_operator(str[i])))
 		return (1);
 	return (0);
 }
@@ -255,15 +255,14 @@ void		sh_check_options(char *str, int *begin, short *opt, short where)
 	}
 }
 
-int		sh_long_atoi(const char *s1)
+long int		sh_long_atoi(const char *s1)
 {
-	char	nega;
-	int		nb;
+	char		nega;
+	long int	nb;
 
 	nb = 0;
 	nega = '+';
-	while ((*s1 == '\t' || *s1 == '\n' || *s1 == '\f'
-				|| *s1 == ' ' || *s1 == '\r' || *s1 == '\v') && *s1)
+	while ((*s1 == '\t' || *s1 == '\n' || *s1 == ' ') && *s1)
 			s1++;
 	if (*s1 == '-' || *s1 == '+')
 	{
@@ -278,14 +277,73 @@ int		sh_long_atoi(const char *s1)
 	return (nega == '-' ? -nb : nb);
 }
 
+int			sh_error_expression_name(char *str)
+{
+	printf("42sh: bad math expression: operator expected at `%s`", str);
+	return (0);
+}
+
+int			sh_check_value(char *str)
+{
+	int		i;
+	
+	i = 0;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+		i++;
+	while (str[i] >= '0' && str[i] <= '9' && str[i])
+		i++;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+		i++;
+	if (str[i])
+		return (sh_error_expression_name(str + i));
+	else
+		return (1);
+}
+
+long int	sh_find_arth_var_value(char **str)
+{
+	t_env *env;
+
+	env = sh()->params;
+	while (env && (ft_strcmp(*str, env->key) != 0))
+		env = env->next;
+	ft_memdel((void**)str);
+	if (env && sh_check_value(env->value))
+		return (sh_long_atoi(env->value));
+	sh()->abort_cmd = 1;
+	return (0);
+}
+
+long int	sh_record_arth(char *str, int i)
+{
+	int		i_cpy;
+	int		i_sub;
+	char	*name;
+
+	i_cpy = i;
+	i_sub = 0;
+	while (str[i_cpy] && str[i_cpy] != ' ' && str[i_cpy] != '\n'
+		&& str[i_cpy] != '\t' && !(sh_all_char_operator(str[i_cpy])))
+		i_cpy++;
+	if (!(name = malloc(i_cpy - i + 1)))
+		exit(-1);
+	while (str[i] && str[i] != '\t' && str[i] != ' '
+		&& str[i] != '\n' && !(sh_all_char_operator(str[i])))
+		name[i_sub++] = str[i++];
+	name[i_sub] = '\0';
+	return (sh_find_arth_var_value(&name));
+}
+
 long int	sh_get_int_value(char *str, int *begin)
 {
 	long int result;
 	short	opt;
+
+	printf("oui\n");
 	opt = 0;
 	result = 0;
 	sh_check_options(str, begin, &opt, 0);
-	result = sh_long_atoi(str);
+	result = sh_record_arth(str, *begin);
 	if (opt == 1)
 		result--;
 	else if (opt == 2)
@@ -293,6 +351,18 @@ long int	sh_get_int_value(char *str, int *begin)
 	else if (opt == 3)
 		result++;
 	return (result);
+}
+
+int			sh_check_valid_var_name(char *str, int i)
+{
+	while (str[i] != '\t' && str[i] != ' ' && str[i] != '\n'
+		&& !(sh_all_char_operator(str[i])) && str[i])
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 long int	sh_find_number(char *str, int begin)
@@ -306,8 +376,10 @@ long int	sh_find_number(char *str, int begin)
 		begin++;
 	if (str[begin] >= '0' && str[begin] <= '9')
 		result = sh_atoi_index(str, &begin);
-	else
+	else if (sh_check_valid_var_name(str, begin))
 		result = sh_get_int_value(str, &begin);
+	else
+		sh()->abort_cmd = 1;
 	return (result);
 }
 
@@ -427,7 +499,10 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
-	arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
-	result = sh_exec_arith(arith);
-	exp->value = ft_long_itoa(result);
+	if (sh_valid_arith(exp->name))
+	{
+		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
+		result = sh_exec_arith(arith);
+		exp->value = ft_long_itoa(result);
+	}
 }

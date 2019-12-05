@@ -69,4 +69,5 @@ void	sh_simple_expansion(t_exp *exp);
 void	sh_subsh_expansion(t_exp *exp);
 void	sh_arithmetic_expansion(t_exp *exp);
 void	sh_str_start_end(char **dest, char *src, int i, int n);
+int		sh_valid_arith(char *str);
 #endif
