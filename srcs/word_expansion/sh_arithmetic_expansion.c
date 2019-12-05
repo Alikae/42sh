@@ -279,7 +279,7 @@ long int		sh_long_atoi(const char *s1)
 
 int			sh_error_expression_name(char *str)
 {
-	printf("42sh: bad math expression: operator expected at `%s`", str);
+	printf("42sh: bad math expression: (error is \"%s\"\n", str);
 	return (0);
 }
 
