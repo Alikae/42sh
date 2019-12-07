@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Updated: 2019/11/09 15:19:08 by jerry            ###   ########.fr       */
-/*   Updated: 2019/11/28 05:50:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/07 08:16:25 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 #include "sh_tokens.h"
 #include "sh_job_control.h"
 
-//FORBIDDEN FUNCS
 int		tablen(char **tab)
 {
 	int	l;
@@ -52,9 +51,8 @@ void	restore_std_fds(t_sh *p)
 	{
 		if (p->cpy_std_fds[i] < 0)
 			continue;
-		int ret = dup2(p->cpy_std_fds[i], i);
-		//(void)ret;
-		ret = close(p->cpy_std_fds[i]);
+		dup2(p->cpy_std_fds[i], i);
+		close(p->cpy_std_fds[i]);
 		p->cpy_std_fds[i] = -1;
 	}
 }
@@ -94,12 +92,6 @@ void	save_std_fds(t_sh *p)
 		if (p->cpy_std_fds[i] < 0)
 			p->cpy_std_fds[i] = dup(i);
 	}
-	//	if (p->cpy_std_fds[2] > -1)
-	//	{
-	//		p->dbg_fd = p->cpy_std_fds[2];
-	//		printf("DEBUG FD IS NOW %i\n", p->dbg_fd);
-	//		dprintf(p->dbg_fd, "[TEST DBUGFD]%i\n", i);
-	//	}
 }
 
 void	close_all_redirections(t_sh *p)
@@ -111,7 +103,6 @@ void	close_all_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
-		//printf("[%i]  close %i %i\n", getpid(), lst->in, lst->out);
 		close(lst->in);
 		close(lst->out);
 		lst = lst->next;
@@ -144,28 +135,16 @@ void lstp(){}
 
 int     block_wait(t_sh *p, int child_pid, int from_fg)
 {
-	//IF CONTINUED_JOB: ADD JOB DONT TRIGGER AND IF !ADD JOB DEL CONTINUED JOB
 	int			status;
 
 	p->process_is_stopped = 0;
-	//printf("[%i] waiting\n", getpid());
-	//
-	//	def_prog_mode();
-	//	endwin();
-	//
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		dprintf(2, "WAIT ERROR\n");
 		return (1/*error wait*/);
 	}
-	//printf("status:%i\n", status);
-	//dprintf(2, "WSTOPSIG:%i\n", WSTOPSIG(status));
-	//dprintf(2, "WTERMSIG:%i\n", WTERMSIG(status));
-	//dprintf(2, "IFSIG:%i\n", WIFSIGNALED(status));
-	//dprintf(2, "IFSTP:%i\n", WIFSTOPPED(status));
 	if (WIFSTOPPED(status))
 	{
-		//		printf("a\n");
 		if (WSTOPSIG(status) == SIGTSTP)
 		{
 			p->process_is_stopped = 1;
@@ -195,14 +174,11 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 	}
 	else if (WIFSIGNALED(status))
 	{
-		//	printf("b\n");
-		//	printf("%i-%i\n", WTERMSIG(status), SIGINT);
 		if (/*WSTOPSIG(status) == SIGINT || */WTERMSIG(status) == SIGINT)
 		{
 			printf("\nChild_process [%i] Interrupted\n", child_pid);
 			p->abort_cmd = 1;
 		}
-		//		handle_signal(WTERMSIG(status));
 		if (WTERMSIG(status) == SIGSEGV)
 			printf("\n[%i] aborted: Segmentation Fault\n", child_pid);
 		if (WTERMSIG(status) == SIGBUS)
@@ -212,24 +188,12 @@ int     block_wait(t_sh *p, int child_pid, int from_fg)
 		if (WTERMSIG(status) == SIGSTOP)
 			printf("\nChild_process [%i] KILLED (SIGSTOP)\n", child_pid);
 	}
-	//ctrl-Z only	tcgetattr (0, &j->tmodes);
-	//	tcsetattr(0, TCSADRAIN, &shell_tmodes);
-	//	printf("%i\n", p->dbg_fd);
-	////wait(&wait_status);
-	//while (waitpid(WAIT_ANY, &wait_status, 0) != -1)
-	//	;
 	if (p->is_interactive && p->pid_main_process == getpid())
 	{
 		signal(SIGTTOU, SIG_IGN);
 		int ret = tcsetpgrp (0, getpgid(0));
-		//		dprintf(2, "[%i]tcsetpg ret = %i", getpid(), ret);
 		ret = tcsetattr(0, TCSANOW, &p->orig_termios);
-		//dprintf(2, "[%i]tcsetat ret = %i\n", getpid(), ret);
 		signal(SIGTTOU, SIG_DFL);
-		//		sigprocmask(SIG_UNBLOCK, &sigset, 0);
-		//	init_signals_handling();
-		//		endwin();
-		//		reset_prog_mode();
 	}
 	return (WEXITSTATUS(status));
 	//if from_fg && finished process rm job
@@ -361,7 +325,6 @@ int		exec_prgm(t_sh *p, char **child_argv)
 		printf("cant exec '%s'\n", child_argv[0]);
 		return (127); //ret val?
 	}
-	//dprintf(2, "[%i]exec path %s\n", getpid(), child_argv[0]);
 	ret = exec_path(p, real_path, child_argv);
 	free(real_path);
 	return (ret);
@@ -432,7 +395,7 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	if (path[0] == '/')
 		real_path = path;
 	else
-	{//				UNUSEFULL open understand local path
+	{
 		real_path = getcwd(0, 0);
 		real_path = ft_strjoin(real_path, "/");//<-- FREE
 		real_path = ft_strjoin(real_path, path);//<--SAME
@@ -629,40 +592,6 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	//dprintf(2, "assign: '%s'->'%s'", p->assign_lst->key, p->assign_lst->value);
 }
 
-/*int		stock_redirections_assignements_argvs(t_sh *p, t_token *token_begin, t_token *token_end, int *nb_assign)
-  {
-//transform stockage
-//	child_argv_ast
-//	->retokenize_it
-//	transform to child_argv
-int	nb_redirections;
-int	cmd_begin;
-int	ac;
-
-p->child_ac = count_argv(token_begin, token_end);
-if (!(p->child_argv = (char**)malloc((p->child_ac + 1) * sizeof(char*))))
-exit(ERROR_MALLOC);
-nb_redirections = 0;
- *nb_assign = 0;
- cmd_begin = 0;
- ac = 0;
- while (token_begin)
- {
- if (is_redirection_operator(token_begin->type))
- stock_redirection(p, token_begin, &nb_redirections);
- else if (!cmd_begin && (ft_strchr(token_begin->content, '=') > token_begin->content))
- stock_assign(p, token_begin, nb_assign);
- else if (token_begin->type == SH_WORD)
- {
- p->child_argv[(ac)++] = ft_strdup(token_begin->content);
- cmd_begin = 1;
- }
- token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
- }
- p->child_argv[ac] = 0;
- return (nb_redirections);
- }*/
-
 void	stack_argvs(t_token **p_argv_stack, t_token *token)
 {
 	t_token	*tmp;
@@ -679,21 +608,6 @@ void	stack_argvs(t_token **p_argv_stack, t_token *token)
 		tmp->next = create_token(SH_WORD, token->index, token->content);
 	}
 }
-/*
-   t_token	*stack_redirect(t_token *token_begin, t_token *token_end, int *nb_assign)
-   {
-
-   }
-
-   t_token	*stack_assigns(t_token *token_begin, t_token *token_end, int *nb_assign)
-   {
-   t_token	*origin;
-   int		cmd_begin;
-
-   while (token_begin && token_begin)
-   token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
-   origin = (token_begin) ? create_token() : ;
-   }*/
 
 t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
 {
@@ -853,15 +767,6 @@ int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev)
 	return (sh_is_builtin2(cmd));
 }
 
-/*void	restore_redirections(t_redirect_lst *olds)
-  {
-  while (olds)
-  {
-  dup2(old, old);
-  olds = olds->next;
-  }
-  }*/
-
 int     exec_builtin(t_sh *p, int (*f)(int, char **, t_env **), char **child_argv)
 {
 	int ret;
@@ -949,15 +854,6 @@ int		handle_no_cmd_name(t_sh *p, char **child_argv)
 	//close open files
 	return (0);
 }
-
-
-//$hello
-//
-//echo ls && ls;
-//
-//
-//
-//Expand assigns?
 
 int		exec_function(t_sh *p, t_token *func, char **child_argv)
 {
