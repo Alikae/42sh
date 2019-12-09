@@ -24,5 +24,6 @@ void	ft_tab_strdel(char ***buff)
 		free(*tmp);
 		tmp++;
 	}
+	free(*buff);
 	*buff = NULL;
 }
