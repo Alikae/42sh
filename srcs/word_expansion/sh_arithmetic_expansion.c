@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/07 07:22:19 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/10 17:16:05 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,7 @@ int			sh_check_value(char *str)
 	i = 0;
 	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 		i++;
-	while (str[i] >= '0' && str[i] <= '9' && str[i])
+	while (str[i] && ((str[i] >= '0' && str[i] <= '9') || sh_all_char_operator(str[i])))
 		i++;
 	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 		i++;
@@ -339,7 +339,6 @@ long int	sh_get_int_value(char *str, int *begin)
 	long int result;
 	short	opt;
 
-	printf("oui\n");
 	opt = 0;
 	result = 0;
 	sh_check_options(str, begin, &opt, 0);
@@ -377,7 +376,7 @@ long int	sh_find_number(char *str, int begin)
 	if (str[begin] >= '0' && str[begin] <= '9')
 		result = sh_atoi_index(str, &begin);
 	else if (sh_check_valid_var_name(str, begin))
-		result = sh_get_int_value(str, &begin);
+		result  = sh_get_int_value(str, &begin);
 	else
 		sh()->abort_cmd = 1;
 	return (result);
