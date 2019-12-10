@@ -25,7 +25,7 @@ int		sh_check_value(char *str)
 		return (1);
 }
 
-long int	sh_find_arth_var_value(char **str)
+char		*sh_find_arth_var_value(char **str)
 {
 	t_env *env;
 
@@ -34,7 +34,7 @@ long int	sh_find_arth_var_value(char **str)
 		env = env->next;
 	ft_memdel((void**)str);
 	if (env && sh_check_value(env->value))
-		return (sh_long_atoi(env->value));
+		return (env->value);
 	sh()->abort_cmd = 1;
 	return (0);
 }
@@ -61,7 +61,6 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 	sub[i] = '\0';
 	free(*str);
 	*str = sub;
-	printf("str = %s\n", *str); 
 }
 
 void		sh_record_arth(char **str, int i)
@@ -80,11 +79,10 @@ void		sh_record_arth(char **str, int i)
 	i_cpy = i;
 	while ((*str)[i] && (*str)[i] != '\t' && (*str)[i] != ' '
 			&& (*str)[i] != '\n' && !(sh_all_char_operator((*str)[i])))
-		name[i_sub++] = str[i++];
+		name[i_sub++] = (*str)[i++];
 	name[i_sub] = '\0';
 	name = sh_find_arth_var_value(&name);
 	sh_sub_var(name, str, i_cpy, i);
-	exit (-1);
 }
 
 int		sh_check_valid_var_name(char *str, int i)
@@ -106,16 +104,15 @@ int		sh_valid_arith(char **str)
 
 	i = 0;
 	par = 0;
-	return (1);
-	while (str[i] && !(sh()->abort_cmd))
+	while ((*str)[i] && !(sh()->abort_cmd))
 	{
-		if (str[i] == '(')
+		if ((*str)[i] == '(')
 			par++;
-		else if (str[i] == ')')
+		else if ((*str)[i] == ')')
 			par--;
-		else if (!(sh_all_char_operator(str[i])))
+		else if (!(sh_all_char_operator((*str)[i])))
 		{
-			if (sh_check_valid_var_name(str, i)
+			if (sh_check_valid_var_name(*str, i))
 				sh_record_arth(str, i);
 		}
 		i++;

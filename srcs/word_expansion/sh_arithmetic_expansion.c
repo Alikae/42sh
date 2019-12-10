@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/10 17:16:05 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/10 19:10:31 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,63 +277,6 @@ long int		sh_long_atoi(const char *s1)
 	return (nega == '-' ? -nb : nb);
 }
 
-int			sh_error_expression_name(char *str)
-{
-	printf("42sh: bad math expression: (error is \"%s\"\n", str);
-	return (0);
-}
-
-int			sh_check_value(char *str)
-{
-	int		i;
-	
-	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-		i++;
-	while (str[i] && ((str[i] >= '0' && str[i] <= '9') || sh_all_char_operator(str[i])))
-		i++;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-		i++;
-	if (str[i])
-		return (sh_error_expression_name(str + i));
-	else
-		return (1);
-}
-
-long int	sh_find_arth_var_value(char **str)
-{
-	t_env *env;
-
-	env = sh()->params;
-	while (env && (ft_strcmp(*str, env->key) != 0))
-		env = env->next;
-	ft_memdel((void**)str);
-	if (env && sh_check_value(env->value))
-		return (sh_long_atoi(env->value));
-	sh()->abort_cmd = 1;
-	return (0);
-}
-
-long int	sh_record_arth(char *str, int i)
-{
-	int		i_cpy;
-	int		i_sub;
-	char	*name;
-
-	i_cpy = i;
-	i_sub = 0;
-	while (str[i_cpy] && str[i_cpy] != ' ' && str[i_cpy] != '\n'
-		&& str[i_cpy] != '\t' && !(sh_all_char_operator(str[i_cpy])))
-		i_cpy++;
-	if (!(name = malloc(i_cpy - i + 1)))
-		exit(-1);
-	while (str[i] && str[i] != '\t' && str[i] != ' '
-		&& str[i] != '\n' && !(sh_all_char_operator(str[i])))
-		name[i_sub++] = str[i++];
-	name[i_sub] = '\0';
-	return (sh_find_arth_var_value(&name));
-}
-
 long int	sh_get_int_value(char *str, int *begin)
 {
 	long int result;
@@ -342,7 +285,6 @@ long int	sh_get_int_value(char *str, int *begin)
 	opt = 0;
 	result = 0;
 	sh_check_options(str, begin, &opt, 0);
-	result = sh_record_arth(str, *begin);
 	if (opt == 1)
 		result--;
 	else if (opt == 2)
@@ -350,18 +292,6 @@ long int	sh_get_int_value(char *str, int *begin)
 	else if (opt == 3)
 		result++;
 	return (result);
-}
-
-int			sh_check_valid_var_name(char *str, int i)
-{
-	while (str[i] != '\t' && str[i] != ' ' && str[i] != '\n'
-		&& !(sh_all_char_operator(str[i])) && str[i])
-	{
-		if (str[i] >= '0' && str[i] <= '9')
-			return (0);
-		i++;
-	}
-	return (1);
 }
 
 long int	sh_find_number(char *str, int begin)
@@ -375,8 +305,6 @@ long int	sh_find_number(char *str, int begin)
 		begin++;
 	if (str[begin] >= '0' && str[begin] <= '9')
 		result = sh_atoi_index(str, &begin);
-	else if (sh_check_valid_var_name(str, begin))
-		result  = sh_get_int_value(str, &begin);
 	else
 		sh()->abort_cmd = 1;
 	return (result);
@@ -498,7 +426,7 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
-	if (sh_valid_arith(exp->name))
+	if (sh_valid_arith(&(exp->name)))
 	{
 		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 		result = sh_exec_arith(arith);
