@@ -131,6 +131,7 @@ int			sh_reader(char **command, t_hist *hist)
 		exit(1);
 	*command = (char*)ft_memalloc(1);
 	getcommand(command, term, hist);
+	ft_memdel((void**)&hist->current);
 	term = NULL;
 	return (1);
 }
