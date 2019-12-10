@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/04 23:14:33 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/10 18:35:34 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ typedef struct	s_arith
 
 void	sh_subsh_quote(t_exp *exp, short *quote);
 void	sh_spetial_quote(char **content);
-int		sh_word_expansion(t_exp *exp);
+int	sh_word_expansion(t_exp *exp);
 void	sh_parameter_expansion(t_exp *exp);
-int		sh_tilde_expansion(char **content, t_env *env);
+int	sh_tilde_expansion(char **content, t_env *env);
 t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs);
 void	sh_find_quote(t_split *splt, short quote);
-int		sh_expansion_size(char *content, int i);
+int	sh_expansion_size(char *content, int i);
 t_token	*sh_expansion(char *content, t_env **env, short ifs);
 void	sh_print_exp(t_exp *exp, char *where);
 void	sh_record_name(t_exp *exp);
@@ -69,5 +69,7 @@ void	sh_simple_expansion(t_exp *exp);
 void	sh_subsh_expansion(t_exp *exp);
 void	sh_arithmetic_expansion(t_exp *exp);
 void	sh_str_start_end(char **dest, char *src, int i, int n);
-int		sh_valid_arith(char *str);
+int	sh_valid_arith(char **str);
+int 	sh_all_char_operator(char c);
+
 #endif
