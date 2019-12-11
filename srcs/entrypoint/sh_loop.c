@@ -154,7 +154,7 @@ int		sh_loop(void)
 			//printf("%i - %s -\n", strlen(input), input);
 			//ft_tab_strdel(&ln_buff); //BECAME STRDEL
 			//printf("-%s-\n", input);
-			free(ln_buff);
+			ft_memdel((void**)&ln_buff);
 			sh_init_cmd(input);
 			if ((p->ast = tokenize_input(input)))//line
 			{
@@ -176,7 +176,7 @@ int		sh_loop(void)
 				ft_putstr("$->");//prompt PSX
 		}
 		//
-		free(input);
+		ft_memdel((void**)&input);
 		check_jobs_status(p);
 	}
 	return (1);

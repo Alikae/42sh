@@ -104,9 +104,9 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	while (k != 0 && *command && j > 0)
 	{
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
-			exit(1);
+			return (*command);
 		if (tcgetattr(0, &sh()->orig_termios))
-			exit(1);
+			return (*command);
 		sh_tty_cbreak(1, sh()->orig_termios);
 		sh_reprompt(i, command);
 		ft_memdel((void**)&buf);

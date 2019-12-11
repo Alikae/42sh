@@ -53,14 +53,11 @@ int		sh_script(const char *path)
 	//doesnt throw error omn script "WHILE"
 	if (input && *input && (ast = tokenize_input(input)))//line
 	{
-		ft_memdel((void**)&input);
 		//HANDLE SYNTAX ERROR
 	//	print_all_tokens(p, ast, 0);
 		p->abort_cmd = 0;
 		exec_script(p, ast, 0);
 	}
-	if (!input)
-		ft_memdel((void**)&input);
 	return (1);
 }
 

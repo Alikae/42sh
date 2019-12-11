@@ -33,6 +33,6 @@ char		**tab_realloc(char **tabl, char *line)
 		new[i] = ft_strdup(line);
 		new[i + 1] = NULL;
 	}
-	ft_free_tabstr(tabl);
+	ft_tab_strdel(tabl);
 	return (new);
 }
