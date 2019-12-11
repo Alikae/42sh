@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/12/07 08:01:21 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/12/08 17:15:42 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -110,9 +110,19 @@ C_FILES_executer = \
 	sh_exec_arg.c \
 	sh_exec_default.c \
 	exec_script.c \
+	exec_prgm.c \
+	fd_handler.c \
+	block_wait.c \
+	functions_handler.c \
+	get_path.c \
+	generate_redirections.c \
 	exec_compound.c \
+	prepare_child.c \
+	redirections_utils.c \
+	assigns_handler.c \
 	exec_simple_command.c \
-	redirections_handler.c
+	redirections_handler.c \
+	open_files_handler.c
 
 C_FILES_debug_mode = \
 		     debug_mode.c
