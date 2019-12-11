@@ -36,8 +36,8 @@ void	sh_shdel(t_sh **shell)
 	ft_tab_strdel(&(s->aliases));
 	ft_strdel(&(s->bucopy));
 	ft_strdel(&(s->buselect));
-	ft_strdel(&(s->user));
-	//ft_strdel(&(s->dir)); // -> SIGABORT
+	s->user = NULL;
+	s->dir = NULL;
 	if (s->is_interactive)
 		ft_strdel(&(s->cmd));
 	sh_job_del(&(s->jobs));

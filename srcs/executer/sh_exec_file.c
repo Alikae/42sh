@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/08 18:01:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/11 22:38:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int		sh_script(const char *path)
 	//doesnt throw good error on script "WHILE"
 	if (input && *input && (ast = tokenize_input(input)))
 	{
+		ft_memdel((void**)&input);
 		p->abort_cmd = 0;
 		exec_script(p, ast);
 	}
