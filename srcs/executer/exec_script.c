@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_script.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 18:43:20 by thdelmas          #+#    #+#             */
+/*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
+/*   Updated: 2019/12/09 11:35:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +34,7 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 		return (exec_compound_for(p, token_compound));
 	else if (type == SH_SUBSH)
 		return (exec_compound_subsh(p, token_compound));
-	return(exec_script(p, token_compound->sub));
+	return (exec_script(p, token_compound->sub));
 }
 
 t_token	*find_cmd_name(t_token *tok)
@@ -49,38 +50,41 @@ t_token	*find_cmd_name(t_token *tok)
 
 int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
-	int	nb_redirections;
-	int	ret;
+	int		nb_redirections;
 	t_token	*tok;
-	int	nb_assign;
+	int		nb_assign;
 
 	tok = find_cmd_name(token_begin);
 	if (tok && is_compound(tok->type))
 	{
-		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)//PUT IN ENV
-		{
-			p->abort_cmd = 1;
-			printf("SH_NESTED_COMPOUND_LIMIT REACHED\nAbort command\n");
-			return (1/*ERROR CODE*/);
-		}
+		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
+			printf("NEST_COMPOUND_LIMIT REACHED\nAbort %d\n", p->abort_cmd = 1);
+		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
+			return (-121);
 		p->nb_nested_compounds++;
-		//
 		nb_assign = 0;
-		nb_redirections = stock_redirections_assignements_compound(p, token_begin, token_end, &nb_assign);//TO SEE
-		ret = (!p->abort_cmd) ? exec_compound_command(p, tok, tok->type) : -125;
+		nb_redirections = stock_redirections_assignements_compound(p,
+				token_begin, token_end, &nb_assign);
+		tok = (t_token*)(uint64_t)((!p->abort_cmd) ? exec_compound_command(p,
+					tok, tok->type) : -125);
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 		del_n_assign_lst(p, nb_assign);
 		p->nb_nested_compounds--;
 	}
 	else
-		ret = exec_simple_command(p, token_begin, token_end);
-	return (ret);
+		tok = (t_token*)(uint64_t)exec_simple_command(p, token_begin,
+				token_end);
+	return ((int)tok);
 }
 
-int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_token *token_end, int pipe1, int pipe2)
+int		exec_command_in_background_closing_pipe(t_token *token_begin,
+		t_token *token_end, int pipe1, int pipe2)
 {
-	int child_pid;
+	int			child_pid;
+	t_pipe_lst	*pipe_lst;
+	t_sh		*p;
 
+	p = sh();
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
 		exit(1);
@@ -88,42 +92,19 @@ int		exec_command_in_background_closing_pipe(t_sh *p, t_token *token_begin, t_to
 	{
 		return (child_pid);
 	}
-	//close(0);
-
-	t_pipe_lst	*pipe_lst = sh()->pipe_lst;
+	pipe_lst = sh()->pipe_lst;
 	while (pipe_lst)
 	{
 		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
-		{
-			//printf("[%i] close %i\n", getpid(), pipe_lst->pipe[0]);
 			if (pipe_lst->pipe[0] > 2)
 				close(pipe_lst->pipe[0]);
-		}
 		if (pipe_lst->pipe[1] != pipe1 && pipe_lst->pipe[1] != pipe2)
-		{
-			//printf("[%i] close %i\n", getpid(), pipe_lst->pipe[1]);
 			if (pipe_lst->pipe[1] > 2)
 				close(pipe_lst->pipe[1]);
-		}
 		pipe_lst = pipe_lst->next;
 	}
-	//foreach pipe in pipe_lt
-	//	if (!= pipe_in || pipe_out)
-	//		close
-	//
-	//CLOSE EVERY PIPES BUT NEEDEDS?
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//
 	exec_command(p, token_begin, token_end);
 	exit(1);
-	//CREATE JOB?
-	//fork
-	//in parent
-	//	return;
-	//in child
-	//	exec_command(p, token_begin, token_end);
-	//	exit(0); ?
-	return (0);
 }
 
 void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
@@ -139,37 +120,43 @@ void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
 		del_n_redirect_lst(&sh()->redirect_lst, (fd_in != -1) + (fd_out != -1));
 }
 
-void	exec_pipeline_recursively(t_sh *p, t_token *token_begin, t_token *token_end, int prev_pipe)
+int		exec_pipeline_recursively(t_sh *p, t_token *token_begin,
+		t_token *token_end, int prev_pipe)
 {
 	t_token	*next_separator;
 	int		next_pipe[2];
 
-	next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators);
+	next_separator = find_token_by_key_until(token_begin, token_end, &p->type,
+			&p->pipeline_separators);
 	if (!next_separator || next_separator->type != SH_OR)
 	{
 		toggle_redirect_pipe(1, prev_pipe, p->extern_pipe);
 		p->force_setpgrp_setattr = 1;
-		p->pgid_current_pipeline = exec_command_in_background_closing_pipe(p, token_begin, token_end, prev_pipe, p->extern_pipe);
-		p->force_setpgrp_setattr = 0;
+		p->pgid_current_pipeline = exec_command_in_background_closing_pipe(
+				token_begin, token_end, prev_pipe, p->extern_pipe);
 		toggle_redirect_pipe(0, prev_pipe, p->extern_pipe);
-		return;
+		return (1 + (p->force_setpgrp_setattr = 0));
 	}
-	pipe(next_pipe);//PROTECT
-	printf("[%i] pipe [%i %i]\n", getpid(), next_pipe[0], next_pipe[1]);
+	if (pipe(next_pipe) < 0)
+		return (-1);
 	push_pipe_lst(&p->pipe_lst, next_pipe);
-	exec_pipeline_recursively(p, next_separator->next, token_end, next_pipe[0]);
+	if (exec_pipeline_recursively(p, next_separator->next, token_end,
+				next_pipe[0]) < 0)
+		return (-1);
 	toggle_redirect_pipe(1, prev_pipe, next_pipe[1]);
-	exec_command_in_background_closing_pipe(p, token_begin, next_separator, prev_pipe, next_pipe[1]);
+	exec_command_in_background_closing_pipe(token_begin, next_separator,
+			prev_pipe, next_pipe[1]);
 	toggle_redirect_pipe(0, prev_pipe, next_pipe[1]);
+	return (1);
 }
 
-void	setup_pipeline_handle_bang(t_sh *p, t_token **p_token_begin, t_token *token_end, int *bang)
+void	setup_pipeline_handle_bang(t_sh *p, t_token **p_token_begin,
+		t_token *token_end, int *bang)
 {
 	p->pgid_current_pipeline = 0;
 	p->index_pipeline_begin = (*p_token_begin)->index;
 	p->index_pipeline_end = (token_end) ? token_end->index : -1;
 	*bang = 0;
-	//NOR FIRST TOKEN
 	if ((*p_token_begin)->type == SH_BANG)
 	{
 		*bang = 1;
@@ -179,7 +166,9 @@ void	setup_pipeline_handle_bang(t_sh *p, t_token **p_token_begin, t_token *token
 
 int		find_next_pipe(t_sh *p)
 {
-	t_redirect_lst *rlst = p->redirect_lst;
+	t_redirect_lst *rlst;
+
+	rlst = p->redirect_lst;
 	while (rlst)
 	{
 		printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
@@ -192,7 +181,9 @@ int		find_next_pipe(t_sh *p)
 
 int		find_previous_pipe(t_sh *p)
 {
-	t_redirect_lst *rlst = p->redirect_lst;
+	t_redirect_lst *rlst;
+
+	rlst = p->redirect_lst;
 	while (rlst)
 	{
 		printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
@@ -207,34 +198,35 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int		bang;
 	int		tmp;
-
+	int		tmp2;
+	int		prev_pipe;
 	t_token *next_sep;
-	//track abort_cmd
+
 	if (token_begin == token_end)
 		return ;
 	setup_pipeline_handle_bang(p, &token_begin, token_end, &bang);
-	if ((next_sep = find_token_by_key_until(token_begin, token_end, &p->type, &p->pipeline_separators)) && next_sep->type == SH_OR)
+	if ((next_sep = find_token_by_key_until(token_begin, token_end, &p->type,
+					&p->pipeline_separators)) && next_sep->type == SH_OR)
 	{
-		//
 		tmp = p->extern_pipe;
 		p->extern_pipe = find_next_pipe(p);
-		//
-		int prev_pipe = find_previous_pipe(p);
-		//
-		dprintf(2, "[%i]prev_pipe %i next %i\n", getpid(), prev_pipe, p->extern_pipe);
-		exec_pipeline_recursively(p, token_begin, token_end, prev_pipe);
+		prev_pipe = find_previous_pipe(p);
+		if (exec_pipeline_recursively(p, token_begin, token_end, prev_pipe) < 0)
+		{
+			delete_close_all_pipe_lst(p->pipe_lst);
+			p->pipe_lst = 0;
+			return ;
+		}
 		delete_close_all_pipe_lst(p->pipe_lst);
 		p->pipe_lst = 0;
-		int tmp = p->pgid_current_pipeline;
+		tmp2 = p->pgid_current_pipeline;
 		p->pgid_current_pipeline = 0;
-		p->last_cmd_result = block_wait(p, tmp, 0);
+		p->last_cmd_result = block_wait(p, tmp2, 0);
 		if (!p->process_is_stopped)
 		{
-			kill(-1 * tmp, SIGKILL);
+			kill(-1 * tmp2, SIGKILL);
 		}
-		//
 		p->extern_pipe = tmp;
-		//
 	}
 	else
 		p->last_cmd_result = exec_command(p, token_begin, token_end);
@@ -251,9 +243,11 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 	prev_separator = 0;
 	while (token_begin && token_begin != token_end && !p->abort_cmd)
 	{
-		next_separator = find_token_by_key_until(token_begin, token_end, &p->type, &p->and_or_separators);
+		next_separator = find_token_by_key_until(token_begin, token_end,
+				&p->type, &p->and_or_separators);
 		tmp = p->type;
-		if (!prev_separator || (prev_separator == SH_AND_IF && !p->last_cmd_result)
+		if (!prev_separator || (prev_separator == SH_AND_IF &&
+					!p->last_cmd_result)
 				|| (prev_separator == SH_OR_IF && p->last_cmd_result))
 			exec_pipeline(p, token_begin, next_separator);
 		prev_separator = tmp;
@@ -273,32 +267,32 @@ void	close_cpy_std_fds(t_sh *p)
 	p->cpy_std_fds[2] = -1;
 }
 
-void	create_process_group_give_terminal_access(t_sh *p, pid_t pid, int foreground)
+void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
+		int foreground)
 {
-		if (p->pgid_current_pipeline)
-			setpgid (pid, p->pgid_current_pipeline);
-		else
-			setpgid (pid, pid);
-		if (foreground || (p->force_setpgrp_setattr))//pipeline in background?
-		{
-			signal(SIGTTOU, SIG_IGN);
-			tcsetpgrp(0, pid);
-			tcsetattr(0, TCSADRAIN, &p->extern_termios);
-			signal(SIGTTOU, SIG_DFL);
-		}
+	if (p->pgid_current_pipeline)
+		setpgid(pid, p->pgid_current_pipeline);
+	else
+		setpgid(pid, pid);
+	if (foreground || (p->force_setpgrp_setattr))//pipeline in background?
+	{
+		signal(SIGTTOU, SIG_IGN);
+		tcsetpgrp(0, pid);
+		tcsetattr(0, TCSADRAIN, &p->extern_termios);
+		signal(SIGTTOU, SIG_DFL);
+	}
 }
 
-int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
-{//protec fork?
+int		fork_process(t_sh *p, int foreground)
+{
 	int		child_pid;
 	int		create_pgrp;
 	pid_t	pid;
 
 	create_pgrp = 0;
-	if (p->pid_main_process == getpid()/**/ && p->is_interactive)
+	if (p->pid_main_process == getpid() && p->is_interactive)
 		create_pgrp = 1;
-	if ((child_pid = fork()) > 0)
-		;//dprintf(2, "[%i] FORK -> [%i](%sinteractive, %sground)\n", getpid(), child_pid, (p->is_interactive) ? "" : "non", (foreground) ? "fore" : "back");
+	child_pid = fork();
 	if (child_pid < 0)
 	{
 		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
@@ -310,12 +304,12 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 		create_process_group_give_terminal_access(p, pid, foreground);
 	if (!child_pid)
 	{
-			signal (SIGINT, SIG_DFL);
-			signal (SIGQUIT, SIG_DFL);
-			signal (SIGTSTP, SIG_DFL);
-			signal (SIGTTIN, SIG_DFL);
-			signal (SIGTTOU, SIG_DFL);
-			signal (SIGCHLD, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGTSTP, SIG_DFL);
+		signal(SIGTTIN, SIG_DFL);
+		signal(SIGTTOU, SIG_DFL);
+		signal(SIGCHLD, SIG_DFL);
 	}
 	if (!child_pid)
 	{
@@ -326,19 +320,18 @@ int		fork_process(t_sh *p, int /*conserve_foreground*/foreground/*?*/)
 	return (child_pid);
 }
 
-int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end)
+int		exec_and_or_in_background(t_sh *p, t_token *token_begin,
+		t_token *token_end)
 {
 	int child_pid;
 
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
 		return (-1);
-	//protec fork
 	if (child_pid == 0)
 	{
 		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
-		//free stuff or not?
 		exit(1);
 	}
 	else
@@ -349,7 +342,6 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin, t_token *token_end
 	return (0);
 }
 
-//TODO
 t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
 {
 	int	skip_newline;
@@ -357,11 +349,28 @@ t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
 	skip_newline = 1;
 	while (token_begin && token_begin != token_end)
 	{
-		if (token_begin->type == SH_SEMI || token_begin->type == SH_AND || (token_begin->type == SH_NEWLINE && !skip_newline))
+		if (token_begin->type == SH_SEMI || token_begin->type == SH_AND
+				|| (token_begin->type == SH_NEWLINE && !skip_newline))
 			return (token_begin);
-		if (token_begin->type == SH_WORD || token_begin->type == SH_ASSIGN || token_begin->type == SH_LESS || token_begin->type == SH_GREAT || token_begin->type == SH_DLESS || token_begin->type == SH_DGREAT || token_begin->type == SH_LESSAND || token_begin->type == SH_GREATAND || token_begin->type == SH_LESSGREAT || token_begin->type == SH_DLESSDASH || token_begin->type == SH_CLOBBER || token_begin->type == SH_IF || token_begin->type == SH_CASE || token_begin->type == SH_WHILE || token_begin->type == SH_UNTIL || token_begin->type == SH_FOR || token_begin->type == SH_BRACES || token_begin->type == SH_BANG || token_begin->type == SH_FUNC)
+		if (token_begin->type == SH_WORD || token_begin->type == SH_ASSIGN
+				|| token_begin->type == SH_LESS || token_begin->type == SH_GREAT
+				|| token_begin->type == SH_DLESS
+				|| token_begin->type == SH_DGREAT
+				|| token_begin->type == SH_LESSAND
+				|| token_begin->type == SH_GREATAND
+				|| token_begin->type == SH_LESSGREAT
+				|| token_begin->type == SH_DLESSDASH
+				|| token_begin->type == SH_CLOBBER
+				|| token_begin->type == SH_IF || token_begin->type == SH_CASE
+				|| token_begin->type == SH_WHILE
+				|| token_begin->type == SH_UNTIL || token_begin->type == SH_FOR
+				|| token_begin->type == SH_BRACES
+				|| token_begin->type == SH_BANG || token_begin->type == SH_FUNC)
 			skip_newline = 0;
-		else if (token_begin->type == SH_AND || token_begin->type == SH_OR || token_begin->type == SH_AND_IF || token_begin->type == SH_OR_IF || token_begin->type == SH_DSEMI)
+		else if (token_begin->type == SH_AND || token_begin->type == SH_OR
+				|| token_begin->type == SH_AND_IF
+				|| token_begin->type == SH_OR_IF
+				|| token_begin->type == SH_DSEMI)
 			skip_newline = 1;
 		token_begin = token_begin->next;
 	}

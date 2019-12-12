@@ -1,19 +1,40 @@
-#include "error.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fd_handler.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 14:43:54 by ede-ram           #+#    #+#             */
+/*   Updated: 2019/12/08 14:48:51 by ede-ram          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-typedef struct	s_fd
+#include "sh.h"
+
+void	save_std_fds(t_sh *p)
 {
-	int			usr_fd;
-	int			real_fd;
-	struct s_fd	*next;
-}				t_fd;
+	int	i;
 
-t_fd	*create_fd(int user_fd, int real_fd)
+	i = -1;
+	while (++i < 3)
+	{
+		if (p->cpy_std_fds[i] < 0)
+			p->cpy_std_fds[i] = dup(i);
+	}
+}
+
+void	restore_std_fds(t_sh *p)
 {
-	t_fd	*fd;
+	int	i;
 
-	if (!(fd = (t_fd*)malloc(sizeof(t_fd))))
-		exit(ERROR_MALLOC);
-	fd->usr_fd = user_fd;
-	fd->real_fd = real_fd;
-	return (fd);
+	i = -1;
+	while (++i < 3)
+	{
+		if (p->cpy_std_fds[i] < 0)
+			continue;
+		dup2(p->cpy_std_fds[i], i);
+		close(p->cpy_std_fds[i]);
+		p->cpy_std_fds[i] = -1;
+	}
 }
