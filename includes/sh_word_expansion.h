@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/10 18:35:34 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/12 17:52:44 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void	sh_simple_expansion(t_exp *exp);
 void	sh_subsh_expansion(t_exp *exp);
 void	sh_arithmetic_expansion(t_exp *exp);
 void	sh_str_start_end(char **dest, char *src, int i, int n);
-int	sh_valid_arith(char **str);
+void	sh_sub_arith_var(char **str);
 int 	sh_all_char_operator(char c);
+int		sh_valide_arith(char *str);
+char	**sh_strplit_arth(const char *s);
 
 #endif

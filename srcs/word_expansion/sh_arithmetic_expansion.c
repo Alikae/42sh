@@ -6,12 +6,11 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/10 19:10:31 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/12 17:26:28 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
-#include <stdio.h>
 
 int		sh_arithmetic_string_size(t_exp *exp)
 {
@@ -426,7 +425,11 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
-	if (sh_valid_arith(&(exp->name)))
+	sh_sub_arith_var(&(exp->name));
+	printf("la\n");
+	if (sh()->abort_cmd)
+		return ;
+	if (sh_valide_arith(exp->name))
 	{
 		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 		result = sh_exec_arith(arith);
