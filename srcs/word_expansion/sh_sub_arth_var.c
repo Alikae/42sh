@@ -69,9 +69,9 @@ void		sh_add_opt(char **name, short int opt)
 
 	i = 0;
 	(void) opt;
-	tab = sh_strplit_arth(*name);
+	tab = sh_strsplit_arth(*name);
 	while (tab[i])
-		printf("tab[i] = |%s|\n", tab[i++]);
+		printf("tab[%i] = |%s|\n", i,  tab[i++]);
 	exit (0);
 }
 
