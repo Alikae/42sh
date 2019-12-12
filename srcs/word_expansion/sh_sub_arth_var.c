@@ -49,7 +49,8 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 
 	j = 0;
 	i = 0;
-	if (!(sub = malloc(ft_strlen(value) + (end - begin))))
+	printf("%lu\n", ft_strlen(value) + ft_strlen(*str) - (end - begin));
+	if (!(sub = malloc(ft_strlen(value) + ft_strlen(*str) -  (end - begin))))
 		exit (-1);
 	while (i < begin)
 	{
@@ -69,16 +70,18 @@ unsigned int	sh_tab_len(char **tab)
 {
 	int		i;
 	int		j;
+	int		len;
 	
 	i = 0;
+	len = 0;
 	while (tab[i])
 	{
 		j = 0;
 		while (tab[i][j])
-			j++;
+			++j && ++len;
 		i++;
 	}
-	return (j);
+	return (len);
 }
 
 char		*sh_tab_fusion_free(char ***tab)
@@ -94,7 +97,6 @@ char		*sh_tab_fusion_free(char ***tab)
 		exit (-1);
 	while ((*tab)[i])
 	{
-		printf("tab[i] = |%s|\n", (*tab)[i]);
 		j = 0;
 		while ((*tab)[i][j])
 			name[i_name++] = (*tab)[i][j++];
@@ -128,8 +130,6 @@ void		sh_add_opt(char **name, short int opt)
 		i++;
 	}
 	*name = sh_tab_fusion_free(&tab);
-	printf("name = %s\n", *name);
-	exit (0);
 }
 
 void		sh_record_arth(char **str, int i, short int opt)
@@ -153,8 +153,14 @@ void		sh_record_arth(char **str, int i, short int opt)
 	if (!(name = sh_find_arth_var_value(&name)))
 		name = ft_strdup("0");	
 	if (opt)
+	{
+		printf("yo\n");
 		sh_add_opt(&name, opt);
+		i_cpy = i_cpy - 2;
+	}
 	sh_sub_var(name, str, i_cpy, i);
+	if (opt)
+		free(name);
 }
 
 int		sh_check_valid_var_name(char *str, int i)
@@ -175,10 +181,10 @@ void		sh_sub_arith_var(char **str)
 	short int	opt;
 
 	i = 0;
-	opt = 0;
 	while ((*str)[i] && !(sh()->abort_cmd))
 	{
-		if (!(sh_all_char_operator((*str)[i])))
+		opt = 0;
+		if (!(sh_all_char_operator((*str)[i])) && ((*str)[i] < 0 || (*str)[i] > 9))
 		{
 			if (i >= 2 && (*str)[i - 1] == '+' && (*str)[i - 2] == '+')
 				opt = 1;
@@ -186,6 +192,7 @@ void		sh_sub_arith_var(char **str)
 				opt = -1;
 			if (sh_check_valid_var_name(*str, i))
 				sh_record_arth(str, i, opt);
+			printf("str = %s\n", *str);
 		}
 		i++;
 	}
