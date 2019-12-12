@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/12 17:26:28 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/12 21:56:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,7 +387,7 @@ int		ft_number(long int n)
 	return (count);
 }
 
-char	*ft_long_itoa(long int n)
+char	*sh_long_itoa(long int n)
 {
 	char	*strnb;
 	int		i;
@@ -398,7 +398,7 @@ char	*ft_long_itoa(long int n)
 	if (n < 0)
 		test = 2;
 	if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
-		return (NULL);
+		exit (-1);
 	ft_bzero(strnb, test + i);
 	if (n < 0)
 		strnb[0] = '-';
@@ -433,6 +433,6 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	{
 		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 		result = sh_exec_arith(arith);
-		exp->value = ft_long_itoa(result);
+		exp->value = sh_long_itoa(result);
 	}
 }

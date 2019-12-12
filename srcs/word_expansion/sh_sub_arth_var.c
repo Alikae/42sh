@@ -13,12 +13,15 @@ int		sh_check_value(char *str)
 	int		i;
 
 	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-		i++;
-	while (str[i] && ((str[i] >= '0' && str[i] <= '9') || sh_all_char_operator(str[i])))
-		i++;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-		i++;
+	while (str[i])
+	{
+		while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+			i++;
+		while (str[i] && ((str[i] >= '0' && str[i] <= '9') || sh_all_char_operator(str[i])))
+			i++;
+		while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+			i++;
+	}
 	if (str[i])
 		return (sh_error_expression_name(str + i));
 	else
@@ -62,16 +65,70 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 	*str = sub;
 }
 
+unsigned int	sh_tab_len(char **tab)
+{
+	int		i;
+	int		j;
+	
+	i = 0;
+	while (tab[i])
+	{
+		j = 0;
+		while (tab[i][j])
+			j++;
+		i++;
+	}
+	return (j);
+}
+
+char		*sh_tab_fusion_free(char ***tab)
+{
+	int		j;
+	int		i;
+	int		i_name;
+	char	*name;
+
+	i = 0;
+	i_name = 0;
+	if (!(name = malloc(sh_tab_len(*tab))))
+		exit (-1);
+	while ((*tab)[i])
+	{
+		printf("tab[i] = |%s|\n", (*tab)[i]);
+		j = 0;
+		while ((*tab)[i][j])
+			name[i_name++] = (*tab)[i][j++];
+		i++;
+	}
+	name[i_name] = '\0';
+	i = 0;
+	while ((*tab)[i])
+		free((*tab)[i++]);
+	free(*tab);
+	*tab = NULL;
+	return (name);
+}
+
 void		sh_add_opt(char **name, short int opt)
 {
 	char	**tab;
 	int		i;
+	char	*cpy;
 
 	i = 0;
-	(void) opt;
 	tab = sh_strsplit_arth(*name);
 	while (tab[i])
-		printf("tab[i] = |%s|\n",  tab[i++]);
+	{
+		if (!(sh_all_char_operator(*tab[i])))
+		{
+			cpy = tab[i];
+			tab[i] = sh_long_itoa(sh_long_atoi(tab[i]) + opt);
+			free(cpy);
+		}
+		i++;
+	}
+	*name = sh_tab_fusion_free(&tab);
+	printf("name = %s\n", *name);
 	exit (0);
 }
 
