@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/13 02:43:56 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/13 04:01:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,7 +430,6 @@ void	sh_arithmetic_expansion(t_exp *exp)
 		return ;
 	if (sh_valide_arith(exp->name))
 	{
-		printf("la\n");
 		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 		result = sh_exec_arith(arith);
 		exp->value = sh_long_itoa(result);

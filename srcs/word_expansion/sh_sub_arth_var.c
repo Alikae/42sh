@@ -13,15 +13,12 @@ int		sh_check_value(char *str)
 	int		i;
 
 	i = 0;
-	printf("=====sh_check_value====\n");
 	while (str[i])
 	{
-		printf("%c", str[i]);
 		if ((str[i] > '9' || str[i] < '0') && !sh_all_char_operator(str[i]))
 			break ;
 		i++;
 	}
-	printf("\n=======================\n");
 	if (str[i])
 		return (sh_error_expression_name(str + i));
 	else
@@ -49,29 +46,21 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 
 	j = 0;
 	i = 0;
-	printf("string = %s\n", *str);
-	printf("malloc size = %i\n",ft_strlen(value) + ft_strlen(*str) - (end- begin + 2));
-	if (!(sub = malloc(ft_strlen(value) + ft_strlen(*str) - (end - begin + 2)))) //not work !!!!!!!
+	if (!(sub = malloc(ft_strlen(value) + (ft_strlen(*str) - (end - begin)) + 3)))
 		exit (-1);
-	printf("3\n");
 	while (i < begin)
 	{
 		sub[i] = (*str)[i];
 		i++;
 	}
-	printf("4\n");
 	sub[i++] = '(';
 	while (value[j])
 		sub[i++] = value[j++];
-	printf("5\n");
 	sub[i++] = ')';
-	printf("str[%i] = %s\n", end, *str);
 	while ((*str)[end])
 		sub[i++] = (*str)[end++];
-	printf("6\n");
 	sub[i] = '\0';
-	printf("sub = %s\n", sub);
-//	free(*str);
+	free(*str);
 	*str = sub;
 }
 
@@ -166,10 +155,8 @@ void		sh_record_arth(char **str, int i, short int opt)
 		sh_add_opt(&name, opt);
 		i_cpy = i_cpy - 2;
 	}
-	printf("1\n");
 	sh_sub_var(name, str, i_cpy, i);
-//	if (opt)
-		free(name);
+	free(name);
 }
 
 int		sh_check_valid_var_name(char *str, int i)
@@ -203,7 +190,6 @@ void		sh_sub_arith_var(char **str)
 			if (sh_check_valid_var_name(*str, i))
 				sh_record_arth(str, i, opt);
 		}
-	printf("str = %s\n", (*str));
 	i++;
 	}
 }
