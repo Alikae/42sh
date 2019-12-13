@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/13 18:39:39 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/13 20:29:19 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,9 +424,7 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	result = 0;
 	arith = NULL;
 	exp->i++;
-	printf("1\n");
 	sh_record_arithmetic_string(exp);
-	printf("2\n");
 	sh_sub_arith_var(&(exp->name));
 	if (sh()->abort_cmd)
 		return ;
