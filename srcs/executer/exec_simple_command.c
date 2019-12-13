@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/13 05:24:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/13 05:32:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
 		if (!origin)
 		{
 			if (!(origin = sh_expansion(stack_argvs->content, &(p->params), 1)))
-				origin = create_token(SH_WORD, "", 0);
+				origin = create_token(SH_WORD, 0, 0);
 			actual = origin;
 		}
 		else
 		{
 			if (!(actual->next = sh_expansion(stack_argvs->content,
 					&(p->params), 1)))
-				actual->next = create_token(SH_WORD, "", 0);
+				actual->next = create_token(SH_WORD, 0, 0);
 		}
 		while (actual && actual->next)
 			actual = actual->next;
