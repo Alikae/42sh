@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:21:28 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/08 17:28:24 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/13 05:20:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	char	*equal;
 	t_token	*tmpt;
 
-	//reverse?
 	(*nb_assign)++;
 	tmp = p->assign_lst;
 	equal = ft_strchr(token->content, '=');
@@ -95,10 +94,17 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	p->assign_lst = sh_create_param(token->content);
 	*equal = '=';
 	p->assign_lst->value = ft_strdup(equal + 1);
-	tmpt = sh_expansion(p->assign_lst->value, &(p->params), 0);
-	free(p->assign_lst->value);
-	p->assign_lst->value = ft_strdup(tmpt->content);
-	free_ast(tmpt);
+	if ((tmpt = sh_expansion(p->assign_lst->value, &(p->params), 0)))
+	{
+		free(p->assign_lst->value);
+		p->assign_lst->value = ft_strdup(tmpt->content);
+		free_ast(tmpt);
+	}
+	else
+	{
+		free(p->assign_lst->value);
+		p->assign_lst->value = ft_strdup("");
+	}
 	p->assign_lst->next = tmp;
 }
 

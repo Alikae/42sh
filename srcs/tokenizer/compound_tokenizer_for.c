@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 08:00:25 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/07 08:01:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/13 02:40:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int		tokenize_for_in(t_toktool *t, t_token *compound_token)
 		sh()->alias_end--;
 	if (!(compound_token->sub->sub = tokenize_for_wordlist(t)))
 		return (0);
-	else
-		t->i = word_begin;
 	return (1);
 }
 
@@ -37,6 +35,7 @@ int		tokenize_for_do(t_toktool *t, t_token *compound)
 	int			word_begin;
 
 	word_begin = t->i;
+	printf("for: %s", t->input + t->i);
 	if (read_n_skip_word(t) == -1)
 		return (0);
 	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i
@@ -74,7 +73,7 @@ t_token	*tokenize_for(t_toktool *t, int word_begin)
 		forward_blanks(t);
 	if (t->input[t->i] == ';')
 		t->i++;
-	else if (compound_token->sub->sub && t->input[t->i] != '\n')
+	if (!compound_token->sub->sub && t->input[t->i] != '\n')
 		return (tokenize_for_errors(t, "missing separator (';' or NEWLINE) \
 		before DO in FOR", compound_token));
 		forward_blanks_newline(t);

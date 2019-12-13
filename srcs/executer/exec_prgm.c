@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:03:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/08 17:35:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/13 02:57:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 int	exec_path(t_sh *p, char *path, char **child_argv)
 {
-	int ret;
-	int child_pid;
+	int		ret;
+	int		child_pid;
+	char	**child_env;
 
 	child_pid = fork_process(p, 1);
 	ret = 0;
@@ -24,9 +25,10 @@ int	exec_path(t_sh *p, char *path, char **child_argv)
 		ret = block_wait(p, child_pid, 0);
 	else
 	{
-		execve(path, child_argv, transform_env_for_child(p->params)/*protec?FREE?*/);
+		if (!(child_env = transform_env_for_child(p->params)))
+			exit(-1);
+		execve(path, child_argv, transform_env_for_child(p->params));
 		dprintf(2, "Execve ErrorR\n");
-		sh()->exit = 1;
 		exit(1);
 	}
 	return (ret);
