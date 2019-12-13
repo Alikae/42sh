@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/08 16:20:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/12 03:52:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 	int	nb_redirections;
 
 	nb_redirections = 0;
-	if (type == SH_GREAT || type == SH_CLOBBER || type == SH_DGREAT || type == SH_DLESSDASH || type == SH_DLESS)
+	if (type == SH_GREAT || type == SH_CLOBBER || type == SH_DGREAT || type == SH_DLESSDASH || type == SH_DLESS || type == SH_LESSAND || type == SH_GREATAND)
 	{
 		if (fd_in == -1)
 		{
@@ -72,24 +72,23 @@ void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections)
 
 void	stock_lessgreatand(t_sh *p, t_token *token, int *nb_redirections)
 {
-	//TO REDO
 	int	fd_in;
 	int	fd_out;
 
-
+	printf("yolo\n");
 	(void)p;
 	if (!token->content || !*token->content)
-		fd_in = 1;//handle &
+		fd_in = (token->type == SH_LESSAND) ? 0 : 1;//handle &
 	else
 		fd_in = ft_atoi(token->content);
-	if (!token->content || !*token->content)
-		return ;//handle &
+	if (!token->sub->content || !*token->sub->content)
+		return ;
 	else
 		fd_out = ft_atoi(token->sub->content);
+	printf("%s\n", token->sub->content);
 	if (token->sub->content[0] == '-')
-		close(fd_in);
-	else
-		*nb_redirections += push_redirections(p, fd_out, fd_in, token->type);
+		fd_out = -1;
+	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }
 
 void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
@@ -105,12 +104,12 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	if (token->type == SH_LESSAND || token->type == SH_GREATAND)
 	{
 		stock_lessgreatand(p, token, nb_redirections);
+		printf("teset\n");
+		print_redirections(p, p->redirect_lst);
 		return ;
 	}
-	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		printf("d->[%s] %p\n", token->content, token->content);
 	if (!token->content || !*token->content)
-		fd_in = -1;//handle &
+		fd_in = 1;//handle &
 	else
 		fd_in = ft_atoi(token->content);
 	if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))

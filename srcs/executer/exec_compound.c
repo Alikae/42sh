@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/08 17:32:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/13 05:20:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	t_token *tmp_tok;
 
 	tmp_tok = sh_expansion(tok->sub->content, &p->params, 1);
-	if (!tmp_tok)//Does thotho can retrn null?
+	if (!tmp_tok)
 	{
 		printf("expansion error\n");
 		exit(1);

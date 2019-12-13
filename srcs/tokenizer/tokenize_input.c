@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/07 04:58:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/13 02:45:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
 	}
 	actual = origin->next;
 	delete_token(origin);
-	free(sh()->alias_stack);//DO EVERYWHERE WHEN QUITTING? DO OUTSIDE?
+	free(sh()->alias_stack);
 	sh()->alias_stack = 0;
 	return (actual);
 }
