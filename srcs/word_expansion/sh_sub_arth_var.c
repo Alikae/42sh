@@ -3,7 +3,7 @@
 
 int		sh_error_expression_name(char *str)
 {
-	printf("42sh: bad math expression: (error is \"%s\"\n", str);
+	printf("42sh: bad math expression: error is \"%s\"\n", str);
 	sh()->abort_cmd = 1;
 	return (0);
 }
@@ -13,15 +13,15 @@ int		sh_check_value(char *str)
 	int		i;
 
 	i = 0;
+	printf("=====sh_check_value====\n");
 	while (str[i])
 	{
-		while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-			i++;
-		while (str[i] && ((str[i] >= '0' && str[i] <= '9') || sh_all_char_operator(str[i])))
-			i++;
-		while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-			i++;
+		printf("%c", str[i]);
+		if ((str[i] > '9' || str[i] < '0') && !sh_all_char_operator(str[i]))
+			break ;
+		i++;
 	}
+	printf("\n=======================\n");
 	if (str[i])
 		return (sh_error_expression_name(str + i));
 	else
@@ -37,7 +37,7 @@ char		*sh_find_arth_var_value(char **str)
 		env = env->next;
 	ft_memdel((void**)str);
 	if (env && sh_check_value(env->value))
-		return (env->value);
+		return (ft_strdup(env->value));
 	return (0);
 }
 
@@ -49,20 +49,28 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 
 	j = 0;
 	i = 0;
-	printf("%lu\n", ft_strlen(value) + ft_strlen(*str) - (end - begin));
-	if (!(sub = malloc(ft_strlen(value) + ft_strlen(*str) -  (end - begin))))
+	printf("malloc size = %i\n",ft_strlen(value) + ft_strlen(*str) - (end- begin + 2));
+	if (!(sub = malloc(ft_strlen(value) + ft_strlen(*str) - (end - begin + 2))))
 		exit (-1);
+	printf("3\n");
 	while (i < begin)
 	{
 		sub[i] = (*str)[i];
 		i++;
 	}
+	printf("4\n");
+	sub[i++] = '(';
 	while (value[j])
 		sub[i++] = value[j++];
+	printf("5\n");
+	sub[i++] = ')';
+	printf("str[%i] = %s\n", end, *str);
 	while ((*str)[end])
 		sub[i++] = (*str)[end++];
+	printf("6\n");
 	sub[i] = '\0';
-	free(*str);
+	printf("%s\n", sub);
+//	free(*str);
 	*str = sub;
 }
 
@@ -151,15 +159,15 @@ void		sh_record_arth(char **str, int i, short int opt)
 		name[i_sub++] = (*str)[i++];
 	name[i_sub] = '\0';
 	if (!(name = sh_find_arth_var_value(&name)))
-		name = ft_strdup("0");	
+		name = ft_strdup("0");
 	if (opt)
 	{
-		printf("yo\n");
 		sh_add_opt(&name, opt);
 		i_cpy = i_cpy - 2;
 	}
+	printf("1\n");
 	sh_sub_var(name, str, i_cpy, i);
-	if (opt)
+//	if (opt)
 		free(name);
 }
 
@@ -184,7 +192,8 @@ void		sh_sub_arith_var(char **str)
 	while ((*str)[i] && !(sh()->abort_cmd))
 	{
 		opt = 0;
-		if (!(sh_all_char_operator((*str)[i])) && ((*str)[i] < 0 || (*str)[i] > 9))
+		if (!(sh_all_char_operator((*str)[i])) && ((str)[i] < 0 || (*str)[i] > 9)
+			&& (*str)[i] != ')' && (*str)[i] != '(')
 		{
 			if (i >= 2 && (*str)[i - 1] == '+' && (*str)[i - 2] == '+')
 				opt = 1;
@@ -192,8 +201,8 @@ void		sh_sub_arith_var(char **str)
 				opt = -1;
 			if (sh_check_valid_var_name(*str, i))
 				sh_record_arth(str, i, opt);
-			printf("str = %s\n", *str);
 		}
-		i++;
+	printf("str = %s\n", (*str));
+	i++;
 	}
 }
