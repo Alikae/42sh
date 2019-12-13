@@ -179,6 +179,8 @@ void		sh_sub_arith_var(char **str)
 	i = 0;
 	while ((*str)[i] && !(sh()->abort_cmd))
 	{
+		while ((*str)[i] == ' ' || (*str)[i] == '\t' || (*str)[i] == '\n')
+			i++;
 		opt = 0;
 		if (!(sh_all_char_operator((*str)[i])) && ((str)[i] < 0 || (*str)[i] > 9)
 			&& (*str)[i] != ')' && (*str)[i] != '(')
