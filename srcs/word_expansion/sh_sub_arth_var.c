@@ -49,8 +49,9 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 
 	j = 0;
 	i = 0;
+	printf("string = %s\n", *str);
 	printf("malloc size = %i\n",ft_strlen(value) + ft_strlen(*str) - (end- begin + 2));
-	if (!(sub = malloc(ft_strlen(value) + ft_strlen(*str) - (end - begin + 2))))
+	if (!(sub = malloc(ft_strlen(value) + ft_strlen(*str) - (end - begin + 2)))) //not work !!!!!!!
 		exit (-1);
 	printf("3\n");
 	while (i < begin)
@@ -69,7 +70,7 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 		sub[i++] = (*str)[end++];
 	printf("6\n");
 	sub[i] = '\0';
-	printf("%s\n", sub);
+	printf("sub = %s\n", sub);
 //	free(*str);
 	*str = sub;
 }
