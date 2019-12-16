@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:52:54 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/08 17:39:59 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/14 00:57:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*get_next_path(const char *path, char **all_paths, int i)
 	}
 	if (i > tablen(all_paths))
 		return (0);
-	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])//!*all_paths --> ':path1:path2' will fail
+	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])
 	{
 		cwd = getcwd(0, 0);
 		next_path = ft_strjoin_free(cwd, "/", cwd);

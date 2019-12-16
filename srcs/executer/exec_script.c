@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/09 11:35:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/16 18:00:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,11 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 	if (child_pid < 0)
 		exit(1);
 	if (child_pid)
-	{
 		return (child_pid);
-	}
 	pipe_lst = sh()->pipe_lst;
+	(void)pipe1;
+	(void)pipe2;
+	/*WAS HERE, DID It BREAK SMTHNG?
 	while (pipe_lst)
 	{
 		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
@@ -102,7 +103,7 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 			if (pipe_lst->pipe[1] > 2)
 				close(pipe_lst->pipe[1]);
 		pipe_lst = pipe_lst->next;
-	}
+	}*/
 	exec_command(p, token_begin, token_end);
 	exit(1);
 }
@@ -171,7 +172,7 @@ int		find_next_pipe(t_sh *p)
 	rlst = p->redirect_lst;
 	while (rlst)
 	{
-		printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
+		//printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
 		if (rlst->in == 1)
 			return (rlst->out);
 		rlst = rlst->next;
@@ -186,7 +187,7 @@ int		find_previous_pipe(t_sh *p)
 	rlst = p->redirect_lst;
 	while (rlst)
 	{
-		printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
+		//printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
 		if (rlst->in == 0)
 			return (rlst->out);
 		rlst = rlst->next;
@@ -194,12 +195,38 @@ int		find_previous_pipe(t_sh *p)
 	return (-1);
 }
 
+int		exec_pipeline_core(t_token *token_begin, t_token *token_end)
+{
+	int		tmp;
+	int		tmp2;
+	t_sh	*p;
+
+	p = sh();
+	tmp = p->extern_pipe;
+	p->extern_pipe = find_next_pipe(p);
+	if (exec_pipeline_recursively(p, token_begin, token_end,
+				find_previous_pipe(p)) < 0)
+	{
+		delete_close_all_pipe_lst(p->pipe_lst);
+		p->pipe_lst = 0;
+		return (0);
+	}
+	delete_close_all_pipe_lst(p->pipe_lst);
+	p->pipe_lst = 0;
+	tmp2 = p->pgid_current_pipeline;
+	p->pgid_current_pipeline = 0;
+	p->last_cmd_result = block_wait(p, tmp2, 0);
+	if (!p->process_is_stopped)
+	{
+		kill(-1 * tmp2, SIGKILL);
+	}
+	p->extern_pipe = tmp;
+	return (1);
+}
+
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int		bang;
-	int		tmp;
-	int		tmp2;
-	int		prev_pipe;
 	t_token *next_sep;
 
 	if (token_begin == token_end)
@@ -208,25 +235,8 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	if ((next_sep = find_token_by_key_until(token_begin, token_end, &p->type,
 					&p->pipeline_separators)) && next_sep->type == SH_OR)
 	{
-		tmp = p->extern_pipe;
-		p->extern_pipe = find_next_pipe(p);
-		prev_pipe = find_previous_pipe(p);
-		if (exec_pipeline_recursively(p, token_begin, token_end, prev_pipe) < 0)
-		{
-			delete_close_all_pipe_lst(p->pipe_lst);
-			p->pipe_lst = 0;
+		if (!exec_pipeline_core(token_begin, token_end))
 			return ;
-		}
-		delete_close_all_pipe_lst(p->pipe_lst);
-		p->pipe_lst = 0;
-		tmp2 = p->pgid_current_pipeline;
-		p->pgid_current_pipeline = 0;
-		p->last_cmd_result = block_wait(p, tmp2, 0);
-		if (!p->process_is_stopped)
-		{
-			kill(-1 * tmp2, SIGKILL);
-		}
-		p->extern_pipe = tmp;
 	}
 	else
 		p->last_cmd_result = exec_command(p, token_begin, token_end);
