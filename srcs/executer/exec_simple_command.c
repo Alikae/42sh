@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/16 17:56:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/16 22:38:10 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,45 @@ int		stock_redirections_assignements_compound(t_sh *p, t_token *token_begin,
 	return (nb_redirections);
 }
 
+int		is_exp_begin(const char *str, int *type)
+{
+	if (str[0] == '$' && str[1] == '(')
+	{
+		*type = (str[2] == '(') ? 2 : 1;
+		return (1);
+	}
+	return (0);
+}
+
+void	goto_exp_end(const char *str, int *i, int type)
+{
+	const char *end;
+
+	end = (type == 1) ? ")" : "))";
+	while (str[*i] && ft_strncmp(str + *i, end, type))
+		(*i)++;
+	if (!ft_strncmp(str + *i, end, type))
+		*i += type;
+}
+
+int		contain_equal_not_first_exterior_to_expansions(const char *str)
+{
+	int	i;
+	int	exp_type;
+
+	i = 0;
+	if (!str || !*str || str[0] == '=')
+		return (0);
+	while (str[++i])
+	{
+		if (str[i] == '=')
+			return (1);
+		if (is_exp_begin(str + i, &exp_type))
+			goto_exp_end(str, &i, exp_type);
+	}
+	return (0);
+}
+
 int		stock_redirections_assignements_argvs(t_token *token_begin,
 		t_token *token_end, int *nb_assign, char ***child_argv)
 {
@@ -129,8 +168,7 @@ int		stock_redirections_assignements_argvs(t_token *token_begin,
 	{
 		if (is_redirection_operator(token_begin->type))
 			stock_redirection(p, token_begin, &nb_redirections);
-		else if (!cmd_begin && (ft_strchr(token_begin->content,
-						'=') > token_begin->content))
+		else if (!cmd_begin && contain_equal_not_first_exterior_to_expansions(token_begin->content))
 			stock_assign(p, token_begin, nb_assign);
 		else if (token_begin->type == SH_WORD)
 		{
