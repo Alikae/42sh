@@ -43,6 +43,9 @@ char *operator(t_arith *arith)
 
 void bst_print_dot_aux(t_arith *a, int  stream)
 {
+	static int i;
+
+	i++;
     if (a->sub)
     {
         dprintf(stream, "    %s -> %s;\n", operator(a), operator(a->sub));
