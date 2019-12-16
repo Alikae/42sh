@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/12/12 19:55:24 by tcillard         ###   ########.fr        #
+#    Updated: 2019/12/16 22:45:29 by tcillard         ###   ########.fr        #
 #    Updated: 2019/12/08 17:15:42 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -181,7 +181,8 @@ C_FILES_word_expansion = \
 			 sh_subsh_expansion.c \
 			 sh_check_arith.c \
 			 sh_sub_arth_var.c \
-			 sh_arth_tab.c
+			 sh_arth_tab.c \
+			 dot_file.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))
