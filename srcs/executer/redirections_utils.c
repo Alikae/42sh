@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/12 03:52:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/14 01:18:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 			nb_redirections++;
 		}
 	}
-	else if (type == SH_LESSAND)
-	{
-	}
 	return (nb_redirections);
 }
 
@@ -75,7 +72,6 @@ void	stock_lessgreatand(t_sh *p, t_token *token, int *nb_redirections)
 	int	fd_in;
 	int	fd_out;
 
-	printf("yolo\n");
 	(void)p;
 	if (!token->content || !*token->content)
 		fd_in = (token->type == SH_LESSAND) ? 0 : 1;//handle &
@@ -85,7 +81,6 @@ void	stock_lessgreatand(t_sh *p, t_token *token, int *nb_redirections)
 		return ;
 	else
 		fd_out = ft_atoi(token->sub->content);
-	printf("%s\n", token->sub->content);
 	if (token->sub->content[0] == '-')
 		fd_out = -1;
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
@@ -104,8 +99,6 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	if (token->type == SH_LESSAND || token->type == SH_GREATAND)
 	{
 		stock_lessgreatand(p, token, nb_redirections);
-		printf("teset\n");
-		print_redirections(p, p->redirect_lst);
 		return ;
 	}
 	if (!token->content || !*token->content)

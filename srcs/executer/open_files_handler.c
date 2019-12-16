@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:06:19 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/12 03:32:28 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/14 00:57:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int		open_with_redirection_flags(char *real_path, t_toktype type)
 }
 
 int		create_open_file(t_sh *p, char *path, t_toktype type)
-{//LESSANDDASH greatanddash lessand greatand lessgreat
+{
 	int		fd;
 	int		was_malloc;
 	char	*real_path;

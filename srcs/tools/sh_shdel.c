@@ -6,7 +6,7 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:17:18 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/20 11:15:00 by jerry            ###   ########.fr       */
+/*   Updated: 2019/12/14 02:23:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	sh_shdel(t_sh **shell)
 	ft_strdel(&(s->buselect));
 	s->user = NULL;
 	s->dir = NULL;
-	if (s->is_interactive)
-		ft_strdel(&(s->cmd));
+//	if (s->is_interactive)
+	ft_strdel(&(s->cmd));
 	sh_job_del(&(s->jobs));
 	sh_hist_del(&(s->hist));
 	free(*shell);

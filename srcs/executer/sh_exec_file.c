@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/13 05:26:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/14 02:19:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int		sh_script(const char *path)
 	input = ft_strconv_w(input);
 	sh_init_cmd(input);
 	//doesnt throw good error on script "WHILE"
+	p->cmd = input;
 	if (input && *input && (ast = tokenize_input(input)))
 	{
 		ft_memdel((void**)&input);
@@ -56,7 +57,7 @@ int		sh_script(const char *path)
 		exec_script(p, ast);
 	}
 	else if (input && *input)
-		printf("Tokenize Error\n");//
+		printf("Tokenize Error-\n");
 	return (1);
 }
 
@@ -66,7 +67,7 @@ int		sh_exec_file(void)
 	int		i;
 
 	p = sh();
-	i = 0;
+	i = 1;
 	while (i < p->ac)
 		sh_script(p->av[i++]);
 	return (1);
