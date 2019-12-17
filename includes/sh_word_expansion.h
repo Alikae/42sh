@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/16 22:46:04 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/17 00:05:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ int		sh_valide_arith(char *str);
 char	**sh_strsplit_arth(const char *s);
 long int sh_long_atoi(const char *s1);
 char   *sh_long_itoa(long int n);
-void	bst_print_dot(t_arith *a, char *str);
+void	bst_print_dot(t_arith *a, char *str, char *arth);
 
 #endif
