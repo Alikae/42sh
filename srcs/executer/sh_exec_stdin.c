@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:56:39 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/19 23:03:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/08 18:01:55 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,13 @@ int	sh_exec_stdin(void)
 	}
 	free(buff);
 	sh_init_cmd(ret);
-	//---->vim script : "while"
-	//doesnt throw errror
-	if (ret && *ret && (sh()->ast = tokenize_input(ret)))//line
+	if (ret && *ret && (sh()->ast = tokenize_input(ret)))
 	{
 		print_all_tokens(sh(), sh()->ast, 0);
 		exec_script(sh(), sh()->ast);
 	}
 	else
-	{	printf("lala\n");
-	}
+		printf("Tokenize Error\n");
 	free(ret);
 	return (0);
 }

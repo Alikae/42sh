@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/01 14:42:32 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/24 19:00:28 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/17 20:30:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ t_env		*sh_env_params(char **ev)
 	char	*s1;
 	size_t	i;
 	t_env	*params;
-
-	s1 = NULL;
+	
 	if (ev && *ev)
 	{
 		i = ft_strclen(*ev, '=');

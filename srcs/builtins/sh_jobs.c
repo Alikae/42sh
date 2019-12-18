@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/19 19:46:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/16 16:29:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	sh_jobs(int ac, char **av, char **env)
 		job = *old_next;
 		if (waitpid(job->pid, &status, WNOHANG | WUNTRACED) < 0)
 		{
-			printf("[%i] Done: %s\n", job->pid, job->name);
+			printf("[%i] 2Done: %s\n", job->pid, job->name);
 			*old_next = job->next;
 			delete_job(job);
 			continue;
@@ -64,10 +64,10 @@ int	sh_jobs(int ac, char **av, char **env)
 		}
 		else if (WIFEXITED(status))
 		{
-			printf("[%i] Done :		'%s'\n", job->pid, job->name);
-			*old_next = job->next;
-			delete_job(job);
-			continue;
+		//	printf("[%i] 1Done :		'%s'\n", job->pid, job->name);
+		//	*old_next = job->next;
+		//	delete_job(job);
+		//	continue;
 		}
 		printf("[%i] %s:		'%s'\n", job->pid, job->status, job->name);
 		old_next = &((*old_next)->next);

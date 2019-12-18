@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:44:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/12 19:55:46 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/16 17:22:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ static void		sh_handle_sigint(void)
 	str = "[%i] CTRL-C: exiting non-interactive shell\n";
 	if (sh()->pid_main_process != getpid())
 	{
-		dprintf(sh()->dbg_fd, str, getpid());
-		printf("there\n");
+		dprintf(2, str, getpid());
 		exit(1);
 	}
 	sh()->abort_cmd = 1;
 }
 
-static void		sh_handle_signal(int sig)
+void		sh_handle_signal(int sig)
 {
+	//printf("signal %i\n", sig);
 	if (sig == SIGTSTP)
 		sh_handle_sigstp();
 	else if (sig == SIGINT)
@@ -69,7 +69,7 @@ static void		sh_handle_signal(int sig)
 
 void			sh_init_signals(void)
 {
-	int	sig;
+	int			sig;
 
 	sig = 0;
 	while (++sig < 32)

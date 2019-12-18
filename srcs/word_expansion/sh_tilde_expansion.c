@@ -6,12 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/07 04:58:00 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/17 20:32:42 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 # include <stdio.h>
+
 int		sh_find_env(t_env **env_cpy, char *find)
 {
 	while (*env_cpy && ft_strcmp((*env_cpy)->key, find) != 0)
@@ -74,7 +75,7 @@ void	sh_find_opt(t_env *env, char **content)
 		sh_find_env(&env, "OLDPWD");
 	else
 		sh_find_env(&env, "PWD");
-	if (env)
+	if (env && env->value)
 		sh_sub_tilde(content, env->value, 1);
 }
 
