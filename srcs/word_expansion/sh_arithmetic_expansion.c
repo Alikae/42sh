@@ -6,12 +6,11 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/07 07:22:19 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/17 01:44:10 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
-#include <stdio.h>
 
 int		sh_arithmetic_string_size(t_exp *exp)
 {
@@ -29,6 +28,18 @@ int		sh_arithmetic_string_size(t_exp *exp)
 		exp->i++;
 	}
 	return (exp->i - size);
+}
+
+int		sh_special_char_operator(char *str, int i)
+{
+	if (str[i] == '&' && str[i + 1] == '&')
+		return (1);
+	else if (str[i] == '|' && str[i + i] == '|')
+		return (1);
+	else if ((str[i] == '>' || str[i] == '<'
+		|| str[i] == '=' || str[i] == '!') && str[i + 1] == '=')
+		return (1);
+	return (0);
 }
 
 void	sh_init_arith(t_arith **arith)
@@ -130,20 +141,15 @@ void	sh_write_less_op(char *str, int i, t_arith **arith)
 
 void	sh_count_priority(char *c, int i, int count, int *less_count)
 {
-	if ((c[i] == '*' || c[i] == '/' || c[i] == '%')
-			&& (count + 3) < *less_count)
+	if (c[i] == '*' || c[i] == '/' || c[i] == '%')
 		*less_count = count + 3;
-	else if (((c[i] == '-' && c[i + 1] != '-')
-				|| (c[i] == '+' && c[i + 1] != '+'))
-			&& (count + 2) < *less_count)
-		*less_count = count + 2;
-	else if ((c[i] == '>' || c[i] == '<' || c[i] == '&'
-				|| c[i] == '|' || c[i] == '!' || c[i] == '=')
-			&& (count + 1) < *less_count)
+	else if (c[i] == '>' || c[i] == '<' || c[i] == '&'
+				|| c[i] == '|' || c[i] == '!' || c[i] == '='
+				|| c [i] == '-' || c[i] == '+')
 		*less_count = count + 1;
 }
 
-int		sh_all_operator_char(char c)
+int		sh_all_char_operator(char c)
 {
 	if (c == '-' || c == '+' || c == '*' || c == '/' || c == '%' || c == '|'
 				|| c == '=' || c == '&' || c == '>' || c == '<' || c == '!')
@@ -160,7 +166,7 @@ int		sh_is_number(char *str, int i, int end)
 	op = 0;
 	while (i <= end)
 	{
-		if (!(sh_all_operator_char(str[i])))
+		if (!(sh_all_char_operator(str[i])))
 			num = 1;
 		else if (num == 1 && op == 0)
 			op = 1;
@@ -169,6 +175,23 @@ int		sh_is_number(char *str, int i, int end)
 		i++;
 	}
 	return (1);
+}
+
+void	print_char(char *str, int begin)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (i == begin)
+			ft_putchar('|');
+		ft_putchar(str[i]);
+		if (i == begin)
+			ft_putchar('|');
+		i++;
+	}
+	ft_putchar('\n');
 }
 
 int		sh_is_valid_operator(char *str, int begin)
@@ -180,33 +203,31 @@ int		sh_is_valid_operator(char *str, int begin)
 	num = 0;
 	op = 0;
 	i = 0;
+	if (!(sh_all_char_operator(str[begin])))
+		return (0);
+	print_char(str, begin);
 	while (i < begin)
 	{
-		if (!(sh_all_operator_char(str[i])))
+		if (sh_all_char_operator(str[i]))
 			num = 1;
 		else if (str[i] >= '0' && str[i] <= '9')
-			num = 0;
+			num = 2;
 		i++;
 	}
-	i++;
-	if (str[i] && sh_all_operator_char(str[i]))
-		i++;
-	while (str[i] == ' ')
-		i++;
-	if (str[i] && num && !(sh_all_operator_char(str[i])))
+	if (num == 2)
 		return (1);
 	return (0);
 }
 
 int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 {
-	int		less_count;
+	int		actual_count;
 	int		old_less_op;
 	int		par;
 	int		i_less_op;
 
-	less_count = 2147483647;
-	old_less_op = 0;
+	actual_count = 0;
+	old_less_op = 21000000;
 	i_less_op = -1;
 	if (sh_is_number(str, begin, end))
 		return (-1);
@@ -218,10 +239,12 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 			par = par - 3;
 		if (sh_is_valid_operator(str,begin))
 		{
-			old_less_op = less_count;
-			sh_count_priority(str, begin, par, &less_count);
-			if (old_less_op > less_count)
+			sh_count_priority(str, begin, par, &actual_count);
+			if (old_less_op >= actual_count)
+			{
+				old_less_op = actual_count;
 				i_less_op = begin;
+			}
 		}
 		begin++;
 	}
@@ -230,40 +253,14 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	return (i_less_op);
 }
 
-void		sh_check_options(char *str, int *begin, short *opt, short where)
+long int		sh_long_atoi(const char *s1)
 {
-	if (str[*begin] == '-')
-	{
-		if (str[*begin + 1] == '-')
-		{
-			*opt = 1;
-			*begin = *begin + 2;
-		}
-		else if (where == 1)
-		{
-			*opt = 2;
-			*begin = *begin + 1;
-		}
-	}
-	else if (str[*begin] == '+')
-	{
-		if (str[*begin + 1] == '+')
-		{
-			*opt = 3;
-			*begin = *begin + 2;
-		}
-	}
-}
-
-int		sh_long_atoi(const char *s1)
-{
-	char	nega;
-	int		nb;
+	char		nega;
+	long int	nb;
 
 	nb = 0;
 	nega = '+';
-	while ((*s1 == '\t' || *s1 == '\n' || *s1 == '\f'
-				|| *s1 == ' ' || *s1 == '\r' || *s1 == '\v') && *s1)
+	while ((*s1 == '\t' || *s1 == '\n' || *s1 == ' ') && *s1)
 			s1++;
 	if (*s1 == '-' || *s1 == '+')
 	{
@@ -278,37 +275,25 @@ int		sh_long_atoi(const char *s1)
 	return (nega == '-' ? -nb : nb);
 }
 
-long int	sh_get_int_value(char *str, int *begin)
-{
-	long int result;
-	short	opt;
-	opt = 0;
-	result = 0;
-	sh_check_options(str, begin, &opt, 0);
-	result = sh_long_atoi(str);
-	if (opt == 1)
-		result--;
-	else if (opt == 2)
-		result = -result;
-	else if (opt == 3)
-		result++;
-	return (result);
-}
-
 long int	sh_find_number(char *str, int begin)
 {
 	short		opt;
 	long int	result;
 
 	result = 0;
-	opt = 0;
+	opt = 1;
 	while (str[begin] == '(' || str[begin] == ' ')
+		begin++;
+	if (str[begin] == '-')
+	{
+		begin++;
+		opt = -1;
+	}
+	else if (str[begin] == '+')
 		begin++;
 	if (str[begin] >= '0' && str[begin] <= '9')
 		result = sh_atoi_index(str, &begin);
-	else
-		result = sh_get_int_value(str, &begin);
-	return (result);
+	return (result * opt);
 }
 
 void	sh_init_ast(long int number, t_arith **arith)
@@ -323,7 +308,7 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 {
 	t_arith *arith;
 	int	end_cpy;
-
+	
 	sh_init_arith(&arith);
 	end_cpy = end;
 	end = sh_next_less_operator(str, begin, end, &arith);
@@ -332,7 +317,10 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 	else
 	{
 		arith->next = sh_creat_arithmetic_ast(str, begin, end - 1);
-		arith->sub = sh_creat_arithmetic_ast(str, end + 1, end_cpy);
+		if (!(sh_special_char_operator(str, end)))
+			arith->sub = sh_creat_arithmetic_ast(str, end + 1, end_cpy);
+		else
+			arith->sub = sh_creat_arithmetic_ast(str, end + 2, end_cpy);
 	}
 	return (arith);
 }
@@ -369,9 +357,8 @@ long int	sh_exec_arith(t_arith *arith)
 		return (sh_exec_arith(arith->next) != sh_exec_arith(arith->sub));
 	else if (arith->next_op == EQUAL)
 		return (sh_exec_arith(arith->next) == sh_exec_arith(arith->sub));
-	else if (arith->next_op == NUMBER)
+	else
 		return (arith->nb);
-	return (1);
 }
 
 int		ft_number(long int n)
@@ -389,7 +376,7 @@ int		ft_number(long int n)
 	return (count);
 }
 
-char	*ft_long_itoa(long int n)
+char	*sh_long_itoa(long int n)
 {
 	char	*strnb;
 	int		i;
@@ -400,7 +387,7 @@ char	*ft_long_itoa(long int n)
 	if (n < 0)
 		test = 2;
 	if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
-		return (NULL);
+		exit (-1);
 	ft_bzero(strnb, test + i);
 	if (n < 0)
 		strnb[0] = '-';
@@ -427,7 +414,13 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	arith = NULL;
 	exp->i++;
 	sh_record_arithmetic_string(exp);
-	arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
-	result = sh_exec_arith(arith);
-	exp->value = ft_long_itoa(result);
+	sh_sub_arith_var(&(exp->name));
+	if (sh()->abort_cmd)
+		return ;
+	if (sh_valide_arith(exp->name))
+	{
+		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
+		result = sh_exec_arith(arith);
+		exp->value = sh_long_itoa(result);
+	}
 }
