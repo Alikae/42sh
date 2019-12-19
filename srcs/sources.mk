@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/12/08 17:15:42 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/12/19 05:40:41 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,10 @@ C_FILES_entrypoint = \
 	sh_set_shlvl.c \
 	sh_init_path.c \
 	sh_init.c
+
+C_FILES_sh_printf = \
+			sh_printf.c \
+
 
 C_FILES_job_control = \
 		      t_job.c \

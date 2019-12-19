@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/16 18:00:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/19 05:42:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	if (tok && is_compound(tok->type))
 	{
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
-			printf("NEST_COMPOUND_LIMIT REACHED\nAbort %d\n", p->abort_cmd = 1);
+			sh_dprintf(2, "NEST_COMPOUND_LIMIT REACHED\nAbort %i\n", p->abort_cmd = 1);
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
 			return (-121);
 		p->nb_nested_compounds++;
