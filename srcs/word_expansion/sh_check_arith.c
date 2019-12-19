@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/17 01:41:20 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/19 01:47:20 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int		sh_valide_arith(char *str)
 	par = 0;
 	i = 0;
 	i = sh_skip_white_space(str, i);
+	printf("str = %s\n", str);
 	while (str[i])
 	{
 		if (!(sh_parenthesis_counter(str, &i, 0)))
@@ -97,6 +98,8 @@ int		sh_valide_arith(char *str)
 			return (sh_arth_syntax_error(str, i));
 		else
 			i = sh_skip_number(str, i);
+		if (!(sh_parenthesis_counter(str, &i, 0)))
+			return (sh_arth_syntax_error(str, i));
 		if (!(sh_check_operator(str, i)))
 			return (sh_arth_syntax_error(str, i));
 		while (sh_all_char_operator(str[i]))

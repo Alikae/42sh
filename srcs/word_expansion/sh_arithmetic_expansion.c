@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/17 01:44:10 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/19 01:44:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ void	sh_record_arithmetic_string(t_exp *exp)
 {
 	int		size;
 
+	printf("exp[%i] = %c\n",exp->i, exp->content[exp->i]);
 	size = sh_arithmetic_string_size(exp);
+	printf("size = %i\n", size);
 	exp->i = exp->i - size + 1;
 	if (!(exp->name = (char*)malloc(size + 1)))
 		exit (-1);
@@ -405,6 +407,34 @@ char	*sh_long_itoa(long int n)
 	return (strnb);
 }
 
+int		sh_arth_error_parenthesis(char *str)
+{
+	printf("42sh: %s: too much parenthesis\n", str);
+	sh()->abort_cmd = 1;
+	return (0);
+}
+int		sh_check_arth(char *name)
+{
+	int		par;
+	int		i;
+
+	par = 0;
+	i = 0;
+	while (name[i])
+	{
+		if (name[i] == ')' && par)
+			par++;
+		else if (name[i] == ')')
+			return (sh_arth_error_parenthesis(name));
+		else if (name[i] == '(')
+			par--;
+		i++;
+	}
+	if (par)
+		return (sh_arth_error_parenthesis(name));
+	return (1);
+}
+
 void	sh_arithmetic_expansion(t_exp *exp)
 {
 	t_arith		*arith;
@@ -413,6 +443,8 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	result = 0;
 	arith = NULL;
 	exp->i++;
+	if (!(sh_check_arth(exp->content)))
+		return ;
 	sh_record_arithmetic_string(exp);
 	sh_sub_arith_var(&(exp->name));
 	if (sh()->abort_cmd)
