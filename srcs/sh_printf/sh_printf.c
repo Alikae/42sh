@@ -17,7 +17,7 @@ void	print_int_recursively(int fd, t_print_info *info, long int i)
 	print_if_needed(fd, info);
 }
 
-void	print_int(int fd, va_list va, t_print_info *info)
+void	shpf_print_int(int fd, va_list va, t_print_info *info)
 {
 	long int	i;
 
@@ -31,7 +31,7 @@ void	print_int(int fd, va_list va, t_print_info *info)
 	print_int_recursively(fd, info, i);
 }
 
-void	print_str(int fd, va_list va, t_print_info *info)
+void	shpf_print_str(int fd, va_list va, t_print_info *info)
 {
 	char	*str;
 
@@ -44,7 +44,7 @@ void	print_str(int fd, va_list va, t_print_info *info)
 	}
 }
 
-void	print_char(int fd, va_list va, t_print_info *info)
+void	shpf_print_char(int fd, va_list va, t_print_info *info)
 {
 	unsigned char	c;
 
@@ -56,11 +56,11 @@ void	print_char(int fd, va_list va, t_print_info *info)
 void	conversion_multiplexer(int fd, va_list va, t_print_info *info, const char format)
 {
 	if (format == 'i')
-		print_int(fd, va, info);
+		shpf_print_int(fd, va, info);
 	else if (format == 's')
-		print_str(fd, va, info);
+		shpf_print_str(fd, va, info);
 	else if (format == 'c')
-		print_char(fd, va, info);
+		shpf_print_char(fd, va, info);
 }
 
 void	read_n_disp(int fd, va_list va, const char *format)
