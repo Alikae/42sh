@@ -54,13 +54,11 @@ int		sh_script(const char *path)
 	{
 		//HANDLE SYNTAX ERROR
 	//	print_all_tokens(p, ast, 0);
-		ft_memdel((void**)&input);
 		p->abort_cmd = 0;
 		exec_script(p, ast);
 	}
 	else if (input && *input)
 		printf("Tokenize Error-\n");
-	ft_memdel((void**)&input);
 	return (1);
 }
 

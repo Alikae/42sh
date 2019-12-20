@@ -14,6 +14,8 @@
 #include "sh_executer.h"
 #include "sh_job_control.h"
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 {
