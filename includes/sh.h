@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/07 03:54:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/19 05:39:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "libft.h"
 # include "sh_env.h"
 # include "sh_history.h"
+# include "sh_printf.h"
 # include <curses.h>
 //# include "sh_line.h"
 //# include "sh_redirections.h"

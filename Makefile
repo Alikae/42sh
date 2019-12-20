@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/12/07 03:44:33 by ede-ram          ###   ########.fr        #
+#    Updated: 2019/12/19 05:43:32 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SUB_DIRS := \
 	command_line \
 	command_edition \
 	entrypoint \
+	sh_printf \
 	builtins \
 	builtins/echo \
 	exitpoint \
