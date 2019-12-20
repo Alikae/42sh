@@ -65,7 +65,7 @@ void	sh_find_home(t_env *env, char **content)
 	if (home)
 	{
 		sh_sub_tilde(content, home, 0);
-		free(home);
+		ft_memdel((void**)&home);
 	}
 }
 

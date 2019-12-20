@@ -31,17 +31,11 @@ void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 
 void	sh_free_exp(t_exp *exp)
 {
-	if (exp->value)
-		free(exp->value);
-	if (exp->content)
-		free(exp->content);
-	if (exp->name)
-		free(exp->name);
-	free(exp->tok->content);
-	free(exp->tok);
-	exp->name = NULL;
-	exp->value = NULL;
-	exp->content = NULL;
+	ft_memdel((void**)&exp->value);
+	ft_memdel((void**)&exp->content);
+	ft_memdel((void**)&exp->name);
+	ft_memdel((void**)&(exp->tok->content));
+	ft_memdel((void**)&exp->tok);
 }
 
 int		sh_word_error(t_exp *exp)
@@ -82,9 +76,8 @@ void	sh_sub_token(t_exp *exp)
 		exp->tok->content[exp->first_i++] = cpy[j++];
 	exp->tok->content[exp->first_i] = '\0';
 	exp->first_i = ft_strlen(exp->value);
-	free(exp->name);
-	exp->name = NULL;
-	free(cpy);
+	ft_memdel((void**)&exp->name);
+	ft_memdel((void**)&cpy);
 }
 
 int		sh_in_expansion(t_exp *exp)
@@ -109,9 +102,7 @@ int		sh_in_expansion(t_exp *exp)
 	exp->content = ft_strdup(exp->tok->content);
 	exp->i = exp->first_i - 1;
 	exp->find = *(exp->env);
-	if (exp->value)
-		free(exp->value);
-	exp->value = NULL;
+	ft_memdel((void**)&exp->value);
 	return (0);
 }
 
