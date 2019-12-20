@@ -20,6 +20,8 @@ void	sh_prompt(void)
 	char *prompt;
 	char *tmp;
 
+	prompt = NULL;
+	tmp = NULL;
 	if (!(tmp = sh_getev_value("PS1")))
 	{
 		if (!(tmp = ft_strnew(PATH_MAX + 1)))
@@ -30,9 +32,9 @@ void	sh_prompt(void)
 		tmp = ft_strjoin(prompt, "\033[0m");
 		free(prompt);
 		prompt = ft_strjoin(tmp, "\033[0;33m c> \033[0m");
-		free(tmp);
+		ft_memdel((void**)&tmp);
 		ft_putstr(prompt);
-		free(prompt);
+		ft_memdel((void**)&prompt);
 	}
 	else
 		ft_putstr(tmp);

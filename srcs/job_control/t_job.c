@@ -8,8 +8,8 @@ void	delete_job(t_job *job)
 //	printf("delete job %s\n", job->name);
 	if (!job)
 		return ;
-	free(job->name);
-	free(job);
+	ft_memdel((void**)&job->name);
+	ft_memdel((void**)&job);
 }
 
 void	delete_all_jobs(t_job *job)

@@ -24,6 +24,6 @@ void	sh_env_del(t_env **env)
 	ft_strdel(&(ev->key));
 	ft_strdel(&(ev->value));
 	sh_env_del(&(ev->next));
-	free(*env);
-	*env = NULL;
+	ft_memdel((void**)env);
+	ev = NULL;
 }

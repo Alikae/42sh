@@ -35,7 +35,7 @@ int	sh_loop_read(int *complete, char **input, t_sh *p, char **ln)
 		*input = ft_strjoin_free(*input, "\n", *input);
 	*input = ft_strjoin_free(*input, *ln, *input);
 	//ft_tab_strdel(&ln_buff); //BECAME STRDEL
-	free(*ln);
+	ft_memdel((void**)ln);
 	sh_init_cmd(*input);
 	if ((p->ast = tokenize_input(*input)))
 	{

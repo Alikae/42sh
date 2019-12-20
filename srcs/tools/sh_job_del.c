@@ -30,4 +30,5 @@ void	sh_job_del(t_job **job)
 	ft_strdel(&(j->name));
 	free(*job);
 	*job = NULL;
+	j = NULL;
 }

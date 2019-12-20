@@ -26,4 +26,5 @@ void	sh_hist_del(t_hist **hist)
 	ft_strdel(&(h->path));
 	free(*hist);
 	*hist = NULL;
+	h = NULL;
 }

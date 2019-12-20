@@ -67,10 +67,7 @@ C_FILES_command_edition = \
 
 C_FILES_command_line = \
 		       sh_prompt.c \
-		       sh_free_all_ln.c \
-		       sh_free_one_ln.c \
 		       sh_command_line.c \
-		       sh_init_ln.c 
 
 C_FILES_history = \
 		  sh_get_next_line.c \

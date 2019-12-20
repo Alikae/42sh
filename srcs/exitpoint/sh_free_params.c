@@ -25,11 +25,9 @@ void	sh_free_params(void)
 	while (params)
 	{
 		tmp = params->next;
-		if (params->key)
-			free(params->key);
-		if (params->value)
-			free(params->value);
-		free(params);
+		ft_memdel((void**)&params->key);
+		ft_memdel((void**)&params->value);
+		ft_memdel((void**)&params);
 		params = tmp;
 	}
 }

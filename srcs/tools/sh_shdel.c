@@ -42,4 +42,5 @@ void	sh_shdel(t_sh **shell)
 	sh_hist_del(&(s->hist));
 	free(*shell);
 	*shell = NULL;
+	s = NULL;
 }

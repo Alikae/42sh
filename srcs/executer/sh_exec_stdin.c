@@ -31,7 +31,7 @@ int	sh_exec_stdin(void)
 			ret = ft_strjoin_free(ret, buff, ret);
 		ft_bzero(buff, 1024);
 	}
-	free(buff);
+	ft_memdel((void**)&buff);
 	sh_init_cmd(ret);
 	if (ret && *ret && (sh()->ast = tokenize_input(ret)))
 	{
@@ -40,6 +40,6 @@ int	sh_exec_stdin(void)
 	}
 	else
 		printf("Tokenize Error\n");
-	free(ret);
+	ft_memdel((void**)&ret);
 	return (0);
 }

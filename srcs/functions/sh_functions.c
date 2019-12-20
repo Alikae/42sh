@@ -72,10 +72,8 @@ void	ft_free_sub(t_token *sub)
 		ft_free_sub(sub->next);
 	if (sub->sub)
 		ft_free_sub(sub->sub);
-	if (sub->content)
-		free(sub->content);
-	if (sub->next)
-		free(sub->next);
+	ft_memdel(void**)&(sub->content);
+	ft_memdel(void**)&(sub->next);
 }
 
 /*
@@ -87,7 +85,7 @@ void	ft_free_token(t_func **func_lib, t_token *token)
 	t_token	*cpy;
 
 	ft_free_sub((*func_lib)->token);
-	free((*func_lib)->token->content);
+	ft_memdel((void**)&((*func_lib)->token->content);
 	free((*func_lib)->token);
 	(*func_lib)->token = ft_cpy_token(token);
 }

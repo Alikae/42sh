@@ -38,7 +38,7 @@ void		del_n_redirect_lst(t_redirect_lst **p_origin, int n)
 			close((*p_origin)->in);
 		tmp = *p_origin;
 		*p_origin = (*p_origin)->next;
-		free(tmp);
+		ft_memdel((void**)&tmp);
 	}
 }
 
@@ -52,7 +52,7 @@ void		delete_close_all_pipe_lst(t_pipe_lst *lst)
 		close(lst->pipe[1]);
 		old = lst;
 		lst = lst->next;
-		free(old);
+		ft_memdel((void**)&old);
 	}
 }
 

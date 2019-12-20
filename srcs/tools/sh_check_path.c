@@ -59,12 +59,12 @@ int		sh_check_path(char *all_path, int *error)
 		if (!(sh_find_error(path, all_path[i], error)))
 		{
 			path[i] = '1';
-			free(path);
+			ft_memdel((void**)&path);
 			return (0);
 		}
 		path[i] = all_path[i];
 		i++;
 	}
-	free(path);
+	ft_memdel((void**)&path);
 	return (1);
 }

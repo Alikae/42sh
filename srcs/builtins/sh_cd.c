@@ -37,7 +37,7 @@ static int	cd_go_to(char *path)
 		ev->exported = 1;
 	if ((ev = sh_setev("OLDPWD", dir)))
 		ev->exported = 1;
-	free(path);
+	ft_memdel((void**)&path);
 	return (0);
 }
 
