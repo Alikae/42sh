@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/19 01:44:49 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/20 23:18:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,7 @@ void	sh_record_arithmetic_string(t_exp *exp)
 {
 	int		size;
 
-	printf("exp[%i] = %c\n",exp->i, exp->content[exp->i]);
 	size = sh_arithmetic_string_size(exp);
-	printf("size = %i\n", size);
 	exp->i = exp->i - size + 1;
 	if (!(exp->name = (char*)malloc(size + 1)))
 		exit (-1);
@@ -109,7 +107,7 @@ void	sh_write_less_op(char *str, int i, t_arith **arith)
 		(*arith)->next_op = MORE_EQUAL;
 	else if (str[i] == '>')
 		(*arith)->next_op = MORE;
-	else if (str[i] == '<' && str[i + 1] == '-')
+	else if (str[i] == '<' && str[i + 1] == '=')
 		(*arith)->next_op = LESS_EQUAL;
 	else if (str[i] == '<')
 		(*arith)->next_op = LESS;
