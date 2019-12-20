@@ -32,8 +32,7 @@ C_FILES_entrypoint = \
 	sh_init.c
 
 C_FILES_sh_printf = \
-			sh_printf.c \
-
+			sh_printf.c 
 
 C_FILES_job_control = \
 		      t_job.c \

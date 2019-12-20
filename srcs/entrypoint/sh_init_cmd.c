@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "libft.h"
 
 void	sh_init_cmd(char *input)
 {
@@ -20,7 +21,7 @@ void	sh_init_cmd(char *input)
 	p->unfinished_cmd = 0;
 	p->invalid_cmd = 0;
 	free(p->cmd);
-	p->cmd = input;
+	p->cmd = ft_strdup(input);
 	p->extern_pipe = -1;
 	p->alias_end = 0;
 }
