@@ -23,7 +23,7 @@ void	sh_hist_del(t_hist **hist)
 		return ;
 	ft_tab_strdel(&(h->prev));
 	ft_strdel(&(h->path));
-	ft_strdel(&(h->path));
+	ft_memdel((void**)&h->current);
 	free(*hist);
 	*hist = NULL;
 	h = NULL;
