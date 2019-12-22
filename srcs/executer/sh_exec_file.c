@@ -45,19 +45,22 @@ int		sh_script(const char *path)
 			return (0);
 		ft_strclr(buff);
 	}
+	ft_memdel((void**)&buff);
 	close(fd);
 	input = ft_strconv_w(input);
 	sh_init_cmd(input);
 	//doesnt throw good error on script "WHILE"
-	p->cmd = input;
 	if (input && *input && (ast = tokenize_input(input)))
 	{
-		ft_memdel((void**)&input);
+		//HANDLE SYNTAX ERROR
+	//	print_all_tokens(p, ast, 0);
 		p->abort_cmd = 0;
+		ft_memdel((void**)&input);
 		exec_script(p, ast);
 	}
 	else if (input && *input)
 		printf("Tokenize Error-\n");
+	ft_memdel((void**)&input);
 	return (1);
 }
 

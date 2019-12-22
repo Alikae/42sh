@@ -18,7 +18,12 @@ void	ft_free_tabstr(char **tab)
 	int i;
 
 	i = 0;
-	while (tab && tab[i])
-		free(tab[i++]);
+	if (tab)
+	{
+		while (tab[i])
+			ft_memdel((void**)&tab[i++]);
+		ft_memdel((void**)&tab[i]);
+	}
 	free(tab);
+	tab = NULL;
 }

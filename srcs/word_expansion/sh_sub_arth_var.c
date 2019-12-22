@@ -103,7 +103,7 @@ char		*sh_tab_fusion_free(char ***tab)
 	name[i_name] = '\0';
 	i = 0;
 	while ((*tab)[i])
-		free((*tab)[i++]);
+		ft_memdel((void**)&((*tab)[i++]));
 	free(*tab);
 	*tab = NULL;
 	return (name);
@@ -123,7 +123,7 @@ void		sh_add_opt(char **name, short int opt)
 		{
 			cpy = tab[i];
 			tab[i] = sh_long_itoa(sh_long_atoi(tab[i]) + opt);
-			free(cpy);
+			ft_memdel((void**)&cpy);
 		}
 		i++;
 	}
@@ -156,7 +156,7 @@ void		sh_record_arth(char **str, int i, short int opt)
 		i_cpy = i_cpy - 2;
 	}
 	sh_sub_var(name, str, i_cpy, i);
-	free(name);
+	ft_memdel((void**)&name);
 }
 
 int		sh_check_valid_var_name(char *str, int i)

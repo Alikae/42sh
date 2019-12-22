@@ -46,6 +46,8 @@ static int		sh_parse_line_escape(char **line)
 	i = 0;
 	while (line[0][i] != '\0')
 		i++;
+	if (i == 0)
+		return (1);
 	i -= 1;
 	if (line[0][i] == '\\' && (i == 0 || !sh_ice(*line, i)))
 	{

@@ -57,8 +57,8 @@ t_token	*dup_token_with_sub(t_token *origin)
 
 void	delete_token(t_token *tok)
 {
-	free(tok->content);
-	free(tok);
+	ft_memdel((void**)&tok->content);
+	ft_memdel((void**)&tok);
 }
 
 void	free_ast(t_token *origin)

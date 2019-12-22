@@ -26,4 +26,5 @@ void	sh_open_file_del(t_open_file **op)
 	close(f->fd);
 	free(*op);
 	*op = NULL;
+	f = NULL;
 }

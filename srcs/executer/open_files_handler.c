@@ -34,11 +34,11 @@ void	remove_opened_files(t_sh *p)
 
 	while (p->opened_files)
 	{
-		free(p->opened_files->name);
+		ft_memdel((void**)&(p->opened_files->name));
 		tmp = p->opened_files;
 		p->opened_files = p->opened_files->next;
 		close(tmp->fd);
-		free(tmp);
+		ft_memdel((void**)&tmp);
 	}
 }
 
@@ -86,18 +86,18 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	{
 		real_path = getcwd(0, 0);
 		tmp = ft_strjoin(real_path, "/");
-		free(real_path);
+		ft_memdel((void**)&real_path);
 		real_path = ft_strjoin(tmp, path);
-		free(tmp);
+		ft_memdel((void**)&tmp);
 		was_malloc = 1;
 	}
 	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
 		dprintf(2, "OPEN ERROR -> '%s'\n", real_path);
-		(was_malloc) ? free(real_path) : 0;
+		(was_malloc) ? ft_memdel((void**)&real_path) : 0;
 		return (-1);
 	}
 	push_to_opened_files(p, real_path, fd);
-	(was_malloc) ? free(real_path) : 0;
+	(was_malloc) ? ft_memdel((void**)&real_path) : 0;
 	return (fd);
 }

@@ -52,9 +52,9 @@ void	restore_before_assigns(t_sh *p)
 		sh_setev(assign->key, assign->value);
 		tmp = assign;
 		assign = assign->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
+		ft_memdel((void**)&tmp->key);
+		ft_memdel((void**)&tmp->value);
+		ft_memdel((void**)&tmp);
 	}
 	p->tmp_assign_lst = 0;
 }
@@ -96,13 +96,13 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	p->assign_lst->value = ft_strdup(equal + 1);
 	if ((tmpt = sh_expansion(p->assign_lst->value, &(p->params), 0)))
 	{
-		free(p->assign_lst->value);
+		ft_memdel((void**)&(p->assign_lst->value));
 		p->assign_lst->value = ft_strdup(tmpt->content);
 		free_ast(tmpt);
 	}
 	else
 	{
-		free(p->assign_lst->value);
+		ft_memdel((void**)&(p->assign_lst->value));
 		p->assign_lst->value = ft_strdup("");
 	}
 	p->assign_lst->next = tmp;
@@ -114,10 +114,10 @@ void	del_n_assign_lst(t_sh *p, int n)
 
 	while (n-- && p->assign_lst)
 	{
-		free(p->assign_lst->key);
-		free(p->assign_lst->value);
+		ft_memdel((void**)&(p->assign_lst->key));
+		ft_memdel((void**)&(p->assign_lst->value));
 		tmp = p->assign_lst->next;
-		free(p->assign_lst);
+		ft_memdel((void**)&p->assign_lst);
 		p->assign_lst = tmp;
 	}
 }

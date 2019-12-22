@@ -28,7 +28,7 @@ t_env		*sh_env_params(char **ev)
 		params->value = ft_strdup(*ev + i + 1);
 		params->exported = 1;
 		params->readonly = 0;
-		free(s1);
+		ft_memdel((void**)&s1);
 		params->next = sh_env_params(ev + 1);
 		return (params);
 	}

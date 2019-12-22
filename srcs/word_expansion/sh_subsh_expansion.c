@@ -15,7 +15,7 @@
 #include "sh_redirections.h"
 #include <stdio.h>
 
-#define P(x) (printf(x))
+#define P(x) (printf(x)) //
 
 
 void	sh_str_start_end(char **dest, char *src, int i, int n)
@@ -112,7 +112,7 @@ void	sh_subshdup(char *buff, t_exp *exp)
 			exp->value[i] = cpy[i];
 			i++;
 		}
-		free(cpy);
+		ft_memdel((void**)&cpy);
 	}
 	ft_subshcpy(buff, &(exp->value), i);
 }

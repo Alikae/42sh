@@ -26,4 +26,5 @@ void	sh_ln_del(t_ln **ln)
 	sh_ln_del(&(l->next));
 	free(*ln);
 	*ln = NULL;
+	l = NULL;
 }

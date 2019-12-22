@@ -27,4 +27,5 @@ void	sh_token_del(t_token **plst)
 	sh_token_del(&(p->next));
 	free(*plst);
 	*plst = NULL;
+	p = NULL;
 }

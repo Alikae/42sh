@@ -27,4 +27,5 @@ void	sh_pipe_lst_del(t_pipe_lst **plst)
 	close((*plst)->pipe[1]);
 	free(*plst);
 	*plst = NULL;
+	p = NULL;
 }

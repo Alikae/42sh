@@ -97,7 +97,7 @@ char	*sh_find_alias(t_toktool *t, int i)
 		str[j++] = t->input[i++];
 	str[j] = '\0';
 	tab = sh_find_sub_alias(str);
-	free(str);
+	ft_memdel((void**)&str);
 	return (tab);
 }
 
@@ -188,7 +188,7 @@ void	sh_record_alias(char ***stack, char *alias)
 	}
 	cpy[i++] = alias;
 	cpy[i] = 0;
-	free(*stack);
+	ft_free_tabstr(*stack);
 	*stack = cpy;
 }
 
@@ -246,7 +246,7 @@ int		sh_alias_substitution(t_toktool *t, int word_begin)
 	alias = NULL;
 	if (!(sh()->alias_end) && sh()->alias_stack)
 	{
-		free((sh()->alias_stack));
+		ft_free_tabstr((sh()->alias_stack));
 		sh()->alias_stack = NULL;
 	}
 	if (before || t->word_nb == 1)

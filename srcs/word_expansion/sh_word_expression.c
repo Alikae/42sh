@@ -41,7 +41,7 @@ void	sh_spetial_quote(char **content)
 		(*content)[j++] = cpy[i++];
 	}
 	(*content)[j] = '\0';
-	free(cpy);
+	ft_memdel((void**)&cpy);
 }
 
 void	sh_sub_word(t_exp *exp)
@@ -56,8 +56,7 @@ void	sh_sub_word(t_exp *exp)
 		j++;
 		size++;
 	}
-	if (exp->value)
-		free(exp->value);
+	free(exp->value);
 	if (!(exp->value = malloc(size + 1)))
 		exit (-1);
 	j = 0;
@@ -81,7 +80,7 @@ void	sh_next_word(t_exp *exp)
 		exp->content[j++] = cpy[i++];
 	exp->content[j] = '\0';
 	exp->i = 0;
-	free(cpy);
+	ft_memdel((void**)&cpy);
 }
 
 void	sh_add_var(t_exp *exp)
@@ -105,8 +104,7 @@ void	sh_assign_word(t_exp *exp)
 	sh_word_expansion(exp);
 	if (exp->find)
 	{
-		if (exp->find->value)
-			free(exp->find->value);
+		free(exp->find->value);
 		exp->find->value = ft_strdup(exp->value);
 	}
 	else

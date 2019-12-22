@@ -60,6 +60,6 @@ int	exec_prgm(t_sh *p, char **child_argv)
 		return (127);
 	}
 	ret = exec_path(p, real_path, child_argv);
-	free(real_path);
+	ft_memdel((void**)&real_path);
 	return (ret);
 }

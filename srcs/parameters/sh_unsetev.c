@@ -37,5 +37,5 @@ void	sh_unsetev(const char *key, t_env **env)
 	}
 	ft_strdel(&(tgt->key));
 	ft_strdel(&(tgt->value));
-	free(tgt);
+	ft_memdel((void**)&tgt);
 }

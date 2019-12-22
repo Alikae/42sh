@@ -69,7 +69,7 @@ t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
 	}
 	actual = origin->next;
 	delete_token(origin);
-	free(sh()->alias_stack);
+	ft_free_tabstr(sh()->alias_stack);
 	sh()->alias_stack = 0;
 	return (actual);
 }

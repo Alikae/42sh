@@ -64,7 +64,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	{
 		if (!(ret = lstat(real_path, st)))
 			break ;
-		free(real_path);
+		ft_memdel((void**)&real_path);
 	}
 	ft_free_tabstr(paths);
 	if (ret || !path[0])

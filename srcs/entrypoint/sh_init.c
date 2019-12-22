@@ -43,4 +43,6 @@ void	sh_init(t_sh *shell)
 	shell->user = getlogin();
 	pwd = getpwnam(shell->user);
 	shell->dir = pwd->pw_dir;
+	shell->bucopy = NULL;
+	shell->cmd = NULL;
 }

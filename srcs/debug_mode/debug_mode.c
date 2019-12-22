@@ -32,15 +32,15 @@ void	ask_for_extern_terminal(t_sh *p)
 		printf("testing term %i :\ny = accept\nn = next terminal\nq = set to current terminal\n", n);
 		nc = ft_itoa(n);
 		path = ft_strjoin("/dev/ttys00", nc);
-		free(nc);
+		ft_memdel((void**)&nc);
 		if ((fd = open(path, O_WRONLY)) < 0)
 		{
-			free(path);
+			ft_memdel((void**)&path);
 			printf("open ERROR in ask_for_extern_terminal\n");
 			n++;
 			continue;
 		}
-		free(path);
+		ft_memdel((void**)&path);
 		dprintf(fd, "\nterminal %i : correct ?\n", n);
 		read(0, input, 1);
 		real_input = *input;
