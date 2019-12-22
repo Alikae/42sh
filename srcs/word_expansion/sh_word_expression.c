@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/10/01 04:10:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 03:23:24 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -113,16 +113,41 @@ void	sh_assign_word(t_exp *exp)
 		sh_add_var(exp);
 }
 
+void	sh_record_less_option(t_exp *exp)
+{
+	int		i;
+	int		j;
+	
+	j = 0;
+	i = exp->i;
+	while (exp->content[i] != '}')
+		i++;
+	if (!(exp->value = malloc(i - exp->i + 1)))
+		exit (-1);
+	i = exp->i;
+	while (exp->content[i] != '}')
+		exp->value[j++] = exp->content[i++];
+	exp->value[j] = '\0';
+}
+
 void	sh_opt_less(t_exp *exp)
 {
-//	sh_print_exp(exp, "sh_opt_less");
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
-	else if ((exp->find && !(exp->find->value) && exp->opt & COLON) || !(exp->find))
+	else if ((exp->find && !(exp->find->value) && exp->opt == COLON) || !(exp->find))
 	{
 		sh_next_word(exp);
-		sh_word_expansion(exp);
+		if (exp->content[exp->i] == '$' || exp->content[exp->i] == '~' || exp->content[exp->i] == '`')
+		{
+			printf("1\n");
+			sh_word_expansion(exp);
+		}
+		else
+		{
+			printf("2\n");
+			sh_record_less_option(exp);
+		}
 	}
 	else
 		exp->value = NULL;
@@ -132,7 +157,7 @@ void	sh_opt_equal(t_exp *exp)
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
-	else if (exp->find && !exp->find->value && !(exp->opt & COLON))
+	else if (exp->find && !exp->find->value && !(exp->opt == COLON))
 		exp->value = NULL;
 	else
 		sh_assign_word(exp);
@@ -143,7 +168,7 @@ void	sh_opt_question(t_exp *exp)
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
-	else if (exp->find && !(exp->opt & COLON))
+	else if (exp->find && !(exp->opt == COLON))
 		exp->value = NULL;
 	else
 	{
@@ -182,13 +207,20 @@ void	sh_word_opt(t_exp *exp)
 		sh_opt_plus(exp);
 	else if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
+	else
+		exp->value = NULL;
 //	sh_print_exp(exp, "word_opt");
 }
 
 void	sh_find_value(t_exp *exp)
 {
-	while (exp->find && ft_strcmp(exp->name, exp->find->key) != 0)
-		exp->find = exp->find->next;
+	t_env	*env;
+
+	env = sh()->params;
+	while (env && ft_strcmp(exp->name, env->key) != 0)
+		env = env->next;
+	exp->find = env;
+//	printf("exp - %s\n", exp->find->value);
 }
 
 void	sh_record_name(t_exp *exp)
@@ -198,6 +230,7 @@ void	sh_record_name(t_exp *exp)
 
 	i_sub = 0;
 	cpy = exp->i;
+	ft_memdel((void**)&(exp->name));
 	while (exp->content[cpy] != ':' && exp->content[cpy] != '-'
 			&& exp->content[cpy] != '=' && exp->content[cpy] != '?'
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
@@ -217,20 +250,26 @@ void	sh_record_name(t_exp *exp)
 			&& exp->content[exp->i] != '\\' && exp->content[exp->i])
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
-//	sh_print_exp(exp, "record_name");
 	sh_find_value(exp);
 }
 
 void	sh_parameter_expansion(t_exp *exp)
 {
+	int		len;
+
+	len = 0;
+	sh_print_exp(exp, "start of parameters expansion");
 	//attenton expression sans {
+	if (exp->content[exp->i] == '{')
+		exp->i++;
 	if (exp->content[exp->i] == '#')
 	{
-		exp->opt = exp->opt + LEN;
+		len =  1;
 		exp->i++;
 	}
 	sh_record_name(exp);
 	sh_word_opt(exp);
+	sh_print_exp(exp, "end of parameter expansion");
 	if (exp->value)
 		sh_spetial_quote(&(exp->value));
 }

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/20 23:18:30 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/22 02:14:05 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,7 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	actual_count = 0;
 	old_less_op = 21000000;
 	i_less_op = -1;
+	par = 0;
 	if (sh_is_number(str, begin, end))
 		return (-1);
 	while (begin < end)
@@ -433,6 +434,15 @@ int		sh_check_arth(char *name)
 	return (1);
 }
 
+void	sh_free_arith_ast(t_arith *arith)
+{
+	if (arith->next)
+		sh_free_arith_ast(arith->next);
+	if (arith->sub)
+		sh_free_arith_ast(arith->sub);
+	ft_memdel((void**)&arith);
+}
+
 void	sh_arithmetic_expansion(t_exp *exp)
 {
 	t_arith		*arith;
@@ -451,6 +461,7 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	{
 		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 		result = sh_exec_arith(arith);
+		sh_free_arith_ast(arith);
 		exp->value = sh_long_itoa(result);
 	}
 }

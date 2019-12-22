@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/11/28 05:25:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 02:41:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -31,12 +31,9 @@ void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 
 void	sh_free_exp(t_exp *exp)
 {
-	if (exp->value)
-		free(exp->value);
-	if (exp->content)
-		free(exp->content);
-	if (exp->name)
-		free(exp->name);
+	free(exp->value);
+	free(exp->content);
+	free(exp->name);
 	free(exp->tok->content);
 	free(exp->tok);
 	exp->name = NULL;

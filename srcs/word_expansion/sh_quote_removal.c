@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/11/01 17:36:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 02:33:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,7 @@ void	sh_find_quote(t_split *splt, short quote)
 		}
 		if (!bquote)
 		{
-			if (sh_check_quote(splt, quote))
-				break ;
-			if (!splt->tok->content[splt->i])
+			if (sh_check_quote(splt, quote) && !(splt->tok->content[splt->i]))
 				break ;
 			if (splt->split && !quote  && sh_check_split(splt))
 				sh_token_spliting(splt, 0);
@@ -150,10 +148,7 @@ void	sh_find_quote(t_split *splt, short quote)
 t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 {
 	t_split	splt;
-	t_token	*toke;
-	int		i;
 
-	i = 1;
 	splt.tok = tok;
 	if (split && ifs)
 		splt.split = split;
@@ -165,13 +160,5 @@ t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
-	toke = splt.sub;
-/*	while (toke)
-	{
-		if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
-			;//printf("								[%i]tok->content = %s\n", i, tok->content);
-		toke = toke->next;
-		i++;
-	}*/
 	return (splt.sub);
 }

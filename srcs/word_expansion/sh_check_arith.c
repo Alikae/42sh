@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/20 23:17:19 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/22 01:44:07 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int		sh_valide_arith(char *str)
 	par = 0;
 	i = 0;
 	i = sh_skip_white_space(str, i);
-	printf("str = %s\n", str);
 	while (str[i])
 	{
 		if (!(sh_parenthesis_counter(str, &i, 0)))
