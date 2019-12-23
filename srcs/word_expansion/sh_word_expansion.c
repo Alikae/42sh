@@ -177,8 +177,6 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 	sh_tilde_expansion(&(exp.tok->content), *env);
 	sh_word_expansion(&exp);
 	new_tok = sh_quote_removal(exp.tok, sh_getev_value("IFS"), ifs);
-	while (1)
-		;
 	sh_free_exp(&exp);
 	return (new_tok);
 }
