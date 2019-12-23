@@ -69,10 +69,10 @@ void	read_n_disp(int fd, va_list va, const char *format)
 	t_print_info	info;
 
 	info.ibuf = 0;
-	i = -1;
+	i = 0;
 	if (!format)
 		return ;
-	while (format[++i])
+	while (format[i])
 	{
 		while (format[i] && format[i] != '%')
 		{
@@ -81,8 +81,10 @@ void	read_n_disp(int fd, va_list va, const char *format)
 		}
 		if (format[i] == '%')
 		{
-			conversion_multiplexer(fd, va, &info, *(format + i + 1));
-			i += 2;
+			if (!format[++i])
+				break;
+			conversion_multiplexer(fd, va, &info, *(format + i));
+			i++;
 		}
 	}
 	write(fd, info.buf, info.ibuf);

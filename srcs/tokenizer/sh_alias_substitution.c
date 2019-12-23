@@ -244,9 +244,6 @@ int		sh_alias_substitution(t_toktool *t, int word_begin)
 	char		*alias;
 	static int	before = 0;
 
-	printf("V    %s\n", t->input + word_begin);
-	sh_alias(1, (char**)"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 0);
-	printf("^\n");
 	alias = NULL;
 	if (!(sh()->alias_end) && sh()->alias_stack)
 	{
@@ -260,14 +257,8 @@ int		sh_alias_substitution(t_toktool *t, int word_begin)
 		if ((alias = sh_find_alias(t, word_begin)))
 		{
 			sh_treat_alias(alias, t, word_begin, &before);
-	printf("VVVVV\n");
-	sh_alias(1, (char**)"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 0);
-	printf("^^^^^\n");
 			return (1);
 		}
 	}
-	printf("XCXVVVVV\n");
-	sh_alias(1, (char**)"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 0);
-	printf("XCX^^^^^\n");
 	return (0);
 }

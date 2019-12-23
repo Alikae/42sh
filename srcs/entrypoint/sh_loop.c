@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/23 00:40:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 01:31:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ int		sh_loop(void)
 			//		printf("Tokenizer Error\n");
 			input[ft_strlen(input) - 1] = 0;
 			free_ast(p->ast);
+			p->ast = 0;
 			if (p->invalid_cmd)
 				break;
 			if (!p->unfinished_cmd)
