@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/16 16:33:34 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 01:31:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "sh_history.h"
 #include "sh_env.h"
 #include "sh_job_control.h"
+#include "sh_builtins.h"
 
 #include <stdio.h> //
 
@@ -39,7 +40,7 @@ int	sh_loop_read(int *complete, char **input, t_sh *p, char **ln)
 	sh_init_cmd(*input);
 	if ((p->ast = tokenize_input(*input)))
 	{
-		print_all_tokens(p, p->ast, 0);
+		//print_all_tokens(p, p->ast, 0);
 		p->abort_cmd = 0;
 		if (!p->unfinished_cmd)
 			exec_script(p, p->ast);
@@ -168,6 +169,7 @@ int		sh_loop(void)
 			//		printf("Tokenizer Error\n");
 			input[ft_strlen(input) - 1] = 0;
 			free_ast(p->ast);
+			p->ast = 0;
 			if (p->invalid_cmd)
 				break;
 			if (!p->unfinished_cmd)

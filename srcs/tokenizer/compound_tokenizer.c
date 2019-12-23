@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/07 07:58:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:52:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_token	*tokenize_case(t_toktool *t, int word_begin)
 	forward_blanks_newline(t);
 	if (!read_n_skip_in(t))
 	{
-		printf("-%c-\n", t->input[t->i]);
+		//sh_dprintf(1, "-%c-\n", t->input[t->i]);
 		if (!t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;

@@ -5,7 +5,7 @@
 
 void	delete_job(t_job *job)
 {
-//	printf("delete job %s\n", job->name);
+//	sh_dprintf(1, "delete job %s\n", job->name);
 	if (!job)
 		return ;
 	ft_memdel((void**)&job->name);
@@ -47,7 +47,7 @@ t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e, con
 	sh()->jobs = create_job(pid, name, index_b, index_e);
 	sh()->jobs->next = jobs;
 	sh()->jobs->status = status;
-	printf("[%i] %s\n", getpid(), sh()->jobs->name);
+	sh_dprintf(1, "[%i] %s\n", getpid(), sh()->jobs->name);
 	return (jobs);
 }
 
@@ -56,10 +56,10 @@ void	signal_all_jobs(int sig)
 	t_job	*jobs;
 
 	jobs = sh()->jobs;
-	printf("[%i] send sig %i to jobs:\n", getpid(), sig);
+	sh_dprintf(1, "[%i] send sig %i to jobs:\n", getpid(), sig);
 	while (jobs)
 	{
-		printf("--> {[%i]%s}\n", jobs->pid, jobs->name);
+		sh_dprintf(1, "--> {[%i]%s}\n", jobs->pid, jobs->name);
 		kill(jobs->pid, sig);
 		jobs = jobs->next;
 	}

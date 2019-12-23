@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/19 05:42:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 01:43:24 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int		find_next_pipe(t_sh *p)
 	rlst = p->redirect_lst;
 	while (rlst)
 	{
-		//printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
+		//sh_dprintf(1, "[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
 		if (rlst->in == 1)
 			return (rlst->out);
 		rlst = rlst->next;
@@ -187,7 +187,7 @@ int		find_previous_pipe(t_sh *p)
 	rlst = p->redirect_lst;
 	while (rlst)
 	{
-		//printf("[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
+		//sh_dprintf(1, "[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
 		if (rlst->in == 0)
 			return (rlst->out);
 		rlst = rlst->next;
@@ -305,7 +305,7 @@ int		fork_process(t_sh *p, int foreground)
 	child_pid = fork();
 	if (child_pid < 0)
 	{
-		printf("[%i]fork error: ressource temporarily unavailable\n", getpid());
+		sh_dprintf(1, "[%i]fork error: ressource temporarily unavailable\n", getpid());
 		p->abort_cmd = 1;
 		return (-1);
 	}

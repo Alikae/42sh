@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:46:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/16 17:58:41 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 01:06:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@
 void	print_redirections(t_sh *p, t_redirect_lst *origin)
 {
 	(void)p;
-	dprintf(2, "[%i]REDIRECTIONS(%p)[fd%i]:\n", getpid(), origin,
-			2);
+	sh_dprintf(2, "[%i]REDIRECTIONS:\n", getpid());
 	while (origin)
 	{
-		dprintf(2, "fd %.3i --- to fd %.3i\n", origin->in,
+		sh_dprintf(2, "fd %i --- to fd %i\n", origin->in,
 				origin->out);
 		origin = origin->next;
 	}
@@ -66,7 +65,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 		if (dup2(lst->out, lst->in) < 0)
 			close(lst->in);
 	}
-//	printf("[%i] close %i\n", getpid(), lst->out);
+//	sh_dprintf(1, "[%i] close %i\n", getpid(), lst->out);
 //	close(lst->out);
 }
 

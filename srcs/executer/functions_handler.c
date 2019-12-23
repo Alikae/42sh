@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:57:12 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/14 00:54:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:43:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		exec_function(t_sh *p, t_token *func, char **child_argv)
 	if (p->nb_nested_functions >= SH_NESTED_FUNCTION_LIMIT)
 	{
 		p->abort_cmd = 1;
-		printf("SH_NESTED_FUNCTION_LIMIT REACHED\nAbort command\n");
+		sh_dprintf(2, "SH_NESTED_FUNCTION_LIMIT REACHED\nAbort command\n");
 		return (-10);
 	}
 	tmp = sh()->av;

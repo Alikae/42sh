@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:38:56 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/07 04:14:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:54:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_toktype	handle_redirections_operators(t_toktool *t, t_toktype type,
 {
 	if (t->word_nb == 1 && operator_cant_be_first(type))
 	{
-		dprintf(2, "Syntax error: operator cant be first in command \
+		sh_dprintf(2, "Syntax error: operator cant be first in command \
 -%.10s\n", t->input + ((t->i > 2) ? t->i - 2 : 0));
 		return (SH_SYNTAX_ERROR);
 	}

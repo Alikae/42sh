@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:44:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/16 17:22:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:43:27 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static void		sh_handle_sigstp(void)
 
 	ret = tcsetpgrp(0, getpgid(0));
 	errno = 0;
-	printf("handle SIGTSTP: tcsetpgrp ret = %i errno %i\n", ret, errno);
-	printf("SIGTSTP detected\n");
+	sh_dprintf(1, "handle SIGTSTP: tcsetpgrp ret = %i errno %i\n", ret, errno);
+	sh_dprintf(1, "SIGTSTP detected\n");
 	sh_loop();
 }
 
@@ -36,7 +36,7 @@ static void		sh_handle_sigint(void)
 	str = "[%i] CTRL-C: exiting non-interactive shell\n";
 	if (sh()->pid_main_process != getpid())
 	{
-		dprintf(2, str, getpid());
+		sh_dprintf(2, str, getpid());
 		exit(1);
 	}
 	sh()->abort_cmd = 1;
@@ -50,21 +50,21 @@ void		sh_handle_signal(int sig)
 	else if (sig == SIGINT)
 		sh_handle_sigint();
 /*	else if (sig == SIGSEGV)
-		printf("SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
+		sh_dprintf(1, "SEGVAULTED\nYOU'RE ENTIRE LIFE IS A MESS\n");
 	else if (sig == SIGABRT)
-		printf("SIGABORT\nYOU'RE ENTIRE LIFE IS A MESS\n");*/
+		sh_dprintf(1, "SIGABORT\nYOU'RE ENTIRE LIFE IS A MESS\n");*/
 	else if (sig == SIGILL)
-		printf("ILLEGAL INSTRUCTION\nWhat are you trying to do ?!?\n");
+		sh_dprintf(1, "ILLEGAL INSTRUCTION\nWhat are you trying to do ?!?\n");
 	else if (sig == SIGBUS)
-		printf("BUS ERROR\n");
+		sh_dprintf(1, "BUS ERROR\n");
 	else if (sig == SIGCONT)
 		;//return to last job
 	else if (sig == SIGTRAP)
-		printf("SIGTRAPPED: WHAT IS THAT?\n");
+		sh_dprintf(1, "SIGTRAPPED: WHAT IS THAT?\n");
 	else if (sig == SIGTTIN)
-		printf("SIGTTIN detected\n");
+		sh_dprintf(1, "SIGTTIN detected\n");
 	else if (sig == SIGTTOU)
-		printf("[%i]SIGTTOU detected\n", getpid());
+		sh_dprintf(1, "[%i]SIGTTOU detected\n", getpid());
 }
 
 void			sh_init_signals(void)

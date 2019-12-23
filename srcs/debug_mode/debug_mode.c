@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 23:33:55 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/04 20:34:21 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/23 00:39:00 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,26 @@ void	ask_for_extern_terminal(t_sh *p)
 	n = 0;
 	while (n < 10)
 	{
-		printf("testing term %i :\ny = accept\nn = next terminal\nq = set to current terminal\n", n);
+		sh_dprintf(2, "testing term %i :\ny = accept\nn = next terminal\nq = set to current terminal\n", n);
 		nc = ft_itoa(n);
 		path = ft_strjoin("/dev/ttys00", nc);
 		ft_memdel((void**)&nc);
 		if ((fd = open(path, O_WRONLY)) < 0)
 		{
 			ft_memdel((void**)&path);
-			printf("open ERROR in ask_for_extern_terminal\n");
+			sh_dprintf(1, "open ERROR in ask_for_extern_terminal\n");
 			n++;
 			continue;
 		}
 		ft_memdel((void**)&path);
-		dprintf(fd, "\nterminal %i : correct ?\n", n);
+		sh_dprintf(fd, "\nterminal %i : correct ?\n", n);
 		read(0, input, 1);
 		real_input = *input;
 		while (read(0, input, 1) > 0 && *input != '\n')
 			;
 		if (real_input == 'y')
 		{
-			printf("Terminal %i chosen, fd %i\n\n\n\n\n--SHELL BEGIN--\n\n\n", n, fd);
+			sh_dprintf(2, "Terminal %i chosen, fd %i\n\n\n\n\n--SHELL BEGIN--\n\n\n", n, fd);
 			p->dbg_fd = fd;
 			return ;
 		}

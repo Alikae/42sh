@@ -1,5 +1,6 @@
 #include "sh.h"
 #include "sh_types.h"
+#include "sh_builtins.h"
 
 int		sh_alias_value_len(char *alias, int *ind)
 {
@@ -186,7 +187,7 @@ void	sh_record_alias(char ***stack, char *alias)
 		cpy[i] = (*stack)[i];
 		i++;
 	}
-	cpy[i++] = alias;
+	cpy[i++] = ft_strdup(alias);
 	cpy[i] = 0;
 	ft_free_tabstr(*stack);
 	*stack = cpy;
@@ -246,7 +247,7 @@ int		sh_alias_substitution(t_toktool *t, int word_begin)
 	alias = NULL;
 	if (!(sh()->alias_end) && sh()->alias_stack)
 	{
-		ft_free_tabstr((sh()->alias_stack));
+	//	ft_free_tabstr((sh()->alias_stack));
 		sh()->alias_stack = NULL;
 	}
 	if (before || t->word_nb == 1)
