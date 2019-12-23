@@ -184,12 +184,13 @@ void	sh_record_alias(char ***stack, char *alias)
 	i = 0;
 	while (*stack && (*stack)[i])
 	{
-		cpy[i] = (*stack)[i];
+		cpy[i] = ft_strdup((*stack)[i]);
 		i++;
 	}
 	cpy[i++] = ft_strdup(alias);
 	cpy[i] = 0;
 	ft_free_tabstr(*stack);
+	printf("%p\n", *stack);
 	*stack = cpy;
 }
 
@@ -247,7 +248,7 @@ int		sh_alias_substitution(t_toktool *t, int word_begin)
 	alias = NULL;
 	if (!(sh()->alias_end) && sh()->alias_stack)
 	{
-	//	ft_free_tabstr((sh()->alias_stack));
+		ft_free_tabstr((sh()->alias_stack));
 		sh()->alias_stack = NULL;
 	}
 	if (before || t->word_nb == 1)
