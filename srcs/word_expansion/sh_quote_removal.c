@@ -75,7 +75,7 @@ int		sh_check_split(t_split *splt)
 void	sh_token_spliting(t_split *splt, int reset)
 {
 	int			j;
-	static int	i = 0;
+	static int	i;
 	t_token		*cpy;
 
 	j = 0;
@@ -128,6 +128,38 @@ int		sh_is_next_word(t_split *splt)
 	return (0);
 }
 
+void	sh_delete_last_ifs(t_split *splt)
+{
+	int			size;
+	char		*content_cpy;
+
+	size = 0;
+	content_cpy = NULL;
+	splt->i = 0;
+	splt->tok = splt->sub;
+	printf("tok add = %p\n", splt->tok);
+	printf("1\n");
+	while (splt->tok->next)
+		splt->tok = splt->tok->next;
+	printf("2\n");
+	while (!(sh_check_split(splt)) && splt->tok->content[splt->i])
+		size++ && splt->i++;
+	printf("3\n");
+	if (!(content_cpy = malloc(size + 1)))
+		exit (-1);
+	splt->i = 0;
+	while (!(sh_check_split(splt)) && splt->tok->content[splt->i])
+	{
+		printf("enculer\n");
+		content_cpy[splt->i] = splt->tok->content[splt->i];
+		splt->i++;
+	}
+	printf("4\n");
+	content_cpy[splt->i] = '\0';
+	ft_memdel((void**)&(splt->tok->content));
+	splt->tok->content = content_cpy;
+}
+
 void	sh_find_quote(t_split *splt, short quote)
 {
 	int		bquote;
@@ -150,13 +182,15 @@ void	sh_find_quote(t_split *splt, short quote)
 				break ;
 			if (splt->split && !quote && sh_check_split(splt) && sh_is_next_word(splt))
 				sh_token_spliting(splt, 0);
+			else if (!quote && !(sh_is_next_word(splt)) && splt->tok->sub)
+				sh_delete_last_ifs(splt);
 		}
 		splt->i++;
 	}
 	if (!quote)
 		sh_token_spliting(splt, 1);
 }
-//ifs end last token
+
 t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 {
 	t_split	splt;
@@ -174,7 +208,7 @@ t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
-	printf("2\n");
 	print_all_tokens(sh(), splt.sub, 0);
+	printf("sub = %p\n", splt.sub);
 	return (splt.sub);
 }
