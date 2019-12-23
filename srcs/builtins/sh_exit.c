@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:45:31 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/12 19:20:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/23 00:32:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ status = 0;
 	//status = sh()->exit;//NOP	new var
 	if (ac > 2)
 	{
-		dprintf(2, "exit: too many arguments");
+		sh_dprintf(2, "exit: too many arguments\n");
 		status = 1;
 	}
 	else if (ac == 2)
@@ -35,7 +35,7 @@ status = 0;
 		{
 			if (!ft_isdigit(*arg))
 			{
-				dprintf(2, "exit: numeric argument required");
+				sh_dprintf(2, "exit: numeric argument required\n");
 				return (1);
 			}
 			arg++;
@@ -43,5 +43,5 @@ status = 0;
 		status = ft_atoi(av[1]);
 		status = (!status ? 1 : status);
 	}
-	exit(status);//EXITPOINT
+	exit(status);
 }

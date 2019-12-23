@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/14 01:18:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:47:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections)
 	(void)nb_redirections;
 	if (pipe(pip) == -1)
 	{
-		printf("PIPE ERROR\nKILLING MYSELF");
+		sh_dprintf(2, "PIPE ERROR\nKILLING MYSELF");
 		exit(1);
 	}
 	write(pip[1], tok->content, ft_strlen(tok->content));
@@ -107,10 +107,10 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		fd_in = ft_atoi(token->content);
 	if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))
 	{
-		dprintf(2, "redirection error in %s\n", token->sub->content);
+		sh_dprintf(2, "redirection error in %s\n", token->sub->content);
 		return ;
 	}
 	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		dprintf(p->dbg_fd, "fd_out = %i\n", fd_out);
+		sh_dprintf(p->dbg_fd, "fd_out = %i\n", fd_out);
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }

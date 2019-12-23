@@ -55,7 +55,7 @@ void	shpf_print_char(int fd, va_list va, t_print_info *info)
 
 void	conversion_multiplexer(int fd, va_list va, t_print_info *info, const char format)
 {
-	if (format == 'i')
+	if (format == 'i' || format == 'd')
 		shpf_print_int(fd, va, info);
 	else if (format == 's')
 		shpf_print_str(fd, va, info);

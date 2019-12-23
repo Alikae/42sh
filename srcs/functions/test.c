@@ -71,8 +71,8 @@ t_token	*gen_tokens2()
 
 void	print_token(t_token *token)
 {
-	printf("content=%s\n", token->content);
-	printf("type=%i\n", token->type);
+	sh_dprintf(1, "content=%s\n", token->content);
+	sh_dprintf(1, "type=%i\n", token->type);
 	if (token && token->sub)
 		print_token(token->sub);
 	if (token && token->next)
@@ -83,7 +83,7 @@ void	print_func(t_func *func_lib)
 {
 	while (func_lib)
 	{
-		printf("%s\n", func_lib->name);
+		sh_dprintf(1, "%s\n", func_lib->name);
 		print_token(func_lib->token->sub);
 		func_lib = func_lib->next;
 	}
@@ -96,13 +96,13 @@ int	main()
 	func_lib = NULL;
 	token = gen_tokens2();
 	store_func(&func_lib, token);
-	printf("---one tkoen---\n");
+	sh_dprintf(1, "---one tkoen---\n");
 	print_func(func_lib);
 	store_func(&func_lib, token);
-	printf("---replace token---\n");
+	sh_dprintf(1, "---replace token---\n");
 	print_func(func_lib);
 	token->content = ft_strdup("et un nouveau");
 	store_func(&func_lib, token);
-	printf("---add a toker---\n");
+	sh_dprintf(1, "---add a toker---\n");
 	print_func(func_lib);
 }

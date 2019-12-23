@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 02:38:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/11/28 21:58:35 by jerry            ###   ########.fr       */
+/*   Updated: 2019/12/23 00:54:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_toktype	fcknrm1(t_toktool *t, t_toktype *type, int max, const char *end)
 		if (!esc && t->input[t->i] == '\\')
 			esc = 2;
 		if (!esc && !ft_strncmp(end, t->input + t->i, len) && (t->i += len))
-			return (0 + 1);
+			return (1);
 		else if (!esc && (subtype = is_opening_char(t))
 				&& sub_opening_is_compatible(*type, subtype))
 		{
@@ -59,11 +59,11 @@ t_toktype	skip_ending_char(t_toktool *t, t_toktype type, int max_exp)
 
 	if (max_exp > 1024)
 	{
-		printf("Max nested expansions reached\n");
+		sh_dprintf(2, "Max nested expansions reached\n");
 		return (SH_SYNTAX_ERROR);
 	}
 	end = assign_patend(type);
-	if (0 != (hey = fcknrm1(t, &type, max_exp, end)))
+	if ((hey = fcknrm1(t, &type, max_exp, end)))
 		return (hey - 1);
 	sh()->unfinished_cmd = 1;
 	return (SH_SYNTAX_ERROR);
@@ -100,7 +100,10 @@ t_toktype	read_skip_opening_char(t_toktool *t)
 	if (t->input[t->i] == '(')
 		yep = SH_SUBSH;
 	else if (t->input[t->i] == '$')
+	{
 		something_icouldnt_name(t, &yep);
+		return (yep);
+	}
 	else if (t->input[t->i] == '\'')
 		yep = SH_QUOTE;
 	else if (t->input[t->i] == '"')

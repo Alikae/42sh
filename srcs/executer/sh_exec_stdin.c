@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:56:39 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/08 18:01:55 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:48:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	sh_exec_stdin(void)
 		exec_script(sh(), sh()->ast);
 	}
 	else
-		printf("Tokenize Error\n");
+		sh_dprintf(2, "Tokenize Error\n");
 	ft_memdel((void**)&ret);
 	return (0);
 }

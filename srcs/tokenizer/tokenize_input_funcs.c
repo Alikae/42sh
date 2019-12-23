@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 03:51:40 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/07 04:17:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:55:22 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ t_toktype	handle_function_error(t_toktool *t, t_toktype *type)
 	{
 		(t->input[t->i]) ? sh()->invalid_cmd = 1 : 0;
 		(!t->input[t->i]) ? (sh()->unfinished_cmd = 1) : 0;
-		(t->input[t->i]) ? printf("SYNTAX ERROR: Function block need to be a co\
-mpound at %.10s\n", t->input + word_begin) : 0;
+		(t->input[t->i]) ? sh_dprintf(1, "SYNTAX ERROR: Function block \
+need to be a compound at %.10s\n", t->input + word_begin) : 0;
 		return (SH_SYNTAX_ERROR);
 	}
 	return (SH_NULL);

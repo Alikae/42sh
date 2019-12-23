@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/16 22:48:29 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 06:32:18 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
 			actual = actual->next;
 		stack_argvs = stack_argvs->next;
 	}
+	//print_all_tokens(p, origin, 0);
 	free_ast(stack_origin);
 	return (origin);
 }
