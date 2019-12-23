@@ -6,13 +6,14 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 02:33:30 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/22 06:54:59 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
 #include <stdio.h>
+#include "sh_tokens.h"
 
 void	sh_remove_car(char **str, int i)
 {
@@ -116,6 +117,17 @@ int		sh_check_quote(t_split *splt, short quote)
 	return (0);
 }
 
+int		sh_is_next_word(t_split *splt)
+{
+	while (splt->tok->content[splt->i])
+	{
+		if (!(sh_check_split(splt)))
+			return (1);
+		splt->i++;
+	}
+	return (0);
+}
+
 void	sh_find_quote(t_split *splt, short quote)
 {
 	int		bquote;
@@ -136,7 +148,7 @@ void	sh_find_quote(t_split *splt, short quote)
 		{
 			if (sh_check_quote(splt, quote) && !(splt->tok->content[splt->i]))
 				break ;
-			if (splt->split && !quote  && sh_check_split(splt))
+			if (splt->split && !quote && sh_check_split(splt) && sh_is_next_word(splt))
 				sh_token_spliting(splt, 0);
 		}
 		splt->i++;
@@ -144,12 +156,14 @@ void	sh_find_quote(t_split *splt, short quote)
 	if (!quote)
 		sh_token_spliting(splt, 1);
 }
-
+//ifs end last token
 t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 {
 	t_split	splt;
 
 	splt.tok = tok;
+	printf("1\n");
+	print_all_tokens(sh(), tok, 0);
 	if (split && ifs)
 		splt.split = split;
 	else if (ifs)
@@ -160,5 +174,7 @@ t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
+	printf("2\n");
+	print_all_tokens(sh(), splt.sub, 0);
 	return (splt.sub);
 }

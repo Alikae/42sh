@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/11/28 05:42:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 06:07:19 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "sh_tokenizer.h"
 #include "sh_redirections.h"
 #include <stdio.h>
+#include "sh_tokens.h"
 
 #define P(x) (printf(x)) //
 
@@ -135,13 +136,13 @@ void	sh_subsh_expansion(t_exp *exp)
 	t_token	*tok;
 	int		pipe_fd[2];
 
-	tok = NULL;
 	sh_record_commande_string(exp);
 	tok = create_token(SH_SUBSH, 0, NULL);
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
+		print_all_tokens(sh(), tok, 0);
 		if (pipe(pipe_fd) == -1)
-			exit(-1);//exit_properly
+			exit(-1);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
 	//	printf("exec subsh exp\n");
 		exec_compound_subsh(sh(), tok);
@@ -150,7 +151,5 @@ void	sh_subsh_expansion(t_exp *exp)
 		close(pipe_fd[0]);
 	}
 	else//error
-	{
 		sh()->abort_cmd = 1;
-	}
 }
