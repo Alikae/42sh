@@ -76,5 +76,12 @@ char	**sh_strsplit_arth(const char *s);
 long int sh_long_atoi(const char *s1);
 char   *sh_long_itoa(long int n);
 void	bst_print_dot(t_arith *a, char *str, char *arth);
+int		sh_is_next_word(t_split *splt);
+int		sh_check_split(t_split *splt);
+void	sh_remove_char(char **str, int i);
+int		sh_check_quote(t_split *splt, short quote);
+int		sh_check_split(t_split *splt);
+void	sh_token_spliting(t_split *splt, int reset);
+void	sh_next_token(t_token **new);
 
 #endif

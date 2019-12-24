@@ -181,6 +181,7 @@ C_FILES_word_expansion = \
 			 sh_check_arith.c \
 			 sh_sub_arth_var.c \
 			 sh_arth_tab.c \
+			 sh_quote_removal_tool.c \
 			 dot_file.c
 
 # SUPPA concat loop
