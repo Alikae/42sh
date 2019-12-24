@@ -30,7 +30,7 @@ char	*dupfilsdup(const char *in)
 	char	*new;
 	int		len;
 
-	len = (in) ? ft_strlen(in) : 1;
+	len = (in) ? ft_strlen(in) : 0;
 	if (!(new = (char*)malloc(sizeof(char) * (len + 1))))
 		return (0);
 	new[len] = 0;
