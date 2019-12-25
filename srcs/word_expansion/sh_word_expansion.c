@@ -60,12 +60,10 @@ void	sh_sub_token(t_exp *exp)
 
 	value_size = 0;
 	i = -1;
-	printf("exp->first_i = %i\n", exp->first_i);
 	cpy = exp->tok->content;
 	if (exp->value)
 		value_size = ft_strlen(exp->value);
 	j = exp->first_i + sh_expansion_size(exp->tok->content, exp->first_i) + 1;
-//	printf("sh_sub_token = %i\n", j);
 	size = ft_strlen(cpy) - sh_expansion_size(exp->tok->content, exp->first_i) + value_size;
 	if (!(exp->tok->content = malloc(size)))
 		exit (-1);
@@ -99,7 +97,6 @@ int		sh_in_expansion(t_exp *exp, int i)
 	}
 	else
 		sh_simple_expansion(exp);
-	printf("%i\n", sh()->exp_rec);
 	if (sh()->exp_rec == 1 && exp->value)
 	{
 		exp->first_i = i;

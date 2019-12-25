@@ -207,7 +207,6 @@ void	sh_word_opt(t_exp *exp)
 		exp->value = ft_strdup(exp->find->value);
 	else
 		exp->value = NULL;
-//	sh_print_exp(exp, "word_opt");
 }
 
 void	sh_find_value(t_exp *exp)
@@ -218,7 +217,6 @@ void	sh_find_value(t_exp *exp)
 	while (env && ft_strcmp(exp->name, env->key) != 0)
 		env = env->next;
 	exp->find = env;
-//	printf("exp - %s\n", exp->find->value);
 }
 
 void	sh_record_name(t_exp *exp)
@@ -254,10 +252,10 @@ void	sh_record_name(t_exp *exp)
 void	sh_parameter_expansion(t_exp *exp)
 {
 	int		len;
+	char 	*cpy;
 
+	cpy = NULL;
 	len = 0;
-	sh_print_exp(exp, "start of parameters expansion");
-	//attenton expression sans {
 	if (exp->content[exp->i] == '{')
 		exp->i++;
 	if (exp->content[exp->i] == '#')
@@ -267,7 +265,12 @@ void	sh_parameter_expansion(t_exp *exp)
 	}
 	sh_record_name(exp);
 	sh_word_opt(exp);
-	sh_print_exp(exp, "end of parameter expansion");
-	if (exp->value)
+	if (exp->value && !len)
 		sh_spetial_quote(&(exp->value));
+	else if (exp->value && len)
+	{
+		cpy = exp->value;
+		exp->value = sh_long_itoa(ft_strlen(exp->value));
+		ft_memdel((void**)&cpy);
+	}
 }
