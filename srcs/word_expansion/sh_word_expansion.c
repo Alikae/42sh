@@ -60,6 +60,7 @@ void	sh_sub_token(t_exp *exp)
 
 	value_size = 0;
 	i = -1;
+	printf("exp->first_i = %i\n", exp->first_i);
 	cpy = exp->tok->content;
 	if (exp->value)
 		value_size = ft_strlen(exp->value);
@@ -81,7 +82,7 @@ void	sh_sub_token(t_exp *exp)
 	ft_memdel((void**)&cpy);
 }
 
-int		sh_in_expansion(t_exp *exp)
+int		sh_in_expansion(t_exp *exp, int i)
 {
 	if (exp->content[exp->i] == '{')
 	{
@@ -99,15 +100,12 @@ int		sh_in_expansion(t_exp *exp)
 	else
 		sh_simple_expansion(exp);
 	printf("%i\n", sh()->exp_rec);
-	if (sh()->exp_rec == 1)
+	if (sh()->exp_rec == 1 && exp->value)
 	{
-	//	printf("exp->content1 = %s\nexp->tok->content1 = %s\n", exp->content, exp->tok->content);
+		exp->first_i = i;
 		sh_sub_token(exp);
-	//	printf("exp->content2 = %s\nexp->tok->content2 = %s\n", exp->content, exp->tok->content);
 		free(exp->content);
-	//	printf("exp->content3 = %s\nexp->tok->content3 = %s\n", exp->content, exp->tok->content);
 		exp->content = ft_strdup(exp->tok->content);
-	//	printf("exp->content4 = %s\n", exp->content);
 		exp->i = exp->first_i - 1;
 		ft_memdel((void**)&exp->value);
 	}
@@ -147,17 +145,21 @@ void	sh_print_exp(t_exp *exp, char *where)
 
 int		sh_word_expansion(t_exp *exp)
 {
+	int		i;
+	
 	sh()->exp_rec++;
+	i = 0;
 	while (exp->content && (exp->content)[exp->i])
 	{
-		exp->first_i = exp->i;
+		i = exp->i;
 		if (sh_expansion_quote(exp) && exp->quote != SH_QUOTE && exp->quote != SH_BQUOTE
 			&& (exp->quote - SH_DQUOTE) != SH_BQUOTE && exp->content[exp->i + 1]
 			&& (exp->content[exp->i] == '$' || exp->content[exp->i] == '`'))
 		{
+			
 			if (exp->content[exp->i] == '$')
 				exp->i++;
-			if (sh_in_expansion(exp))
+			if (sh_in_expansion(exp, i))
 				return (1);
 		}
 		exp->i++;
@@ -170,8 +172,7 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 {
 	t_exp	exp;
 	t_token	*new_tok;
-	
-//	printf("\ninside = %s\n", tok_content);
+
 	sh_init_exp(env, &exp, tok_content);
 	exp.tok->sub = NULL;
 	exp.tok->next = NULL;
