@@ -97,7 +97,7 @@ int		sh_in_expansion(t_exp *exp, int i)
 	}
 	else
 		sh_simple_expansion(exp);
-	if (sh()->exp_rec == 1 && exp->value)
+	if (sh()->exp_rec == 1)
 	{
 		exp->first_i = i;
 		sh_sub_token(exp);
