@@ -137,15 +137,9 @@ void	sh_opt_less(t_exp *exp)
 	{
 		sh_next_word(exp);
 		if (exp->content[exp->i] == '$' || exp->content[exp->i] == '~' || exp->content[exp->i] == '`')
-		{
-			printf("1\n");
 			sh_word_expansion(exp);
-		}
 		else
-		{
-			printf("2\n");
 			sh_record_less_option(exp);
-		}
 	}
 	else
 		exp->value = NULL;
@@ -170,8 +164,8 @@ void	sh_opt_question(t_exp *exp)
 		exp->value = NULL;
 	else
 	{
-		sh_sub_word(exp);
 		exp->opt = ERROR;
+		sh()->abort_cmd = 1;
 	}
 }
 
