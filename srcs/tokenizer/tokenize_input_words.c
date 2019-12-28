@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 03:55:42 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:55:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/24 00:05:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ t_toktype	handle_normal_word(t_toktool *t, int word_begin,
 		sh()->invalid_cmd = 1;
 		return (SH_SYNTAX_ERROR);
 	}
+				printf("THERE\n");
 	if (sh_alias_substitution(t, word_begin))
 		return (0);
+				printf("THERE2\n");
 	(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input
 			+ word_begin, t->i - word_begin);
 	if (sh()->alias_end)

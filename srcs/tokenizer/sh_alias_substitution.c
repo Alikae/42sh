@@ -134,7 +134,7 @@ void	sh_print_alias_loop_error(char **stack, int loop)
 
 	max = sh_find_max_len(stack);
 	i = 0;
-	printf("42sh: recurcive alias error: %s\n", stack[0]);
+	printf("42sh: recursive alias error: %s\n", stack[0]);
 	while (stack[i + 1])
 	{
 		ft_putstr(stack[i]);
@@ -184,12 +184,13 @@ void	sh_record_alias(char ***stack, char *alias)
 	i = 0;
 	while (*stack && (*stack)[i])
 	{
-		cpy[i] = (*stack)[i];
+		cpy[i] = ft_strdup((*stack)[i]);
 		i++;
 	}
 	cpy[i++] = ft_strdup(alias);
 	cpy[i] = 0;
 	ft_free_tabstr(*stack);
+	printf("%p\n", *stack);
 	*stack = cpy;
 }
 
@@ -201,13 +202,15 @@ int		sh_push_alias(char *alias)
 	ret = 0; 
 	stack = sh()->alias_stack;
 	sh_record_alias(&stack, alias);
+	sh()->alias_stack = stack;
 	if ((ret = sh_check_stack(stack, alias)) != -1)
 	{
+		//NO ERROR
+		//JUST STOP DESALIASING
 		sh()->abort_cmd = 1;
 		sh_print_alias_loop_error(stack, ret);
 		return (0);
 	}
-	sh()->alias_stack = stack;
 	return (1);
 }
 
@@ -247,7 +250,7 @@ int		sh_alias_substitution(t_toktool *t, int word_begin)
 	alias = NULL;
 	if (!(sh()->alias_end) && sh()->alias_stack)
 	{
-	//	ft_free_tabstr((sh()->alias_stack));
+		ft_free_tabstr((sh()->alias_stack));
 		sh()->alias_stack = NULL;
 	}
 	if (before || t->word_nb == 1)
