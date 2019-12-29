@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/13 11:41:10 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/29 17:14:19 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,25 @@
 #include <signal.h>
 #include <pwd.h>
 #include <errno.h>
+#include <ncurses.h>
+#include <termios.h>
+#include <termcap.h>
 
-void	sh_init(t_sh *shell)
+
+static struct termios	init_term(void)
+{
+	char			*term;
+	struct termios	termios;
+
+	term = getenv("TERM");
+	if (tgetent(NULL, term ? term : "xterm") == ERR)
+		exit(EXIT_FAILURE);
+	if (tcgetattr(0, &termios))
+		exit(EXIT_FAILURE);
+	return (termios);
+}
+
+void					sh_init(t_sh *shell)
 {
 	struct passwd	*pwd;
 
@@ -45,4 +62,5 @@ void	sh_init(t_sh *shell)
 	shell->dir = pwd->pw_dir;
 	shell->bucopy = NULL;
 	shell->cmd = NULL;
+	shell->orig_termios = init_term();
 }

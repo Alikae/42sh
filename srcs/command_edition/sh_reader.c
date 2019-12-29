@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/12 19:23:51 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/29 17:15:36 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	buf = NULL;
 	while (k != 0 && *command && j > 0)
 	{
-		if (tgetent(NULL, term ? term : "vt100") == ERR)
+		if (tgetent(NULL, term ? term : "xterm") == ERR)
 			return (*command);
 		if (tcgetattr(0, &sh()->orig_termios))
 			return (*command);
@@ -125,10 +125,6 @@ int			sh_reader(char **command, t_hist *hist)
 	hist->index = -1;
 	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
-	if (tgetent(NULL, term ? term : "vt100") == ERR)
-		exit(1);
-	if (tcgetattr(0, &sh()->orig_termios))
-		exit(1);
 	*command = (char*)ft_memalloc(1);
 	getcommand(command, term, hist);
 	ft_memdel((void**)&hist->current);
