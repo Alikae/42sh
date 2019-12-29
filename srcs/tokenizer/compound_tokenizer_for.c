@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 08:00:25 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/13 02:40:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:53:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		tokenize_for_do(t_toktool *t, t_token *compound)
 	int			word_begin;
 
 	word_begin = t->i;
-	printf("for: %s", t->input + t->i);
+	//sh_dprintf(1, "for: %s", t->input + t->i);
 	if (read_n_skip_word(t) == -1)
 		return (0);
 	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i
@@ -89,7 +89,7 @@ int		limit_compound_is_reached(void)
 	{
 		sh()->abort_cmd = 1;
 		sh()->print_syntax_errors = 0;
-		printf("SH_NESTED_TOKENIZED_COMPOUND_LIMIT REACHED\nAbort\n");
+		sh_dprintf(1, "SH_NESTED_TOKENIZED_COMPOUND_LIMIT REACHED\nAbort\n");
 		return (1);
 	}
 	return (0);

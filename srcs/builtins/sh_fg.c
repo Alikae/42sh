@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/10/12 05:04:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:36:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,14 @@ int	sh_fg(int ac, char **av, char **env)
 	(void)ac;
 	if (sh()->pid_main_process != getpid() || !sh()->is_interactive)
 	{
-		printf("fg: No job control in this shell\n");
+		sh_dprintf(2, "fg: No job control in this shell\n");
 		return (0);
 	}
 	if (!(job = sh()->jobs))
 	{
-		printf("[%i] actually no job\n", getpid());
+		sh_dprintf(1, "[%i] actually no job\n", getpid());
 		return (0);
 	}
-	//printf("ARGV1 %s\n", av[1]);
 	arg = (ac > 1) ? ft_atoi(av[1]) : -10;//atoi protec?
 	argcpy = arg;
 	while (arg-- > 0 && job)
@@ -50,14 +49,14 @@ int	sh_fg(int ac, char **av, char **env)
 			argsuffix = "nd";
 		else
 			argsuffix = (argcpy % 10 == 3) ? "rd": "th";
-		printf("fg: bad arg: no %s%s job\n", av[1], argsuffix);
-		return (-1/*error*/);
+		sh_dprintf(2, "fg: bad arg: no %s%s job\n", av[1], argsuffix);
+		return (-1);
 	}
 	tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
 	tcsetpgrp(0, job->pid);
-	printf("SIGCONT process group [%i]\n", job->pid);
+	//printf("SIGCONT process group [%i]\n", job->pid);
 	if (kill (-1 * job->pid, SIGCONT) < 0)
 		perror ("kill (SIGCONT)");
 	block_wait(sh(), job->pid, 1);
-	return (0/*?*/);
+	return (0);
 }

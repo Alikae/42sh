@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 04:21:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/07 05:12:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:53:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_token	*handle_syntax_error(t_toktool *t, const char *s,
 	(void)t;
 	free_ast(to_free);
 	if (sh()->print_syntax_errors)
-		printf("SYNTAX_ERROR: %s\n", s);
+		sh_dprintf(2, "SYNTAX_ERROR: %s\n", s);
 	return (0);
 }
 

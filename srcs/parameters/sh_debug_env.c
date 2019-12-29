@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 20:41:34 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/14 21:10:59 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/23 00:50:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	sh_debug_env(t_env **ev)
 	tmp = *ev;
 	while (tmp)
 	{
-		dprintf(sh()->dbg_fd, "KEY = :%s:\t", tmp->key);
-		dprintf(sh()->dbg_fd, "VALUE = :%s:\t", tmp->value);
-		dprintf(sh()->dbg_fd, "EXPORTED = %d\t", tmp->exported);
-		dprintf(sh()->dbg_fd, "READONLY = %d\n", tmp->readonly);
+		sh_dprintf(sh()->dbg_fd, "KEY = :%s:\t", tmp->key);
+		sh_dprintf(sh()->dbg_fd, "VALUE = :%s:\t", tmp->value);
+		sh_dprintf(sh()->dbg_fd, "EXPORTED = %i\t", tmp->exported);
+		sh_dprintf(sh()->dbg_fd, "READONLY = %i\n", tmp->readonly);
 		tmp = tmp->next;
 	}
 }

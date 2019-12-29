@@ -6,7 +6,7 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 14:59:45 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/11 15:32:16 by jerry            ###   ########.fr       */
+/*   Updated: 2019/12/23 00:28:42 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	constructor(void)
 {
 	if (!sh())
 	{
-		dprintf(STDERR_FILENO, "Memory allocation failure\n");
+		sh_dprintf(STDERR_FILENO, "Memory allocation failure\n");
 		exit(1);
 	}
 }

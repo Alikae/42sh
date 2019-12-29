@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/14 21:10:45 by thdelmas         ###   ########.fr       */
+/*   Updated: 2019/12/22 05:29:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	i = 0;
 	nl = 1;
 	(void)ev;
-	if (!ft_strcmp("all", sh()->dbg) || !ft_strcmp(__func__, sh()->dbg))
-		sh_debug_builtin(ac, av, ev);
 	while (++i < ac)
 	{
 		if (i > 1)

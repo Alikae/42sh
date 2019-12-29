@@ -6,11 +6,12 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 03:55:42 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/14 02:08:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/24 00:05:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "sh_builtins.h"
 #include "sh_tokenizer.h"
 
 t_toktype	handle_normal_word(t_toktool *t, int word_begin,
@@ -19,12 +20,14 @@ t_toktype	handle_normal_word(t_toktool *t, int word_begin,
 	if (word_is_reserved(t->input + word_begin, t->i - word_begin)
 			== SH_SUBSH_END)
 	{
-		printf("Unexpected token at -%s\n", t->input + word_begin);
+		sh_dprintf(2, "Unexpected token at -%s\n", t->input + word_begin);
 		sh()->invalid_cmd = 1;
 		return (SH_SYNTAX_ERROR);
 	}
+				printf("THERE\n");
 	if (sh_alias_substitution(t, word_begin))
 		return (0);
+				printf("THERE2\n");
 	(*p_actual)->next = create_token_n(SH_WORD, word_begin, t->input
 			+ word_begin, t->i - word_begin);
 	if (sh()->alias_end)
@@ -107,7 +110,7 @@ t_toktype	handle_reserved_and_normals_word(t_toktool *t,
 						bang_unfollowed_by_word(t))))
 		{
 			(!(tmp == -1) && (sh()->invalid_cmd = 1)) ?
-				printf("Unexpected token at -%s\n", t->input + word_begin) : 0;
+				sh_dprintf(2, "Unexpected token at -%s\n", t->input + word_begin) : 0;
 			return (SH_SYNTAX_ERROR);
 		}
 		if (tokenize_reserved_word(t, p_actual, type, word_begin)

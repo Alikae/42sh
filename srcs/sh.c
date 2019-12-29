@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 19:37:37 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/19 22:37:25 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 03:48:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ t_sh	*sh(void)
 	if (!(s = (t_sh*)malloc(sizeof(t_sh))))
 		return (NULL);
 	ft_bzero(s, sizeof(t_sh));
-	sh_init_path();
+//	sh_init_path();
 	return (s);
 }

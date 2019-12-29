@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:52:54 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/14 00:57:02 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 00:46:34 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	*get_next_path(const char *path, char **all_paths, int i)
 			return (0);
 		return (ft_strdup(path));
 	}
-	if (i > tablen(all_paths))
+	if (i >= tablen(all_paths))
 		return (0);
-	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/') || !all_paths[i])
+	if (!all_paths || !*all_paths || (path[0] == '.' && path[1] == '/'))
 	{
 		cwd = getcwd(0, 0);
 		next_path = ft_strjoin_free(cwd, "/", cwd);
@@ -59,7 +59,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	nb_paths = 0;
 	paths = 0;
 	if (path[0] != '/' && !(paths = ft_strsplit(sh_getev_value("PATH"), ':')))
-		printf("$PATH not found\n");
+		sh_dprintf(1, "$PATH not found\n");
 	while ((real_path = get_next_path(path, paths, nb_paths++)))
 	{
 		if (!(ret = lstat(real_path, st)))
@@ -69,7 +69,7 @@ char	*get_real_path(const char *path, struct stat *st)
 	ft_free_tabstr(paths);
 	if (ret || !path[0])
 	{
-		dprintf(2, "%s: command not found\n", path);
+		sh_dprintf(2, "%s: command not found\n", path);
 		return (0);
 	}
 	return (real_path);

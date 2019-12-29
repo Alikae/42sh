@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/14 02:19:20 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/23 23:45:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ int		sh_script(const char *path)
 	if (!(buff = ft_strnew(BUFF_SIZE)))
 		return (-1);
 	if ((fd = open(path, O_RDONLY)) < 0)
+	{
+		sh_dprintf(2, "42sh: cant open %s\n", path);
 		return (fd);
+	}
 	if (read(fd, buff, 0) != 0)
 		return (-1);
 	while (read(fd, buff, 4096) > 0)
@@ -59,7 +62,7 @@ int		sh_script(const char *path)
 		exec_script(p, ast);
 	}
 	else if (input && *input)
-		printf("Tokenize Error-\n");
+		sh_dprintf(2, "Tokenize Error-\n");
 	ft_memdel((void**)&input);
 	return (1);
 }
