@@ -46,7 +46,6 @@ int		sh_word_error(t_exp *exp)
 	write(2, ": ", 2);
 	write(2, exp->value, ft_strlen(exp->value));
 	write(2,"\n", 1);
-	sh_free_exp(exp);
 	return (1);
 }
 
@@ -177,6 +176,5 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 	sh_word_expansion(&exp);
 	new_tok = sh_quote_removal(exp.tok, sh_getev_value("IFS"), ifs);
 	sh_free_exp(&exp);
-	print_all_tokens(sh(),new_tok, 0);
 	return (new_tok);
 }
