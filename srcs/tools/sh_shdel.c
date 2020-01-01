@@ -40,6 +40,8 @@ void	sh_shdel(t_sh **shell)
 		ft_strdel(&(s->cmd));
 	sh_job_del(&(s->jobs));
 	sh_hist_del(&(s->hist));
+	s->dir = NULL;
+	s->user = NULL;
 	free(*shell);
 	*shell = NULL;
 	s = NULL;

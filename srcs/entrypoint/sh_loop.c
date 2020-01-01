@@ -66,6 +66,7 @@ static t_hist	*init_history(void)
 	tmp = sh_getev("HISTSIZE");
 	hist->size_l = (!tmp ? 200 : ft_atoi(tmp->value));
 	hist = command_history(hist);
+	tmp = NULL;
 	return (hist);
 }
 

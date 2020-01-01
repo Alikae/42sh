@@ -119,8 +119,4 @@ void			push_history(t_hist *hist)
 	while (i >= 0)
 		ft_putendl_fd(hist->prev[i--], fd);
 	close(fd);
-	ft_free_tabstr(hist->prev);
-	ft_memdel((void**)&hist->path);
-	ft_memdel((void**)&hist->current);
-	hist->prev = 0;
 }
