@@ -182,7 +182,8 @@ C_FILES_word_expansion = \
 			 sh_sub_arth_var.c \
 			 sh_arth_tab.c \
 			 sh_quote_removal_tool.c \
-			 dot_file.c
+			 sh_word_expression_opt.c \
+			 sh_expression_tool.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))
