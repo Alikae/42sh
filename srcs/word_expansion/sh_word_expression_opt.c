@@ -6,10 +6,12 @@ void	sh_opt_less(t_exp *exp)
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
-	else if ((exp->find && !(exp->find->value) && exp->opt == COLON) || !(exp->find))
+	else if ((exp->find && !(exp->find->value)
+			&& exp->opt == COLON) || !(exp->find))
 	{
 		sh_next_word(exp);
-		if (exp->content[exp->i] == '$' || exp->content[exp->i] == '~' || exp->content[exp->i] == '`')
+		if (exp->content[exp->i] == '$' || exp->content[exp->i] == '~'
+				|| exp->content[exp->i] == '`')
 			sh_word_expansion(exp);
 		else
 			sh_record_less_option(exp);
