@@ -14,7 +14,8 @@ void	sh_spetial_quote(char **content)
 	cpy = (*content);
 	while ((*content)[i])
 	{
-		if ((*content)[i] == '\'' || (*content)[i] == '"' || (*content)[i] == '\\')
+		if ((*content)[i] == '\'' || (*content)[i] == '"' 
+				|| (*content)[i] == '\\')
 			size++;
 		i++;
 	}
@@ -68,32 +69,4 @@ void	sh_next_word(t_exp *exp)
 	exp->content[j] = '\0';
 	exp->i = 0;
 	ft_memdel((void**)&cpy);
-}
-
-void	sh_add_var(t_exp *exp)
-{
-	exp->find = (*exp->env);
-	while (exp->find->next)
-		exp->find = exp->find->next;
-	if (!(exp->find->next = malloc(sizeof(t_env))))
-		exit(-1);
-	exp->find = exp->find->next;
-	exp->find->key = ft_strdup(exp->name);
-	exp->find->value = ft_strdup(exp->value);
-}
-
-void	sh_assign_word(t_exp *exp)
-{
-	int		i;
-
-	i = 0;
-	sh_next_word(exp);
-	sh_word_expansion(exp);
-	if (exp->find)
-	{
-		free(exp->find->value);
-		exp->find->value = ft_strdup(exp->value);
-	}
-	else
-		sh_add_var(exp);
 }
