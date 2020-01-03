@@ -48,11 +48,15 @@ void	sh_opt_question(t_exp *exp)
 void	sh_opt_plus(t_exp *exp)
 {
 	exp->i++;
-	if ((!(exp->opt & COLON) && exp->find && !exp->find)
-			|| (exp->find && exp->find->value))
+	if (((exp->opt & COLON) && exp->find && exp->find->value)
+			|| (!(exp->opt & COLON) && exp->find))
 	{
 		sh_next_word(exp);
-		sh_word_expansion(exp);
+		if (exp->content[exp->i] == '$' || exp->content[exp->i] == '~'
+				|| exp->content[exp->i] == '`')
+			sh_word_expansion(exp);
+		else
+			sh_record_less_option(exp);
 	}
 	else
 		exp->value = NULL;
