@@ -177,23 +177,6 @@ int		sh_is_number(char *str, int i, int end)
 	return (1);
 }
 
-void	print_char(char *str, int begin)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (i == begin)
-			ft_putchar('|');
-		ft_putchar(str[i]);
-		if (i == begin)
-			ft_putchar('|');
-		i++;
-	}
-	ft_putchar('\n');
-}
-
 int		sh_is_valid_operator(char *str, int begin)
 {
 	int		num;
@@ -205,7 +188,6 @@ int		sh_is_valid_operator(char *str, int begin)
 	i = 0;
 	if (!(sh_all_char_operator(str[begin])))
 		return (0);
-	print_char(str, begin);
 	while (i < begin)
 	{
 		if (sh_all_char_operator(str[i]))
