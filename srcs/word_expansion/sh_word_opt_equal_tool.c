@@ -18,7 +18,7 @@ void	sh_next_value(t_exp *exp)
 	exp->value[i] = '\0';
 }
 
-void	sh_add_var(t_exp *exp)
+void	sh_add_var(t_exp *exp,char *name)
 {
 	exp->find = (*exp->env);
 	while (exp->find->next)
@@ -26,28 +26,33 @@ void	sh_add_var(t_exp *exp)
 	if (!(exp->find->next = malloc(sizeof(t_env))))
 		exit(-1);
 	exp->find = exp->find->next;
-	exp->find->key = ft_strdup(exp->name);
+	exp->find->key = ft_strdup(name);
 	exp->find->value = ft_strdup(exp->value);
+	exp->find->next = NULL;
 }
 
 void	sh_assign_word(t_exp *exp)
 {
 	int		i;
+	t_env	*env_cpy;
+	char	*name_cpy;
 
 	i = 0;
+	name_cpy = NULL;
+	env_cpy = exp->find;
+	if (!env_cpy)
+		name_cpy = ft_strdup(exp->name);
 	sh_next_word(exp);
-	printf("next word = %s\n", exp->content);
 	if (exp->content[exp->i] == '~' || exp->content[exp->i] == '$'
 			|| exp->content[exp->i] == '`')
 		sh_word_expansion(exp);
 	else
 		sh_next_value(exp);
-	printf("exp->value = %s\n", exp->value);
-	if (exp->find)
+	if (env_cpy)
 	{
-		free(exp->find->value);
-		exp->find->value = ft_strdup(exp->value);
+		free(env_cpy->value);
+		env_cpy->value = ft_strdup(exp->value);
 	}
 	else
-		sh_add_var(exp);
+		sh_add_var(exp, name_cpy);
 }

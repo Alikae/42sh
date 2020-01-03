@@ -87,7 +87,6 @@ void		sh_word_opt(t_exp *exp);
 void		sh_spetial_quote(char **content);
 void		sh_sub_word(t_exp *exp);
 void		sh_next_word(t_exp *exp);
-void		sh_add_var(t_exp *exp);
 void		sh_assign_word(t_exp *exp);
 void		sh_record_less_option(t_exp *exp);
 

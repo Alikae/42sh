@@ -27,7 +27,7 @@ void	sh_opt_equal(t_exp *exp)
 		exp->value = ft_strdup(exp->find->value);
 	else if (exp->find && !exp->find->value && !(exp->opt == COLON))
 		exp->value = NULL;
-	else
+	else 
 		sh_assign_word(exp);
 }
 
