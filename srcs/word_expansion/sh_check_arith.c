@@ -30,7 +30,7 @@ int		sh_skip_number(char *str, int i)
 
 int		sh_arth_syntax_error(char *str, int i)
 {
-	printf("42sh: %s: syntax error: operand expected (error token is \"%s\")\n", str, str + i);
+	printf("42sh: %s: syntax error: operand expected: %s)\n", str, str + i);
 	sh()->abort_cmd = 1;
 	return (0);
 }

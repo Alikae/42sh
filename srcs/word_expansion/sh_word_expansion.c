@@ -44,8 +44,7 @@ int		sh_word_error(t_exp *exp)
 	write(2, "42sh: ", 6);
 	write(2, exp->name, ft_strlen(exp->name));
 	write(2, ": ", 2);
-	while (exp->content[exp->i] != '}')
-		ft_putchar(exp->content[exp->i++]);
+	ft_putstr(exp->value);
 	write(2,"\n", 1);
 	sh()->exp_rec = 0;
 	return (1);

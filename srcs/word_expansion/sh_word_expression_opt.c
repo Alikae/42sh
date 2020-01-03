@@ -33,6 +33,9 @@ void	sh_opt_equal(t_exp *exp)
 
 void	sh_opt_question(t_exp *exp)
 {
+	char	*cpy_name;
+
+	cpy_name = exp->name;
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
@@ -40,6 +43,13 @@ void	sh_opt_question(t_exp *exp)
 		exp->value = NULL;
 	else
 	{
+		if (exp->content[exp->i] == '$' || exp->content[exp->i] == '~'
+				|| exp->content[exp->i] == '`')
+			sh_word_expansion(exp);
+		else
+			sh_record_less_option(exp);
+		ft_memdel((void**)&(exp->name));
+		exp->name = cpy_name;
 		exp->opt = ERROR;
 		sh()->abort_cmd = 1;
 	}
