@@ -90,5 +90,6 @@ void		sh_next_word(t_exp *exp);
 void		sh_assign_word(t_exp *exp);
 void		sh_record_less_option(t_exp *exp);
 void		sh_pattern_matching(t_exp *exp);
-
+char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long);
+char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long);
 #endif

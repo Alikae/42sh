@@ -32,10 +32,13 @@ void	sh_pattern_matching(t_exp *exp)
 		exp->value = NULL;
 		return ;
 	}
-	pattern = sh_record_pattern(exp);
 	if ((exp->content[exp->i] == '%' && exp->content[exp->i + 1] == '%')
 			|| (exp->content[exp->i] == '#' && exp->content[exp->i + 1] == '#'))
 		opt = 1;
+	exp->i = exp->i + opt + 1;
+	pattern = sh_record_pattern(exp);
+	printf("pattern = %s\nfind  = %s\n", pattern, exp->find->value);
+
 	if (exp->content[exp->i] == '%')
 		exp->value = subtitute_suffix_pattern(exp->find->value, pattern, opt);
 	else
