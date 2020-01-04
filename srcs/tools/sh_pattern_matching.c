@@ -43,7 +43,7 @@ int		str_match_pattern(const char *str, const char *pattern, int start, int end)
 //1 = long
 char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long)
 {
-	short	start;
+	unsigned long	start;
 
 	if (short_or_long == 0)
 	{
@@ -64,8 +64,10 @@ char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short
 
 char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long)
 {
-	short	end;
+	unsigned long	end;
+	unsigned long	start;
 
+	start = 0;
 	if (short_or_long == 0)
 	{
 		end = 0;
