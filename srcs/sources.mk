@@ -184,7 +184,8 @@ C_FILES_word_expansion = \
 			 sh_quote_removal_tool.c \
 			 sh_word_expression_opt.c \
 			 sh_expression_tool.c \
-			 sh_word_opt_equal_tool.c
+			 sh_word_opt_equal_tool.c \
+			 sh_pattern_matching.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

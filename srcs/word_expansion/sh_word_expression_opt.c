@@ -87,6 +87,8 @@ void	sh_word_opt(t_exp *exp)
 		sh_opt_question(exp);
 	else if (exp->content[exp->i] == '+')
 		sh_opt_plus(exp);
+	else if (exp->content[exp->i] == '%' || exp->content[exp->i] == '#')
+		sh_pattern_matching(exp);
 	else if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
 	else

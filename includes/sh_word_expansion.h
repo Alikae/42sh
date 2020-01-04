@@ -89,5 +89,6 @@ void		sh_sub_word(t_exp *exp);
 void		sh_next_word(t_exp *exp);
 void		sh_assign_word(t_exp *exp);
 void		sh_record_less_option(t_exp *exp);
+void		sh_pattern_matching(t_exp *exp);
 
 #endif
