@@ -166,7 +166,8 @@ C_FILES_tools = \
 		sh_are_you_sur.c \
 		sh_check_path.c \
 		sh_error_path.c \
-		ft_join_with_char.c
+		ft_join_with_char.c \
+		sh_pattern_matching.c
 #sh_find_law.c \
 
 C_FILES_word_expansion = \
