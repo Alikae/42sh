@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/23 23:59:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/05 02:07:44 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int		sh_loop(void)
 //			;
 		while (!complete)//Can we ctrl-C?
 		{
-			dbug = 0;
+			dbug = 1;
 			//swap_signals_to_prompter
 			if (!dbug)
 			{
@@ -142,6 +142,7 @@ int		sh_loop(void)
 				ln_buff = ft_strdup("fd < lala\n\n\n");
 				ln_buff = ft_strdup("cat <lala\n");
 				ln_buff = ft_strdup("a");
+				ln_buff = ft_strdup("a=11112222;${a%%2}");
 			}
 			//	int z = 0;
 			//	while (ln_buff[z])

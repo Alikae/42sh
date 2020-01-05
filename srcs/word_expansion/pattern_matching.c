@@ -38,8 +38,7 @@ void	sh_pattern_matching(t_exp *exp)
 	exp->i = exp->i + opt + 1;
 	pattern = sh_record_pattern(exp);
 	printf("pattern = %s\nfind  = %s\n", pattern, exp->find->value);
-
-	if (exp->content[exp->i] == '%')
+	if (exp->content[exp->i - opt - 1] == '%')
 		exp->value = subtitute_suffix_pattern(exp->find->value, pattern, opt);
 	else
 		exp->value = subtitute_prefix_pattern(exp->find->value, pattern, opt);

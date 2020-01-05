@@ -6,13 +6,15 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 00:50:22 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/04 01:41:52 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/05 02:06:10 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 
-int		str_match_pattern(const char *str, const char *pattern, unsigned int start, unsigned int end)
+void lstp();
+
+int		str_match_pattern(const char *str, const char *pattern, int start, int end)
 {
 	int	i;
 
@@ -43,8 +45,9 @@ int		str_match_pattern(const char *str, const char *pattern, unsigned int start,
 //1 = long
 char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long)
 {
-	unsigned int	start;
+	int	start;
 
+	lstp();
 	if (short_or_long == 0)
 	{
 		start = ft_strlen(str) - 1;
@@ -54,7 +57,7 @@ char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short
 	else
 	{
 		start = 0;
-		while (start < ft_strlen(str) && !str_match_pattern(str, pattern, start, ft_strlen(str) - 1))
+		while (start < (int)ft_strlen(str) && !str_match_pattern(str, pattern, start, (int)ft_strlen(str) - 1))
 			start++;
 	}
 	if (!str_match_pattern(str, pattern, start, ft_strlen(str - 1)))
@@ -64,12 +67,13 @@ char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short
 
 char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long)
 {
-	unsigned int	end;
+	int	end;
 
+	lstp();
 	if (short_or_long == 0)
 	{
 		end = 0;
-		while (end < ft_strlen(str) && !str_match_pattern(str, pattern, 0, end))
+		while (end < (int)ft_strlen(str) && !str_match_pattern(str, pattern, 0, end))
 			end++;
 	}
 	else
