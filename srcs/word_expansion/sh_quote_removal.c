@@ -6,37 +6,14 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/11/01 17:36:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 06:54:59 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
 #include <stdio.h>
-
-void	sh_remove_car(char **str, int i)
-{
-	char	*new;
-	int		j;
-	int		j_str;
-
-	j_str = 0;
-	j = 0;
-	if (!(new = malloc(ft_strlen(*str))))
-		exit (-1);
-	while ((*str)[j_str])
-	{
-		if (j_str != i)
-		{
-			new[j] = (*str)[j_str];
-			j++;
-		}
-		j_str++;
-	}
-	new[j] = '\0';
-	free(*str);
-	*str = new;
-}
+#include "sh_tokens.h"
 
 void	sh_next_token(t_token **new)
 {
@@ -57,63 +34,22 @@ void	sh_next_token(t_token **new)
 	(*new)->next = NULL;
 }
 
-int		sh_check_split(t_split *splt)
+void	sh_delete_last_ifs(t_split *splt)
 {
-	int		j;
-
-	j = 0;
-	while (splt->split && splt->split[j])
+	while (splt->tok->content[splt->i])
 	{
-		if (splt->split[j] == splt->tok->content[splt->i])
-			return (1);
-		j++;
+		sh_remove_char(&(splt->tok->content), splt->i);
+		splt->i++;
 	}
-	return (0);
 }
 
-void	sh_token_spliting(t_split *splt, int reset)
+void	sh_treat_token(t_split *splt, short quote)
 {
-	int			j;
-	static int	i = 0;
-	t_token		*cpy;
-
-	j = 0;
-	cpy = splt->sub;
-	sh_next_token(&(splt->sub));
-	if (!(splt->sub->content = (char*)malloc(splt->i - i +  1)))
-		exit (-1);
-	while (i < splt->i)
-		splt->sub->content[j++] = splt->tok->content[i++];
-	splt->sub->content[j] = '\0';
-	while (splt->tok->content[i] && sh_check_split(splt))
-		++(splt->i) && ++i;
-	splt->i--;
-	if (reset)
-		i = 0;
-	if (cpy)
-		splt->sub = cpy;
-}
-
-int		sh_check_quote(t_split *splt, short quote)
-{
-	if (quote != SH_DQUOTE && splt->tok->content[splt->i] == '\'')
-	{
-		sh_remove_car(&(splt->tok->content), splt->i);
-		if (quote == SH_QUOTE)
-			return (1);
-		else
-
-			sh_find_quote(splt, SH_QUOTE);
-	}
-	else if (quote != SH_QUOTE && splt->tok->content[splt->i] == '"')
-	{
-		sh_remove_car(&(splt->tok->content), splt->i);
-		if (quote == SH_DQUOTE)
-			return (1);
-		else
-			sh_find_quote(splt, SH_DQUOTE);
-	}
-	return (0);
+	if (splt->split && !quote && sh_check_split(splt)
+			&& sh_is_next_word(splt))
+		sh_token_spliting(splt, 0);
+	if (!sh_is_next_word(splt) && !quote && splt->split)
+		sh_delete_last_ifs(splt);
 }
 
 void	sh_find_quote(t_split *splt, short quote)
@@ -129,17 +65,14 @@ void	sh_find_quote(t_split *splt, short quote)
 			bquote--;
 		if (quote != SH_QUOTE && splt->tok->content[splt->i] == '\\')
 		{
-			sh_remove_car(&(splt->tok->content), splt->i);
+			sh_remove_char(&(splt->tok->content), splt->i);
 			bquote = 1;
 		}
 		if (!bquote)
 		{
-			if (sh_check_quote(splt, quote))
+			if (sh_check_quote(splt, quote) && !(splt->tok->content[splt->i]))
 				break ;
-			if (!splt->tok->content[splt->i])
-				break ;
-			if (splt->split && !quote  && sh_check_split(splt))
-				sh_token_spliting(splt, 0);
+			sh_treat_token(splt, quote);
 		}
 		splt->i++;
 	}
@@ -150,10 +83,7 @@ void	sh_find_quote(t_split *splt, short quote)
 t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 {
 	t_split	splt;
-	t_token	*toke;
-	int		i;
 
-	i = 1;
 	splt.tok = tok;
 	if (split && ifs)
 		splt.split = split;
@@ -165,13 +95,5 @@ t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
-	toke = splt.sub;
-/*	while (toke)
-	{
-		if (!ft_strcmp(sh()->dbg, __func__) || !ft_strcmp(sh()->dbg, "all")) //debug mode
-			;//printf("								[%i]tok->content = %s\n", i, tok->content);
-		toke = toke->next;
-		i++;
-	}*/
 	return (splt.sub);
 }

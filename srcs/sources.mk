@@ -166,7 +166,8 @@ C_FILES_tools = \
 		sh_are_you_sur.c \
 		sh_check_path.c \
 		sh_error_path.c \
-		ft_join_with_char.c
+		ft_join_with_char.c \
+		sh_pattern_matching.c
 #sh_find_law.c \
 
 C_FILES_word_expansion = \
@@ -181,7 +182,11 @@ C_FILES_word_expansion = \
 			 sh_check_arith.c \
 			 sh_sub_arth_var.c \
 			 sh_arth_tab.c \
-			 dot_file.c
+			 sh_quote_removal_tool.c \
+			 sh_word_expression_opt.c \
+			 sh_expression_tool.c \
+			 sh_word_opt_equal_tool.c \
+			 pattern_matching.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

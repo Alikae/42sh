@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/17 01:44:10 by tcillard         ###   ########.fr       */
+/*   Updated: 2019/12/22 02:14:05 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	sh_write_less_op(char *str, int i, t_arith **arith)
 		(*arith)->next_op = MORE_EQUAL;
 	else if (str[i] == '>')
 		(*arith)->next_op = MORE;
-	else if (str[i] == '<' && str[i + 1] == '-')
+	else if (str[i] == '<' && str[i + 1] == '=')
 		(*arith)->next_op = LESS_EQUAL;
 	else if (str[i] == '<')
 		(*arith)->next_op = LESS;
@@ -177,23 +177,6 @@ int		sh_is_number(char *str, int i, int end)
 	return (1);
 }
 
-void	print_char(char *str, int begin)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (i == begin)
-			ft_putchar('|');
-		ft_putchar(str[i]);
-		if (i == begin)
-			ft_putchar('|');
-		i++;
-	}
-	ft_putchar('\n');
-}
-
 int		sh_is_valid_operator(char *str, int begin)
 {
 	int		num;
@@ -205,7 +188,6 @@ int		sh_is_valid_operator(char *str, int begin)
 	i = 0;
 	if (!(sh_all_char_operator(str[begin])))
 		return (0);
-	print_char(str, begin);
 	while (i < begin)
 	{
 		if (sh_all_char_operator(str[i]))
@@ -229,6 +211,7 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 	actual_count = 0;
 	old_less_op = 21000000;
 	i_less_op = -1;
+	par = 0;
 	if (sh_is_number(str, begin, end))
 		return (-1);
 	while (begin < end)
@@ -405,6 +388,43 @@ char	*sh_long_itoa(long int n)
 	return (strnb);
 }
 
+int		sh_arth_error_parenthesis(char *str)
+{
+	printf("42sh: %s: too much parenthesis\n", str);
+	sh()->abort_cmd = 1;
+	return (0);
+}
+int		sh_check_arth(char *name)
+{
+	int		par;
+	int		i;
+
+	par = 0;
+	i = 0;
+	while (name[i])
+	{
+		if (name[i] == ')' && par)
+			par++;
+		else if (name[i] == ')')
+			return (sh_arth_error_parenthesis(name));
+		else if (name[i] == '(')
+			par--;
+		i++;
+	}
+	if (par)
+		return (sh_arth_error_parenthesis(name));
+	return (1);
+}
+
+void	sh_free_arith_ast(t_arith *arith)
+{
+	if (arith->next)
+		sh_free_arith_ast(arith->next);
+	if (arith->sub)
+		sh_free_arith_ast(arith->sub);
+	ft_memdel((void**)&arith);
+}
+
 void	sh_arithmetic_expansion(t_exp *exp)
 {
 	t_arith		*arith;
@@ -413,6 +433,8 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	result = 0;
 	arith = NULL;
 	exp->i++;
+	if (!(sh_check_arth(exp->content)))
+		return ;
 	sh_record_arithmetic_string(exp);
 	sh_sub_arith_var(&(exp->name));
 	if (sh()->abort_cmd)
@@ -421,6 +443,7 @@ void	sh_arithmetic_expansion(t_exp *exp)
 	{
 		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 		result = sh_exec_arith(arith);
+		sh_free_arith_ast(arith);
 		exp->value = sh_long_itoa(result);
 	}
 }

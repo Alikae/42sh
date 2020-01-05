@@ -177,6 +177,7 @@ void		sh_sub_arith_var(char **str)
 	short int	opt;
 
 	i = 0;
+	opt = 0;
 	while ((*str)[i] && !(sh()->abort_cmd))
 	{
 		while ((*str)[i] == ' ' || (*str)[i] == '\t' || (*str)[i] == '\n')

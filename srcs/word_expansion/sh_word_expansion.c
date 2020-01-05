@@ -6,13 +6,14 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/23 01:50:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 06:24:09 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
 #include "sh_env.h"
+#include "sh_tokens.h"
 
 void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 {
@@ -43,9 +44,9 @@ int		sh_word_error(t_exp *exp)
 	write(2, "42sh: ", 6);
 	write(2, exp->name, ft_strlen(exp->name));
 	write(2, ": ", 2);
-	write(2, exp->value, ft_strlen(exp->value));
+	ft_putstr(exp->value);
 	write(2,"\n", 1);
-	sh_free_exp(exp);
+	sh()->exp_rec = 0;
 	return (1);
 }
 
@@ -63,7 +64,6 @@ void	sh_sub_token(t_exp *exp)
 	if (exp->value)
 		value_size = ft_strlen(exp->value);
 	j = exp->first_i + sh_expansion_size(exp->tok->content, exp->first_i) + 1;
-//	printf("sh_sub_token = %i\n", j);
 	size = ft_strlen(cpy) - sh_expansion_size(exp->tok->content, exp->first_i) + value_size;
 	if (!(exp->tok->content = malloc(size)))
 		exit (-1);
@@ -80,7 +80,7 @@ void	sh_sub_token(t_exp *exp)
 	ft_memdel((void**)&cpy);
 }
 
-int		sh_in_expansion(t_exp *exp)
+int		sh_in_expansion(t_exp *exp, int i)
 {
 	if (exp->content[exp->i] == '{')
 	{
@@ -97,12 +97,15 @@ int		sh_in_expansion(t_exp *exp)
 	}
 	else
 		sh_simple_expansion(exp);
-	sh_sub_token(exp);
-	free(exp->content);
-	exp->content = ft_strdup(exp->tok->content);
-	exp->i = exp->first_i - 1;
-	exp->find = *(exp->env);
-	ft_memdel((void**)&exp->value);
+	if (sh()->exp_rec == 1)
+	{
+		exp->first_i = i;
+		sh_sub_token(exp);
+		free(exp->content);
+		exp->content = ft_strdup(exp->tok->content);
+		exp->i = exp->first_i - 1;
+		ft_memdel((void**)&exp->value);
+	}
 	return (0);
 }
 
@@ -139,30 +142,27 @@ void	sh_print_exp(t_exp *exp, char *where)
 
 int		sh_word_expansion(t_exp *exp)
 {
+	int		i;
+	
+	sh()->exp_rec++;
+	i = 0;
 	while (exp->content && (exp->content)[exp->i])
 	{
-		exp->first_i = exp->i;
+		i = exp->i;
 		if (sh_expansion_quote(exp) && exp->quote != SH_QUOTE && exp->quote != SH_BQUOTE
 			&& (exp->quote - SH_DQUOTE) != SH_BQUOTE && exp->content[exp->i + 1]
 			&& (exp->content[exp->i] == '$' || exp->content[exp->i] == '`'))
 		{
+			
 			if (exp->content[exp->i] == '$')
 				exp->i++;
-			if (sh_in_expansion(exp))
+			if (sh_in_expansion(exp, i))
 				return (1);
 		}
 		exp->i++;
 	}
+	sh()->exp_rec--;
 	return (0);
-}
-
-void	sh_print_envi(t_env *env)
-{
-	while (env)
-	{
-		printf("env = %s\n", env-> key);
-		env = env->next;
-	}
 }
 
 t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
@@ -170,7 +170,6 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 	t_exp	exp;
 	t_token	*new_tok;
 
-//	printf("\ninside = %s\n", tok_content);
 	sh_init_exp(env, &exp, tok_content);
 	exp.tok->sub = NULL;
 	exp.tok->next = NULL;

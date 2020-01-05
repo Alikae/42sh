@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/19 05:39:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2019/12/22 04:55:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct		s_sh
 	int				last_child_pid;
 	t_env	*params;
 	t_ln			*ln_history;
-
+	int				exp_rec;
 	//dbg
 	char			*dbg;
 	int				dbg_fd;

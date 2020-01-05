@@ -12,7 +12,7 @@
 
 #include "sh.h"
 
-int		str_match_pattern(const char *str, const char *pattern, int start, int end)
+int		str_match_pattern(const char *str, const char *pattern, unsigned int start, unsigned int end)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ int		str_match_pattern(const char *str, const char *pattern, int start, int end)
 //1 = long
 char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long)
 {
-	short	start;
+	unsigned int	start;
 
 	if (short_or_long == 0)
 	{
@@ -64,21 +64,21 @@ char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short
 
 char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long)
 {
-	short	end;
+	unsigned int	end;
 
 	if (short_or_long == 0)
 	{
 		end = 0;
-		while (start < ft_strlen(str) && !str_match_pattern(str, pattern, 0, end))
-			start++;
+		while (end < ft_strlen(str) && !str_match_pattern(str, pattern, 0, end))
+			end++;
 	}
 	else
 	{
 		end = ft_strlen(str) - 1;
-		while (start >= 0 && !str_match_pattern(str, pattern, 0, end))
-			start--;
+		while (end >= 0 && !str_match_pattern(str, pattern, 0, end))
+			end--;
 	}
 	if (!str_match_pattern(str, pattern, 0, end))
 		return (ft_strdup(str));
-	return (ft_strdup(str + start));
+	return (ft_strdup(str + end));
 }
