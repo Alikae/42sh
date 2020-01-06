@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:11:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/08 17:59:20 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/06 02:17:51 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ int		(*sh_is_builtin2(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_exit);
 	else if (!ft_strcmp(cmd, "source") || !ft_strcmp(cmd, "."))
 		return (&sh_source);
-	else if (!ft_strcmp(cmd, "pwd"))
-		return (&sh_pwd);
 	else if (!ft_strcmp(cmd, "readonly"))
 		return (&sh_readonly);
 	return (NULL);
