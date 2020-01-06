@@ -204,13 +204,7 @@ int		sh_push_alias(char *alias)
 	sh_record_alias(&stack, alias);
 	sh()->alias_stack = stack;
 	if ((ret = sh_check_stack(stack, alias)) != -1)
-	{
-		//NO ERROR
-		//JUST STOP DESALIASING
-		sh()->abort_cmd = 1;
-		sh_print_alias_loop_error(stack, ret);
 		return (0);
-	}
 	return (1);
 }
 
@@ -225,13 +219,13 @@ int		count_alias_word_in_str(const char *str)
 	return (count_token_words_in_str(str + i));
 }
 
-void	sh_treat_alias(char *alias, t_toktool *t, int begin, int *before)
+int		sh_treat_alias(char *alias, t_toktool *t, int begin, int *before)
 {
 	int		len;
 	
 	len = 0;
 	if (!(sh_push_alias(alias)))
-		return ;
+		return (0);;
 	len = (ft_strlen(alias) - 1);
 	if ((alias[len] == ' ' || alias[len] == '\n'
 			|| alias[len] == '\t') && !(sh()->alias_end))
@@ -240,6 +234,7 @@ void	sh_treat_alias(char *alias, t_toktool *t, int begin, int *before)
 		sh()->alias_end--;
 	sh_sub_alias_command(t, alias, begin);
 	sh()->alias_end = sh()->alias_end + count_alias_word_in_str(alias);
+	return (1);
 }
 
 int		sh_alias_substitution(t_toktool *t, int word_begin)
@@ -259,8 +254,9 @@ int		sh_alias_substitution(t_toktool *t, int word_begin)
 			before = 0;
 		if ((alias = sh_find_alias(t, word_begin)))
 		{
-			sh_treat_alias(alias, t, word_begin, &before);
-			return (1);
+			if (sh_treat_alias(alias, t, word_begin, &before))
+				return (1);
+			return (0);
 		}
 	}
 	return (0);
