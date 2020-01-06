@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 02:14:05 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/06 20:35:35 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		sh_special_char_operator(char *str, int i)
 void	sh_init_arith(t_arith **arith)
 {
 	if (!((*arith) = malloc(sizeof(t_arith))))
-		exit (-1);
+		exit(-1);
 	(*arith)->nb = 0;
 	(*arith)->next_op = NUMBER;
 	(*arith)->next = NULL;
@@ -59,7 +59,7 @@ void	sh_record_arithmetic_string(t_exp *exp)
 	size = sh_arithmetic_string_size(exp);
 	exp->i = exp->i - size + 1;
 	if (!(exp->name = (char*)malloc(size + 1)))
-		exit (-1);
+		exit(-1);
 	sh_str_start_end(&(exp->name), exp->content, exp->i, exp->i + size - 1);
 }
 
@@ -145,7 +145,7 @@ void	sh_count_priority(char *c, int i, int count, int *less_count)
 		*less_count = count + 3;
 	else if (c[i] == '>' || c[i] == '<' || c[i] == '&'
 				|| c[i] == '|' || c[i] == '!' || c[i] == '='
-				|| c [i] == '-' || c[i] == '+')
+				|| c[i] == '-' || c[i] == '+')
 		*less_count = count + 1;
 }
 
@@ -220,7 +220,7 @@ int		sh_next_less_operator(char *str, int begin, int end, t_arith **arith)
 			par = par + 3;
 		else if (par && str[begin] == ')')
 			par = par - 3;
-		if (sh_is_valid_operator(str,begin))
+		if (sh_is_valid_operator(str, begin))
 		{
 			sh_count_priority(str, begin, par, &actual_count);
 			if (old_less_op >= actual_count)
@@ -244,7 +244,7 @@ long int		sh_long_atoi(const char *s1)
 	nb = 0;
 	nega = '+';
 	while ((*s1 == '\t' || *s1 == '\n' || *s1 == ' ') && *s1)
-			s1++;
+		s1++;
 	if (*s1 == '-' || *s1 == '+')
 	{
 		nega = *s1;
@@ -290,8 +290,8 @@ void	sh_init_ast(long int number, t_arith **arith)
 t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 {
 	t_arith *arith;
-	int	end_cpy;
-	
+	int		end_cpy;
+
 	sh_init_arith(&arith);
 	end_cpy = end;
 	end = sh_next_less_operator(str, begin, end, &arith);
@@ -370,7 +370,7 @@ char	*sh_long_itoa(long int n)
 	if (n < 0)
 		test = 2;
 	if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
-		exit (-1);
+		exit(-1);
 	ft_bzero(strnb, test + i);
 	if (n < 0)
 		strnb[0] = '-';
@@ -394,6 +394,7 @@ int		sh_arth_error_parenthesis(char *str)
 	sh()->abort_cmd = 1;
 	return (0);
 }
+
 int		sh_check_arth(char *name)
 {
 	int		par;

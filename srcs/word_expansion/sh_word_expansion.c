@@ -6,9 +6,10 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 06:24:09 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/06 20:24:41 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdio.h>
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
@@ -18,7 +19,7 @@
 void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 {
 	if (!(exp->tok = create_token(SH_WORD, 0, tok_content)))
-		exit (-1);
+		exit(-1);
 	exp->quote = 0;
 	exp->first_i = 0;
 	exp->i = 0;
@@ -45,7 +46,7 @@ int		sh_word_error(t_exp *exp)
 	write(2, exp->name, ft_strlen(exp->name));
 	write(2, ": ", 2);
 	ft_putstr(exp->value);
-	write(2,"\n", 1);
+	write(2, "\n", 1);
 	sh()->exp_rec = 0;
 	return (1);
 }

@@ -1,17 +1,17 @@
-
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   sh_tilde_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/05 08:17:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/17 20:32:42 by tcillard         ###   ########.fr       */
+/*   Created: 2020/01/06 20:09:39 by tcillard          #+#    #+#             */
+/*   Updated: 2020/01/06 20:12:28 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
-# include <stdio.h>
+#include <stdio.h>
 
 int		sh_find_env(t_env **env_cpy, char *find)
 {
@@ -44,7 +44,7 @@ void	sh_sub_tilde(char **content, char *home, int opt)
 
 void	sh_find_home(t_env *env, char **content)
 {
-	t_env 			*env_cpy;
+	t_env			*env_cpy;
 	struct passwd	*data;
 	char			*home;
 
@@ -82,7 +82,7 @@ void	sh_find_opt(t_env *env, char **content)
 int		sh_tilde_expansion(char **content, t_env *env)
 {
 	int		i;
-	
+
 	i = 0;
 	if ((*content)[i] == '~')
 	{

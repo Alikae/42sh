@@ -1,26 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_expression_tool.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/06 19:51:59 by tcillard          #+#    #+#             */
+/*   Updated: 2020/01/06 19:59:45 by tcillard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 
+void	sh_count_new_spetial_quote_len(char **content, int *i, int *size)
+{
+	while ((*content)[*i])
+	{
+		if ((*content)[*i] == '\'' || (*content)[*i] == '"'
+			|| (*content)[*i] == '\\')
+			(*size)++;
+		(*i)++;
+	}
+}
+
 void	sh_spetial_quote(char **content)
 {
-	unsigned int	i;
-	unsigned int	size;
-	unsigned int	j;
-	char			*cpy;
+	int		i;
+	int		size;
+	int		j;
+	char	*cpy;
 
 	i = 0;
 	j = 0;
 	size = 0;
 	cpy = (*content);
-	while ((*content)[i])
-	{
-		if ((*content)[i] == '\'' || (*content)[i] == '"' 
-				|| (*content)[i] == '\\')
-			size++;
-		i++;
-	}
+	sh_count_new_spetial_quote_len(content, &i, &size);
 	if (!((*content) = malloc(size + i + 1)))
-		exit (-1);
+		exit(-1);
 	i = 0;
 	while (cpy[i])
 	{
@@ -46,7 +62,7 @@ void	sh_sub_word(t_exp *exp)
 	}
 	free(exp->value);
 	if (!(exp->value = malloc(size + 1)))
-		exit (-1);
+		exit(-1);
 	j = 0;
 	while (exp->content[exp->i] != '}')
 		exp->value[j++] = exp->content[exp->i++];

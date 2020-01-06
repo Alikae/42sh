@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_quote_removal_tool.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/06 20:12:40 by tcillard          #+#    #+#             */
+/*   Updated: 2020/01/06 20:18:16 by tcillard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 
@@ -42,7 +53,7 @@ void	sh_remove_char(char **str, int i)
 	j_str = 0;
 	j = 0;
 	if (!(new = malloc(ft_strlen(*str))))
-		exit (-1);
+		exit(-1);
 	while ((*str)[j_str])
 	{
 		if (j_str != i)
@@ -65,7 +76,6 @@ int		sh_check_quote(t_split *splt, short quote)
 		if (quote == SH_QUOTE)
 			return (1);
 		else
-
 			sh_find_quote(splt, SH_QUOTE);
 	}
 	else if (quote != SH_QUOTE && splt->tok->content[splt->i] == '"')
@@ -88,8 +98,8 @@ void	sh_token_spliting(t_split *splt, int reset)
 	j = 0;
 	cpy = splt->sub;
 	sh_next_token(&(splt->sub));
-	if (!(splt->sub->content = (char*)malloc(splt->i - i +  1)))
-		exit (-1);
+	if (!(splt->sub->content = (char*)malloc(splt->i - i + 1)))
+		exit(-1);
 	while (i < splt->i)
 		splt->sub->content[j++] = splt->tok->content[i++];
 	splt->sub->content[j] = '\0';

@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_word_opt_equal_tool.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/06 20:30:07 by tcillard          #+#    #+#             */
+/*   Updated: 2020/01/06 20:31:50 by tcillard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh_word_expansion.h"
 
 void	sh_next_value(t_exp *exp)
 {
 	int		i;
-	
+
 	i = exp->i;
 	while (exp->content[i] != '}')
 		i++;
 	if (!(exp->value = malloc(i + 1)))
-		exit (-1);
+		exit(-1);
 	i = exp->i;
 	while (exp->content[i] != '}')
 	{
@@ -18,7 +30,7 @@ void	sh_next_value(t_exp *exp)
 	exp->value[i] = '\0';
 }
 
-void	sh_add_var(t_exp *exp,char *name)
+void	sh_add_var(t_exp *exp, char *name)
 {
 	exp->find = (*exp->env);
 	while (exp->find->next)

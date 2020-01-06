@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 01:44:07 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/06 19:51:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int		sh_skip_white_space(char *str, int i)
 
 int		sh_skip_number(char *str, int i)
 {
-
 	while (str[i] >= '0' && str[i] <= '9')
 		i++;
 	i = sh_skip_white_space(str, i);
@@ -84,8 +83,7 @@ int		sh_valide_arith(char *str)
 	int		par;
 
 	par = 0;
-	i = 0;
-	i = sh_skip_white_space(str, i);
+	i = sh_skip_white_space(str, 0);
 	while (str[i])
 	{
 		if (!(sh_parenthesis_counter(str, &i, 0)))
@@ -94,8 +92,7 @@ int		sh_valide_arith(char *str)
 			i++;
 		if (sh_all_char_operator(str[i]))
 			return (sh_arth_syntax_error(str, i));
-		else
-			i = sh_skip_number(str, i);
+		i = sh_skip_number(str, i);
 		if (!(sh_parenthesis_counter(str, &i, 0)))
 			return (sh_arth_syntax_error(str, i));
 		if (!(sh_check_operator(str, i)))

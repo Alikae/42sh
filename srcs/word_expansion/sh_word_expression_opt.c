@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_word_expression_opt.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/06 20:18:54 by tcillard          #+#    #+#             */
+/*   Updated: 2020/01/06 20:19:52 by tcillard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 
@@ -27,7 +38,7 @@ void	sh_opt_equal(t_exp *exp)
 		exp->value = ft_strdup(exp->find->value);
 	else if (exp->find && !exp->find->value && !(exp->opt == COLON))
 		exp->value = NULL;
-	else 
+	else
 		sh_assign_word(exp);
 }
 

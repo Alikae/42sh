@@ -6,9 +6,10 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 03:23:24 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/06 20:29:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdio.h>
 #include "sh_word_expansion.h"
 #include "sh_tokens.h"
@@ -18,13 +19,13 @@ void	sh_record_less_option(t_exp *exp)
 {
 	int		i;
 	int		j;
-	
+
 	j = 0;
 	i = exp->i;
 	while (exp->content[i] != '}')
 		i++;
 	if (!(exp->value = malloc(i - exp->i + 1)))
-		exit (-1);
+		exit(-1);
 	i = exp->i;
 	while (exp->content[i] != '}')
 		exp->value[j++] = exp->content[i++];
@@ -74,7 +75,7 @@ void	sh_record_name(t_exp *exp)
 void	sh_parameter_expansion(t_exp *exp)
 {
 	int		len;
-	char 	*cpy;
+	char	*cpy;
 
 	cpy = NULL;
 	len = 0;
@@ -82,7 +83,7 @@ void	sh_parameter_expansion(t_exp *exp)
 		exp->i++;
 	if (exp->content[exp->i] == '#')
 	{
-		len =  1;
+		len = 1;
 		exp->i++;
 	}
 	sh_record_name(exp);
