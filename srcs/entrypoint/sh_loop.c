@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/05 02:07:44 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/06 01:49:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int		sh_loop(void)
 //			;
 		while (!complete)//Can we ctrl-C?
 		{
-			dbug = 1;
+			dbug = 0;
 			//swap_signals_to_prompter
 			if (!dbug)
 			{
