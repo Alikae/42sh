@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:40:24 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/07 04:03:41 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/07 01:57:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_token	*dup_token_with_sub(t_token *origin)
 
 void	delete_token(t_token *tok)
 {
-	ft_memdel((void**)&tok->content);
+	ft_memdel((void**)&(tok->content));
 	ft_memdel((void**)&tok);
 }
 
