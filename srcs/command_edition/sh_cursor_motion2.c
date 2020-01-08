@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 08:48:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/01 15:51:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/08 11:33:30 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "sh_command_edition.h"
 #include "sh.h"
 #include "libft.h"
+#include <stdio.h> //
 
 int			sh_paste(char **command, char *buf, int i, t_hist *hist)
 {
@@ -29,10 +30,12 @@ int			sh_paste(char **command, char *buf, int i, t_hist *hist)
 	if (sh()->buselect)
 		reset_selection(command, i, hist);
 	*command = sh_insert_char(*command, buf, i);
-	ft_putstr_fd(&command[0][i + 1], 0);
-	j = ft_strlen(&command[0][i + 1]);
+	*command = sh_insert_char(*command, " ", ft_strlen(*command) - 1);
+	ft_putstr_fd(*command + i + 1, 0);
+	sh_cursor_motion(command, "\b", ft_strlen(*command) - 1, hist);
 	sh_cursor_position(&cursor);
-	if (command[0][i + ft_strlen(buf) + 1] != 0)
+	j = ft_strlen(*command + i + 1);
+	if (command[0][i + len + 1] != 0)
 	{
 		i = ft_strlen(*command) - 1;
 		i = sh_cursor_backward(j - len, i, cursor, term);

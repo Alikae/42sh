@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/01 15:35:28 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/08 11:33:33 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 		i = sh_cursor_backward(1, i, cursor, term);
 	else if (buf[0] == '\033' && buf[2] == 'C' && command[0][i + 1] != 0)
 		i = sh_cursor_forward(1, i, cursor, term);
-	else if ((buf[0] == 127 || buf[0] == 8) || buf[2] == '3')
+	else if ((buf[0] == 127 || buf[0] == 8) || buf[2] == '3' || buf[0] == '\b')
 	{
 		if (buf[0] == 127 || buf[0] == 8)
 			i = sh_backspace(command, i, cursor, term);
