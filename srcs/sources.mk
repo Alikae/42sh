@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/07 03:38:39 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/08 21:04:27 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -127,12 +127,9 @@ C_FILES_executer = \
 C_FILES_debug_mode = \
 		     debug_mode.c
 
-C_FILES_builtins/echo = \
-	sh_echo.c \
-
 C_FILES_builtins = \
+		   sh_echo.c \
 		   sh_debug_builtin.c \
-		   sh_cd.c \
 		   sh_env.c \
 		   sh_export.c \
 		   sh_readonly.c \
@@ -148,6 +145,7 @@ C_FILES_builtins = \
 		   sh_exit.c \
 		   sh_jobs.c \
 		   sh_fg.c \
+		   sh_cd.c \
 		   sh_unalias.c
 
 C_FILES_tools = \

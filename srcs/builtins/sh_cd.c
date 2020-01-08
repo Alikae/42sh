@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/24 15:46:57 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/07 12:44:53 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "sh_builtins.h"
 #include "libft.h"
 #include "limits.h"
+
+#define F_L 1
+#define F_P 2
 
 static int	cd_go_to(char *path)
 {
@@ -29,9 +32,9 @@ static int	cd_go_to(char *path)
 	path = sh_resolve_dotpath(path);
 	if (chdir(path))
 	{
-		ft_putstr("cd: can't access: ");
-		ft_putendl(path);
-		return (-1);
+		ft_putstr_fd("cd: can't access: ", 2);
+		ft_putendl_fd(path, 2);
+		return (1);
 	}
 	if ((ev = sh_setev("PWD", path)))
 		ev->exported = 1;
@@ -41,31 +44,30 @@ static int	cd_go_to(char *path)
 	return (0);
 }
 
-static int	cd_go_home(void)
+static int	cd_go_homeold(int code)
 {
 	char *pwd;
 
-	if ((pwd = sh_getev_value("HOME")))
+	if (code == 1)
 	{
-		cd_go_to(pwd);
-		return (0);
+		if ((pwd = sh_getev_value("HOME")))
+			return (cd_go_to(pwd));
+		else
+			ft_putendl_fd("HOME is not set", 2);
 	}
 	else
-		ft_putendl("HOME is not set");
-	return (1);
-}
-
-static int	cd_go_old(void)
-{
-	char *pwd;
-
-	if ((pwd = sh_getev_value("OLDPWD")))
 	{
-		cd_go_to(pwd);
-		return (0);
+		if ((pwd = sh_getev_value("OLDPWD")))
+		{
+			if (!cd_go_to(pwd))
+			{
+				ft_putendl(pwd);
+				return (0);
+			}
+		}
+		else
+			ft_putendl_fd("OLDPWD is not set", 2);
 	}
-	else
-		ft_putendl("OLDPWD is not set");
 	return (1);
 }
 
@@ -84,20 +86,57 @@ static int	cd_physical(char *path)
 	return (i);
 }
 
+static int		check_flags(char *from, char *to)
+{
+	int		i;
+	char	flag;
+
+	i = -1;
+	flag = *to;
+	while (from[++i])
+	{
+		if (from[i] == 'L')
+		{
+			*to ^= F_P;
+			*to |= F_L;
+		}
+		else if (from[i] == 'P')
+		{
+			*to ^= F_L;
+			*to |= F_P;
+		}
+		else if (from[i] != '\0')
+		{
+			*to = flag;
+			return (0);
+		}
+	}
+	return (1);
+}
+
 int			sh_cd(int ac, char **av, t_env **ev)
 {
+	char	flag;
+	int		i;
+
+	flag = '\0';
+	flag = F_L;
+	i = 1;
 	(void)ev;
 	if (ac <= 1)
-		return (cd_go_home());
-	else if (ac >= 2 && !ft_strcmp(av[1], "-"))
-		return (cd_go_old());
-	else if (ac >= 3 && !ft_strcmp(av[1], "-P"))
-		return (cd_physical(av[2]));
-	else if (ac >= 3 && !ft_strcmp(av[1], "-L"))
-		return (cd_go_to(av[2]));
-	else if (ac >= 2 && av[1][0] == '/')
-		return (cd_go_to(av[1]));
+		return (cd_go_homeold(1));
+	while (av[i][0] == '-' && av[i][1] != 0
+			&& check_flags(av[i] + 1, &flag))
+			i++;
+	if (flag & F_P)
+		return (cd_physical(av[i]));
+	else if (!av[i + 1])
+	{
+		if (!ft_strcmp(av[i], "-"))
+			return (cd_go_homeold(2));
+		return (cd_go_to(av[i]));
+	}
 	else
-		return (cd_go_to(av[1]));
+		ft_putendl_fd("42sh cd: usage: cd [-LP] [path]", 2);
 	return (0);
 }
