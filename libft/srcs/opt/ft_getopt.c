@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 16:35:28 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/27 20:07:52 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/08 22:12:41 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,12 @@ t_opt	*ft_get_sopt(int *ac, char ***av, char *optstr)
 		return (NULL);
 	while (*++s)
 	{
-		tmp = ft_strchr(optstr, *s);
+		if (!(tmp = ft_strchr(optstr, *s)))
+		{
+			write(2, s, ft_strlen(s));
+			write(2, " not supported\n", 15);
+			continue;
+		}
 		if (tmp[1] == ':' && (tmp[2] == '|' || !tmp[2]))
 			*optmp = ft_get_sopt_arg(ac, av, s - (*av)[1]);
 		else if (!tmp[1] || tmp[1] == '|')
