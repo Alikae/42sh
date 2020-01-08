@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:12:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/07 02:15:22 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/08 02:48:38 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void	sh_token_spliting(t_split *splt, int reset)
 	j = 0;
 	cpy = splt->sub;
 	sh_next_token(&(splt->sub));
-	printf("token = %p\n", splt->sub);
 	if (!(splt->sub->content = (char*)malloc(splt->i - i + 1)))
 		exit(-1);
 	while (i < splt->i)

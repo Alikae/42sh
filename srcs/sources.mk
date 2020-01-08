@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2019/12/19 05:55:44 by ede-ram          ###   ########.fr        #
+#    Updated: 2020/01/07 03:38:39 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -186,7 +186,8 @@ C_FILES_word_expansion = \
 			 sh_word_expression_opt.c \
 			 sh_expression_tool.c \
 			 sh_word_opt_equal_tool.c \
-			 pattern_matching.c
+			 pattern_matching.c \
+			 sh_spetial_parameters.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))
