@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 03:38:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/08 21:03:28 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/08 22:03:40 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,6 @@ void	sh_at_parameters(t_exp *exp)
 	(void)exp;
 }
 
-void	sh_bang_parameters(t_exp *exp)
-{
-	(void)exp;
-}
-
 void	sh_less_parameters(t_exp *exp)
 {
 	(void)exp;
@@ -114,7 +109,7 @@ void	sh_spetial_parameters(t_exp *exp)
 	else if (exp->name[0] == '@' && !(exp->name[1]))
 		sh_at_parameters(exp);
 	else if (exp->name[0] == '!' && !(exp->name[1]))
-		sh_bang_parameters(exp);
+		exp->value = ft_strdup(ft_itoa(sh()->last_background_pipeline_pgid));
 	else if (exp->name[0] == '-' && !(exp->name[1]))
 		sh_less_parameters(exp);
 }
