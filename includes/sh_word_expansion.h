@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/17 00:05:30 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/07 04:32:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,5 @@ void		sh_record_less_option(t_exp *exp);
 void		sh_pattern_matching(t_exp *exp);
 char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long);
 char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long);
+void	sh_spetial_parameters(t_exp *exp);
 #endif
