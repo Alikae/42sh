@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 03:38:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/08 20:42:47 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/08 21:03:28 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	sh_record_all_parameters(t_exp *exp, char c, char **av)
 	}
 	if (!(exp->value = malloc(size)))
 		exit(-1);
-	i = 1
+	i = 1;
 	while (av[i])
 	{
 		j = 0;
