@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/22 04:55:53 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/08 21:57:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct		s_sh
 	t_toktype		type; //for recognize tokens
 	int				last_cmd_result;
 	int				last_child_pid;
+	int				last_background_pipeline_pgid;
 	t_env	*params;
 	t_ln			*ln_history;
 	int				exp_rec;

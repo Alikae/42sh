@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 23:58:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/08 21:58:16 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ int		exec_pipeline_core(t_token *token_begin, t_token *token_end)
 	delete_close_all_pipe_lst(p->pipe_lst);
 	p->pipe_lst = 0;
 	tmp2 = p->pgid_current_pipeline;
+	p->last_background_pipeline_pgid = p->pgid_current_pipeline;
 	p->pgid_current_pipeline = 0;
 	p->last_cmd_result = block_wait(p, tmp2, 0);
 	if (!p->process_is_stopped)
@@ -338,6 +339,7 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin,
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
 		return (-1);
+	p->last_background_pipeline_pgid = child_pid;
 	if (child_pid == 0)
 	{
 		close_cpy_std_fds(p);
