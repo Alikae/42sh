@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/12/29 17:15:36 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/07 14:59:11 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	buf = NULL;
 	while (k != 0 && *command && j > 0)
 	{
-		if (tgetent(NULL, term ? term : "xterm") == ERR)
+		if (tgetent(NULL, term ? term : "vt100") == ERR)
 			return (*command);
 		if (tcgetattr(0, &sh()->orig_termios))
 			return (*command);

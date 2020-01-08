@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sh_sub_arth_var.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
+/*   Updated: 2020/01/06 20:06:41 by tcillard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 #include "sh_word_expansion.h"
 
-int		sh_error_expression_name(char *str)
+int				sh_error_expression_name(char *str)
 {
 	printf("42sh: bad math expression: error is \"%s\"\n", str);
 	sh()->abort_cmd = 1;
 	return (0);
 }
 
-int		sh_check_value(char *str)
+int				sh_check_value(char *str)
 {
 	int		i;
 
@@ -25,7 +37,7 @@ int		sh_check_value(char *str)
 		return (1);
 }
 
-char		*sh_find_arth_var_value(char **str)
+char			*sh_find_arth_var_value(char **str)
 {
 	t_env *env;
 
@@ -38,17 +50,17 @@ char		*sh_find_arth_var_value(char **str)
 	return (0);
 }
 
-void		sh_sub_var(char *value, char **str, int begin, int end)
+void			sh_sub_var(char *value, char **str, int beg, int ed)
 {
 	char	*sub;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	j = 0;
 	i = 0;
-	if (!(sub = malloc(ft_strlen(value) + (ft_strlen(*str) - (end - begin)) + 3)))
-		exit (-1);
-	while (i < begin)
+	if (!(sub = malloc(ft_strlen(value) + (ft_strlen(*str) - (ed - beg)) + 3)))
+		exit(-1);
+	while (i < beg)
 	{
 		sub[i] = (*str)[i];
 		i++;
@@ -57,8 +69,8 @@ void		sh_sub_var(char *value, char **str, int begin, int end)
 	while (value[j])
 		sub[i++] = value[j++];
 	sub[i++] = ')';
-	while ((*str)[end])
-		sub[i++] = (*str)[end++];
+	while ((*str)[ed])
+		sub[i++] = (*str)[ed++];
 	sub[i] = '\0';
 	free(*str);
 	*str = sub;
@@ -69,7 +81,7 @@ unsigned int	sh_tab_len(char **tab)
 	int		i;
 	int		j;
 	int		len;
-	
+
 	i = 0;
 	len = 0;
 	while (tab[i])
@@ -82,7 +94,7 @@ unsigned int	sh_tab_len(char **tab)
 	return (len);
 }
 
-char		*sh_tab_fusion_free(char ***tab)
+char			*sh_tab_fusion_free(char ***tab)
 {
 	int		j;
 	int		i;
@@ -92,7 +104,7 @@ char		*sh_tab_fusion_free(char ***tab)
 	i = 0;
 	i_name = 0;
 	if (!(name = malloc(sh_tab_len(*tab))))
-		exit (-1);
+		exit(-1);
 	while ((*tab)[i])
 	{
 		j = 0;
@@ -109,7 +121,7 @@ char		*sh_tab_fusion_free(char ***tab)
 	return (name);
 }
 
-void		sh_add_opt(char **name, short int opt)
+void			sh_add_opt(char **name, short int opt)
 {
 	char	**tab;
 	int		i;
@@ -130,7 +142,7 @@ void		sh_add_opt(char **name, short int opt)
 	*name = sh_tab_fusion_free(&tab);
 }
 
-void		sh_record_arth(char **str, int i, short int opt)
+void			sh_record_arth(char **str, int i, short int opt)
 {
 	int		i_cpy;
 	int		i_sub;
@@ -159,7 +171,7 @@ void		sh_record_arth(char **str, int i, short int opt)
 	ft_memdel((void**)&name);
 }
 
-int		sh_check_valid_var_name(char *str, int i)
+int				sh_check_valid_var_name(char *str, int i)
 {
 	while (str[i] != '\t' && str[i] != ' ' && str[i] != '\n'
 			&& !(sh_all_char_operator(str[i])) && str[i])
@@ -171,7 +183,7 @@ int		sh_check_valid_var_name(char *str, int i)
 	return (1);
 }
 
-void		sh_sub_arith_var(char **str)
+void			sh_sub_arith_var(char **str)
 {
 	int			i;
 	short int	opt;
@@ -180,10 +192,11 @@ void		sh_sub_arith_var(char **str)
 	opt = 0;
 	while ((*str)[i] && !(sh()->abort_cmd))
 	{
+		opt = 0;
 		while ((*str)[i] == ' ' || (*str)[i] == '\t' || (*str)[i] == '\n')
 			i++;
-		opt = 0;
-		if (!(sh_all_char_operator((*str)[i])) && ((str)[i] < 0 || (*str)[i] > 9)
+		if (!(sh_all_char_operator((*str)[i]))
+			&& ((str)[i] < 0 || (*str)[i] > 9)
 			&& (*str)[i] != ')' && (*str)[i] != '(')
 		{
 			if (i >= 2 && (*str)[i - 1] == '+' && (*str)[i - 2] == '+')
@@ -193,6 +206,6 @@ void		sh_sub_arith_var(char **str)
 			if (sh_check_valid_var_name(*str, i))
 				sh_record_arth(str, i, opt);
 		}
-	i++;
+		i++;
 	}
 }

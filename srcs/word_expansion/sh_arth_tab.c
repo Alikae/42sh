@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 17:34:23 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/12 22:29:42 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/06 19:48:44 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,18 @@ char		**sh_strsplit_arth(char const *s)
 
 	n = 0;
 	if (s == NULL || !(sp = (char**)malloc(sizeof(char*) * ft_word(s) + 1)))
-		exit (-1);
+		exit(-1);
 	while (*s)
 	{
 		i = 0;
 		if (!(sp[n] = malloc(ft_wordlen(s) + 1)))
-			exit (-1);
+			exit(-1);
 		if (!(sh_all_char_operator(*s)))
-		{
 			while (*s && (!(sh_all_char_operator(*s))))
 				sp[n][i++] = *s++;
-		}
 		else
-		{
 			while (*s && sh_all_char_operator(*s))
 				sp[n][i++] = *s++;
-		}
 		sp[n][i] = '\0';
 		n++;
 	}

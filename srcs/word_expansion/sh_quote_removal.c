@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 06:54:59 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/07 02:56:54 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,17 @@ void	sh_next_token(t_token **new)
 	if (*new == NULL)
 	{
 		if (!(*new = (t_token*)create_token(SH_WORD, 0, NULL)))
-			exit (-1);
+			exit(-1);
 	}
 	else
 	{
 		while ((*new)->next)
 			(*new) = (*new)->next;
 		if (!((*new)->next = (t_token*)create_token(SH_WORD, 0, NULL)))
-			exit (-1);
+			exit(-1);
 		*new = (*new)->next;
 	}
+	ft_memdel((void**)&((*new)->content));
 	(*new)->sub = NULL;
 	(*new)->next = NULL;
 }

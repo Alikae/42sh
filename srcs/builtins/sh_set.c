@@ -6,13 +6,39 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/06 23:07:41 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/08 03:32:13 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "sh_builtins.h"
-
+#include "sh.h"
+void		sh_record_ev_params(char **av)
+{
+	char	**new_av;
+	int		i;
+	char 	**old_av;
+	
+	old_av = sh()->av;
+	i = 0;
+	while (av[i])
+		i++;
+	if (!(new_av = malloc(sizeof(char*) * (i + 1))))
+		exit(-1);
+	i = 0;
+	new_av[i++] = ft_strdup(old_av[0]);
+	while (av[i]) 
+	{
+		new_av[i] = ft_strdup(av[i]);
+		i++;
+	}
+	new_av[i] = 0;
+	sh()->av = new_av;
+	i = 0;
+	while (old_av[i])
+		ft_memdel((void**)&(old_av[i++]));
+	free(old_av);
+}
 static void	sh_print_set(t_env **ev)
 {
 	t_env	*params;
@@ -40,6 +66,7 @@ int			sh_set(int ac, char **av, t_env **ev)
 	tmp2 = NULL;
 	if (!ev || !*ev)
 		return (1);
+	sh_record_ev_params(av);
 	if (ac <= 1)
 		sh_print_set(ev);
 	else if ((tmp = ft_strchr(av[i], '=')))

@@ -6,9 +6,10 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 03:23:24 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/07 04:45:59 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdio.h>
 #include "sh_word_expansion.h"
 #include "sh_tokens.h"
@@ -18,13 +19,13 @@ void	sh_record_less_option(t_exp *exp)
 {
 	int		i;
 	int		j;
-	
+
 	j = 0;
 	i = exp->i;
 	while (exp->content[i] != '}')
 		i++;
 	if (!(exp->value = malloc(i - exp->i + 1)))
-		exit (-1);
+		exit(-1);
 	i = exp->i;
 	while (exp->content[i] != '}')
 		exp->value[j++] = exp->content[i++];
@@ -49,23 +50,27 @@ void	sh_record_name(t_exp *exp)
 	i_sub = 0;
 	cpy = exp->i;
 	ft_memdel((void**)&(exp->name));
-	while (exp->content[cpy] != ':' && exp->content[cpy] != '-'
+	while ((exp->content[cpy] != ':' && exp->content[cpy] != '-'
 			&& exp->content[cpy] != '=' && exp->content[cpy] != '?'
 			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
 			&& exp->content[cpy] != '%' && exp->content[cpy] != '}'
 			&& exp->content[cpy] != '$' && exp->content[cpy] != '/'
 			&& exp->content[cpy] != '"' && exp->content[cpy] != '\''
-			&& exp->content[cpy] != '\\' && exp->content[cpy])
+			&& exp->content[cpy] != '\\' && exp->content[cpy]) || i_sub == 0)
+	{
 		cpy++;
+		i_sub++;
+	}
+	i_sub = 0;
 	if (!(exp->name = malloc(cpy - exp->i + 1)))
 		exit(-1);
-	while (exp->content[exp->i] != ':' && exp->content[exp->i] != '-'
+	while ((exp->content[exp->i] != ':' && exp->content[exp->i] != '-'
 			&& exp->content[exp->i] != '=' && exp->content[exp->i] != '?'
 			&& exp->content[exp->i] != '+' && exp->content[exp->i] != '#'
 			&& exp->content[exp->i] != '%' && exp->content[exp->i] != '}'
 			&& exp->content[exp->i] != '$' && exp->content[exp->i] != '/'
 			&& exp->content[exp->i] != '"' && exp->content[exp->i] != '\''
-			&& exp->content[exp->i] != '\\' && exp->content[exp->i])
+			&& exp->content[exp->i] != '\\' && exp->content[exp->i]) || i_sub == 0)
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
 	sh_find_value(exp);
@@ -74,7 +79,7 @@ void	sh_record_name(t_exp *exp)
 void	sh_parameter_expansion(t_exp *exp)
 {
 	int		len;
-	char 	*cpy;
+	char	*cpy;
 
 	cpy = NULL;
 	len = 0;
@@ -82,7 +87,7 @@ void	sh_parameter_expansion(t_exp *exp)
 		exp->i++;
 	if (exp->content[exp->i] == '#')
 	{
-		len =  1;
+		len = 1;
 		exp->i++;
 	}
 	sh_record_name(exp);

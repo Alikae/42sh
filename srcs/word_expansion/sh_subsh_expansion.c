@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2019/12/22 06:07:19 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/06 20:22:54 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 #include "sh_redirections.h"
 #include <stdio.h>
 #include "sh_tokens.h"
-
-#define P(x) (printf(x)) //
-
 
 void	sh_str_start_end(char **dest, char *src, int i, int n)
 {
@@ -62,7 +59,7 @@ int		sh_commande_string_size(t_exp *exp, char c)
 	{
 		sh_subsh_quote(exp, &quote);
 		if (!quote && exp->content[exp->i] == '(')
-			sh_commande_string_size(exp,')');
+			sh_commande_string_size(exp, ')');
 		exp->i++;
 	}
 	return (exp->i - size);
@@ -78,7 +75,7 @@ void	sh_record_commande_string(t_exp *exp)
 		size = sh_commande_string_size(exp, '`');
 	exp->i = exp->i - size + 1;
 	if (!(exp->name = (char*)malloc(size + 1)))
-		exit (-1);
+		exit(-1);
 	sh_str_start_end(&(exp->name), exp->content, exp->i, exp->i + size - 1);
 }
 
@@ -102,12 +99,12 @@ void	sh_subshdup(char *buff, t_exp *exp)
 	if (!(exp->value))
 	{
 		if (!(exp->value = malloc(ft_strlen(buff) + 1)))
-			exit (-1);
+			exit(-1);
 	}
 	else
 	{
 		if (!(exp->value = malloc(ft_strlen(cpy) + ft_strlen(buff) + 1)))
-			exit (-1);
+			exit(-1);
 		while (cpy[i])
 		{
 			exp->value[i] = cpy[i];
@@ -120,10 +117,10 @@ void	sh_subshdup(char *buff, t_exp *exp)
 
 void	sh_read_pipe(t_exp *exp, int fd)
 {
-	int ret;
-	char buff[500];
-	ret = 0;
+	int		ret;
+	char	buff[500];
 
+	ret = 0;
 	while ((ret = read(fd, &buff, 499)) > 0)
 	{
 		buff[ret] = '\0';
@@ -144,12 +141,11 @@ void	sh_subsh_expansion(t_exp *exp)
 		if (pipe(pipe_fd) == -1)
 			exit(-1);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
-	//	printf("exec subsh exp\n");
 		exec_compound_subsh(sh(), tok);
 		del_n_redirect_lst(&(sh()->redirect_lst), 1);
 		sh_read_pipe(exp, pipe_fd[0]);
 		close(pipe_fd[0]);
 	}
-	else//error
+	else
 		sh()->abort_cmd = 1;
 }

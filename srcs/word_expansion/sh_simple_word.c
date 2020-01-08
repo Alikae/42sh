@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 02:40:54 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/19 15:10:38 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/07 04:29:34 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,19 @@
 
 void	sh_simple_expansion(t_exp *exp)
 {
+	int		i;
+	int		j;
+	char	**av;
+
+	i = 0;
+	j = 0;
+	av = NULL;
 	sh_record_name(exp);
 	if (exp->find)
 	{
 		exp->value = ft_strdup(exp->find->value);
 		sh_spetial_quote(&(exp->value));
 	}
+	else
+		sh_spetial_parameters(exp);
 }

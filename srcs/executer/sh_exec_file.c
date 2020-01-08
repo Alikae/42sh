@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/23 23:45:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/07 02:33:56 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,15 @@ int		sh_script(const char *path)
 	if ((fd = open(path, O_RDONLY)) < 0)
 	{
 		sh_dprintf(2, "42sh: cant open %s\n", path);
+		ft_memdel((void**)&buff);
 		return (fd);
 	}
 	if (read(fd, buff, 0) != 0)
+	{
+		ft_memdel((void**)&buff);
+		sh_dprintf(2, "42sh: cant read %s\n", path);
 		return (-1);
+	}
 	while (read(fd, buff, 4096) > 0)
 	{
 		if (input)
