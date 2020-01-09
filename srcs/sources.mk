@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/08 21:04:27 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/09 09:52:24 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -141,7 +141,6 @@ C_FILES_builtins = \
 		   sh_type.c \
 		   sh_true.c \
 		   sh_alias.c \
-		   sh_pwd.c \
 		   sh_exit.c \
 		   sh_jobs.c \
 		   sh_fg.c \
