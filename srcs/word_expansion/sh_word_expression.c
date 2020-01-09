@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 23:29:38 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 23:33:25 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	sh_find_value(t_exp *exp)
 int		sh_check_all_separator(char c)
 {
 	return (c && c != ':' && c != '-' && c != '=' && c != '?' && c != '+'
-			&& c != '#' && c != '%' && c != '}' && c != '$' && c != '/' && c != '"'
-			&& c != '\'' && c != '\\');
+			&& c != '#' && c != '%' && c != '}' && c != '$' && c != '/'
+			&& c != '"' && c != '\'' && c != '\\');
 }
 
 void	sh_record_name(t_exp *exp)
@@ -65,7 +65,7 @@ void	sh_record_name(t_exp *exp)
 	i_sub = 0;
 	if (!(exp->name = malloc(cpy - exp->i + 1)))
 		exit(-1);
-	while (sh_check_all_separator(exp->content[exp->i]) ||  i_sub == 0)
+	while (sh_check_all_separator(exp->content[exp->i]) || i_sub == 0)
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
 	sh_find_value(exp);
