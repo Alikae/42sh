@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/07 12:05:21 by tmeyer           ###   ########.fr        #
+#    Updated: 2020/01/09 15:24:13 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -137,6 +137,7 @@ C_FILES_builtins = \
 		   sh_unset.c \
 		   sh_set.c \
 		   sh_test.c \
+		   sh_test_unary.c \
 		   sh_source.c \
 		   sh_type.c \
 		   sh_true.c \
