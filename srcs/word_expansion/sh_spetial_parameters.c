@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 03:38:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 21:45:36 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 23:08:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,6 @@ void	sh_wildcard_parameters(t_exp *exp)
 	sh_record_all_parameters(exp, c, sh()->av);
 }
 
-void	sh_less_parameters(t_exp *exp)
-{
-	(void)exp;
-}
-
 void	sh_spetial_parameters(t_exp *exp)
 {
 	if (exp->name[0] >= '0' && exp->name[0] <= '9')
@@ -103,6 +98,4 @@ void	sh_spetial_parameters(t_exp *exp)
 		sh_record_all_parameters(exp, ' ', sh()->av);
 	else if (exp->name[0] == '!' && !(exp->name[1]))
 		exp->value = ft_strdup(ft_itoa(sh()->last_background_pipeline_pgid));
-	else if (exp->name[0] == '-' && !(exp->name[1]))
-		sh_less_parameters(exp);
 }

@@ -6,93 +6,11 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 20:06:41 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 23:07:45 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sh.h"
 #include "sh_word_expansion.h"
-
-int				sh_error_expression_name(char *str)
-{
-	printf("42sh: bad math expression: error is \"%s\"\n", str);
-	sh()->abort_cmd = 1;
-	return (0);
-}
-
-int				sh_check_value(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if ((str[i] > '9' || str[i] < '0') && !sh_all_char_operator(str[i]))
-			break ;
-		i++;
-	}
-	if (str[i])
-		return (sh_error_expression_name(str + i));
-	else
-		return (1);
-}
-
-char			*sh_find_arth_var_value(char **str)
-{
-	t_env *env;
-
-	env = sh()->params;
-	while (env && (ft_strcmp(*str, env->key) != 0))
-		env = env->next;
-	ft_memdel((void**)str);
-	if (env && sh_check_value(env->value))
-		return (ft_strdup(env->value));
-	return (0);
-}
-
-void			sh_sub_var(char *value, char **str, int beg, int ed)
-{
-	char	*sub;
-	int		i;
-	int		j;
-
-	j = 0;
-	i = 0;
-	if (!(sub = malloc(ft_strlen(value) + (ft_strlen(*str) - (ed - beg)) + 3)))
-		exit(-1);
-	while (i < beg)
-	{
-		sub[i] = (*str)[i];
-		i++;
-	}
-	sub[i++] = '(';
-	while (value[j])
-		sub[i++] = value[j++];
-	sub[i++] = ')';
-	while ((*str)[ed])
-		sub[i++] = (*str)[ed++];
-	sub[i] = '\0';
-	free(*str);
-	*str = sub;
-}
-
-unsigned int	sh_tab_len(char **tab)
-{
-	int		i;
-	int		j;
-	int		len;
-
-	i = 0;
-	len = 0;
-	while (tab[i])
-	{
-		j = 0;
-		while (tab[i][j])
-			++j && ++len;
-		i++;
-	}
-	return (len);
-}
 
 char			*sh_tab_fusion_free(char ***tab)
 {

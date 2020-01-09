@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 21:24:27 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 23:29:38 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,13 @@ void	sh_find_value(t_exp *exp)
 	exp->find = env;
 }
 
+int		sh_check_all_separator(char c)
+{
+	return (c && c != ':' && c != '-' && c != '=' && c != '?' && c != '+'
+			&& c != '#' && c != '%' && c != '}' && c != '$' && c != '/' && c != '"'
+			&& c != '\'' && c != '\\');
+}
+
 void	sh_record_name(t_exp *exp)
 {
 	int		cpy;
@@ -50,13 +57,7 @@ void	sh_record_name(t_exp *exp)
 	i_sub = 0;
 	cpy = exp->i;
 	ft_memdel((void**)&(exp->name));
-	while ((exp->content[cpy] != ':' && exp->content[cpy] != '-'
-			&& exp->content[cpy] != '=' && exp->content[cpy] != '?'
-			&& exp->content[cpy] != '+' && exp->content[cpy] != '#'
-			&& exp->content[cpy] != '%' && exp->content[cpy] != '}'
-			&& exp->content[cpy] != '$' && exp->content[cpy] != '/'
-			&& exp->content[cpy] != '"' && exp->content[cpy] != '\''
-			&& exp->content[cpy] != '\\' && exp->content[cpy]) || i_sub == 0)
+	while (sh_check_all_separator(exp->content[cpy]) || i_sub == 0)
 	{
 		cpy++;
 		i_sub++;
@@ -64,13 +65,7 @@ void	sh_record_name(t_exp *exp)
 	i_sub = 0;
 	if (!(exp->name = malloc(cpy - exp->i + 1)))
 		exit(-1);
-	while ((exp->content[exp->i] != ':' && exp->content[exp->i] != '-'
-			&& exp->content[exp->i] != '=' && exp->content[exp->i] != '?'
-			&& exp->content[exp->i] != '+' && exp->content[exp->i] != '#'
-			&& exp->content[exp->i] != '%' && exp->content[exp->i] != '}'
-			&& exp->content[exp->i] != '$' && exp->content[exp->i] != '/'
-			&& exp->content[exp->i] != '"' && exp->content[exp->i] != '\''
-			&& exp->content[exp->i] != '\\' && exp->content[exp->i]) || i_sub == 0)
+	while (sh_check_all_separator(exp->content[exp->i]) ||  i_sub == 0)
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';
 	sh_find_value(exp);

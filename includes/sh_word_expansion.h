@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 21:56:41 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 23:06:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,10 @@ void		sh_str_start_end(char **dest, char *src, int i, int n);
 void		sh_subsh_quote(t_exp *exp, short *quote);
 int			sh_commande_string_size(t_exp *exp, char c);
 void		sh_record_commande_string(t_exp *exp);
+int			sh_error_expression_name(char *str);
+int			sh_check_value(char *str);
+char		*sh_find_arth_var_value(char **str);
+void		sh_sub_var(char *value, char **str, int beg, int ed);
+int			sh_tab_len(char **tab);
+
 #endif

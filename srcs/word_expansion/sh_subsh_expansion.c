@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 22:46:05 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 23:00:32 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	sh_subsh_expansion(t_exp *exp)
 	tok = create_token(SH_SUBSH, 0, NULL);
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
-		//print_all_tokens(sh(), tok, 0);
 		if (pipe(pipe_fd) == -1)
 			exit(-1);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
