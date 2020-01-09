@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/07 05:13:18 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 21:24:12 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,18 +129,6 @@ int		sh_expansion_quote(t_exp *exp)
 	return (1);
 }
 
-void	sh_print_exp(t_exp *exp, char *where)
-{
-	printf("\n---------- %s ----------\n", where);
-	printf("exp->i = %i\n", exp->i);
-	printf("exp->first_i = %i\n", exp->first_i);
-	printf("exp->contet[%i] = %c\n", exp->i, exp->content[exp->i]);
-	printf("exp->name = %s\n", exp->name);
-	printf("exp->value = %s\n", exp->value);
-	printf("exp->content = %s\n", exp->content);
-	printf("\n-----------------------------------\n");
-}
-
 int		sh_word_expansion(t_exp *exp)
 {
 	int		i;
@@ -175,6 +163,7 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 	exp.tok->sub = NULL;
 	exp.tok->next = NULL;
 	sh_tilde_expansion(&(exp.tok->content), *env);
+	printf("%s\n", exp.tok->content);
 	sh_word_expansion(&exp);
 	new_tok = sh_quote_removal(exp.tok, sh_getev_value("IFS"), ifs);
 	sh_free_exp(&exp);
