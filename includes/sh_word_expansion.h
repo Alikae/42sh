@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/07 04:32:30 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 21:56:41 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int 		sh_all_char_operator(char c);
 int			sh_valide_arith(char *str);
 char		**sh_strsplit_arth(const char *s);
 long int	sh_long_atoi(const char *s1);
-char 	  *sh_long_itoa(long int n);
+char		*sh_long_itoa(long int n);
 void		bst_print_dot(t_arith *a, char *str, char *arth);
 int			sh_is_next_word(t_split *splt);
 int			sh_check_split(t_split *splt);
@@ -90,7 +90,14 @@ void		sh_next_word(t_exp *exp);
 void		sh_assign_word(t_exp *exp);
 void		sh_record_less_option(t_exp *exp);
 void		sh_pattern_matching(t_exp *exp);
-char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long);
-char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long);
-void	sh_spetial_parameters(t_exp *exp);
+char		*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long);
+char		*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long);
+void		sh_spetial_parameters(t_exp *exp);
+int			sh_skip_white_space(char *str, int i);
+int			sh_skip_number(char *str, int i);
+int			sh_arth_syntax_error(char *str, int i);
+void		sh_str_start_end(char **dest, char *src, int i, int n);
+void		sh_subsh_quote(t_exp *exp, short *quote);
+int			sh_commande_string_size(t_exp *exp, char c);
+void		sh_record_commande_string(t_exp *exp);
 #endif
