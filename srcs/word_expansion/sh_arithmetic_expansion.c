@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 20:35:35 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 00:11:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,6 @@ int		sh_special_char_operator(char *str, int i)
 	return (0);
 }
 
-void	sh_init_arith(t_arith **arith)
-{
-	if (!((*arith) = malloc(sizeof(t_arith))))
-		exit(-1);
-	(*arith)->nb = 0;
-	(*arith)->next_op = NUMBER;
-	(*arith)->next = NULL;
-	(*arith)->sub = NULL;
-}
-
 void	sh_record_arithmetic_string(t_exp *exp)
 {
 	int		size;
@@ -61,40 +51,6 @@ void	sh_record_arithmetic_string(t_exp *exp)
 	if (!(exp->name = (char*)malloc(size + 1)))
 		exit(-1);
 	sh_str_start_end(&(exp->name), exp->content, exp->i, exp->i + size - 1);
-}
-
-long int	sh_long_power(int pw)
-{
-	long int nb;
-
-	nb = 1;
-	if (pw < 0)
-		return (0);
-	while (pw)
-	{
-		nb = nb * 10;
-		pw--;
-	}
-	return (nb);
-}
-
-long int	sh_atoi_index(char *str, int *i)
-{
-	long int	pw;
-	long int	nb;
-
-	nb = 0;
-	pw = *i;
-	while (str[pw] && str[pw] >= '0' && str[pw] <= '9')
-		pw++;
-	pw = sh_long_power(pw - *i - 1);
-	while (pw)
-	{
-		nb = nb + pw * (str[*i] - '0');
-		(*i)++;
-		pw = pw / 10;
-	}
-	return (nb);
 }
 
 void	sh_write_less_op(char *str, int i, t_arith **arith)
@@ -306,86 +262,6 @@ t_arith	*sh_creat_arithmetic_ast(char *str, int begin, int end)
 			arith->sub = sh_creat_arithmetic_ast(str, end + 2, end_cpy);
 	}
 	return (arith);
-}
-
-long int	sh_exec_arith(t_arith *arith)
-{
-	if (arith->next_op == PLUS)
-		return (sh_exec_arith(arith->next) + sh_exec_arith(arith->sub));
-	else if (arith->next_op == MINUS)
-		return (sh_exec_arith(arith->next) - sh_exec_arith(arith->sub));
-	else if (arith->next_op == MULTI)
-		return (sh_exec_arith(arith->next) * sh_exec_arith(arith->sub));
-	else if (arith->next_op == DIV)
-		return (sh_exec_arith(arith->next) / sh_exec_arith(arith->sub));
-	else if (arith->next_op == MODULO)
-		return (sh_exec_arith(arith->next) % sh_exec_arith(arith->sub));
-	else if (arith->next_op == MORE)
-		return (sh_exec_arith(arith->next) > sh_exec_arith(arith->sub));
-	else if (arith->next_op == LESS)
-		return (sh_exec_arith(arith->next) < sh_exec_arith(arith->sub));
-	else if (arith->next_op == MORE_EQUAL)
-		return (sh_exec_arith(arith->next) >= sh_exec_arith(arith->sub));
-	else if (arith->next_op == LESS_EQUAL)
-		return (sh_exec_arith(arith->next) <= sh_exec_arith(arith->sub));
-	else if (arith->next_op == AND)
-		return (sh_exec_arith(arith->next) & sh_exec_arith(arith->sub));
-	else if (arith->next_op == OR)
-		return (sh_exec_arith(arith->next) | sh_exec_arith(arith->sub));
-	else if (arith->next_op == AND_AND)
-		return (sh_exec_arith(arith->next) && sh_exec_arith(arith->sub));
-	else if (arith->next_op == OR_OR)
-		return (sh_exec_arith(arith->next) || sh_exec_arith(arith->sub));
-	else if (arith->next_op == DIFFERENT)
-		return (sh_exec_arith(arith->next) != sh_exec_arith(arith->sub));
-	else if (arith->next_op == EQUAL)
-		return (sh_exec_arith(arith->next) == sh_exec_arith(arith->sub));
-	else
-		return (arith->nb);
-}
-
-int		ft_number(long int n)
-{
-	int		count;
-
-	count = 0;
-	if (n == 0)
-		count++;
-	while (n != 0)
-	{
-		n = n / 10;
-		count++;
-	}
-	return (count);
-}
-
-char	*sh_long_itoa(long int n)
-{
-	char	*strnb;
-	int		i;
-	int		test;
-
-	i = ft_number(n);
-	test = 1;
-	if (n < 0)
-		test = 2;
-	if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
-		exit(-1);
-	ft_bzero(strnb, test + i);
-	if (n < 0)
-		strnb[0] = '-';
-	else
-		i--;
-	while ((i >= 0 && test == 1) || (test == 2 && i > 0))
-	{
-		if (test == 1)
-			strnb[i] = (n - (n / 10 * 10)) + '0';
-		else
-			strnb[i] = ((n - (n / 10 * 10)) * -1) + '0';
-		n = n / 10;
-		i--;
-	}
-	return (strnb);
 }
 
 int		sh_arth_error_parenthesis(char *str)
