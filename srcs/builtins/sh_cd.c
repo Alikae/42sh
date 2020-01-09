@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/09 11:40:52 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/09 13:01:03 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	cd_go_to(char *path)
 		*tmp = '\0';
 	ft_bzero(dir, PATH_MAX + 1);
 	getcwd(dir, PATH_MAX);
+	path = sh_resolve_dotpath(path);
 	if (chdir(path))
 	{
 		ft_putstr_fd("cd: can't access: ", 2);
@@ -37,9 +38,11 @@ static int	cd_go_to(char *path)
 	}
 	if ((ev = sh_setev("OLDPWD", dir)))
 		ev->exported = 1;
+	ft_bzero(dir, PATH_MAX + 1);
 	getcwd(dir, PATH_MAX);
 	if ((ev = sh_setev("PWD", dir)))
 		ev->exported = 1;
+	ft_memdel((void**)&path);
 	return (0);
 }
 
