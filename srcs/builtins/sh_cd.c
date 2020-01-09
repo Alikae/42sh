@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/07 12:44:53 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/09 13:01:03 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ static int	cd_go_to(char *path)
 		ft_putendl_fd(path, 2);
 		return (1);
 	}
-	if ((ev = sh_setev("PWD", path)))
-		ev->exported = 1;
 	if ((ev = sh_setev("OLDPWD", dir)))
+		ev->exported = 1;
+	ft_bzero(dir, PATH_MAX + 1);
+	getcwd(dir, PATH_MAX);
+	if ((ev = sh_setev("PWD", dir)))
 		ev->exported = 1;
 	ft_memdel((void**)&path);
 	return (0);
@@ -86,7 +88,7 @@ static int	cd_physical(char *path)
 	return (i);
 }
 
-static int		check_flags(char *from, char *to)
+static int	check_flags(char *from, char *to)
 {
 	int		i;
 	char	flag;
@@ -127,7 +129,7 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		return (cd_go_homeold(1));
 	while (av[i][0] == '-' && av[i][1] != 0
 			&& check_flags(av[i] + 1, &flag))
-			i++;
+		i++;
 	if (flag & F_P)
 		return (cd_physical(av[i]));
 	else if (!av[i + 1])
