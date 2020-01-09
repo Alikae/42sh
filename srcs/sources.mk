@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/09 15:53:17 by jerry            ###   ########.fr        #
+#    Updated: 2020/01/09 16:01:27 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -149,7 +149,6 @@ C_FILES_builtins = \
 		   sh_unalias.c
 
 C_FILES_tools = \
-		sh_resolve_dotpath.c \
 		sh_print_all_token.c \
 		sh_shdel.c \
 		sh_hist_del.c \
