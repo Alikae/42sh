@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/08 11:33:33 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/09 13:16:24 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,29 +98,29 @@ static int	sh_backspace(char **command, int i, t_pos cursor, t_pos term)
 
 int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 {
-	t_pos	cursor;
-	t_pos	term;
+	t_cursors c;
 
-	sh_cursor_position(&cursor);
-	term.rows = tgetnum("li");
-	term.col = tgetnum("co");
+	sh_cursor_position(&c.cursor);
+	c.term.rows = tgetnum("li");
+	c.term.col = tgetnum("co");
 	if (sh()->buselect && !(buf[0] == 127 || buf[0] == 8))
 		reset_selection(command, i, hist);
 	if (buf[0] == '\033' && buf[2] == 'H')
-		i = sh_cursor_backward(i + 1, i, cursor, term);
+		i = sh_cursor_backward(i + 1, i, c.cursor, c.term);
 	else if (buf[0] == '\033' && buf[2] == 'F')
-		i = sh_cursor_forward(ft_strlen(*command) - i - 1, i, cursor, term);
+		i = sh_cursor_forward(ft_strlen(*command) - i - 1, i, c.cursor, c.term);
 	else if (buf[0] == '\033' && buf[2] == 'D' && i > -1)
-		i = sh_cursor_backward(1, i, cursor, term);
+		i = sh_cursor_backward(1, i, c.cursor, c.term);
 	else if (buf[0] == '\033' && buf[2] == 'C' && command[0][i + 1] != 0)
-		i = sh_cursor_forward(1, i, cursor, term);
+		i = sh_cursor_forward(1, i, c.cursor, c.term);
 	else if ((buf[0] == 127 || buf[0] == 8) || buf[2] == '3' || buf[0] == '\b')
 	{
 		if (buf[0] == 127 || buf[0] == 8)
-			i = sh_backspace(command, i, cursor, term);
+			i = sh_backspace(command, i, c.cursor, c.term);
 		else if (command[0][i] != '\0' && command[0][i + 1] != '\0')
 			i = sh_delete(command, i);
-		sh_switch_history(hist, command);
+		if (buf[0] != '\b')
+			sh_switch_history(hist, command);
 	}
 	return (i);
 }
