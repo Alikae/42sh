@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 22:06:45 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/24 12:22:11 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/09 11:45:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,5 @@ void	sh_pipe_lst_del(t_pipe_lst **lst);
 void	sh_redirect_lst_del(t_redirect_lst **lst);
 void	sh_token_del(t_token **token);
 void	sh_open_file_del(t_open_file **opened_files);
-char	*sh_resolve_dotpath(char *path);
 
 #endif

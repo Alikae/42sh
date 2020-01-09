@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/01 19:19:04 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/09 09:52:51 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,11 @@
 int	sh_source(int ac, char **av, t_env **ev);
 int	sh_basename(int ac, char **av, t_env **ev);
 int	sh_env(int ac, char **av, t_env **ev);
-int	sh_pwd(int ac, char **av, t_env **ev);
 int	sh_export(int ac, char **av, t_env **ev);
 int	sh_unset(int ac, char **av, t_env **ev);
 int	sh_false(int ac, char **av, t_env **ev);
 int	sh_pwd(int ac, char **av, t_env **ev);
 int	sh_readonly(int ac, char **av, t_env **ev);
-int	sh_rm(int ac, char **av, t_env **env);
 int	sh_set(int ac, char **av, t_env **ev);
 int	sh_cd(int ac, char **av, t_env **ev);
 int	sh_true(int ac, char **av, t_env **ev);
