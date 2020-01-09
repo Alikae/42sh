@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/09 16:00:32 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/09 16:25:36 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static int	cd_go_to(char *path)
 	getcwd(dir, PATH_MAX);
 	if ((ev = sh_setev("PWD", dir)))
 		ev->exported = 1;
-	ft_memdel((void**)&path);
 	return (0);
 }
 
