@@ -6,17 +6,15 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 00:50:22 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/05 02:06:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 01:40:48 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 
-void lstp();
-
-int		str_match_pattern(const char *str, const char *pattern, int start, int end)
+int		str_match_pattern(char *str, char *pattern, int start, int end)
 {
-	int	i;
+	int		i;
 
 	i = -1;
 	if (!pattern || !*pattern)
@@ -40,24 +38,22 @@ int		str_match_pattern(const char *str, const char *pattern, int start, int end)
 	return (pattern[i] ? 0 : 1);
 }
 
-//short_or_long: 
-//o = short
-//1 = long
-char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long)
+char	*subtitute_suffix_pattern(char *str, char *pattern, short s_or_l)
 {
-	int	start;
+	int		start;
 
-	lstp();
-	if (short_or_long == 0)
+	if (s_or_l == 0)
 	{
 		start = ft_strlen(str) - 1;
-		while (start >= 0 && !str_match_pattern(str, pattern, start, ft_strlen(str) - 1))
+		while (start >= 0
+			&& !str_match_pattern(str, pattern, start, ft_strlen(str) - 1))
 			start--;
 	}
 	else
 	{
 		start = 0;
-		while (start < (int)ft_strlen(str) && !str_match_pattern(str, pattern, start, (int)ft_strlen(str) - 1))
+		while (start < (int)ft_strlen(str)
+			&& !str_match_pattern(str, pattern, start, (int)ft_strlen(str) - 1))
 			start++;
 	}
 	if (!str_match_pattern(str, pattern, start, ft_strlen(str - 1)))
@@ -65,15 +61,15 @@ char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short
 	return (ft_strndup(str, start));
 }
 
-char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long)
+char	*subtitute_prefix_pattern(char *str, char *pattern, short s_or_l)
 {
-	int	end;
+	int		end;
 
-	lstp();
-	if (short_or_long == 0)
+	if (s_or_l == 0)
 	{
 		end = 0;
-		while (end < (int)ft_strlen(str) && !str_match_pattern(str, pattern, 0, end))
+		while (end < (int)ft_strlen(str)
+			&& !str_match_pattern(str, pattern, 0, end))
 			end++;
 	}
 	else
