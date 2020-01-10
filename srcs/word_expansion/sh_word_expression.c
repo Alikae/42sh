@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 23:33:25 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 01:52:14 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	sh_record_name(t_exp *exp)
 
 	i_sub = 0;
 	cpy = exp->i;
-	ft_memdel((void**)&(exp->name));
 	while (sh_check_all_separator(exp->content[cpy]) || i_sub == 0)
 	{
 		cpy++;
