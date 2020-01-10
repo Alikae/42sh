@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/09 11:10:09 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/10 22:29:16 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static int		echo_process(int ac, char **av, char flag, int i)
 			ft_putstr(handle);
 		else
 			break ;
+		if (i < ac - 1)
+			ft_putchar(' ');
 		i++;
 	}
 	if (!(flag & F_N) && !(flag & F_C))
