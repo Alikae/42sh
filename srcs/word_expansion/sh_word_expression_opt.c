@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:18:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 20:19:52 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 01:56:09 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	sh_opt_plus(t_exp *exp)
 
 void	sh_word_opt(t_exp *exp)
 {
+	ft_memdel((void**)&(exp->name));
 	if (exp->content[exp->i] == ':')
 	{
 		exp->i++;

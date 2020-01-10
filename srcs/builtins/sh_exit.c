@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:45:31 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:32:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/09 10:58:10 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ int				sh_exit(int ac, char **av, t_env **ev)
 
 	(void)ac;
 	(void)ev;
-
-//
-status = 0;
+	status = 0;
 	//status = sh()->exit;//NOP	new var
 	if (ac > 2)
 	{

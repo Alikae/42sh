@@ -6,13 +6,12 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 03:38:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/08 22:03:40 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/09 23:08:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
-// 1-9	#	$	?	-	0	!	*	@
-//	√	√	√	√	?	√		√	
+
 void	sh_positional_parameters(t_exp *exp)
 {
 	int		i;
@@ -55,8 +54,7 @@ void	sh_record_all_parameters(t_exp *exp, char c, char **av)
 		size = ft_strlen(av[i]) + c ? 1 : 0;
 		i++;
 	}
-	if (!(exp->value = malloc(size)))
-		exit(-1);
+	exp->value = ft_strnew(size);
 	i = 1;
 	while (av[i])
 	{
@@ -67,7 +65,7 @@ void	sh_record_all_parameters(t_exp *exp, char c, char **av)
 			exp->value[n++] = c;
 		i++;
 	}
-	exp->value[n] = '\0';	
+	exp->value[n] = '\0';
 }
 
 void	sh_wildcard_parameters(t_exp *exp)
@@ -75,24 +73,14 @@ void	sh_wildcard_parameters(t_exp *exp)
 	t_env	*cpy;
 	char	c;
 
- 	c = 0;
-	cpy = sh_getev("IFS");  
+	c = 0;
+	cpy = sh_getev("IFS");
 	if (!cpy)
 		c = ' ';
 	else if (cpy->value)
 		c = cpy->value[0];
 	sh_record_all_parameters(exp, c, sh()->av);
 }
-
-void	sh_at_parameters(t_exp *exp)
-{
-	(void)exp;
-}
-
-void	sh_less_parameters(t_exp *exp)
-{
-	(void)exp;
-} 
 
 void	sh_spetial_parameters(t_exp *exp)
 {
@@ -107,9 +95,7 @@ void	sh_spetial_parameters(t_exp *exp)
 	else if (exp->name[0] == '*' && !(exp->name[1]))
 		sh_wildcard_parameters(exp);
 	else if (exp->name[0] == '@' && !(exp->name[1]))
-		sh_at_parameters(exp);
+		sh_record_all_parameters(exp, ' ', sh()->av);
 	else if (exp->name[0] == '!' && !(exp->name[1]))
 		exp->value = ft_strdup(ft_itoa(sh()->last_background_pipeline_pgid));
-	else if (exp->name[0] == '-' && !(exp->name[1]))
-		sh_less_parameters(exp);
 }

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 19:45:53 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 19:46:28 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 03:50:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	sh_pattern_matching(t_exp *exp)
 		opt = 1;
 	exp->i = exp->i + opt + 1;
 	pattern = sh_record_pattern(exp);
-	printf("pattern = %s\nfind  = %s\n", pattern, exp->find->value);
 	if (exp->content[exp->i - opt - 1] == '%')
 		exp->value = subtitute_suffix_pattern(exp->find->value, pattern, opt);
 	else

@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 08:48:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/08 11:33:30 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/09 10:41:35 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "sh_command_edition.h"
 #include "sh.h"
 #include "libft.h"
-#include <stdio.h> //
 
 int			sh_paste(char **command, char *buf, int i, t_hist *hist)
 {

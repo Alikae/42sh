@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/10 22:45:47 by ede-ram          ###   ########.fr        #
+#    Updated: 2020/01/10 22:47:07 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -139,11 +139,11 @@ C_FILES_builtins = \
 		   sh_unset.c \
 		   sh_set.c \
 		   sh_test.c \
+		   sh_test_unary.c \
 		   sh_source.c \
 		   sh_type.c \
 		   sh_true.c \
 		   sh_alias.c \
-		   sh_pwd.c \
 		   sh_exit.c \
 		   sh_jobs.c \
 		   sh_fg.c \
@@ -151,7 +151,6 @@ C_FILES_builtins = \
 		   sh_unalias.c
 
 C_FILES_tools = \
-		sh_resolve_dotpath.c \
 		sh_print_all_token.c \
 		sh_shdel.c \
 		sh_hist_del.c \
@@ -187,7 +186,16 @@ C_FILES_word_expansion = \
 			 sh_expression_tool.c \
 			 sh_word_opt_equal_tool.c \
 			 pattern_matching.c \
-			 sh_spetial_parameters.c
+			 sh_spetial_parameters.c \
+			 sh_arith_check_tools.c \
+			 sh_subsh_expansion_tools.c \
+			 sh_sub_arth_var_tools.c \
+			 sh_word_expansion_tools.c \
+			 sh_exec_arithmetique_expansion.c \
+			 sh_arithmetique_expansion_tool.c \
+			 sh_arithmetique_expansion_operator.c \
+			 sh_arithmetique_expansion_tool_2.c \
+			 sh_next_less_operator.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

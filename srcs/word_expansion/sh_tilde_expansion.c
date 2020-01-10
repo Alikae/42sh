@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:09:39 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 20:12:28 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 03:45:16 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	sh_sub_tilde(char **content, char *home, int opt)
 	while ((*content)[i])
 		new[j++] = (*content)[i++];
 	new[j] = '\0';
-	free(*content);
 	(*content) = new;
 }
 
@@ -96,11 +95,8 @@ int		sh_tilde_expansion(char **content, t_env *env)
 				sh_find_home(env, content);
 			else
 				sh_find_opt(env, content);
+			return (1);
 		}
-		if ((*content)[1] == '/')
-			return (2);
-		return (1);
 	}
-	else
-		return (0);
+	return (0);
 }
