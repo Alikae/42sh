@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 23:07:45 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 00:42:58 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void			sh_add_opt(char **name, short int opt)
 		if (!(sh_all_char_operator(*tab[i])))
 		{
 			cpy = tab[i];
-			tab[i] = sh_long_itoa(sh_long_atoi(tab[i]) + opt);
+			tab[i] = sh_long_itoa(sh_atoi_index(tab[i], 0) + opt);
 			ft_memdel((void**)&cpy);
 		}
 		i++;
