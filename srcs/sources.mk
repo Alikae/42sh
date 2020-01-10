@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/08 21:04:27 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/10 22:45:47 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -102,7 +102,9 @@ C_FILES_tokenizer = \
 	opening_chars_handling.c \
 	is_opening_char.c \
 	assign_patend.c \
-	sh_alias_substitution.c
+	sh_alias_substitution.c \
+	sh_alias_substitution_2.c \
+	sh_alias_substitution_3.c
 
 C_FILES_executer = \
 	sh_exec_file.c \

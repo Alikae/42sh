@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/08 21:57:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 22:44:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,9 @@ void	constructor(void) __attribute__((constructor));
 void	destructor(void) __attribute__((destructor));
 void	sh_pipe_lst_del(t_pipe_lst **plst);
 int		count_token_words_in_str(const char *str);
-#endif
+void	sh_sub_alias_command(t_toktool *t, char *alias, int in);
+char	*sh_find_alias(t_toktool *t, int i);
+int		sh_check_stack(char **stack, char *alias);
+void	sh_record_alias(char ***stack, char *alias);
 
+#endif
