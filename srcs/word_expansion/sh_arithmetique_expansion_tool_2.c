@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 00:31:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 00:38:13 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 03:53:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		sh_arth_error_parenthesis(char *str)
 {
-	printf("42sh: %s: too much parenthesis\n", str);
+	sh_dprintf(2, "42sh: %s: too much parenthesis\n", str);
 	sh()->abort_cmd = 1;
 	return (0);
 }

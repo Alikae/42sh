@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:02:19 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 23:07:51 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 03:54:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		sh_error_expression_name(char *str)
 {
-	printf("42sh: bad math expression: error is \"%s\"\n", str);
+	sh_dprintf(2, "42sh: bad math expression: error is \"%s\"\n", str);
 	sh()->abort_cmd = 1;
 	return (0);
 }
