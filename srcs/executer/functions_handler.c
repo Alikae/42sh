@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:57:12 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 23:33:14 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/11 01:30:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int		exec_function(t_sh *p, t_token *func, char **child_argv)
 	int		ret;
 	char	**tmp;
 
-	//store actual positional params : TMP ACTUAL CMD STUFF (CHILD ARGV ETC) ? VERIFY
 	if (p->nb_nested_functions >= SH_NESTED_FUNCTION_LIMIT)
 	{
 		p->abort_cmd = 1;
