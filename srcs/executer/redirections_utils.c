@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:47:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 23:10:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "sh_executer.h"
 #include "sh_redirections.h"
 
+	//TODO TODO TODO TODO
 int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 {
-	//TODO TODO TODO TODO
 	int	nb_redirections;
 
 	nb_redirections = 0;

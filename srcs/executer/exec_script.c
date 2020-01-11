@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/08 21:58:16 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 23:02:14 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	if (tok && is_compound(tok->type))
 	{
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
-			sh_dprintf(2, "NEST_COMPOUND_LIMIT REACHED\nAbort %i\n", p->abort_cmd = 1);
+			sh_dprintf(2, "NEST_COMPOUND_LIMIT\nAbort %i\n", p->abort_cmd = 1);
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
 			return (-121);
 		p->nb_nested_compounds++;
@@ -93,17 +93,6 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 	pipe_lst = sh()->pipe_lst;
 	(void)pipe1;
 	(void)pipe2;
-	/*WAS HERE, DID It BREAK SMTHNG?
-	while (pipe_lst)
-	{
-		if (pipe_lst->pipe[0] != pipe1 && pipe_lst->pipe[0] != pipe2)
-			if (pipe_lst->pipe[0] > 2)
-				close(pipe_lst->pipe[0]);
-		if (pipe_lst->pipe[1] != pipe1 && pipe_lst->pipe[1] != pipe2)
-			if (pipe_lst->pipe[1] > 2)
-				close(pipe_lst->pipe[1]);
-		pipe_lst = pipe_lst->next;
-	}*/
 	exec_command(p, token_begin, token_end);
 	exit(1);
 }
@@ -172,7 +161,6 @@ int		find_next_pipe(t_sh *p)
 	rlst = p->redirect_lst;
 	while (rlst)
 	{
-		//sh_dprintf(1, "[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
 		if (rlst->in == 1)
 			return (rlst->out);
 		rlst = rlst->next;
@@ -187,7 +175,6 @@ int		find_previous_pipe(t_sh *p)
 	rlst = p->redirect_lst;
 	while (rlst)
 	{
-		//sh_dprintf(1, "[%i]plst %i %i\n", getpid(), rlst->in, rlst->out);
 		if (rlst->in == 0)
 			return (rlst->out);
 		rlst = rlst->next;
@@ -218,9 +205,7 @@ int		exec_pipeline_core(t_token *token_begin, t_token *token_end)
 	p->pgid_current_pipeline = 0;
 	p->last_cmd_result = block_wait(p, tmp2, 0);
 	if (!p->process_is_stopped)
-	{
 		kill(-1 * tmp2, SIGKILL);
-	}
 	p->extern_pipe = tmp;
 	return (1);
 }
@@ -285,13 +270,23 @@ void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
 		setpgid(pid, p->pgid_current_pipeline);
 	else
 		setpgid(pid, pid);
-	if (foreground || (p->force_setpgrp_setattr))//pipeline in background?
+	if (foreground || (p->force_setpgrp_setattr))
 	{
 		signal(SIGTTOU, SIG_IGN);
 		tcsetpgrp(0, pid);
 		tcsetattr(0, TCSADRAIN, &p->extern_termios);
 		signal(SIGTTOU, SIG_DFL);
 	}
+}
+
+void	sig_default(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGTSTP, SIG_DFL);
+	signal(SIGTTIN, SIG_DFL);
+	signal(SIGTTOU, SIG_DFL);
+	signal(SIGCHLD, SIG_DFL);
 }
 
 int		fork_process(t_sh *p, int foreground)
@@ -306,22 +301,14 @@ int		fork_process(t_sh *p, int foreground)
 	child_pid = fork();
 	if (child_pid < 0)
 	{
-		sh_dprintf(1, "[%i]fork error: ressource temporarily unavailable\n", getpid());
-		p->abort_cmd = 1;
+		sh_dprintf(2, "[%i]fork error: ressource temporarily unavailable\n\
+Abort %i\n", getpid(), (p->abort_cmd = 1));
 		return (-1);
 	}
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 		create_process_group_give_terminal_access(p, pid, foreground);
-	if (!child_pid)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGTSTP, SIG_DFL);
-		signal(SIGTTIN, SIG_DFL);
-		signal(SIGTTOU, SIG_DFL);
-		signal(SIGCHLD, SIG_DFL);
-	}
+	(child_pid) ? 0 : sig_default();
 	if (!child_pid)
 	{
 		delete_all_jobs(p->jobs);
@@ -354,39 +341,33 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin,
 	return (0);
 }
 
-t_token	*find_next_script_separator(t_token *token_begin, t_token *token_end)
+t_token	*find_next_script_separator(t_token *t, t_token *token_end)
 {
 	int	skip_newline;
 
 	skip_newline = 1;
-	while (token_begin && token_begin != token_end)
+	while (t && t != token_end)
 	{
-		if (token_begin->type == SH_SEMI || token_begin->type == SH_AND
-				|| (token_begin->type == SH_NEWLINE && !skip_newline))
-			return (token_begin);
-		if (token_begin->type == SH_WORD || token_begin->type == SH_ASSIGN
-				|| token_begin->type == SH_LESS || token_begin->type == SH_GREAT
-				|| token_begin->type == SH_DLESS
-				|| token_begin->type == SH_DGREAT
-				|| token_begin->type == SH_LESSAND
-				|| token_begin->type == SH_GREATAND
-				|| token_begin->type == SH_LESSGREAT
-				|| token_begin->type == SH_DLESSDASH
-				|| token_begin->type == SH_CLOBBER
-				|| token_begin->type == SH_IF || token_begin->type == SH_CASE
-				|| token_begin->type == SH_WHILE
-				|| token_begin->type == SH_UNTIL || token_begin->type == SH_FOR
-				|| token_begin->type == SH_BRACES
-				|| token_begin->type == SH_BANG || token_begin->type == SH_FUNC)
+		if (t->type == SH_SEMI || t->type == SH_AND
+				|| (t->type == SH_NEWLINE && !skip_newline))
+			return (t);
+		if (t->type == SH_WORD || t->type == SH_ASSIGN || t->type == SH_LESS
+				|| t->type == SH_GREAT || t->type == SH_DLESS
+				|| t->type == SH_DGREAT || t->type == SH_LESSAND
+				|| t->type == SH_GREATAND || t->type == SH_LESSGREAT
+				|| t->type == SH_DLESSDASH || t->type == SH_CLOBBER
+				|| t->type == SH_IF || t->type == SH_CASE
+				|| t->type == SH_WHILE || t->type == SH_UNTIL
+				|| t->type == SH_FOR || t->type == SH_BRACES
+				|| t->type == SH_BANG || t->type == SH_FUNC)
 			skip_newline = 0;
-		else if (token_begin->type == SH_AND || token_begin->type == SH_OR
-				|| token_begin->type == SH_AND_IF
-				|| token_begin->type == SH_OR_IF
-				|| token_begin->type == SH_DSEMI)
+		else if (t->type == SH_AND || t->type == SH_OR
+				|| t->type == SH_AND_IF || t->type == SH_OR_IF
+				|| t->type == SH_DSEMI)
 			skip_newline = 1;
-		token_begin = token_begin->next;
+		t = t->next;
 	}
-	return (token_begin);
+	return (t);
 }
 
 int		exec_script(t_sh *p, t_token *token_begin)
