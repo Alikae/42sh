@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 03:38:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 23:08:46 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/10 22:57:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,10 @@ void	sh_record_all_parameters(t_exp *exp, char c, char **av)
 	n = 0;
 	j = 0;
 	i = 1;
+	size = 0;
 	while (av[i])
 	{
-		size = ft_strlen(av[i]) + c ? 1 : 0;
+		size = ft_strlen(av[i]) + 1;
 		i++;
 	}
 	exp->value = ft_strnew(size);

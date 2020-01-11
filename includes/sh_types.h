@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:28:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 21:37:53 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/11 00:31:57 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,16 +134,16 @@ typedef struct	s_cursors
 
 typedef struct	s_exp
 {
-	t_token	*tok;
-	int		i;
-	int		first_i;
-	t_env	**env;
-	t_env	*find;
-	char	*value;
-	char	*name;
-	char	*content;
-	short	opt;
-	short	quote;
+	t_token		*tok;
+	int			i;
+	int			first_i;
+	t_env		**env;
+	t_env		*find;
+	char		*value;
+	char		*name;
+	char		*content;
+	short		opt;
+	t_toktype	quote;
 }				t_exp;
 
 typedef struct	s_split
@@ -163,4 +163,35 @@ typedef struct	s_job
 	struct termios	t_mode;
 	struct s_job	*next;
 } t_job;
+
+typedef enum	e_arthtype
+{
+	INIT = 0,
+	NUMBER,
+	PLUS,
+	MINUS,
+	MULTI,
+	DIV,
+	MODULO,
+	MORE,
+	LESS,
+	MORE_EQUAL,
+	LESS_EQUAL,
+	AND,
+	OR,
+	AND_AND,
+	OR_OR,
+	DIFFERENT,
+	EQUAL,
+	NOP
+}				t_arthtype;
+
+typedef struct	s_arith
+{
+	t_arthtype		next_op;
+	long int		nb;
+	struct s_arith	*next;
+	struct s_arith	*sub;
+}	 			t_arith;
+
 #endif

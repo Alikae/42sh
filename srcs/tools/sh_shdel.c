@@ -6,14 +6,14 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:17:18 by jerry             #+#    #+#             */
-/*   Updated: 2019/12/23 01:31:44 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 23:27:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_tools.h"
 #include "libft.h"
-
+#include "sh_tokenizer.h"
 #include <stddef.h>
 
 void	sh_shdel(t_sh **shell)
@@ -40,6 +40,8 @@ void	sh_shdel(t_sh **shell)
 		ft_strdel(&(s->cmd));
 	sh_job_del(&(s->jobs));
 	sh_hist_del(&(s->hist));
+	ft_free_tabstr(s->av);
+	free_ast(s->functions);
 	s->dir = NULL;
 	s->user = NULL;
 	free(*shell);

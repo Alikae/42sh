@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/20 11:03:05 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/10 22:49:04 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,26 @@
 #include <signal.h>
 #include <termios.h>
 
+char	**sh_tab_cpy(char **av)
+{
+	int 	i;
+	char	**new_av;
+
+	i = 0;
+	while (av[i])
+		i++;
+	if (!(new_av = malloc(sizeof(char*) * (i + 1))))
+		exit(-1);
+	i = 0;
+	while (av[i])
+	{
+		new_av[i] = ft_strdup(av[i]);
+		i++;
+	}
+	new_av[i] = 0;
+	return (new_av);
+}
+
 void	sh_entrypoint(int ac, char **av, char **ev)
 {
 	int		i;
@@ -27,7 +47,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tsh = sh();
 	i = -1;
 	tsh->ac = ac;
-	tsh->av = av;
+	tsh->av = sh_tab_cpy(av);
 	tsh->ev = ev;
 	tcgetattr(0, &tsh->extern_termios);
 	tsh->is_interactive = isatty(0);
