@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 03:45:41 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 01:36:25 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char		*sh_long_itoa(long int n);
 void		bst_print_dot(t_arith *a, char *str, char *arth);
 int			sh_is_next_word(t_split *splt);
 int			sh_check_split(t_split *splt);
-void		sh_remove_char(char **str, int i);
+void		sh_remove_char(char **str, int *i);
 int			sh_check_quote(t_split *splt, short quote);
 int			sh_check_split(t_split *splt);
 void		sh_token_spliting(t_split *splt, int reset);
@@ -62,7 +62,7 @@ char		*subtitute_prefix_pattern(const char *str
 			, const char *pattern, short short_or_long);
 char		*subtitute_suffix_pattern(const char *str
 			, const char *pattern, short short_or_long);
-void		sh_spetial_parameters(t_exp *exp);
+void		sh_spetial_parameters(t_exp *exp, int where);
 int			sh_skip_white_space(char *str, int i);
 int			sh_skip_number(char *str, int i);
 int			sh_arth_syntax_error(char *str, int i);
@@ -97,4 +97,5 @@ int			sh_next_less_operator(char *str, int begin
 int			sh_valid_operator(char *str, int begin);
 void		sh_record_arithmetic_string(t_exp *exp);
 int			sh_arithmetic_string_size(t_exp *exp);
+
 #endif

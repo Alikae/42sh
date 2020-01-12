@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:28:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/11 00:31:57 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 01:31:31 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ typedef struct	s_exp
 	char		*name;
 	char		*content;
 	short		opt;
+	short		special_params;
 	t_toktype	quote;
 }				t_exp;
 
