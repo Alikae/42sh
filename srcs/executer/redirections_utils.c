@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 23:10:02 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/12 18:45:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		return ;
 	}
 	if (!token->content || !*token->content)
-		fd_in = 1;//handle &
+		fd_in = (token->type == SH_LESS) ? 0 : 1;//handle &
 	else
 		fd_in = ft_atoi(token->content);
 	if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))

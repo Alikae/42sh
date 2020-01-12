@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 23:06:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/12 18:51:51 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		return (-125);
 	}
 	if (!child_argv[0])
-		return (handle_no_cmd_name(p, child_argv));//and free stuff
+		return (handle_no_cmd_name(p, child_argv, nb_redirections));//and free stuff
 	tmp = (t_token*)(uint64_t)exec_simple_command_2(p, child_argv, tmp, f);
 	free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
 	return ((int)tmp);
