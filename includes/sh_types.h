@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:28:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/12 21:31:37 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 21:32:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ typedef struct	s_exp
 	short		opt;
 	short		special_params;
 	t_toktype	quote;
-	int			special_params;
 }				t_exp;
 
 typedef struct	s_split
