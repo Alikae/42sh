@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:18:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 22:48:36 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 02:42:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	sh_opt_question(t_exp *exp)
 			sh_word_expansion(exp);
 		else
 			sh_record_less_option(exp);
-		ft_memdel((void**)&(exp->name));
 		exp->name = cpy_name;
 		exp->opt = ERROR;
 		sh()->abort_cmd = 1;
@@ -85,7 +84,6 @@ void	sh_opt_plus(t_exp *exp)
 
 void	sh_word_opt(t_exp *exp)
 {
-	ft_memdel((void**)&(exp->name));
 	if (exp->content[exp->i] == ':')
 	{
 		exp->i++;
@@ -104,5 +102,6 @@ void	sh_word_opt(t_exp *exp)
 	else if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
 	else
-		exp->value = NULL;
+		sh_spetial_parameters(exp, 0);
+	ft_memdel((void**)&exp->name);
 }

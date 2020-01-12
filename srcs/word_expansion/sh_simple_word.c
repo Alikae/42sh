@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 02:40:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 22:38:29 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 02:35:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ void	sh_simple_expansion(t_exp *exp)
 		sh_spetial_quote(&(exp->value));
 	}
 	else
-		sh_spetial_parameters(exp);
+		sh_spetial_parameters(exp, 1);
 }

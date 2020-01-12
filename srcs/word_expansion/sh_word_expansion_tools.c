@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:34:32 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 23:51:49 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 02:19:19 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 	exp->name = NULL;
 	exp->value = NULL;
 	exp->opt = 0;
+	exp->special_params = 0;
 	exp->content = ft_strdup((tok_content));
 }
 
@@ -80,10 +81,9 @@ void	sh_sub_token(t_exp *exp)
 	i = 0;
 	while ((exp->value) && exp->value[i])
 		exp->tok->content[exp->first_i++] = exp->value[i++];
-	while (cpy[j])
-		exp->tok->content[exp->first_i++] = cpy[j++];
+	while (cpy[j + exp->special_params])
+		exp->tok->content[exp->first_i++] = cpy[(j++) + exp->special_params];
 	exp->tok->content[exp->first_i] = '\0';
 	exp->first_i = ft_strlen(exp->value);
-	ft_memdel((void**)&exp->name);
 	ft_memdel((void**)&cpy);
 }

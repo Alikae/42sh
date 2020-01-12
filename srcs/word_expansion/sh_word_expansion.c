@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/11 00:34:39 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 02:25:34 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int		sh_word_expansion(t_exp *exp)
 	{
 		i = exp->i;
 		if (sh_expansion_quote(exp) && exp->quote != SH_QUOTE
-			&& exp->quote  != SH_BQUOTE && (exp->quote - SH_DQUOTE) != SH_BQUOTE
+			&& exp->quote != SH_BQUOTE && (exp->quote - SH_DQUOTE) != SH_BQUOTE
 			&& exp->content[exp->i + 1]
 			&& (exp->content[exp->i] == '$' || exp->content[exp->i] == '`'))
 		{
@@ -90,6 +90,7 @@ int		sh_word_expansion(t_exp *exp)
 			if (sh_in_expansion(exp, i))
 				return (1);
 		}
+		exp->i = i;
 		exp->i++;
 	}
 	sh()->exp_rec--;
@@ -112,6 +113,12 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 	new_tok = sh_quote_removal(exp.tok, sh_getev_value("IFS"), ifs);
 	if (sub)
 		ft_memdel((void**)&exp.tok);
+	if (!(new_tok->content[0]))
+	{
+		ft_memdel((void**)&new_tok->content);
+		free(new_tok);
+		new_tok = NULL;
+	}
 	sh_free_exp(&exp);
 	return (new_tok);
 }

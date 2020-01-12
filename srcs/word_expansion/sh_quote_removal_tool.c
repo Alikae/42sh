@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:12:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 03:48:34 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 00:50:10 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		sh_check_split(t_split *splt)
 	return (0);
 }
 
-void	sh_remove_char(char **str, int i)
+void	sh_remove_char(char **str, int *i)
 {
 	char	*new;
 	int		j;
@@ -56,7 +56,7 @@ void	sh_remove_char(char **str, int i)
 		exit(-1);
 	while ((*str)[j_str])
 	{
-		if (j_str != i)
+		if (j_str != *i)
 		{
 			new[j] = (*str)[j_str];
 			j++;
@@ -72,7 +72,7 @@ int		sh_check_quote(t_split *splt, short quote)
 {
 	if (quote != SH_DQUOTE && splt->tok->content[splt->i] == '\'')
 	{
-		sh_remove_char(&(splt->tok->content), splt->i);
+		sh_remove_char(&(splt->tok->content), &(splt->i));
 		if (quote == SH_QUOTE)
 			return (1);
 		else
@@ -80,7 +80,7 @@ int		sh_check_quote(t_split *splt, short quote)
 	}
 	else if (quote != SH_QUOTE && splt->tok->content[splt->i] == '"')
 	{
-		sh_remove_char(&(splt->tok->content), splt->i);
+		sh_remove_char(&(splt->tok->content), &(splt->i));
 		if (quote == SH_DQUOTE)
 			return (1);
 		else
