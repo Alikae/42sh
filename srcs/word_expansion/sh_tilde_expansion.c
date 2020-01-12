@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:09:39 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 03:45:16 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 23:51:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		sh_find_env(t_env **env_cpy, char *find)
 {
 	while (*env_cpy && ft_strcmp((*env_cpy)->key, find) != 0)
 		*env_cpy = (*env_cpy)->next;
-	if (*env_cpy)
+	if (env_cpy)
 		return (1);
 	else
 		return (0);
@@ -38,6 +38,7 @@ void	sh_sub_tilde(char **content, char *home, int opt)
 	while ((*content)[i])
 		new[j++] = (*content)[i++];
 	new[j] = '\0';
+	ft_memdel((void**)content);
 	(*content) = new;
 }
 

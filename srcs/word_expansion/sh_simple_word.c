@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 02:40:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 02:35:39 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 23:48:37 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,5 @@ void	sh_simple_expansion(t_exp *exp)
 	}
 	else
 		sh_spetial_parameters(exp, 1);
+	ft_memdel((void**)&exp->name);
 }

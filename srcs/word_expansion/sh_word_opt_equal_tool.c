@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:30:07 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 20:31:50 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 00:13:18 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,5 @@ void	sh_assign_word(t_exp *exp)
 	}
 	else
 		sh_add_var(exp, name_cpy);
+	ft_memdel((void**)&name_cpy);
 }

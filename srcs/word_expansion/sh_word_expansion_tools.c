@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:34:32 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 02:19:19 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 23:52:50 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,14 @@ void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 	exp->content = ft_strdup((tok_content));
 }
 
-void	sh_free_exp(t_exp *exp)
+void	sh_free_exp(t_exp *exp, char **tok_content)
 {
 	ft_memdel((void**)&exp->value);
 	ft_memdel((void**)&exp->content);
 	ft_memdel((void**)&exp->name);
 	ft_memdel((void**)&(exp->tok->content));
 	ft_memdel((void**)&exp->tok);
+	ft_memdel((void**)tok_content);
 }
 
 int		sh_word_error(t_exp *exp)
@@ -49,6 +50,7 @@ int		sh_word_error(t_exp *exp)
 	ft_putstr(exp->value);
 	write(2, "\n", 1);
 	sh()->exp_rec = 0;
+	ft_memdel((void**)&exp->name);
 	return (1);
 }
 

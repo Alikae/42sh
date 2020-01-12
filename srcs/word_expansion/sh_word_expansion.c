@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 02:25:34 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 00:02:09 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int		sh_word_expansion(t_exp *exp)
 				exp->i++;
 			if (sh_in_expansion(exp, i))
 				return (1);
+			i--;
 		}
 		exp->i = i;
 		exp->i++;
@@ -101,24 +102,20 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 {
 	t_exp	exp;
 	t_token	*new_tok;
-	int		sub;
 
-	sub = 0;
-	if (sh_tilde_expansion(&tok_content, sh()->params))
-		sub = 1;
+	tok_content = ft_strdup(tok_content);
+	sh_tilde_expansion(&tok_content, sh()->params);
 	sh_init_exp(env, &exp, tok_content);
 	exp.tok->sub = NULL;
 	exp.tok->next = NULL;
 	sh_word_expansion(&exp);
 	new_tok = sh_quote_removal(exp.tok, sh_getev_value("IFS"), ifs);
-	if (sub)
-		ft_memdel((void**)&exp.tok);
 	if (!(new_tok->content[0]))
 	{
 		ft_memdel((void**)&new_tok->content);
 		free(new_tok);
 		new_tok = NULL;
 	}
-	sh_free_exp(&exp);
+	sh_free_exp(&exp, &tok_content);
 	return (new_tok);
 }

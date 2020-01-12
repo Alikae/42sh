@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:18:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 02:42:53 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 00:14:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	sh_opt_less(t_exp *exp)
 {
+	ft_memdel((void**)&exp->name);
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
@@ -40,6 +41,7 @@ void	sh_opt_equal(t_exp *exp)
 		exp->value = NULL;
 	else
 		sh_assign_word(exp);
+	ft_memdel((void**)&exp->name);
 }
 
 void	sh_opt_question(t_exp *exp)
@@ -67,6 +69,7 @@ void	sh_opt_question(t_exp *exp)
 
 void	sh_opt_plus(t_exp *exp)
 {
+	ft_memdel((void**)&exp->name);
 	exp->i++;
 	if (((exp->opt & COLON) && exp->find && exp->find->value)
 			|| (!(exp->opt & COLON) && exp->find))
@@ -93,15 +96,14 @@ void	sh_word_opt(t_exp *exp)
 		sh_opt_less(exp);
 	else if (exp->content[exp->i] == '=')
 		sh_opt_equal(exp);
-	else if (exp->content[exp->i] == '?')
-		sh_opt_question(exp);
 	else if (exp->content[exp->i] == '+')
 		sh_opt_plus(exp);
+	else if (exp->content[exp->i] == '?')
+		sh_opt_question(exp);
 	else if (exp->content[exp->i] == '%' || exp->content[exp->i] == '#')
 		sh_pattern_matching(exp);
 	else if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
 	else
 		sh_spetial_parameters(exp, 0);
-	ft_memdel((void**)&exp->name);
 }
