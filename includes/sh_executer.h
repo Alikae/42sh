@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/12 03:44:16 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/12 18:52:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type);
 void	handle_assigns(t_sh *p);
 void	restore_before_assigns(t_sh *p);
 void	print_assign(t_sh *p);
-int		handle_no_cmd_name(t_sh *p, char **child_argv);
+int		handle_no_cmd_name(t_sh *p, char **child_argv, int nb_redirections);
 void	restore_before_assigns(t_sh *p);
 void	stock_assign(t_sh *p, t_token *token, int *nb_assign);
 void	del_n_assign_lst(t_sh *p, int n);

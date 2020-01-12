@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 23:02:14 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/12 19:01:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,6 +272,7 @@ void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
 		setpgid(pid, pid);
 	if (foreground || (p->force_setpgrp_setattr))
 	{
+		dprintf(2, "[%i]GIVE RIGHTS\n", getpid());
 		signal(SIGTTOU, SIG_IGN);
 		tcsetpgrp(0, pid);
 		tcsetattr(0, TCSADRAIN, &p->extern_termios);
@@ -281,6 +282,7 @@ void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
 
 void	sig_default(void)
 {
+	dprintf(2, "[%i]SIGDEF\n", getpid());
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTSTP, SIG_DFL);
