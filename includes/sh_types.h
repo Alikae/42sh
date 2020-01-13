@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:28:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 03:22:21 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 11:18:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ typedef struct	s_job
 	const char		*status;
 	struct termios	t_mode;
 	struct s_job	*next;
+	short			reported;
 }				t_job;
 
 typedef enum	e_arthtype
