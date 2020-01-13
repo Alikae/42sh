@@ -12,5 +12,10 @@ typedef struct	s_print_info
 
 void	sh_dprintf(int fd, const char *format, ...);
 void	print_int_recursively(int fd, t_print_info *info, long int i);
+void	print_if_needed(int fd, t_print_info *info);
+void	print_int_recursively(int fd, t_print_info *info, long int i);
+void	shpf_print_int(int fd, va_list va, t_print_info *info);
+void	shpf_print_str(int fd, va_list va, t_print_info *info);
+void	shpf_print_char(int fd, va_list va, t_print_info *info);
 
 #endif

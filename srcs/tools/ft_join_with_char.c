@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 09:14:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/09/24 01:05:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 02:27:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_join_with_char(const char *path, const char *name, char c)
 	j = 0;
 	i = 0;
 	if (!((new = malloc((ft_strlen(path) + ft_strlen(name)) + 2))))
-		exit (0);
+		exit(0);
 	while (path[i])
 		new[j++] = path[i++];
 	new[j++] = c;
