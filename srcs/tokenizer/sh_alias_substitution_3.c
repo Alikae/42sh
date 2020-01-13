@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 22:41:32 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 22:45:23 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 11:12:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,5 @@ void			sh_record_alias(char ***stack, char *alias)
 	cpy[i++] = ft_strdup(alias);
 	cpy[i] = 0;
 	ft_free_tabstr(*stack);
-	printf("%p\n", *stack);
 	*stack = cpy;
 }
