@@ -6,21 +6,21 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:28:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/28 21:37:53 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/13 03:22:21 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_TYPES_H
 # define SH_TYPES_H
 
-#include <termios.h>
+# include <termios.h>
 
-typedef struct s_toktool
+typedef struct	s_toktool
 {
-	const char  *input;
-	int         i;
-	int         word_nb;
-}               t_toktool;
+	const char	*input;
+	int			i;
+	int			word_nb;
+}				t_toktool;
 
 typedef struct	s_redirect_lst
 {
@@ -29,28 +29,28 @@ typedef struct	s_redirect_lst
 	struct s_redirect_lst	*next;
 }				t_redirect_lst;
 
-typedef struct  s_pipe_lst
+typedef struct	s_pipe_lst
 {
-	int                 pipe[2];
-	struct s_pipe_lst   *next;
-}               t_pipe_lst;
+	int					pipe[2];
+	struct s_pipe_lst	*next;
+}				t_pipe_lst;
 
-typedef struct		s_ln
+typedef struct	s_ln
 {
 	char			*line;
 	char			*tok;
 	struct s_ln		*prev;
 	struct s_ln		*next;
-}					t_ln;
+}				t_ln;
 
-typedef struct		s_env
+typedef struct	s_env
 {
-	char 			*key;
-	char 			*value;
+	char			*key;
+	char			*value;
 	int				exported;
 	int				readonly;
 	struct s_env	*next;
-}					t_env;
+}				t_env;
 
 typedef enum	e_toktype
 {
@@ -88,18 +88,16 @@ typedef enum	e_toktype
 	SH_BANG,
 	SH_IN,
 	SH_FUNC,
-	SH_SUBSH, 		// ( )
-	SH_SUBSH_END, 		//  )
-	SH_SUBSH_EXP,	// $( )
-	SH_PARAM_EXP,	// ${ }
-	SH_ARITH_EXP,	// $(( ))
+	SH_SUBSH,
+	SH_SUBSH_END,
+	SH_SUBSH_EXP,
+	SH_PARAM_EXP,
+	SH_ARITH_EXP,
 	SH_NEWLINE,
 	SH_GROUP,
-	
 	SH_QUOTE,
 	SH_DQUOTE,
 	SH_BQUOTE,
-
 	SH_SYNTAX_ERROR
 }				t_toktype;
 
@@ -112,12 +110,12 @@ typedef struct	s_token
 	struct s_token	*next;
 }				t_token;
 
-typedef struct		s_open_file
+typedef struct	s_open_file
 {
 	char				*name;
 	int					fd;
 	struct s_open_file	*next;
-}					t_open_file;
+}				t_open_file;
 
 typedef struct	s_pos
 {
@@ -131,19 +129,19 @@ typedef struct	s_cursors
 	t_pos term;
 }				t_cursors;
 
-
 typedef struct	s_exp
 {
-	t_token	*tok;
-	int		i;
-	int		first_i;
-	t_env	**env;
-	t_env	*find;
-	char	*value;
-	char	*name;
-	char	*content;
-	short	opt;
-	short	quote;
+	t_token		*tok;
+	int			i;
+	int			first_i;
+	t_env		**env;
+	t_env		*find;
+	char		*value;
+	char		*name;
+	char		*content;
+	short		opt;
+	short		special_params;
+	t_toktype	quote;
 }				t_exp;
 
 typedef struct	s_split
@@ -162,5 +160,36 @@ typedef struct	s_job
 	const char		*status;
 	struct termios	t_mode;
 	struct s_job	*next;
-} t_job;
+}				t_job;
+
+typedef enum	e_arthtype
+{
+	INIT = 0,
+	NUMBER,
+	PLUS,
+	MINUS,
+	MULTI,
+	DIV,
+	MODULO,
+	MORE,
+	LESS,
+	MORE_EQUAL,
+	LESS_EQUAL,
+	AND,
+	OR,
+	AND_AND,
+	OR_OR,
+	DIFFERENT,
+	EQUAL,
+	NOP
+}				t_arthtype;
+
+typedef struct	s_arith
+{
+	t_arthtype		next_op;
+	long int		nb;
+	struct s_arith	*next;
+	struct s_arith	*sub;
+}				t_arith;
+
 #endif

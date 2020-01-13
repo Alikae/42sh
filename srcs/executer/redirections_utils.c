@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:47:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 07:21:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "sh_executer.h"
 #include "sh_redirections.h"
 
+	//TODO TODO TODO TODO
 int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 {
-	//TODO TODO TODO TODO
 	int	nb_redirections;
 
 	nb_redirections = 0;
@@ -101,8 +101,9 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		stock_lessgreatand(p, token, nb_redirections);
 		return ;
 	}
-	if (!token->content || !*token->content)
-		fd_in = 1;//handle &
+	if (!token->content || !*token->content || token->content[0] == '&')
+		fd_in = (token->type == SH_LESS) ? 0 :
+			(token->content && token->content[0] == '&') ? -1 : 1;//handle &, << etc
 	else
 		fd_in = ft_atoi(token->content);
 	if (!((fd_out = create_open_file(p, token->sub->content, token->type)) > -1))
@@ -110,7 +111,5 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		sh_dprintf(2, "redirection error in %s\n", token->sub->content);
 		return ;
 	}
-	if (!ft_strcmp(p->dbg, __func__) || !ft_strcmp(p->dbg, "all"))
-		sh_dprintf(p->dbg_fd, "fd_out = %i\n", fd_out);
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
 }

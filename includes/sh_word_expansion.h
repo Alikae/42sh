@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/07 04:32:30 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:07:35 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,39 +23,8 @@
 # define ERROR	2
 # define LEN	4
 
-
-typedef enum	e_arthtype
-{
-	INIT = 0,
-	NUMBER,
-	PLUS,
-	MINUS,
-	MULTI,
-	DIV,
-	MODULO,
-	MORE,
-	LESS,
-	MORE_EQUAL,
-	LESS_EQUAL,
-	AND,
-	OR,
-	AND_AND,
-	OR_OR,
-	DIFFERENT,
-	EQUAL,
-	NOP
-}				t_arthtype;
-
-typedef struct	s_arith
-{
-	t_arthtype		next_op;
-	long int		nb;
-	struct s_arith	*next;
-	struct s_arith	*sub;
-}				t_arith;
-
 void		sh_subsh_quote(t_exp *exp, short *quote);
-void		sh_spetial_quote(char **content);
+void		sh_special_quote(char **content);
 int			sh_word_expansion(t_exp *exp);
 void		sh_parameter_expansion(t_exp *exp);
 int			sh_tilde_expansion(char **content, t_env *env);
@@ -70,27 +39,62 @@ void		sh_subsh_expansion(t_exp *exp);
 void		sh_arithmetic_expansion(t_exp *exp);
 void		sh_str_start_end(char **dest, char *src, int i, int n);
 void		sh_sub_arith_var(char **str);
-int 		sh_all_char_operator(char c);
+int			sh_all_char_operator(char c);
 int			sh_valide_arith(char *str);
 char		**sh_strsplit_arth(const char *s);
-long int	sh_long_atoi(const char *s1);
-char 	  *sh_long_itoa(long int n);
+char		*sh_long_itoa(long int n);
 void		bst_print_dot(t_arith *a, char *str, char *arth);
 int			sh_is_next_word(t_split *splt);
 int			sh_check_split(t_split *splt);
-void		sh_remove_char(char **str, int i);
+void		sh_remove_char(char **str, int *i);
 int			sh_check_quote(t_split *splt, short quote);
 int			sh_check_split(t_split *splt);
 void		sh_token_spliting(t_split *splt, int reset);
 void		sh_next_token(t_token **new);
 void		sh_word_opt(t_exp *exp);
-void		sh_spetial_quote(char **content);
 void		sh_sub_word(t_exp *exp);
 void		sh_next_word(t_exp *exp);
 void		sh_assign_word(t_exp *exp);
 void		sh_record_less_option(t_exp *exp);
 void		sh_pattern_matching(t_exp *exp);
-char	*subtitute_prefix_pattern(const char *str, const char *pattern, short short_or_long);
-char	*subtitute_suffix_pattern(const char *str, const char *pattern, short short_or_long);
-void	sh_spetial_parameters(t_exp *exp);
+char		*subtitute_prefix_pattern(const char *str
+			, const char *pattern, short short_or_long);
+char		*subtitute_suffix_pattern(const char *str
+			, const char *pattern, short short_or_long);
+void		sh_special_parameters(t_exp *exp, int where);
+int			sh_skip_white_space(char *str, int i);
+int			sh_skip_number(char *str, int i);
+int			sh_arth_syntax_error(char *str, int i);
+void		sh_str_start_end(char **dest, char *src, int i, int n);
+void		sh_subsh_quote(t_exp *exp, short *quote);
+int			sh_commande_string_size(t_exp *exp, char c);
+void		sh_record_commande_string(t_exp *exp);
+int			sh_error_expression_name(char *str);
+int			sh_check_value(char *str);
+char		*sh_find_arth_var_value(char **str);
+void		sh_sub_var(char *value, char **str, int beg, int ed);
+int			sh_tab_len(char **tab);
+void		sh_init_exp(t_env **env, t_exp *exp, char *tok_content);
+void		sh_free_exp(t_exp *exp, char **tok_content);
+int			sh_word_error(t_exp *exp);
+void		sh_sub_token(t_exp *exp);
+long int	sh_exec_arith(t_arith *arith);
+void		sh_init_arith(t_arith **arith);
+long int	sh_atoi_index(char *str, int *i);
+char		*sh_long_itoa(long int n);
+void		sh_write_less_op(char *str, int i, t_arith **arith);
+int			sh_all_char_operator(char c);
+void		sh_count_priority(char *c, int i, int count, int *less_count);
+int			sh_special_char_operator(char *str, int i);
+int			sh_arth_error_parenthesis(char *str);
+void		sh_free_arith_ast(t_arith *arith);
+int			sh_check_arth(char *name);
+void		sh_init_ast(long int number, t_arith **arith);
+int			sh_is_number(char *str, int i, int end);
+int			sh_next_less_operator(char *str, int begin
+			, int end, t_arith **arith);
+int			sh_valid_operator(char *str, int begin);
+void		sh_record_arithmetic_string(t_exp *exp);
+int			sh_arithmetic_string_size(t_exp *exp);
+
 #endif

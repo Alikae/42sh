@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:18:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 20:19:52 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:09:34 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	sh_opt_less(t_exp *exp)
 {
+	ft_memdel((void**)&exp->name);
 	exp->i++;
 	if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
@@ -40,6 +41,7 @@ void	sh_opt_equal(t_exp *exp)
 		exp->value = NULL;
 	else
 		sh_assign_word(exp);
+	ft_memdel((void**)&exp->name);
 }
 
 void	sh_opt_question(t_exp *exp)
@@ -59,7 +61,6 @@ void	sh_opt_question(t_exp *exp)
 			sh_word_expansion(exp);
 		else
 			sh_record_less_option(exp);
-		ft_memdel((void**)&(exp->name));
 		exp->name = cpy_name;
 		exp->opt = ERROR;
 		sh()->abort_cmd = 1;
@@ -68,6 +69,7 @@ void	sh_opt_question(t_exp *exp)
 
 void	sh_opt_plus(t_exp *exp)
 {
+	ft_memdel((void**)&exp->name);
 	exp->i++;
 	if (((exp->opt & COLON) && exp->find && exp->find->value)
 			|| (!(exp->opt & COLON) && exp->find))
@@ -94,14 +96,14 @@ void	sh_word_opt(t_exp *exp)
 		sh_opt_less(exp);
 	else if (exp->content[exp->i] == '=')
 		sh_opt_equal(exp);
-	else if (exp->content[exp->i] == '?')
-		sh_opt_question(exp);
 	else if (exp->content[exp->i] == '+')
 		sh_opt_plus(exp);
+	else if (exp->content[exp->i] == '?')
+		sh_opt_question(exp);
 	else if (exp->content[exp->i] == '%' || exp->content[exp->i] == '#')
 		sh_pattern_matching(exp);
 	else if (exp->find && exp->find->value)
 		exp->value = ft_strdup(exp->find->value);
 	else
-		exp->value = NULL;
+		sh_special_parameters(exp, 0);
 }

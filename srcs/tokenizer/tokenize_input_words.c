@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 03:55:42 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/30 01:19:22 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 22:33:51 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,19 +107,17 @@ t_toktype	handle_reserved_and_normals_word(t_toktool *t,
 		if (word_out_of_context(type) || (type == SH_BANG && (tmp =
 						bang_unfollowed_by_word(t))))
 		{
-			(!(tmp == -1) && (sh()->invalid_cmd = 1)) ?
-				sh_dprintf(2, "Unexpected token at -%s\n", t->input + word_begin) : 0;
+			if (!(tmp == -1) && (sh()->invalid_cmd = 1))
+				sh_dprintf(2, "Unexpected token at -%s\n",
+						t->input + word_begin);
 			return (SH_SYNTAX_ERROR);
 		}
 		if (tokenize_reserved_word(t, p_actual, type, word_begin)
 				== SH_SYNTAX_ERROR)
 			return (SH_SYNTAX_ERROR);
 	}
-	else
-	{
-		if ((type = handle_normal_word(t, word_begin, p_actual))
+	else if ((type = handle_normal_word(t, word_begin, p_actual))
 				!= SH_GROUP)
-			return (type);
-	}
+		return (type);
 	return (SH_GROUP);
 }

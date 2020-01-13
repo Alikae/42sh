@@ -6,13 +6,14 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/09 11:10:09 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/13 06:56:14 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_env.h"
 #include "libft.h"
 #include "sh.h"
+#include "sh_executer.h"
 #include "sh_builtins.h"
 
 #define F_N 1
@@ -60,6 +61,8 @@ static int		echo_process(int ac, char **av, char flag, int i)
 			ft_putstr(handle);
 		else
 			break ;
+		if (i < ac - 1)
+			ft_putchar(' ');
 		i++;
 	}
 	if (!(flag & F_N) && !(flag & F_C))
@@ -99,8 +102,9 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	i = 1;
 	flag = '\0';
 	(void)ev;
-	if (!av)
+	if (!av || ac < 2)
 		return (0);
+	print_redirections(sh(), sh()->redirect_lst);
 	if (ft_strcmp(av[i], "-") == 0)
 	{
 		echo_process(ac, av, flag, ++i);

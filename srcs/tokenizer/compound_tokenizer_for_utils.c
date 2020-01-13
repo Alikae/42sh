@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 07:52:27 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:53:18 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 22:28:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ t_token	*tokenize_for_wordlist(t_toktool *t)
 	if (t->input[t->i] != ';' && t->input[t->i] != '\n')
 	{
 		free_ast(origin);
-		sh_dprintf(2, "SYNTAX_ERROR: invalid WORD in FOR at -%.10s\n: expected ';' or \
-				'\\n'\n", t->input + t->i);
+		sh_dprintf(2, "SYNTAX_ERROR: invalid WORD in FOR at -%.10s\n: \
+expected ';' or '\\n'\n", t->input + t->i);
 		return (0);
 	}
 	actual = origin->next;

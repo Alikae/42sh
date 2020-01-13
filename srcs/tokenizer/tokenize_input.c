@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/24 00:01:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 22:26:17 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,3 @@ t_token		*tokenize_input(const char *input)
 	ast = recursive_tokenizer(&tok_tool, SH_NULL, &terminator);
 	return (ast);
 }
-//WTF echo $(echo la`while done`) ; echo lala

@@ -6,12 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 02:25:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/10/14 09:15:35 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/13 03:05:00 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH21_COMMAND_LINE_H
-# define SH21_COMMAND_LINE_H
+#ifndef SH_COMMAND_LINE_H
+# define SH_COMMAND_LINE_H
 
 # include "sh_history.h"
 # include "sh_line.h"

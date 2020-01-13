@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:11:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/06 02:17:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 11:07:17 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ char	**transform_env_for_child(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		if (tmp->exported && tmp->value)
-			len++;
+		len += (tmp->exported && tmp->value);
 		tmp = tmp->next;
 	}
 	if (!(tab = (char**)malloc((len + 1) * sizeof(char*))))
@@ -35,12 +34,15 @@ char	**transform_env_for_child(t_env *env)
 	len = 0;
 	while (env)
 	{
-		if (env->exported && env->value)
-			tab[len++] = ft_join_with_char(env->key, env->value, '=');//protecc?
+		if (env->exported && env->value && !(tab[len++] = ft_join_with_char(
+						env->key, env->value, '=')))
+		{
+			ft_free_tabstr(tab);
+			exit(127);
+		}
 		env = env->next;
 	}
-	tab[len] = 0;
-	return (tab);
+	return ((tab[len] = 0) ? tab : tab);
 }
 
 int		count_argv(t_token *token_begin, t_token *token_end)
@@ -104,6 +106,8 @@ int		(*sh_is_builtin2(const char *cmd))(int ac, char **av, t_env **ev)
 		return (&sh_source);
 	else if (!ft_strcmp(cmd, "readonly"))
 		return (&sh_readonly);
+	else if (!ft_strcmp(cmd, "bg"))
+		return (&sh_bg);
 	return (NULL);
 }
 

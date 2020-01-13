@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 19:57:24 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/23 00:57:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 02:30:09 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void			print_all_tokens(t_sh *p, t_token *t, int lvl)
 			sh_dprintf(2, "%c", (lvcpy == 0) ? '|' : ' ');
 			sh_dprintf(2, "      ");
 		}
-		sh_dprintf(2, "[%s] (%i)-%i\n", (t->content) ? t->content : "o", t->type, t->index);
+		sh_dprintf(2, "[%s] (%i)-%i\n",
+		(t->content) ? t->content : "o", t->type, t->index);
 		if (t->sub)
 		{
 			print_all_tokens(p, t->sub, lvl + 1);

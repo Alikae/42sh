@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 08:00:25 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:53:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/10 22:21:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int		tokenize_for_do(t_toktool *t, t_token *compound)
 	int			word_begin;
 
 	word_begin = t->i;
-	//sh_dprintf(1, "for: %s", t->input + t->i);
 	if (read_n_skip_word(t) == -1)
 		return (0);
 	if (t->i == word_begin || ft_strncmp(t->input + word_begin, "do", t->i

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/07 01:35:02 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 10:41:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@
 #include "sh_tools.h"
 #include "sh_tokens.h"
 #include "sh_job_control.h"
-
-void	lstp(void)
-{
-}
 
 int		str_isnum(char *s)
 {
@@ -75,17 +71,13 @@ t_token	*expand_and_retokenize(t_sh *p, t_token *stack_argvs)
 				origin = create_token(SH_WORD, 0, 0);
 			actual = origin;
 		}
-		else
-		{
-			if (!(actual->next = sh_expansion(stack_argvs->content,
+		else if (!(actual->next = sh_expansion(stack_argvs->content,
 					&(p->params), 1)))
-				actual->next = create_token(SH_WORD, 0, 0);
-		}
+			actual->next = create_token(SH_WORD, 0, 0);
 		while (actual && actual->next)
 			actual = actual->next;
 		stack_argvs = stack_argvs->next;
 	}
-	//print_all_tokens(p, origin, 0);
 	free_ast(stack_origin);
 	return (origin);
 }
@@ -137,7 +129,7 @@ void	goto_exp_end(const char *str, int *i, int type)
 		*i += type;
 }
 
-int		contain_equal_not_first_exterior_to_expansions(const char *str)
+int		contain_equal_not_first_no_expansions(const char *str)
 {
 	int	i;
 	int	exp_type;
@@ -169,7 +161,8 @@ int		stock_redirections_assignements_argvs(t_token *token_begin,
 	{
 		if (is_redirection_operator(token_begin->type))
 			stock_redirection(p, token_begin, &nb_redirections);
-		else if (!cmd_begin && contain_equal_not_first_exterior_to_expansions(token_begin->content))
+		else if (!cmd_begin && contain_equal_not_first_no_expansions(
+					token_begin->content))
 			stock_assign(p, token_begin, nb_assign);
 		else if (token_begin->type == SH_WORD)
 		{
@@ -178,7 +171,11 @@ int		stock_redirections_assignements_argvs(t_token *token_begin,
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
+	printf("BEFORE EXPAND:\n\n");
+	print_all_tokens(p, argv_stack, 0);
 	argv_stack = expand_and_retokenize(p, argv_stack);
+	printf("AFTER EXPAND:\n\n");
+	print_all_tokens(p, argv_stack, 0);
 	*child_argv = build_child_argvs(argv_stack);
 	free_ast(argv_stack);
 	return (nb_redirections);
@@ -190,6 +187,10 @@ int		exec_builtin(t_sh *p, int (*f)(int, char **, t_env **),
 	int ret;
 
 	ret = f(p->child_ac, child_argv, &(p->params));
+//	if (p->pid_main_process != getpid())
+//	{
+//		close(0);
+//	}
 	return (ret);
 }
 
@@ -198,7 +199,7 @@ void	free_simple_cmd_ressources(t_sh *p, int nb_redirections, int nb_assign,
 {
 	ft_free_tabstr(child_argv);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-	close_all_redirections(p);
+//	close_all_redirections(p);
 	restore_std_fds(p);
 	remove_opened_files(p);
 	restore_before_assigns(p);
@@ -231,16 +232,15 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	if ((tmp = is_function_definition(token_begin, token_end)))
 		return (store_func(p, tmp));//del in exitpoint?
 	nb_redirections = stock_redirections_assignements_argvs(token_begin,
-			token_end, &nb_assign, &child_argv); //open files
+			token_end, &nb_assign, &child_argv);
 	if (p->abort_cmd)
 	{
 		free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
 		return (-125);
 	}
 	if (!child_argv[0])
-		return (handle_no_cmd_name(p, child_argv));//and free stuff
+		return (handle_no_cmd_name(p, child_argv, nb_redirections));//and free stuff
 	tmp = (t_token*)(uint64_t)exec_simple_command_2(p, child_argv, tmp, f);
 	free_simple_cmd_ressources(p, nb_redirections, nb_assign, child_argv);
-	//KILL CHILD ENV ADDED AT EACH FUNC END
 	return ((int)tmp);
 }

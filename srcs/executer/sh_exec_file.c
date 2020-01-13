@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/07 02:33:56 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:46:08 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "sh_executer.h"
 #include <fcntl.h>
 #include <stdlib.h>
-#define BUFF_SIZE 4096
 
 #include <stdio.h>
 
@@ -31,7 +30,7 @@ int		sh_script(const char *path)
 
 	p = sh();
 	input = NULL;
-	if (!(buff = ft_strnew(BUFF_SIZE)))
+	if (!(buff = ft_strnew(4096)))
 		return (-1);
 	if ((fd = open(path, O_RDONLY)) < 0)
 	{
@@ -60,11 +59,10 @@ int		sh_script(const char *path)
 	//doesnt throw good error on script "WHILE"
 	if (input && *input && (ast = tokenize_input(input)))
 	{
-		//HANDLE SYNTAX ERROR
-	//	print_all_tokens(p, ast, 0);
 		p->abort_cmd = 0;
 		ft_memdel((void**)&input);
 		exec_script(p, ast);
+		free_ast(ast);
 	}
 	else if (input && *input)
 		sh_dprintf(2, "Tokenize Error-\n");

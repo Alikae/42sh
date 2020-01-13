@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/07 02:56:54 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/12 00:52:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	sh_delete_last_ifs(t_split *splt)
 {
 	while (splt->tok->content[splt->i])
 	{
-		sh_remove_char(&(splt->tok->content), splt->i);
+		sh_remove_char(&(splt->tok->content), &splt->i);
 		splt->i++;
 	}
 }
@@ -66,13 +66,13 @@ void	sh_find_quote(t_split *splt, short quote)
 			bquote--;
 		if (quote != SH_QUOTE && splt->tok->content[splt->i] == '\\')
 		{
-			sh_remove_char(&(splt->tok->content), splt->i);
+			sh_remove_char(&(splt->tok->content), &splt->i);
 			bquote = 1;
 		}
 		if (!bquote)
 		{
-			if (sh_check_quote(splt, quote) && !(splt->tok->content[splt->i]))
-				break ;
+			if (sh_check_quote(splt, quote))
+				return ;
 			sh_treat_token(splt, quote);
 		}
 		splt->i++;
