@@ -6,7 +6,7 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:17:18 by jerry             #+#    #+#             */
-/*   Updated: 2020/01/10 23:27:49 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 02:46:25 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@
 #include "sh_tokenizer.h"
 #include <stddef.h>
 
-void	sh_shdel(t_sh **shell)
+void	free_sh_var(t_sh *s)
 {
-	t_sh	*s;
-
-	if (!shell || !(s = *shell))
-		return ;
 	ft_free_opts(s->opt);
 	sh_env_del(&(s->params));
 	sh_ln_del(&(s->ln_history));
@@ -36,13 +32,22 @@ void	sh_shdel(t_sh **shell)
 	ft_tab_strdel(&(s->aliases));
 	ft_strdel(&(s->bucopy));
 	ft_strdel(&(s->buselect));
-	if (s->is_interactive)
-		ft_strdel(&(s->cmd));
 	sh_job_del(&(s->jobs));
 	sh_hist_del(&(s->hist));
 	ft_free_tabstr(s->av);
 	free_ast(s->functions);
-	s->dir = NULL;
+	ft_strdel(&(s->cmd));
+}
+
+void	sh_shdel(t_sh **shell)
+{
+	t_sh	*s;
+
+	if (!shell || !(s = *shell))
+		return ;
+	if (s->is_interactive)
+		s->dir = NULL;
+	free_sh_var(s);
 	s->user = NULL;
 	free(*shell);
 	*shell = NULL;
