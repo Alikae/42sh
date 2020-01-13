@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/10 23:08:56 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 01:46:08 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int		sh_script(const char *path)
 		p->abort_cmd = 0;
 		ft_memdel((void**)&input);
 		exec_script(p, ast);
+		free_ast(ast);
 	}
 	else if (input && *input)
 		sh_dprintf(2, "Tokenize Error-\n");
