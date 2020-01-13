@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:44:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/23 00:43:27 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 06:35:37 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static void		sh_handle_sigint(void)
 
 void		sh_handle_signal(int sig)
 {
-	//printf("signal %i\n", sig);
 	if (sig == SIGTSTP)
 		sh_handle_sigstp();
 	else if (sig == SIGINT)
@@ -69,9 +68,7 @@ void		sh_handle_signal(int sig)
 
 void			sh_init_signals(void)
 {
-	int			sig;
-
-	sig = 0;
-	while (++sig < 32)
-		signal(sig, &sh_handle_signal);
+	signal(SIGINT, &sh_handle_signal);
+	signal(SIGTSTP, &sh_handle_signal);
+	signal(SIGCONT, &sh_handle_signal);
 }
