@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 21:35:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/20 10:45:04 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/13 03:06:18 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "sh.h"
 
-void				sh_entrypoint(int ac , char **av, char **ev);
+void				sh_entrypoint(int ac, char **av, char **ev);
 void				sh_exec_line(const char *input);
 void				sh_init(struct s_sh *shell);
 void				sh_init_cmd(char *input);
@@ -28,7 +28,7 @@ void				sh_init_path(void);
 int					sh_loop(void);
 int					sh_script(const char *path);
 int					sh_parse_rc(void);
-void        		sh_prompt(void);
+void				sh_prompt(void);
 void				signal_handler(int sig);
 void				handle_signal(int sig);
 void				sh_set_shlvl(void);

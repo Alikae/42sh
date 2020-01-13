@@ -6,12 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:14:11 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/07/04 17:14:56 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/13 03:23:02 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TMP
-# define TMP
+#ifndef TMP_H
+# define TMP_H
 
 void	sh_exec_line(const char *tmp);
 
