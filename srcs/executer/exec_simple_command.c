@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 07:09:47 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 10:41:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,11 @@ int		stock_redirections_assignements_argvs(t_token *token_begin,
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
+	printf("BEFORE EXPAND:\n\n");
+	print_all_tokens(p, argv_stack, 0);
 	argv_stack = expand_and_retokenize(p, argv_stack);
+	printf("AFTER EXPAND:\n\n");
+	print_all_tokens(p, argv_stack, 0);
 	*child_argv = build_child_argvs(argv_stack);
 	free_ast(argv_stack);
 	return (nb_redirections);

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 03:50:43 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 11:07:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		sh_unalias(int ac, char **av, t_env **ev);
 int		sh_exit(int ac, char **av, t_env **ev);
 int		sh_jobs(int ac, char **av, t_env **ev);
 int		sh_fg(int ac, char **av, t_env **ev);
+int		sh_bg(int ac, char **av, t_env **ev);
 int		sh_type(int ac, char **av, t_env **ev);
 int		sh_test_unary(char *s1, char *s2);
 int		sh_echo(int ac, char **av, t_env **ev);
