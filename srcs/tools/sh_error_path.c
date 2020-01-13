@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 02:49:50 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/22 15:09:40 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/13 02:28:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ int		sh_error_path(char *cmd, char *path, int error)
 	if (error & ENOTDIR)
 		write(2, ": Not a director\n", 17);
 	if (error & EACCES)
-		write(2, ": Permission denied\n",  20);
+		write(2, ": Permission denied\n", 20);
 	return (-1);
 }

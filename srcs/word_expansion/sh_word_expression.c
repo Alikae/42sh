@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 01:37:20 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:08:33 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	sh_parameter_expansion(t_exp *exp)
 	sh_record_name(exp);
 	sh_word_opt(exp);
 	if (exp->value && !len)
-		sh_spetial_quote(&(exp->value));
+		sh_special_quote(&(exp->value));
 	else if (exp->value && len)
 	{
 		cpy = exp->value;

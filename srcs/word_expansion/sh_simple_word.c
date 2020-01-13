@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 02:40:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 02:35:39 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:09:18 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ void	sh_simple_expansion(t_exp *exp)
 	if (exp->find)
 	{
 		exp->value = ft_strdup(exp->find->value);
-		sh_spetial_quote(&(exp->value));
+		sh_special_quote(&(exp->value));
 	}
 	else
-		sh_spetial_parameters(exp, 1);
+		sh_special_parameters(exp, 1);
+	ft_memdel((void**)&exp->name);
 }

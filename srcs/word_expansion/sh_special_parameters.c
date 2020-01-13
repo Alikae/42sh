@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_spetial_parameters.c                            :+:      :+:    :+:   */
+/*   sh_special_parameters.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 03:38:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 02:37:46 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:11:32 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	sh_wildcard_parameters(t_exp *exp)
 	sh_record_all_parameters(exp, c, sh()->av);
 }
 
-void	sh_spetial_parameters(t_exp *exp, int where)
+void	sh_special_parameters(t_exp *exp, int where)
 {
 	if (exp->name[0] >= '0' && exp->name[0] <= '9')
 		sh_positional_parameters(exp);
