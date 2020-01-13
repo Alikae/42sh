@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/13 07:24:47 by ede-ram          ###   ########.fr        #
+#    Updated: 2020/01/13 13:52:29 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -143,6 +143,7 @@ C_FILES_builtins = \
 		   sh_test_unary.c \
 		   sh_source.c \
 		   sh_type.c \
+		   sh_type2.c \
 		   sh_true.c \
 		   sh_alias.c \
 		   sh_exit.c \

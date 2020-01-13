@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:43:18 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 11:07:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 13:53:06 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int		sh_jobs(int ac, char **av, t_env **ev);
 int		sh_fg(int ac, char **av, t_env **ev);
 int		sh_bg(int ac, char **av, t_env **ev);
 int		sh_type(int ac, char **av, t_env **ev);
+int		sh_type_exec(char *str, char *real);
 int		sh_test_unary(char *s1, char *s2);
 int		sh_echo(int ac, char **av, t_env **ev);
 void	sh_debug_builtin(int ac, char **av, t_env **env);

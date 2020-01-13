@@ -6,7 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/07 14:58:12 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/13 11:51:14 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,5 @@ void					sh_init(t_sh *shell)
 	shell->bucopy = NULL;
 	shell->cmd = NULL;
 	shell->orig_termios = init_term();
+	shell->last_cmd_result = 0;
 }

@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/26 13:52:19 by tmeyer           ###   ########.fr        #
+#    Updated: 2020/01/13 12:54:16 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,7 +99,8 @@ C_FILES_str = \
 	ft_strtrim.c \
 	ft_strncmp_n.c \
 	ft_strlen_w.c \
-	ft_strconv.c
+	ft_strconv.c \
+	ft_to_lower.c
 
 C_FILES_tab_str = \
 	ft_tab_strdel.c \
