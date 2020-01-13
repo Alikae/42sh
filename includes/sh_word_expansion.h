@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 21:31:54 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:07:35 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define LEN	4
 
 void		sh_subsh_quote(t_exp *exp, short *quote);
-void		sh_spetial_quote(char **content);
+void		sh_special_quote(char **content);
 int			sh_word_expansion(t_exp *exp);
 void		sh_parameter_expansion(t_exp *exp);
 int			sh_tilde_expansion(char **content, t_env *env);
@@ -52,7 +52,6 @@ int			sh_check_split(t_split *splt);
 void		sh_token_spliting(t_split *splt, int reset);
 void		sh_next_token(t_token **new);
 void		sh_word_opt(t_exp *exp);
-void		sh_spetial_quote(char **content);
 void		sh_sub_word(t_exp *exp);
 void		sh_next_word(t_exp *exp);
 void		sh_assign_word(t_exp *exp);
@@ -62,7 +61,7 @@ char		*subtitute_prefix_pattern(const char *str
 			, const char *pattern, short short_or_long);
 char		*subtitute_suffix_pattern(const char *str
 			, const char *pattern, short short_or_long);
-void		sh_spetial_parameters(t_exp *exp, int where);
+void		sh_special_parameters(t_exp *exp, int where);
 int			sh_skip_white_space(char *str, int i);
 int			sh_skip_number(char *str, int i);
 int			sh_arth_syntax_error(char *str, int i);
@@ -76,7 +75,7 @@ char		*sh_find_arth_var_value(char **str);
 void		sh_sub_var(char *value, char **str, int beg, int ed);
 int			sh_tab_len(char **tab);
 void		sh_init_exp(t_env **env, t_exp *exp, char *tok_content);
-void		sh_free_exp(t_exp *exp);
+void		sh_free_exp(t_exp *exp, char **tok_content);
 int			sh_word_error(t_exp *exp);
 void		sh_sub_token(t_exp *exp);
 long int	sh_exec_arith(t_arith *arith);

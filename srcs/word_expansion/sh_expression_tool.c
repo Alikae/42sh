@@ -6,13 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 19:51:59 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/06 19:59:45 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 01:11:07 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 
-void	sh_count_new_spetial_quote_len(char **content, int *i, int *size)
+void	sh_count_new_special_quote_len(char **content, int *i, int *size)
 {
 	while ((*content)[*i])
 	{
@@ -23,7 +23,7 @@ void	sh_count_new_spetial_quote_len(char **content, int *i, int *size)
 	}
 }
 
-void	sh_spetial_quote(char **content)
+void	sh_special_quote(char **content)
 {
 	int		i;
 	int		size;
@@ -34,7 +34,7 @@ void	sh_spetial_quote(char **content)
 	j = 0;
 	size = 0;
 	cpy = (*content);
-	sh_count_new_spetial_quote_len(content, &i, &size);
+	sh_count_new_special_quote_len(content, &i, &size);
 	if (!((*content) = malloc(size + i + 1)))
 		exit(-1);
 	i = 0;

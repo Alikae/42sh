@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/11 22:27:26 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/13 01:07:56 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -186,7 +186,7 @@ C_FILES_word_expansion = \
 			 sh_expression_tool.c \
 			 sh_word_opt_equal_tool.c \
 			 pattern_matching.c \
-			 sh_spetial_parameters.c \
+			 sh_special_parameters.c \
 			 sh_arith_check_tools.c \
 			 sh_subsh_expansion_tools.c \
 			 sh_sub_arth_var_tools.c \
