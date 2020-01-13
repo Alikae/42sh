@@ -6,16 +6,16 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 07:36:42 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/10/10 12:38:03 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/13 03:45:34 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HISTORY_H
-# define HISTORY_H
+#ifndef SH_HISTORY_H
+# define SH_HISTORY_H
 
 # include <unistd.h>
 
-typedef struct 	s_hist
+typedef struct	s_hist
 {
 	char		**prev;
 	char		*path;
