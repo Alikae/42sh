@@ -6,13 +6,13 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 16:57:17 by jerry             #+#    #+#             */
-/*   Updated: 2019/11/09 17:22:12 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/14 08:46:36 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_env.h"
 
-void	sh_init_path()
+void	sh_init_path(void)
 {
 	t_env *tmp;
 

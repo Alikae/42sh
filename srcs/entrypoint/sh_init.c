@@ -3,10 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   sh_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/14 02:37:07 by tcillard         ###   ########.fr       */
+/*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/14 08:48:02 by tmeyer           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
@@ -23,7 +25,6 @@
 #include <ncurses.h>
 #include <termios.h>
 #include <termcap.h>
-
 
 static struct termios	init_term(void)
 {
