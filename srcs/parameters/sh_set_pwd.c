@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 00:13:54 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/23 19:13:01 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/14 08:58:12 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,18 @@ void	sh_set_pwd(void)
 
 	ft_bzero(tmp2, PATH_MAX + 1);
 	getcwd(tmp2, PATH_MAX);
-	if ((tmp = sh_getev("OLDPWD")) || (tmp = sh_setev("OLDPWD", NULL)))
+	if (!(tmp = sh_getev("OLDPWD")))
+	{
+		if ((tmp = sh_setev("OLDPWD", NULL)))
+			tmp->exported = 1;
+	}
+	else
 		tmp->exported = 1;
-	if ((tmp = sh_getev("PWD")) || (tmp = sh_setev("PWD", tmp2)))
+	if (!(tmp = sh_getev("PWD")))
+	{
+		if ((tmp = sh_setev("PWD", tmp2)))
+			tmp->exported = 1;
+	}
+	else
 		tmp->exported = 1;
 }

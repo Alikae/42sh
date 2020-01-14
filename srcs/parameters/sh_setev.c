@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/12/17 02:21:13 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/14 09:03:57 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static	t_env *print_err(char *str)
+static t_env	*print_err(char *str)
 {
 	ft_putendl_fd(str, 2);
 	return (NULL);
-	}
+}
 
-t_env	*sh_setev(const char *key, const char *value)
+static t_env	*sh_setev_next(const char *key, const char *value, t_env *env)
 {
-	t_env	*env;
-
-	//printf("set %s %s\n", key, value);
-	if (!key || (!ft_isalpha(*key) && *key != '_'  ))
-		return (print_err(": Bad identifier: Must begin with a letter"));
-	if (!(env = sh()->params))
-	{
-		sh()->params = sh_create_param(key);
-		sh()->params->value = ft_strdup(value);
-		return (sh()->params);
-	}
 	while (env->next && ft_strcmp(env->key, key))
 		env = env->next;
 	if (!ft_strcmp(env->key, key) && env->readonly)
@@ -52,4 +41,19 @@ t_env	*sh_setev(const char *key, const char *value)
 		free(env->value);
 	env->value = ft_strdup(value);
 	return (env);
+}
+
+t_env			*sh_setev(const char *key, const char *value)
+{
+	t_env	*env;
+
+	if (!key || (!ft_isalpha(*key) && *key != '_'))
+		return (print_err(": Bad identifier: Must begin with a letter"));
+	if (!(env = sh()->params))
+	{
+		sh()->params = sh_create_param(key);
+		sh()->params->value = ft_strdup(value);
+		return (sh()->params);
+	}
+	return (sh_setev_next(key, value, env));
 }
