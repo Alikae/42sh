@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 15:25:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/09 13:16:24 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/14 12:53:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 	sh_cursor_position(&c.cursor);
 	c.term.rows = tgetnum("li");
 	c.term.col = tgetnum("co");
-	if (sh()->buselect && !(buf[0] == 127 || buf[0] == 8))
+	if (sh()->buselect && !(buf[0] == 127 || buf[0] == 8) && buf[3] != 'H')
 		reset_selection(command, i, hist);
 	if (buf[0] == '\033' && buf[2] == 'H')
 		i = sh_cursor_backward(i + 1, i, c.cursor, c.term);

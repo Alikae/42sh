@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 07:30:23 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/09 13:20:22 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/14 12:51:33 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int			cursor_history(char **command, char *buf, int i, t_hist *hist)
 		*command = ft_strdup(hist->current);
 	if (hist->index != -1 || temp != -1)
 	{
-		sh_cursor_motion(command, "\033[H", j, hist);
+		sh_cursor_motion(command, "\033[HH", j, hist);
+		ft_memdel((void**)&sh()->buselect);
 		*command = sh_insert_char(*command, " ", i);
 		tputs(tgetstr("cd", NULL), 0, sh_outc);
 		write(0, *command, ft_strlen(*command));
