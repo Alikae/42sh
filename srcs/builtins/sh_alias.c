@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 00:29:34 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/13 10:41:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/14 08:31:18 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,6 @@
 #include "sh.h"
 
 #define F_PRINT 1
-
-static int		replace_alias(char **aliases, char *key)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	while (key[i] != '=')
-		i++;
-	while (aliases && aliases[j] && ft_strncmp_n(aliases[j], key, i))
-		j++;
-	if (!aliases || !aliases[j])
-		return (0);
-	ft_memdel((void**)&aliases[j]);
-	aliases[j] = ft_strdup(key);
-	return (1);
-}
 
 static int		print_alias(char flag, char *alias)
 {
@@ -67,9 +49,7 @@ static int		list_aliases(char flag, char *alias)
 		i++;
 	if (sh()->aliases && sh()->aliases[i])
 		return (print_alias(flag, sh()->aliases[i]));
-	ft_putstr_fd("42sh: alias: ", 2);
-	ft_putstr_fd(alias, 2);
-	ft_putstr_fd(": not found\n", 2);
+	sh_dprintf(2, "42sh: alias: %s: not found\n", alias);
 	return (0);
 }
 

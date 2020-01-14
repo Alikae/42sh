@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 04:29:37 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/09/09 01:37:49 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/14 08:11:35 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,6 @@
 #include "sh.h"
 
 #define F_ALL 1
-
-static int		prompt_error(char *key)
-{
-	ft_putstr_fd("42sh: unalias: ", 2);
-	ft_putstr_fd(key, 2);
-	ft_putstr_fd(" : not found\n", 2);
-	return (1);
-}
 
 static char		*cut_key(char *key)
 {
@@ -78,8 +70,8 @@ static int		process(int i, char **av, char flag)
 			ft_memdel((void**)&test);
 		}
 		ft_memdel((void**)&test);
-		if (!sh()->aliases || !sh()->aliases[j])
-			k = prompt_error(av[i]);
+		if ((!sh()->aliases || !sh()->aliases[j]) && (k = 1))
+			sh_dprintf(0, "42sh: unalias: %s: not found\n", av[i]);
 		else
 			sh()->aliases = delete_a_line(sh()->aliases, j);
 		i++;
@@ -114,9 +106,9 @@ int				sh_unalias(int ac, char **av, t_env **ev)
 	int		i;
 	char	flag;
 
-	i = 1;
+	i = 0;
 	flag = '\0';
-	while (av[i])
+	while (av[++i])
 	{
 		if (av[i][0] == '-' && av[i][1] != 0)
 		{
@@ -125,7 +117,6 @@ int				sh_unalias(int ac, char **av, t_env **ev)
 		}
 		else
 			break ;
-		i++;
 	}
 	(void)ac;
 	(void)ev;
@@ -135,6 +126,6 @@ int				sh_unalias(int ac, char **av, t_env **ev)
 		sh()->aliases = 0;
 	}
 	else if (!av[i])
-		ft_putstr_fd("unalias: usage: unalias [-a] name [name ...]\n", 2);
+		ft_putstr_fd("42sh: unalias: usage: unalias [-a] name [name ...]\n", 2);
 	return (!av[i] ? 1 : process(i, av, flag));
 }
