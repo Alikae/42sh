@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/13 01:07:56 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/13 02:40:45 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ C_FILES_entrypoint = \
 	sh_init.c
 
 C_FILES_sh_printf = \
-			sh_printf.c 
+			sh_printf.c \
+			sh_print.c
 
 C_FILES_job_control = \
 		      t_job.c \
