@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_opts.c                                     :+:      :+:    :+:   */
+/*   ft_inv_opt.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/18 00:46:24 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/21 23:27:43 by thdelmas         ###   ########.fr       */
+/*   Created: 2020/01/14 17:39:12 by jerry             #+#    #+#             */
+/*   Updated: 2020/01/14 17:55:32 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
 
-void	ft_free_opts(t_opt *opts)
+void	ft_inv_opt(const char *pn, const char *name, size_t len)
 {
-	t_opt	*tmp;
-
-	if (!opts)
+	if (!pn || !name)
 		return ;
-	while (opts)
-	{
-		tmp = opts->next;
-		if (opts->name)
-			free(opts->name);
-		if (opts->arg)
-			free(opts->arg);
-		free(opts);
-		opts = tmp;
-	}
+	ft_putstr_fd(pn, 2);
+	ft_putstr_fd(": Missing argument: ", 2);
+	write(2, name, len);
+	ft_putchar_fd('\n', 2);
 }

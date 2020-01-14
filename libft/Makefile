@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/12 15:20:07 by thdelmas          #+#    #+#              #
-#    Updated: 2019/11/03 22:16:51 by thdelmas         ###   ########.fr        #
+#    Updated: 2020/01/14 20:26:10 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ OBJ_DIR := ./.obj
 SUB_DIRS := \
 	conv \
 	int \
-	opt \
+	opts \
 	lst \
 	math \
 	mem \
