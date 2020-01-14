@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 04:02:24 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/14 20:45:12 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct		s_sh
 {
 	int				ac;
 	char			**av;
+	char			**orig_av;
 	char			**ev;
 	t_opt			*opt;
 	t_toktype		type; /*for recognize tokens*/

@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/14 08:48:02 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/14 20:34:34 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void					sh_init(t_sh *shell)
 {
 	struct passwd	*pwd;
 
-	sh_init_env();
 	sh_init_opts(shell);
+	sh_init_env();
 	shell->pid_main_process = getpid();
 	shell->script_separators[0] = SH_SEMI;
 	shell->script_separators[1] = SH_AND;

@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/14 20:25:49 by jerry            ###   ########.fr        #
+#    Updated: 2020/01/14 20:32:07 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ C_FILES_lst = \
 	ft_lstdelone.c \
 	ft_lstiter.c \
 	ft_lstmap.c \
+	ft_lstpush.c \
 	ft_lstnew.c
 
 C_FILES_math = \
