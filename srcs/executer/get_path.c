@@ -58,6 +58,7 @@ char	*get_real_path(const char *path, struct stat *st)
 
 	nb_paths = 0;
 	paths = 0;
+	ret = 1;
 	if (path[0] != '/' && !(paths = ft_strsplit(sh_getev_value("PATH"), ':')))
 		sh_dprintf(1, "$PATH not found\n");
 	while ((real_path = get_next_path(path, paths, nb_paths++)))

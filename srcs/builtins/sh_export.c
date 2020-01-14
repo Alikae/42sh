@@ -50,15 +50,15 @@ int			sh_export(int ac, char **av, t_env **ev)
 		{
 			if (!ft_isalpha(av[i][0]) || av[i][0] == '_')
 			{
-				ft_putstr_fd("export: ", STDERR_FILENO);
-				ft_putstr_fd(av[i], STDERR_FILENO);
-				ft_putendl_fd(": not a valid identifier", STDERR_FILENO);
+				sh_dprintf(2, "42sh: export: %s: not a"
+							"valid indentifier\n", av[i]);
 				return (1);
 			}
 			if ((tmp = ft_strchr(av[i], '=')))
 			{
 				tmp = ft_strndup(av[i], tmp - av[i]);
 				sh_setev(tmp, ft_strchr(av[i], '=') + 1)->exported = 1;
+				ft_memdel((void**)&tmp);
 			}
 			else
 				sh_setev(av[i], NULL)->exported = 1;
