@@ -6,9 +6,7 @@
 /*   By: maboye <maboye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:19:19 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/12 03:06:37 by tcillard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/*   Updated: 2020/01/14 02:37:07 by tcillard         ###   ########.fr       */
 
 #include "sh.h"
 #include "libft.h"
@@ -63,4 +61,5 @@ void					sh_init(t_sh *shell)
 	shell->bucopy = NULL;
 	shell->cmd = NULL;
 	shell->orig_termios = init_term();
+	shell->last_cmd_result = 0;
 }

@@ -6,12 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 03:18:34 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/13 07:21:12 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
+#include "sh_executer.h"
 #include "sh_redirections.h"
 #include "sh_tokens.h"
 
@@ -71,12 +72,14 @@ void	sh_subsh_expansion(t_exp *exp)
 
 	sh_record_commande_string(exp);
 	tok = create_token(SH_SUBSH, 0, NULL);
+	printf("EXP: %s\n", exp->name);
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
 		if (pipe(pipe_fd) == -1)
 			exit(-1);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
 		exec_compound_subsh(sh(), tok);
+		free_ast(tok);
 		del_n_redirect_lst(&(sh()->redirect_lst), 1);
 		sh_read_pipe(exp, pipe_fd[0]);
 		close(pipe_fd[0]);

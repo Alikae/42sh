@@ -3,26 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   sh_type.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/20 15:32:04 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/09 09:49:23 by tmeyer           ###   ########.fr       */
-/*   Updated: 2019/11/01 17:40:51 by thdelmas         ###   ########.fr       */
+/*   Created: 2020/01/13 12:05:02 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/13 14:16:48 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_types.h"
 #include "libft.h"
+#include "sh_executer.h"
+#include "sh_builtins.h"
 
-int	(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev);
-
-int	sh_type_keyword(char *str)
+static int		sh_type_keyword(char *str)
 {
-	int 		i;
-	static char 	*keyword[] = { "if", "then", "else", "elif", "fi", "case", "esac",
-		"for", "select", "while", "until", "do", "done", "in",
-		"function", "time", "{", "}", "!", "[[", "]]", NULL};
+	int			i;
+	static char *keyword[] = {	"if", "then", "else", "elif", "fi", "case",
+								"esac", "for", "select", "while", "until", "do",
+								"done", "in", "function", "time", "{", "}", "!",
+								"[[", "]]", NULL };
+
 	i = -1;
 	while (keyword[++i])
 	{
@@ -36,7 +37,7 @@ int	sh_type_keyword(char *str)
 	return (0);
 }
 
-int	sh_type_builtin(char *str)
+static int		sh_type_builtin(char *str)
 {
 	if (sh_is_builtin(str))
 	{
@@ -47,10 +48,10 @@ int	sh_type_builtin(char *str)
 	return (0);
 }
 
-int	sh_type_alias(char *str)
+static int		sh_type_alias(char *str)
 {
-	char **tmp;
-	int len;
+	char	**tmp;
+	int		len;
 
 	if ((tmp = sh()->aliases))
 		while (*tmp)
@@ -69,9 +70,11 @@ int	sh_type_alias(char *str)
 	return (0);
 }
 
-int	sh_type_fun(char *str)
+static int		sh_type_fun(char *str)
 {
-	t_token *fun = sh()->functions;
+	t_token *fun;
+
+	fun = sh()->functions;
 	while (fun)
 	{
 		if (!ft_strcmp(fun->content, str))
@@ -84,25 +87,24 @@ int	sh_type_fun(char *str)
 	return (0);
 }
 
-void	sh_type_type(char *str)
+int				sh_type(int ac, char **av, t_env **ev)
 {
-	if (!sh_type_keyword(str) && !sh_type_builtin(str)
-			&& !sh_type_fun(str) && !sh_type_alias(str))
-	{
-		ft_putstr_fd("sh: type: ", 2);
-		ft_putstr_fd(str, 2);
-		ft_putendl_fd(": not found", 2);
-	}
-
-}
-
-int	sh_type(int ac, char **av, t_env **ev)
-{
-	int	i;
+	int		i;
+	char	*str;
 
 	i = 0;
 	(void)ev;
 	while (++i < ac)
-		sh_type_type(av[i]);
+	{
+		str = av[i];
+		if (!sh_type_keyword(str) && !sh_type_builtin(str)
+				&& !sh_type_fun(str) && !sh_type_alias(str)
+				&& !sh_type_exec(ft_to_lower(str), av[i]))
+		{
+			ft_putstr_fd("sh: type: ", 2);
+			ft_putstr_fd(av[i], 2);
+			ft_putendl_fd(": not found\n", 2);
+		}
+	}
 	return (0);
 }

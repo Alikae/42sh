@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:37:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 10:59:38 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,12 @@ int	sh_jobs(int ac, char **av, char **env)
 				sh_dprintf(1, "[%i] SIGINT		'%s'\n", job->pid, job->name);
 			else if (WTERMSIG(status) == SIGABRT)
 				sh_dprintf(1, "[%i] SIGABRT	'%s'\n", job->pid, job->name);
-			else if (WTERMSIG(status) == SIGABRT)
-				sh_dprintf(1, "[%i] SIGABRT	'%s'\n", job->pid, job->name);
-			else
-				sh_dprintf(1, "[%i]si %i			'%s'\n", job->pid, WTERMSIG(status), job->name);
+			else if (WTERMSIG(status) == SIGTTIN)
+				sh_dprintf(1, "[%i] SIGTTIN	'%s'\n", job->pid, job->name);
+			else if (WTERMSIG(status) == SIGTTOU)
+				sh_dprintf(1, "[%i] SIGTTOU	'%s'\n", job->pid, job->name);
+			//else
+				//sh_dprintf(1, "[%i]si %i			'%s'\n", job->pid, WTERMSIG(status), job->name);
 		}
 		else if (WIFEXITED(status))
 		{

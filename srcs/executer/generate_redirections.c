@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:46:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/12 18:57:16 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 06:59:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 	gen_redirections_recursively(p, lst->next);
 	if (not_previously_in_the_list(lst->in, lst))
 	{
+		dprintf(2, "[%i]REDIRECT %i -> %i\n", getpid(), lst->in, lst->out);
 		if (dup2(lst->out, lst->in) < 0)
 			close(lst->in);
 	}

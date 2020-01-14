@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/12 18:51:51 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 11:12:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,11 @@ int		stock_redirections_assignements_argvs(t_token *token_begin,
 		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
+//	printf("BEFORE EXPAND:\n\n");
+//	print_all_tokens(p, argv_stack, 0);
 	argv_stack = expand_and_retokenize(p, argv_stack);
+//	printf("AFTER EXPAND:\n\n");
+//	print_all_tokens(p, argv_stack, 0);
 	*child_argv = build_child_argvs(argv_stack);
 	free_ast(argv_stack);
 	return (nb_redirections);
@@ -183,6 +187,10 @@ int		exec_builtin(t_sh *p, int (*f)(int, char **, t_env **),
 	int ret;
 
 	ret = f(p->child_ac, child_argv, &(p->params));
+//	if (p->pid_main_process != getpid())
+//	{
+//		close(0);
+//	}
 	return (ret);
 }
 
@@ -191,7 +199,7 @@ void	free_simple_cmd_ressources(t_sh *p, int nb_redirections, int nb_assign,
 {
 	ft_free_tabstr(child_argv);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-	close_all_redirections(p);
+//	close_all_redirections(p);
 	restore_std_fds(p);
 	remove_opened_files(p);
 	restore_before_assigns(p);

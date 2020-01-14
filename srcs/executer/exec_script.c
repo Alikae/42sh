@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/12 19:01:20 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/13 06:37:10 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,17 +272,16 @@ void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
 		setpgid(pid, pid);
 	if (foreground || (p->force_setpgrp_setattr))
 	{
-		dprintf(2, "[%i]GIVE RIGHTS\n", getpid());
 		signal(SIGTTOU, SIG_IGN);
-		tcsetpgrp(0, pid);
-		tcsetattr(0, TCSADRAIN, &p->extern_termios);
+		tcsetpgrp((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0, pid);
+		tcsetattr((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0,
+				TCSADRAIN, &p->extern_termios);
 		signal(SIGTTOU, SIG_DFL);
 	}
 }
 
 void	sig_default(void)
 {
-	dprintf(2, "[%i]SIGDEF\n", getpid());
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTSTP, SIG_DFL);
@@ -310,9 +309,9 @@ Abort %i\n", getpid(), (p->abort_cmd = 1));
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 		create_process_group_give_terminal_access(p, pid, foreground);
-	(child_pid) ? 0 : sig_default();
 	if (!child_pid)
 	{
+		sig_default();
 		delete_all_jobs(p->jobs);
 		p->jobs = 0;
 		close_cpy_std_fds(p);

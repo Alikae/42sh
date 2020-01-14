@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/11/26 14:04:42 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/13 12:53:52 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char			**tab_realloc(char **tabl, char *line);
 char			*ft_strconv_w(const char *str);
 size_t			ft_strlen_w(const char *str);
 size_t			ft_strlen(const char *s);
+char			*ft_to_lower(char *str);
 char			*ft_strdup(const char *s);
 char			*ft_strndup(const char *s, size_t n);
 char			*ft_strcpy(char *s1, const char *s2);

@@ -38,7 +38,7 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b, int index_e)
 	job->next = 0;
 	return (job);
 }
-#include <stdio.h>
+
 t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e, const char *status)
 {
 	t_job	*jobs;
@@ -47,7 +47,8 @@ t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e, con
 	sh()->jobs = create_job(pid, name, index_b, index_e);
 	sh()->jobs->next = jobs;
 	sh()->jobs->status = status;
-	sh_dprintf(1, "[%i] %s\n", getpid(), sh()->jobs->name);
+	sh()->jobs->reported = 1;
+	sh_dprintf(1, "[%i] %s\n", sh()->jobs->pid, sh()->jobs->name);
 	return (jobs);
 }
 
