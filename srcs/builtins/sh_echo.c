@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 06:56:14 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/15 01:23:12 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	(void)ev;
 	if (!av || ac < 2)
 		return (0);
-	print_redirections(sh(), sh()->redirect_lst);
 	if (ft_strcmp(av[i], "-") == 0)
 	{
 		echo_process(ac, av, flag, ++i);
