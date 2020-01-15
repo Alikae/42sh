@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:12:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 00:50:10 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/15 01:04:24 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	sh_remove_char(char **str, int *i)
 		}
 		j_str++;
 	}
+	(*i)--;
 	new[j] = '\0';
 	free(*str);
 	*str = new;

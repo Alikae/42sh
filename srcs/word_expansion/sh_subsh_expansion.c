@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/13 07:21:12 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/14 22:41:35 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	sh_subsh_expansion(t_exp *exp)
 
 	sh_record_commande_string(exp);
 	tok = create_token(SH_SUBSH, 0, NULL);
-	printf("EXP: %s\n", exp->name);
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
 		if (pipe(pipe_fd) == -1)
