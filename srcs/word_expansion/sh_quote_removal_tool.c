@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:12:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/15 01:04:24 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/15 23:11:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	sh_remove_char(char **str, int *i)
 
 	j_str = 0;
 	j = 0;
-	if (!(new = malloc(ft_strlen(*str))))
+	if (!(new = malloc(ft_strlen(*str) + 1)))
 		exit(-1);
 	while ((*str)[j_str])
 	{
@@ -63,7 +63,6 @@ void	sh_remove_char(char **str, int *i)
 		}
 		j_str++;
 	}
-	(*i)--;
 	new[j] = '\0';
 	free(*str);
 	*str = new;
