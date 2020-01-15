@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/15 01:23:12 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/15 01:45:04 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,15 @@
 #define F_E 2
 #define F_C 4
 
-static void		sh_echo_print(char *tmp, char **handle, char *flag)
+static int		sh_echo_print(char *tmp, char **handle, char *flag)
 {
 	while ((tmp = ft_strchr(*handle, '\\')) && (*flag & F_E))
 	{
-		write(1, *handle, tmp - *handle);
+	printf("la\n");
+	int i;
+		if ((i = write(1, *handle, tmp - *handle) < 0))
+		//	return (0);
+		printf("%i\n" , i);
 		*handle = tmp + 1 + (tmp[1] != '\0');
 		if (tmp[1] == 'a')
 			ft_putchar('\a');
@@ -47,6 +51,7 @@ static void		sh_echo_print(char *tmp, char **handle, char *flag)
 	}
 	if (tmp && tmp[1] == 'c')
 		*flag |= F_C;
+	return (1);
 }
 
 static int		echo_process(int ac, char **av, char flag, int i)
@@ -56,9 +61,13 @@ static int		echo_process(int ac, char **av, char flag, int i)
 	while (i < ac)
 	{
 		handle = av[i];
-		sh_echo_print(NULL, &handle, &flag);
+		if (!(sh_echo_print(NULL, &handle, &flag)))
+			return (1);
 		if (!(flag & F_C))
-			ft_putstr(handle);
+		{
+			if (write(1, handle, ft_strlen(handle)) < 0)
+				return (1);
+		}
 		else
 			break ;
 		if (i < ac - 1)
@@ -105,12 +114,8 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	if (!av || ac < 2)
 		return (0);
 	if (ft_strcmp(av[i], "-") == 0)
-	{
-		echo_process(ac, av, flag, ++i);
-		return (0);
-	}
+		return (echo_process(ac, av, flag, ++i));
 	while (av[i][0] == '-' && check_flags(av[i] + 1, &flag))
 		i++;
-	echo_process(ac, av, flag, i);
-	return (0);
+	return (echo_process(ac, av, flag, i));
 }
