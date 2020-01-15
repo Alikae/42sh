@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:21:28 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/12 18:51:42 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/15 01:01:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int		handle_no_cmd_name(t_sh *p, char **child_argv, int nb_redirections)
 	p->assign_lst = 0;
 	delete_close_all_pipe_lst(p->pipe_lst);
 	p->pipe_lst = 0;
-	//close open files
 	return (0);
 }
 
