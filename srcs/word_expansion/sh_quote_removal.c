@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/15 23:14:10 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 00:40:21 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	sh_find_quote(t_split *splt, short quote)
 		if (!bquote && quote != SH_QUOTE && splt->tok->content[splt->i] == '\\')
 		{
 			sh_remove_char(&(splt->tok->content), &splt->i);
-			bquote = 2;
+			bquote = 1;
 		}
 		if (!bquote)
 		{
