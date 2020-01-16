@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/16 08:44:41 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/16 08:46:54 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int		sh_print(char tmp, char *flag)
 		i = write(1, "\t", 1);
 	else if (tmp == 'c')
 	{
-		flag |= F_C;
+		*flag |= F_C;
 		return (0);
 	}
 	else
@@ -57,7 +57,7 @@ static int		sh_echo_print(char *tmp, char **handle, char *flag)
 		if (write(1, *handle, tmp - *handle) < 0)
 			return (0);
 		*handle = tmp + 1 + (tmp[1] != '\0');
-		if ((i = sh_print(tmp, flag)) == 0)
+		if ((i = sh_print(tmp[1], flag)) == 0)
 			break ;
 		else if (i < 0)
 			return (0);
