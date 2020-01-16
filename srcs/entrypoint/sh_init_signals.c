@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:44:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 06:35:37 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:03:52 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void		sh_handle_sigint(void)
 	if (sh()->pid_main_process != getpid())
 	{
 		sh_dprintf(2, str, getpid());
-		exit(1);
+		destructor(1);
 	}
 	sh()->abort_cmd = 1;
 }

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:09:39 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 23:51:29 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:10:33 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	sh_sub_tilde(char **content, char *home, int opt)
 	i = 1 + opt;
 	j = -1;
 	if (!(new = malloc(ft_strlen(*content) + ft_strlen(home) + 1 - opt)))
-		exit(-1);
+		destructor(-1);
 	while (home[++j])
 		new[j] = home[j];
 	while ((*content)[i])

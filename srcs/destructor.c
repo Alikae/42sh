@@ -6,7 +6,7 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2020/01/10 23:26:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:15:40 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "sh_tools.h"
 #include "libft.h"
 
-void	destructor(void)
+
+void	destructor(int status)
 {
 	t_sh	*s;
 
@@ -26,4 +27,5 @@ void	destructor(void)
 		sh_shdel(&s);
 //		printf("[%i]SUICIDE\n", getpid());
 	}
+	exit(status);
 }

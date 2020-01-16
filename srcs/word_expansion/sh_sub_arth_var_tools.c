@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:02:19 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 03:54:29 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:11:04 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	sh_sub_var(char *value, char **str, int beg, int ed)
 	j = 0;
 	i = 0;
 	if (!(sub = malloc(ft_strlen(value) + (ft_strlen(*str) - (ed - beg)) + 3)))
-		exit(-1);
+		destructor(-1);
 	while (i < beg)
 	{
 		sub[i] = (*str)[i];

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 03:45:31 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/15 03:40:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:01:45 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int				sh_exit(int ac, char **av, t_env **ev)
 			tmp++;
 		}
 		status = ft_atoi(av[1]);
-		exit(status);
+		destructor(status);
 	}
 	else if (ac == 1)
-		exit(sh()->last_cmd_result);
+		destructor(sh()->last_cmd_result);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:30:07 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/13 00:13:18 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:10:04 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	sh_next_value(t_exp *exp)
 	while (exp->content[i] != '}')
 		i++;
 	if (!(exp->value = malloc(i + 1)))
-		exit(-1);
+		destructor(-1);
 	i = exp->i;
 	while (exp->content[i] != '}')
 	{
@@ -36,7 +36,7 @@ void	sh_add_var(t_exp *exp, char *name)
 	while (exp->find->next)
 		exp->find = exp->find->next;
 	if (!(exp->find->next = malloc(sizeof(t_env))))
-		exit(-1);
+		destructor(-1);
 	exp->find = exp->find->next;
 	exp->find->key = ft_strdup(name);
 	exp->find->value = ft_strdup(exp->value);

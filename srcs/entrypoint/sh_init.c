@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/14 08:48:02 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/16 01:03:44 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ static struct termios	init_term(void)
 
 	term = getenv("TERM");
 	if (tgetent(NULL, term ? term : "vt100") == ERR)
-		exit(EXIT_FAILURE);
+		destructor(EXIT_FAILURE);
 	if (tcgetattr(0, &termios))
-		exit(EXIT_FAILURE);
+		destructor(EXIT_FAILURE);
 	return (termios);
 }
 

@@ -6,11 +6,12 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 02:47:34 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/08/08 15:32:55 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:17:10 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "sh.h"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -47,7 +48,7 @@ int		sh_check_path(char *all_path, int *error)
 
 	i = 0;
 	if (!(path = malloc(sizeof(char) * ft_strlen(all_path) + 1)))
-		exit(-1);
+		destructor(-1);
 	while (all_path[i])
 	{
 		while (all_path[i] && all_path[i] != '/')

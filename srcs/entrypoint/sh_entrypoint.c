@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/14 08:45:31 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/16 01:03:35 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**sh_tab_cpy(char **av)
 	while (av[i])
 		i++;
 	if (!(new_av = malloc(sizeof(char*) * (i + 1))))
-		exit(-1);
+		destructor(-1);
 	i = 0;
 	while (av[i])
 	{

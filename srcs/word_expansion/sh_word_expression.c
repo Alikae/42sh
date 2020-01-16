@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/13 01:08:33 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:10:11 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	sh_record_less_option(t_exp *exp)
 	while (exp->content[i] != '}')
 		i++;
 	if (!(exp->value = malloc(i - exp->i + 1)))
-		exit(-1);
+		destructor(-1);
 	i = exp->i;
 	while (exp->content[i] != '}')
 		exp->value[j++] = exp->content[i++];
@@ -63,7 +63,7 @@ void	sh_record_name(t_exp *exp)
 	}
 	i_sub = 0;
 	if (!(exp->name = malloc(cpy - exp->i + 1)))
-		exit(-1);
+		destructor(-1);
 	while (sh_check_all_separator(exp->content[exp->i]) || i_sub == 0)
 		exp->name[i_sub++] = exp->content[exp->i++];
 	exp->name[i_sub] = '\0';

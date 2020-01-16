@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 23:40:24 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/07 01:57:39 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:06:49 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*create_token(t_toktype type, int index, const char *content)
 	t_token	*tok;
 
 	if (!(tok = (t_token*)malloc(sizeof(t_token))))
-		exit(ERROR_MALLOC);
+		destructor(ERROR_MALLOC);
 	tok->content = dupfilsdup(content);
 	tok->type = type;
 	tok->index = index;
@@ -34,9 +34,9 @@ t_token	*create_token_n(t_toktype type, int index, const char *content, int n)
 	t_token	*tok;
 
 	if (!(tok = (t_token*)malloc(sizeof(t_token))))
-		exit(ERROR_MALLOC);
+		destructor(ERROR_MALLOC);
 	if (!(tok->content = ft_strndup(content, n)))
-		exit(ERROR_MALLOC);
+		destructor(ERROR_MALLOC);
 	tok->type = type;
 	tok->index = index;
 	tok->sub = 0;

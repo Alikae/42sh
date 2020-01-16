@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 04:11:49 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/07 04:13:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:06:20 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_toktype	read_here_doc(t_toktool *t, t_token **p_actual)
 		return (SH_SYNTAX_ERROR);
 	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i
 					- here_doc_begin)))
-		exit(ERROR_MALLOC);
+		destructor(ERROR_MALLOC);
 	read_n_skip_word(t);
 	if (sh()->alias_end)
 		sh()->alias_end--;

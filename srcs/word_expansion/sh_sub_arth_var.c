@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/13 01:42:15 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:00:46 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char			*sh_tab_fusion_free(char ***tab)
 	i = 0;
 	i_name = 0;
 	if (!(name = malloc(sh_tab_len(*tab))))
-		exit(-1);
+		destructor(-1);
 	while ((*tab)[i])
 	{
 		j = 0;
@@ -72,7 +72,7 @@ void			sh_record_arth(char **str, int i, short int opt)
 			&& (*str)[i_cpy] != '\t' && !(sh_all_char_operator((*str)[i_cpy])))
 		i_cpy++;
 	if (!(name = malloc(i_cpy - i + 1)))
-		exit(-1);
+		destructor(-1);
 	i_cpy = i;
 	while ((*str)[i] && (*str)[i] != '\t' && (*str)[i] != ' '
 			&& (*str)[i] != '\n' && !(sh_all_char_operator((*str)[i])))

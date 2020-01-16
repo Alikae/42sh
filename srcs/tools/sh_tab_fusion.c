@@ -6,12 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 03:46:45 by tcillard          #+#    #+#             */
-/*   Updated: 2019/09/20 00:21:00 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:16:49 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "sh_error.h"
+#include "sh.h"
 
 int		sh_tab_size(char **tab)
 {
@@ -44,7 +45,7 @@ char	*sh_tab_fusion(char **tab)
 	i = 0;
 	j_str = 0;
 	if (!(str = malloc(sizeof(char) * sh_tab_size(tab) + 1)))
-		exit(ERROR_MALLOC);
+		destructor(ERROR_MALLOC);
 	while (tab[i])
 	{
 		j = 0;
