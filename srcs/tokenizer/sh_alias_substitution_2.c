@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 22:40:06 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:06:30 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/16 08:40:20 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 	while (t->input[j])
 		cmd[i++] = t->input[j++];
 	cmd[i] = '\0';
+	ft_memdel((void**)&(t->input));
 	t->input = cmd;
 }
 
