@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 07:21:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:05:30 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 	return (nb_redirections);
 }
 
+//cat <&4 should throw error
+
 void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections)
 {
 	int	pip[2];
@@ -60,7 +62,7 @@ void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections)
 	if (pipe(pip) == -1)
 	{
 		sh_dprintf(2, "PIPE ERROR\nKILLING MYSELF");
-		exit(1);
+		destructor(1);
 	}
 	write(pip[1], tok->content, ft_strlen(tok->content));
 	close(pip[1]);

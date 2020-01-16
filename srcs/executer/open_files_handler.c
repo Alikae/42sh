@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:06:19 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/12 20:51:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:04:44 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	push_to_opened_files(t_sh *p, char *name, int fd)
 	while (*prev_next)
 		prev_next = &((*prev_next)->next);
 	if (!(*prev_next = (t_open_file*)malloc(sizeof(t_open_file))))
-		exit(127);
+		destructor(127);
 	(*prev_next)->name = ft_strdup(name);
 	(*prev_next)->fd = fd;
 	(*prev_next)->next = 0;

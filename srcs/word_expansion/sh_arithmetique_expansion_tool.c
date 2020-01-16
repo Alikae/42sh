@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 00:09:04 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 00:15:21 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:08:52 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void		sh_init_arith(t_arith **arith)
 {
 	if (!((*arith) = malloc(sizeof(t_arith))))
-		exit(-1);
+		destructor(-1);
 	(*arith)->nb = 0;
 	(*arith)->next_op = NUMBER;
 	(*arith)->next = NULL;
@@ -82,7 +82,7 @@ char		*sh_long_itoa(long int n)
 	if (n < 0)
 		test = 2;
 	if (!(strnb = (char*)malloc(sizeof(char) * (i + test))))
-		exit(-1);
+		destructor(-1);
 	ft_bzero(strnb, test + i);
 	if (n < 0)
 		strnb[0] = '-';

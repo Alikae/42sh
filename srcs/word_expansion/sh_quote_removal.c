@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 00:52:49 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:09:40 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	sh_next_token(t_token **new)
 	if (*new == NULL)
 	{
 		if (!(*new = (t_token*)create_token(SH_WORD, 0, NULL)))
-			exit(-1);
+			destructor(-1);
 	}
 	else
 	{
 		while ((*new)->next)
 			(*new) = (*new)->next;
 		if (!((*new)->next = (t_token*)create_token(SH_WORD, 0, NULL)))
-			exit(-1);
+			destructor(-1);
 		*new = (*new)->next;
 	}
 	ft_memdel((void**)&((*new)->content));
@@ -64,18 +64,19 @@ void	sh_find_quote(t_split *splt, short quote)
 	{
 		if (bquote)
 			bquote--;
-		if (quote != SH_QUOTE && splt->tok->content[splt->i] == '\\')
+		if (!bquote && quote != SH_QUOTE && splt->tok->content[splt->i] == '\\')
 		{
 			sh_remove_char(&(splt->tok->content), &splt->i);
 			bquote = 1;
 		}
 		if (!bquote)
 		{
+			sh_treat_token(splt, quote);
 			if (sh_check_quote(splt, quote))
 				return ;
-			sh_treat_token(splt, quote);
 		}
-		splt->i++;
+		if (splt->tok->content[splt->i])
+			splt->i++;
 	}
 	if (!quote)
 		sh_token_spliting(splt, 1);

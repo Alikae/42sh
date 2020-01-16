@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:10:03 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/08/22 15:14:19 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:07:44 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*sh_find_law(struct stat sb)
 	char	*law;
 
 	if (!(law = malloc(sizeof(char) * 10)))
-		exit(-1);
+		destructor(-1);
 	law[9] = '\0';
 	i = -1;
 	while (++i <= 8)

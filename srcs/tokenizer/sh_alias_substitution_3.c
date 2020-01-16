@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 22:41:32 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 11:12:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:06:37 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void			sh_record_alias(char ***stack, char *alias)
 	while ((*stack) && (*stack)[i])
 		i++;
 	if (!(cpy = malloc(sizeof(char *) * (i + 2))))
-		exit(-1);
+		destructor(-1);
 	i = 0;
 	while (*stack && (*stack)[i])
 	{

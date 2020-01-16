@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:12:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 00:50:10 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:09:45 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	sh_remove_char(char **str, int *i)
 
 	j_str = 0;
 	j = 0;
-	if (!(new = malloc(ft_strlen(*str))))
-		exit(-1);
+	if (!(new = malloc(ft_strlen(*str) + 1)))
+		destructor(-1);
 	while ((*str)[j_str])
 	{
 		if (j_str != *i)
@@ -99,7 +99,7 @@ void	sh_token_spliting(t_split *splt, int reset)
 	cpy = splt->sub;
 	sh_next_token(&(splt->sub));
 	if (!(splt->sub->content = (char*)malloc(splt->i - i + 1)))
-		exit(-1);
+		destructor(-1);
 	while (i < splt->i)
 		splt->sub->content[j++] = splt->tok->content[i++];
 	splt->sub->content[j] = '\0';

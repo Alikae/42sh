@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 01:46:08 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/15 01:12:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,40 @@
 
 #include <stdio.h>
 
+int		read_script(char **buff, int *fd, const char *path)
+{
+	if (!(*buff = ft_strnew(4096)))
+		return (-1);
+	if ((*fd = open(path, O_RDONLY)) < 0)
+	{
+		sh_dprintf(2, "42sh: cant open %s\n", path);
+		ft_memdel((void**)buff);
+		return (-1);
+	}
+	if (read(*fd, *buff, 0) != 0)
+	{
+		ft_memdel((void**)buff);
+		sh_dprintf(2, "42sh: cant read %s\n", path);
+		return (-1);
+	}
+	return (*fd);
+}
+
+int		read_script_2(int fd, char **input, char **buff)
+{
+	while (read(fd, *buff, 4096) > 0)
+	{
+		if (*input)
+			*input = ft_strjoin_free(*input, *buff, *input);
+		else if (!(*input = ft_strdup(*buff)))
+			return (0);
+		ft_strclr(*buff);
+	}
+	ft_memdel((void**)buff);
+	close(fd);
+	return (1);
+}
+
 int		sh_script(const char *path)
 {
 	t_sh	*p;
@@ -30,33 +64,12 @@ int		sh_script(const char *path)
 
 	p = sh();
 	input = NULL;
-	if (!(buff = ft_strnew(4096)))
+	if ((fd = read_script(&buff, &fd, path)) < 0)
 		return (-1);
-	if ((fd = open(path, O_RDONLY)) < 0)
-	{
-		sh_dprintf(2, "42sh: cant open %s\n", path);
-		ft_memdel((void**)&buff);
+	if ((fd = read_script_2(fd, &input, &buff)) < 1)
 		return (fd);
-	}
-	if (read(fd, buff, 0) != 0)
-	{
-		ft_memdel((void**)&buff);
-		sh_dprintf(2, "42sh: cant read %s\n", path);
-		return (-1);
-	}
-	while (read(fd, buff, 4096) > 0)
-	{
-		if (input)
-			input = ft_strjoin_free(input, buff, input);
-		else if (!(input = ft_strdup(buff)))
-			return (0);
-		ft_strclr(buff);
-	}
-	ft_memdel((void**)&buff);
-	close(fd);
 	input = ft_strconv_w(input);
 	sh_init_cmd(input);
-	//doesnt throw good error on script "WHILE"
 	if (input && *input && (ast = tokenize_input(input)))
 	{
 		p->abort_cmd = 0;

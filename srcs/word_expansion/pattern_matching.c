@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 19:45:53 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 03:50:53 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:08:16 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*sh_record_pattern(t_exp *exp)
 	while (exp->content[j] != '}' && exp->content[j])
 		j++;
 	if (!(pattern = malloc(j - exp->i + 1)))
-		exit(-1);
+		destructor(-1);
 	j = exp->i;
 	while (exp->content[j] != '}' && exp->content[j])
 		pattern[i++] = exp->content[j++];

@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/07 14:59:11 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/16 01:02:49 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 		cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
 		cbreak.c_cc[VMIN] = 1;
 		if (tcsetattr(0, TCSANOW, &cbreak) < 0)
-			exit(1);
+			destructor(1);
 	}
 	if (code == 2)
 		tcsetattr(0, TCSANOW, &orig_termios);

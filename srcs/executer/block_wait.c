@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:14:37 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 11:32:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/15 01:02:19 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int		block_wait(t_sh *p, int child_pid, int from_fg)
 	{
 		signal(SIGTTOU, SIG_IGN);
 		tcsetpgrp((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0, getpgid(0));
-		tcsetattr((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0, TCSANOW, &p->orig_termios);
+		tcsetattr((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0]
+				: 0, TCSANOW, &p->orig_termios);
 		signal(SIGTTOU, SIG_DFL);
 	}
 	return (WEXITSTATUS(status));
