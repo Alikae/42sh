@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 19:14:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/15 01:45:04 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 08:46:54 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,47 @@
 #define F_E 2
 #define F_C 4
 
+static int		sh_print(char tmp, char *flag)
+{
+	int i;
+
+	if (tmp == 'a')
+		i = write(1, "\a", 1);
+	else if (tmp == 'b')
+		i = write(1, "\b", 1);
+	else if (tmp == 'f')
+		i = write(1, "\f", 1);
+	else if (tmp == 'n')
+		i = write(1, "\n", 1);
+	else if (tmp == 'r')
+		i = write(1, "\n", 1);
+	else if (tmp == 'v')
+		i = write(1, "\v", 1);
+	else if (tmp == 't')
+		i = write(1, "\t", 1);
+	else if (tmp == 'c')
+	{
+		*flag |= F_C;
+		return (0);
+	}
+	else
+		i = write(1, "\\", 1);
+	return (i);
+}
+
 static int		sh_echo_print(char *tmp, char **handle, char *flag)
 {
+	int i;
+
 	while ((tmp = ft_strchr(*handle, '\\')) && (*flag & F_E))
 	{
-	printf("la\n");
-	int i;
-		if ((i = write(1, *handle, tmp - *handle) < 0))
-		//	return (0);
-		printf("%i\n" , i);
+		if (write(1, *handle, tmp - *handle) < 0)
+			return (0);
 		*handle = tmp + 1 + (tmp[1] != '\0');
-		if (tmp[1] == 'a')
-			ft_putchar('\a');
-		else if (tmp[1] == 'b')
-			ft_putchar('\b');
-		else if (tmp[1] == 'f')
-			ft_putchar('\f');
-		else if (tmp[1] == 'n')
-			ft_putchar('\n');
-		else if (tmp[1] == 'r')
-			ft_putchar('\r');
-		else if (tmp[1] == 'v')
-			ft_putchar('\v');
-		else if (tmp[1] == 't')
-			ft_putchar('\t');
-		else if (tmp[1] == 'c')
+		if ((i = sh_print(tmp[1], flag)) == 0)
 			break ;
-		else
-			ft_putchar('\\');
+		else if (i < 0)
+			return (0);
 	}
 	if (tmp && tmp[1] == 'c')
 		*flag |= F_C;
