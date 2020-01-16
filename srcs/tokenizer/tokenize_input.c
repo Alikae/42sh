@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/10 22:26:17 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 08:40:23 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,10 @@ t_token		*tokenize_input(const char *input)
 	t_toktype		terminator;
 	t_toktool		tok_tool;
 
-	tok_tool.input = input;
+	tok_tool.input = ft_strdup(input);
 	tok_tool.i = 0;
 	tok_tool.word_nb = 1;
 	ast = recursive_tokenizer(&tok_tool, SH_NULL, &terminator);
+	ft_memdel((void**)&(tok_tool.input));
 	return (ast);
 }
