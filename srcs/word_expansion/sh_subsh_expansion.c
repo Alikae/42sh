@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 04:11:29 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/14 22:41:35 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:00:54 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void	sh_subshdup(char *buff, t_exp *exp)
 	if (!(exp->value))
 	{
 		if (!(exp->value = malloc(ft_strlen(buff) + 1)))
-			exit(-1);
+			destructor(-1);
 	}
 	else
 	{
 		if (!(exp->value = malloc(ft_strlen(cpy) + ft_strlen(buff) + 1)))
-			exit(-1);
+			destructor(-1);
 		while (cpy[i])
 		{
 			exp->value[i] = cpy[i];
@@ -75,7 +75,7 @@ void	sh_subsh_expansion(t_exp *exp)
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
 		if (pipe(pipe_fd) == -1)
-			exit(-1);
+			destructor(-1);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
 		exec_compound_subsh(sh(), tok);
 		free_ast(tok);

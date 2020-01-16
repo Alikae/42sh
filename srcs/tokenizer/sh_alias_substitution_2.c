@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 22:40:06 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 22:44:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:06:30 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 	len = sh_alias_value_len(alias, &j) - sh_cmd_len(t, in);
 	i = 0;
 	if (!(cmd = (char*)malloc(len + ft_strlen(t->input) + 1)))
-		exit(-1);
+		destructor(-1);
 	while (i < in)
 	{
 		cmd[i] = t->input[i];
@@ -104,7 +104,7 @@ char	*sh_find_alias(t_toktool *t, int i)
 
 	j = 0;
 	if (!(str = (char*)malloc(t->i - i + 1)))
-		exit(-1);
+		destructor(-1);
 	while (t->input[i] && i < t->i)
 		str[j++] = t->input[i++];
 	str[j] = '\0';

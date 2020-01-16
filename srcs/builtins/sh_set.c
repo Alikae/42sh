@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 02:59:05 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:02:26 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void		sh_record_ev_params(char **av)
 	while (av[i])
 		i++;
 	if (!(new_av = malloc(sizeof(char*) * (i + 1))))
-		exit(-1);
+		destructor(-1);
 	i = 0;
 	new_av[0] = ft_strdup(old_av[0]);
 	while (av[++i])

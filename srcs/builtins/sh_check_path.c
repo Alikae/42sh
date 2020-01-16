@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 23:29:29 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/03 21:29:00 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:01:21 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		sh_check_path(char *all_path, int *error)
 
 	i = 0;
 	if (!(path = malloc(sizeof(char) * strlen(all_path) + 1)))
-		exit(-1);
+		destructor(-1);
 	while (all_path[i])
 	{
 		while (all_path[i] && all_path[i] != '/')

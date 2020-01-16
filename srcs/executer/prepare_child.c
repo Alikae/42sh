@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:11:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 11:07:17 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:04:56 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**transform_env_for_child(t_env *env)
 		tmp = tmp->next;
 	}
 	if (!(tab = (char**)malloc((len + 1) * sizeof(char*))))
-		exit(127);
+		destructor(127);
 	len = 0;
 	while (env)
 	{
@@ -38,7 +38,7 @@ char	**transform_env_for_child(t_env *env)
 						env->key, env->value, '=')))
 		{
 			ft_free_tabstr(tab);
-			exit(127);
+			destructor(127);
 		}
 		env = env->next;
 	}
@@ -79,7 +79,7 @@ char	**build_child_argvs(t_token *ast)
 	}
 	sh()->child_ac = len;
 	if (!(argvs = (char **)malloc((len + 1) * sizeof(char*))))
-		exit(127);
+		destructor(127);
 	argvs[len] = 0;
 	len = 0;
 	while (ast)

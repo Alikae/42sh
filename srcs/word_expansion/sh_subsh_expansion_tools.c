@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 21:53:21 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 22:44:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:10:50 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ void	sh_record_commande_string(t_exp *exp)
 		size = sh_commande_string_size(exp, '`');
 	exp->i = exp->i - size + 1;
 	if (!(exp->name = (char*)malloc(size + 1)))
-		exit(-1);
+		destructor(-1);
 	sh_str_start_end(&(exp->name), exp->content, exp->i, exp->i + size - 1);
 }

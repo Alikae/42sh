@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:03:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/12 22:08:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:04:28 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	exec_path(t_sh *p, char *path, char **child_argv)
 	else
 	{
 		if (!(child_env = transform_env_for_child(p->params)))
-			exit(-1);
+			destructor(-1);
 		execve(path, child_argv, transform_env_for_child(p->params));
 		sh_dprintf(2, "Execve ErrorR\n");
-		exit(1);
+		destructor(1);
 	}
 	return (ret);
 }

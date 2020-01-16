@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:42:20 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:04:18 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	if (!pid)
 	{
 		exec_script(p, tok->sub);
-		exit(1);
+		destructor(1);
 	}
 	sh_pipe_lst_del(&p->pipe_lst);
 	return (block_wait(p, pid, 0));
@@ -65,7 +65,7 @@ int		exec_compound_for(t_sh *p, t_token *tok)
 	if (!tmp_tok)
 	{
 		sh_dprintf(1, "expansion error\n");
-		exit(1);
+		destructor(1);
 	}
 	ins = tok->sub->sub;
 	while (ins && !p->abort_cmd)

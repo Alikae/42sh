@@ -6,11 +6,12 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 09:14:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 02:27:53 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/16 01:17:36 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "sh.h"
 
 char	*ft_join_with_char(const char *path, const char *name, char c)
 {
@@ -25,7 +26,7 @@ char	*ft_join_with_char(const char *path, const char *name, char c)
 	j = 0;
 	i = 0;
 	if (!((new = malloc((ft_strlen(path) + ft_strlen(name)) + 2))))
-		exit(0);
+		destructor(0);
 	while (path[i])
 		new[j++] = path[i++];
 	new[j++] = c;

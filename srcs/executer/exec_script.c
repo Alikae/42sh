@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 06:37:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:16:26 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,15 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 	p = sh();
 	child_pid = fork_process(p, 0);
 	if (child_pid < 0)
-		exit(1);
+		destructor(1);
 	if (child_pid)
 		return (child_pid);
 	pipe_lst = sh()->pipe_lst;
 	(void)pipe1;
 	(void)pipe2;
 	exec_command(p, token_begin, token_end);
-	exit(1);
+	destructor(1);
+	return (0);
 }
 
 void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
@@ -332,7 +333,7 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin,
 	{
 		close_cpy_std_fds(p);
 		exec_and_or(p, token_begin, token_end);
-		exit(1);
+		destructor(1);
 	}
 	else
 	{
