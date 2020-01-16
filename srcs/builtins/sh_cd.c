@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 01:19:23 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/09 16:25:36 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/17 00:16:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,23 @@ static int	cd_go_homeold(int code)
 
 	if (code == 1)
 	{
-		printf("code: %d\n", code);
 		if ((pwd = sh_getev_value("HOME")))
 			return (cd_go_to(pwd));
 		else
 			ft_putendl_fd("HOME is not set", 2);
 	}
-	else
-		if ((pwd = ft_strdup(sh_getev_value("OLDPWD"))))
+	else if ((pwd = ft_strdup(sh_getev_value("OLDPWD"))))
+	{
+		if (!cd_go_to(pwd))
 		{
-			if (!cd_go_to(pwd))
-			{
-				ft_putendl(pwd);
-				ft_memdel((void**)&pwd);
-				return (0);
-			}
+			ft_putendl(pwd);
 			ft_memdel((void**)&pwd);
+			return (0);
 		}
-		else
-			ft_putendl_fd("OLDPWD is not set", 2);
+		ft_memdel((void**)&pwd);
+	}
+	else
+		ft_putendl_fd("OLDPWD is not set", 2);
 	return (1);
 }
 
