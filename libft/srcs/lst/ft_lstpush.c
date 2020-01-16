@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init_opts.c                                     :+:      :+:    :+:   */
+/*   ft_lstpush.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/03 17:26:30 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/14 20:47:37 by jerry            ###   ########.fr       */
+/*   Created: 2020/01/14 16:25:14 by jerry             #+#    #+#             */
+/*   Updated: 2020/01/14 16:27:45 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "sh.h"
+#include <stdlib.h>
 
-void	sh_init_opts(t_sh *s)
+void	ft_lstpush(t_list **list, t_list *node)
 {
-	char	*str;
-	int		i;
+	t_list *tmp;
 
-	str = "a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug:";
-	i = 1;
-	if (s->ac <= 1)
+	tmp = *list;
+	if (!list || !node)
 		return ;
-	s->opt = ft_get_opts(s->ac, s->av, &i, str);
-	if (i > 0)
-		i--;
-	s->av += i;
-	s->ac -= i;
+	if (!*list)
+	{
+		*list = node;
+		return ;
+	}
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = node;
 }

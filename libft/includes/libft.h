@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 21:12:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/13 12:53:52 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/14 20:27:26 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ typedef	struct	s_list
 
 typedef	struct	s_opt
 {
-	char			*name;
-	char			*arg;
+	char			*key;
+	char			*value;
 	struct s_opt	*next;
 }				t_opt;
 
@@ -114,16 +114,19 @@ void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstadd(t_list **alst, t_list *n);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+void			ft_lstpush(t_list **head, t_list *node);
 
 int				ft_sqrt(int nb);
 int				ft_is_prime(int nb);
 int				ft_power(int nb, int power);
 int				ft_factorial(int nb);
 
-void			ft_print_opt(t_opt *optlst);
-void			ft_free_opts(t_opt *opts);
-t_opt			*ft_create_sopt(char name, char *content);
-t_opt			*ft_create_dopt(char *name, char *content);
-t_opt			*ft_getopt(int *ac, char ***av, char *optstr);
+t_opt			*ft_get_opts(int ac, char **av, int *i, const char *optstr);
+t_opt			*ft_create_opt(const char *name, size_t l, const char *val);
 t_opt			*ft_fetch_opt(char *name, size_t size, t_opt *optlst);
+int				ft_is_valid_opt(const char *opts, const char *nm, size_t len);
+void			ft_inv_opt(const char *pn, const char *name, size_t len);
+void			ft_bad_opt(const char *pn, const char *name, size_t len);
+void			ft_print_opts(t_opt *optlst);
+void			ft_free_opts(t_opt *opts);
 #endif

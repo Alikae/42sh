@@ -48,6 +48,7 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	i = -1;
 	tsh->ac = ac;
 	tsh->av = sh_tab_cpy(av);
+	tsh->orig_av = tsh->av;
 	tsh->ev = ev;
 	tcgetattr(0, &tsh->extern_termios);
 	tsh->is_interactive = isatty(0);

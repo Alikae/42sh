@@ -31,6 +31,7 @@ typedef struct		s_sh
 {
 	int				ac;
 	char			**av;
+	char			**orig_av;
 	char			**ev;
 	t_opt			*opt;
 	t_toktype		type; /*for recognize tokens*/

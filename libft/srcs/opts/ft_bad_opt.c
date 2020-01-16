@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_fetch_opt.c                                     :+:      :+:    :+:   */
+/*   ft_bad_opt.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/19 19:31:10 by thdelmas          #+#    #+#             */
-/*   Updated: 2019/09/19 19:54:33 by thdelmas         ###   ########.fr       */
+/*   Created: 2020/01/14 17:39:38 by jerry             #+#    #+#             */
+/*   Updated: 2020/01/14 17:55:50 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_opt	*ft_fetch_opt(char *name, size_t size, t_opt *optlst)
+void	ft_bad_opt(const char *pn, const char *name, size_t len)
 {
-	if (!name)
-		return (NULL);
-	while (optlst)
-	{
-		if (ft_strnequ(name, optlst->name, size))
-			return (optlst);
-		optlst = optlst->next;
-	}
-	return (NULL);
+	if (!pn || !name)
+		return ;
+	ft_putstr_fd(pn, 2);
+	ft_putstr_fd(": Bad option: ", 2);
+	write(2, name, len);
+	ft_putchar_fd('\n', 2);
 }

@@ -6,7 +6,7 @@
 #    By: maboye <maboye@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/30 14:33:15 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/13 12:54:16 by tmeyer           ###   ########.fr        #
+#    Updated: 2020/01/14 20:32:07 by jerry            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ C_FILES_lst = \
 	ft_lstdelone.c \
 	ft_lstiter.c \
 	ft_lstmap.c \
+	ft_lstpush.c \
 	ft_lstnew.c
 
 C_FILES_math = \
@@ -118,12 +119,15 @@ C_FILES_print = \
 	ft_putstr.c \
 	ft_putstr_fd.c
 
-C_FILES_opt = \
-	ft_getopt.c \
+C_FILES_opts = \
+	ft_get_opts.c \
 	ft_fetch_opt.c \
 	ft_free_opts.c \
+	ft_print_opts.c \
 	ft_create_opt.c \
-	ft_print_opt.c
+	ft_is_valid_opt.c \
+	ft_inv_opt.c \
+	ft_bad_opt.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

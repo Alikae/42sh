@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init_opts.c                                     :+:      :+:    :+:   */
+/*   ft_free_opts.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/03 17:26:30 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/14 20:47:37 by jerry            ###   ########.fr       */
+/*   Created: 2019/07/18 00:46:24 by thdelmas          #+#    #+#             */
+/*   Updated: 2020/01/14 18:01:12 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
-#include "sh.h"
 
-void	sh_init_opts(t_sh *s)
+void	ft_free_opts(t_opt *opts)
 {
-	char	*str;
-	int		i;
+	t_opt	*tmp;
 
-	str = "a|b|c:|C|e|f|h|i|m|n|s:|u|v|x|noediting|posix|debug:";
-	i = 1;
-	if (s->ac <= 1)
+	if (!opts)
 		return ;
-	s->opt = ft_get_opts(s->ac, s->av, &i, str);
-	if (i > 0)
-		i--;
-	s->av += i;
-	s->ac -= i;
+	while (opts)
+	{
+		tmp = opts->next;
+		if (opts->key)
+			free(opts->key);
+		if (opts->value)
+			free(opts->value);
+		free(opts);
+		opts = tmp;
+	}
 }
