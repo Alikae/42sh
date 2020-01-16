@@ -21,12 +21,8 @@
 static int	cd_go_to(char *path)
 {
 	char	dir[PATH_MAX + 1];
-	char	*tmp;
 	t_env	*ev;
 
-	tmp = path + ft_strlen(path) - 1;
-	if (*tmp == '/')
-		*tmp = '\0';
 	ft_bzero(dir, PATH_MAX + 1);
 	getcwd(dir, PATH_MAX);
 	if (chdir(path))
@@ -50,24 +46,25 @@ static int	cd_go_homeold(int code)
 
 	if (code == 1)
 	{
+		printf("code: %d\n", code);
 		if ((pwd = sh_getev_value("HOME")))
 			return (cd_go_to(pwd));
 		else
 			ft_putendl_fd("HOME is not set", 2);
 	}
 	else
-	{
-		if ((pwd = sh_getev_value("OLDPWD")))
+		if ((pwd = ft_strdup(sh_getev_value("OLDPWD"))))
 		{
 			if (!cd_go_to(pwd))
 			{
 				ft_putendl(pwd);
+				ft_memdel((void**)&pwd);
 				return (0);
 			}
+			ft_memdel((void**)&pwd);
 		}
 		else
 			ft_putendl_fd("OLDPWD is not set", 2);
-	}
 	return (1);
 }
 

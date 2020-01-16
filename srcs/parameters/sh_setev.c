@@ -38,7 +38,7 @@ static t_env	*sh_setev_next(const char *key, const char *value, t_env *env)
 		env = env->next;
 	}
 	else if (env->value)
-		free(env->value);
+		ft_memdel((void**)&env->value);
 	env->value = ft_strdup(value);
 	return (env);
 }
