@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/16 08:48:15 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/17 00:19:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void					sh_init(t_sh *shell)
 	shell->cpy_std_fds[0] = -1;
 	shell->cpy_std_fds[1] = -1;
 	shell->cpy_std_fds[2] = -1;
-//	sh_init_debug(shell);
 	shell->user = getlogin();
 	pwd = getpwnam(shell->user);
 	shell->dir = pwd->pw_dir;

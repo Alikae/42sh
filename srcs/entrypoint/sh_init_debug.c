@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 18:06:50 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/14 20:29:57 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/17 00:19:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	sh_init_debug(t_sh *shell)
 	if ((tmp = ft_fetch_opt("debug", 5, shell->opt)))
 	{
 		shell->dbg = tmp->value;
-		shell->dbg_fd = dup(2); //CLOSE AT EXITPOINT
+		shell->dbg_fd = dup(2);
 	}
 	else
 	{
