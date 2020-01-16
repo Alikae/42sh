@@ -51,7 +51,7 @@ void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 	j = 0;
 	len = sh_alias_value_len(alias, &j) - sh_cmd_len(t, in);
 	i = 0;
-	if (!(cmd = (char*)malloc(len + ft_strlen(t->input) + 1)))
+	if (!(cmd = (char*)malloc(len + ft_strlen(t->input) + 2)))
 		destructor(-1);
 	while (i < in)
 	{
