@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 10:59:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/17 01:17:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,16 @@
 
 int	sh_jobs(int ac, char **av, char **env)
 {
-	//REDO CONFORMLY TO MAN
 	t_job	**old_next;
 	t_job	*job;
 	int		status;
+	int		i;
 
 	(void)ac;
 	(void)av;
 	(void)env;
+
+	i = -1;
 	old_next = &(sh()->jobs);
 	if (!*old_next)
 		sh_dprintf(1, "Currently no job\n");
@@ -40,14 +42,12 @@ int	sh_jobs(int ac, char **av, char **env)
 		}
 		else if (WIFSTOPPED(status))
 		{
-			if (WSTOPSIG(status) == SIGTSTP)//UNUSEFULL?
+			if (WSTOPSIG(status) == SIGTSTP)
 				sh_dprintf(1, "[%i] SIGTSTP	'%s'\n", job->pid, job->name);
 			else if (WSTOPSIG(status) == SIGTTIN)
 				sh_dprintf(1, "[%i] SIGTTIN	'%s'\n", job->pid, job->name);
 			else if (WSTOPSIG(status) == SIGTTOU)
 				sh_dprintf(1, "[%i] SIGTTOU	'%s'\n", job->pid, job->name);
-			else
-				sh_dprintf(1, "[%i] stopped by %i	'%s'\n", job->pid, WSTOPSIG(status), job->name);
 		}
 		else if (WIFSIGNALED(status) && WTERMSIG(status) != 126)
 		{
@@ -61,8 +61,6 @@ int	sh_jobs(int ac, char **av, char **env)
 				sh_dprintf(1, "[%i] SIGTTIN	'%s'\n", job->pid, job->name);
 			else if (WTERMSIG(status) == SIGTTOU)
 				sh_dprintf(1, "[%i] SIGTTOU	'%s'\n", job->pid, job->name);
-			//else
-				//sh_dprintf(1, "[%i]si %i			'%s'\n", job->pid, WTERMSIG(status), job->name);
 		}
 		else if (WIFEXITED(status))
 		{
@@ -71,7 +69,7 @@ int	sh_jobs(int ac, char **av, char **env)
 		//	delete_job(job);
 		//	continue;
 		}
-		sh_dprintf(1, "[%i] %s:		'%s'\n", job->pid, job->status, job->name);
+		sh_dprintf(1, "[%i] %s:		'%s'\n", ++i, job->status, job->name);
 		old_next = &((*old_next)->next);
 	}
 	return (0);

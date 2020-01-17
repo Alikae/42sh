@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2019/12/19 05:43:32 by ede-ram          ###   ########.fr        #
+#    Updated: 2020/01/17 00:26:28 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,6 @@ SUB_DIRS := \
 	tokens \
 	error \
 	redirections \
-	debug_mode \
 	tools \
 	word_expansion \
 	job_control

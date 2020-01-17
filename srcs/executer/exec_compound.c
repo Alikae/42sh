@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:04:18 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/17 01:12:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,7 @@ int		exec_compound_while(t_sh *p, t_token *tok, t_toktype type)
 int		exec_compound_if(t_sh *p, t_token *tok)
 {
 	if (!exec_script(p, tok->sub->sub) && !p->abort_cmd)
-	{
 		return (p->last_cmd_result = exec_script(p, tok->sub->next->sub));
-	}
 	if (tok->sub->next->next && !p->abort_cmd)
 		return (p->last_cmd_result = exec_script(p, tok->sub->next->next));
 	return (0);

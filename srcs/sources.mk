@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/14 08:32:58 by tmeyer           ###   ########.fr        #
+#    Updated: 2020/01/17 00:26:22 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -126,9 +126,6 @@ C_FILES_executer = \
 	exec_simple_command.c \
 	redirections_handler.c \
 	open_files_handler.c
-
-C_FILES_debug_mode = \
-		     debug_mode.c
 
 C_FILES_builtins = \
 		   sh_echo.c \

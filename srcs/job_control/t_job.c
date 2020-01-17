@@ -5,7 +5,6 @@
 
 void	delete_job(t_job *job)
 {
-//	sh_dprintf(1, "delete job %s\n", job->name);
 	if (!job)
 		return ;
 	ft_memdel((void**)&job->name);
@@ -24,12 +23,13 @@ void	delete_all_jobs(t_job *job)
 	}
 }
 
-t_job	*create_job(unsigned int pid, const char *name, int index_b, int index_e)
+t_job	*create_job(unsigned int pid, const char *name, int index_b,
+		int index_e)
 {
 	t_job	*job;
 
 	if (!(job = (t_job*)malloc(sizeof(t_job))))
-		destructor(1/*MALLOC_ERROR*/);
+		destructor(75);
 	job->name = ft_strndup(name + index_b, index_e - index_b);
 	ft_bzero(&job->t_mode, sizeof(job->t_mode));
 	job->pid = pid;
@@ -39,7 +39,8 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b, int index_e)
 	return (job);
 }
 
-t_job	*add_job(unsigned int pid, const char *name, int index_b, int index_e, const char *status)
+t_job	*add_job(unsigned int pid, const char *name, int index_b,
+		int index_e, const char *status)
 {
 	t_job	*jobs;
 
