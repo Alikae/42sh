@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/16 01:15:22 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/17 05:45:58 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,16 @@ typedef struct		s_sh
 	char			**orig_av;
 	char			**ev;
 	t_opt			*opt;
-	t_toktype		type; /*for recognize tokens*/
+	t_toktype		type;
 	int				last_cmd_result;
 	int				last_child_pid;
 	int				last_background_pipeline_pgid;
 	t_env			*params;
 	t_ln			*ln_history;
 	int				exp_rec;
-	/*
-	**dbg
-	*/
 	char			*dbg;
 	int				dbg_fd;
 	int				lldbug;
-	/*
-	**new
-	*/
 	t_pipe_lst		*pipe_lst;
 	t_redirect_lst	*redirect_lst;
 	t_env			*assign_lst;
@@ -105,5 +99,4 @@ void				sh_sub_alias_command(t_toktool *t, char *alias, int in);
 char				*sh_find_alias(t_toktool *t, int i);
 int					sh_check_stack(char **stack, char *alias);
 void				sh_record_alias(char ***stack, char *alias);
-
 #endif

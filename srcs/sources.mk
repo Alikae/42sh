@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/17 00:26:22 by ede-ram          ###   ########.fr        #
+#    Updated: 2020/01/17 05:36:18 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -125,7 +125,10 @@ C_FILES_executer = \
 	assigns_handler.c \
 	exec_simple_command.c \
 	redirections_handler.c \
-	open_files_handler.c
+	open_files_handler.c \
+	sh_exec_script_tools.c \
+	sh_exec_script_tools_2.c \
+	sh_exec_script_tools_3.c
 
 C_FILES_builtins = \
 		   sh_echo.c \
