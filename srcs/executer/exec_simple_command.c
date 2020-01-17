@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:03:55 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 23:55:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/17 01:33:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include "sh_redirections.h"
 #include <sys/wait.h>
 #include <unistd.h>
-#include <errno.h>//
 #include <signal.h>
 #include "sh_env.h"
 #include "sh_error.h"
@@ -191,7 +190,6 @@ void	free_simple_cmd_ressources(t_sh *p, int nb_redirections, int nb_assign,
 {
 	ft_free_tabstr(child_argv);
 	del_n_redirect_lst(&p->redirect_lst, nb_redirections);
-//	close_all_redirections(p);
 	restore_std_fds(p);
 	remove_opened_files(p);
 	restore_before_assigns(p);

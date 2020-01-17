@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:16:26 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/17 01:30:12 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,7 +337,7 @@ int		exec_and_or_in_background(t_sh *p, t_token *token_begin,
 	}
 	else
 	{
-		add_job(child_pid, p->cmd, token_begin->index,
+		add_job(child_pid, token_begin->index,
 				(token_end) ? token_end->index : -1, "background");
 	}
 	return (0);

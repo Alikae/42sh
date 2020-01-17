@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 05:22:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 11:26:00 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/17 01:34:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	check_jobs_status(t_sh *p)
 	t_job	**old_next;
 	t_job	*job;
 	int		status;
+	int		ret;
 
 	old_next = &p->jobs;
 	status = -1;
@@ -30,7 +31,6 @@ void	check_jobs_status(t_sh *p)
 	{
 		job = *old_next;
 		errno = 0;
-		int ret;
 		if ((ret = waitpid(-job->pid, &status, WNOHANG | WUNTRACED)) < 0)
 		{
 			sh_dprintf(1, "[%i] Done: %s\n", job->pid, job->name);
@@ -64,14 +64,15 @@ void	check_jobs_status(t_sh *p)
 		}
 		else if (WIFEXITED(status))
 		{
-			sh_dprintf(1, "[%i] Done		'%s'\n", job->pid, job->name);
+			sh_dprintf(1, "[%i] Done	'%s'\n", job->pid, job->name);
 			*old_next = job->next;
 			delete_job(job);
 			continue;
 		}
 		if (!job->reported)
 		{
-			sh_dprintf(1, "---[%i] %s		'%s'\n", job->pid, job->status, job->name);
+			sh_dprintf(1, "---[%i] %s	'%s'\n", job->pid,
+					job->status, job->name);
 			job->reported = 1;
 		}
 		old_next = &((*old_next)->next);

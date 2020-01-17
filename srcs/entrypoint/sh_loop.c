@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/17 00:13:12 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/17 01:32:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 #include "sh_env.h"
 #include "sh_job_control.h"
 #include "sh_builtins.h"
-
-#include <stdio.h> //
+#include <stdio.h>
 
 static t_hist	*init_history(void)
 {
@@ -60,7 +59,7 @@ int		sh_loop(void)
 		complete = 0;
 		input = 0;
 		p->print_syntax_errors = 1;
-		while (!complete)//Can we ctrl-C?
+		while (!complete)
 		{
 			dbug = 0;
 			if (!dbug)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_job.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/17 01:32:24 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/17 01:32:25 by ede-ram          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 #include "libft.h"
 #include <stdlib.h>
@@ -39,11 +51,13 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b,
 	return (job);
 }
 
-t_job	*add_job(unsigned int pid, const char *name, int index_b,
+t_job	*add_job(unsigned int pid, int index_b,
 		int index_e, const char *status)
 {
-	t_job	*jobs;
+	t_job		*jobs;
+	const char *name;
 
+	name = sh()->cmd;
 	jobs = sh()->jobs;
 	sh()->jobs = create_job(pid, name, index_b, index_e);
 	sh()->jobs->next = jobs;
