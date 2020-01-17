@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/15 00:59:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/17 05:59:31 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct s_token		t_token;
 typedef struct s_sh			t_sh;
 typedef struct s_env		t_env;
 typedef struct s_pipe_lst	t_pipe_lst;
+typedef	int					(*t_built)(int ac, char **av, t_env **ev);
 
 int		sh_script(const char *path);
 int		sh_exec_stdin(void);
@@ -86,7 +87,7 @@ void	push_to_opened_files(t_sh *p, char *name, int fd);
 char	**transform_env_for_child(t_env *env);
 int		count_argv(t_token *token_begin, t_token *token_end);
 char	**build_child_argvs(t_token *ast);
-int		(*sh_is_builtin(const char *cmd))(int ac, char **av, t_env **ev);
+t_built	sh_is_builtin(const char *cmd);
 void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections);
 void	stock_lessgreatand(t_sh *p, t_token *token, int *nb_redirections);
 void	stock_here_document(t_sh *p, t_token *tok, int *nb_redirections);
@@ -99,5 +100,25 @@ void	restore_before_assigns(t_sh *p);
 void	stock_assign(t_sh *p, t_token *token, int *nb_assign);
 void	del_n_assign_lst(t_sh *p, int n);
 int		block_wait(t_sh *p, int child_pid, int from_fg);
-
+int		exec_compound_command(t_sh *p,
+		t_token *token_compound, int type);
+t_token	*find_cmd_name(t_token *tok);
+int		exec_command(t_sh *p, t_token *token_begin,
+		t_token *token_end);
+int		exec_command_in_background_closing_pipe(t_token *token_begin,
+		t_token *token_end, int pipe1, int pipe2);
+void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out);
+int		exec_pipeline_recursively(t_sh *p, t_token *token_begin,
+		t_token *token_end, int prev_pipe);
+void	setup_pipeline_handle_bang(t_sh *p, t_token **p_token_begin,
+		t_token *token_end, int *bang);
+int		find_next_pipe(t_sh *p);
+int		find_previous_pipe(t_sh *p);
+int		exec_pipeline_core(t_token *token_begin, t_token *token_end);
+void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
+void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end);
+void	close_cpy_std_fds(t_sh *p);
+void	create_process_group_give_terminal_access(t_sh *p,
+		pid_t pid, int foreground);
+void	sig_default(void);
 #endif

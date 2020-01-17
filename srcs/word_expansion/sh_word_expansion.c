@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/15 01:04:42 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/17 01:53:03 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ int		sh_word_expansion(t_exp *exp)
 				exp->i++;
 			if (sh_in_expansion(exp, i))
 				return (1);
-			i--;
 		}
-		exp->i = i;
 		exp->i++;
 	}
 	sh()->exp_rec--;
@@ -102,7 +100,7 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 {
 	t_exp	exp;
 	t_token	*new_tok;
-
+	
 	tok_content = ft_strdup(tok_content);
 	sh_tilde_expansion(&tok_content, sh()->params);
 	sh_init_exp(env, &exp, tok_content);
