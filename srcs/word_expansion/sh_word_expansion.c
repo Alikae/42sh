@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/17 01:53:03 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/17 21:06:37 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 {
 	t_exp	exp;
 	t_token	*new_tok;
-	
+
 	tok_content = ft_strdup(tok_content);
 	sh_tilde_expansion(&tok_content, sh()->params);
 	sh_init_exp(env, &exp, tok_content);
