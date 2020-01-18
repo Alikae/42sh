@@ -6,11 +6,12 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:46:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/15 01:15:40 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/18 07:08:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include <fcntl.h>
 #include "sh_executer.h"
 #include "sh_redirections.h"
 
@@ -35,8 +36,14 @@ void	close_all_redirections(t_sh *p)
 	lst = origin;
 	while (lst)
 	{
-		close(lst->in);
-		close(lst->out);
+		if (lst->in != p->cpy_std_fds[0]
+				&& lst->in != p->cpy_std_fds[1]
+				&& lst->in != p->cpy_std_fds[2])
+			close(lst->in);
+		if (lst->out != p->cpy_std_fds[0]
+				&& lst->out != p->cpy_std_fds[1]
+				&& lst->out != p->cpy_std_fds[2])
+			close(lst->out);
 		lst = lst->next;
 	}
 }
@@ -62,8 +69,40 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 	gen_redirections_recursively(p, lst->next);
 	if (not_previously_in_the_list(lst->in, lst))
 	{
-		if (dup2(lst->out, lst->in) < 0)
+//		printf("%i->%i\n", lst->in, lst->out);
+		if (lst->out == p->cpy_std_fds[0]
+				|| lst->out == p->cpy_std_fds[1]
+				|| lst->out == p->cpy_std_fds[2])
+		{
+			sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
+					p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
 			close(lst->in);
+			return ;
+		}
+		else if (lst->in == p->cpy_std_fds[0]
+				|| lst->in == p->cpy_std_fds[1]
+				|| lst->in == p->cpy_std_fds[2])
+		{
+			sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
+					p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
+			return ;
+		}
+		if (lst->out == -1)
+		{
+			close(lst->in);
+			return ;
+		}
+//		int ret;
+//		if ((ret= fcntl(lst->out, F_GETFD)) < 0)
+//			close(lst->in);
+		if (dup2(lst->out, lst->in) < 0)
+		{
+			if (!(lst->in == p->cpy_std_fds[0]
+					|| lst->in == p->cpy_std_fds[1]
+					|| lst->in == p->cpy_std_fds[2]))
+				close(lst->in);
+		}
+		//printf("%i--\n", ret);
 	}
 }
 

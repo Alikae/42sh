@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 00:20:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/16 01:05:12 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/18 05:47:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,19 @@ void		del_n_redirect_lst(t_redirect_lst **p_origin, int n)
 	while (n-- && *p_origin)
 	{
 		if ((*p_origin)->out > 2)
-			close((*p_origin)->out);
+		{
+			if ((*p_origin)->out != sh()->cpy_std_fds[0]
+					&& (*p_origin)->out != sh()->cpy_std_fds[1]
+					&& (*p_origin)->out != sh()->cpy_std_fds[2])
+				close((*p_origin)->out);
+		}
 		if ((*p_origin)->in > 2)
-			close((*p_origin)->in);
+		{
+			if ((*p_origin)->in != sh()->cpy_std_fds[0]
+					&& (*p_origin)->in != sh()->cpy_std_fds[1]
+					&& (*p_origin)->in != sh()->cpy_std_fds[2])
+				close((*p_origin)->in);
+		}
 		tmp = *p_origin;
 		*p_origin = (*p_origin)->next;
 		ft_memdel((void**)&tmp);

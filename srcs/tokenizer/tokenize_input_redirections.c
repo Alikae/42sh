@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 03:56:23 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 22:28:22 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/18 07:03:10 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_toktype	fill_redirection(t_toktool *t, t_token **p_actual,
 			sh()->unfinished_cmd = 1;
 		else
 			sh_dprintf(2, "GRAMMAR ERROR: expected WORD after \
-redirection_operator at -%.10s\n",
+redirection_operator at -%s\n",
 					t->input + t->i - ((t->i - 4 > -1) ? 4 : 2));
 		return (SH_SYNTAX_ERROR);
 	}

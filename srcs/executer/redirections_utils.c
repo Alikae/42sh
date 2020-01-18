@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:20 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:05:30 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/18 04:44:25 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "sh_executer.h"
 #include "sh_redirections.h"
 
-	//TODO TODO TODO TODO
 int		push_redirections(t_sh *p, int fd_in, int fd_out, t_toktype type)
 {
 	int	nb_redirections;
@@ -82,7 +81,7 @@ void	stock_lessgreatand(t_sh *p, t_token *token, int *nb_redirections)
 	if (!token->sub->content || !*token->sub->content)
 		return ;
 	else
-		fd_out = ft_atoi(token->sub->content);
+		fd_out = ft_atoi(token->sub->content);//|| file name
 	if (token->sub->content[0] == '-')
 		fd_out = -1;
 	*nb_redirections += push_redirections(p, fd_in, fd_out, token->type);
