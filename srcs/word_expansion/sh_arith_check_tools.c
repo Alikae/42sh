@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 21:46:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/12 03:12:26 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/18 02:35:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,4 @@ int		sh_skip_number(char *str, int i)
 		i++;
 	i = sh_skip_white_space(str, i);
 	return (i);
-}
-
-int		sh_arth_syntax_error(char *str, int i)
-{
-	sh_dprintf(2, "42sh: %s: operand expected: %s\n", str, str + i);
-	sh()->abort_cmd = 1;
-	return (0);
 }

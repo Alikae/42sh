@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/09 21:52:09 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/18 03:25:22 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,22 @@ int		sh_parenthesis_counter(char *str, int *i, int s1)
 	return (1);
 }
 
+int		sh_check_side(char *str)
+{
+	int		i;
+
+	i = sh_skip_white_space(str, 0);
+	if (sh_all_char_operator(str[i]) && str[i] != '-' && str[i] != '+')
+		return (1);
+	i = ft_strlen(str) - 1;
+	while ((str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+			&& str[i])
+		i--;
+	if (sh_all_char_operator(str[i]))
+		return (1);
+	return (0);
+}
+
 int		sh_valide_arith(char *str)
 {
 	int		i;
@@ -79,7 +95,7 @@ int		sh_valide_arith(char *str)
 			i++;
 		i = sh_skip_white_space(str, i);
 	}
-	if (sh_parenthesis_counter(str, &i, 1))
+	if (sh_parenthesis_counter(str, &i, 1) || sh_check_side(str))
 		return (sh_arth_syntax_error(str, 0));
 	return (1);
 }

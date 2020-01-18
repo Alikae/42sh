@@ -6,18 +6,11 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:02:19 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/16 01:11:04 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/18 02:36:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
-
-int		sh_error_expression_name(char *str)
-{
-	sh_dprintf(2, "42sh: bad math expression: error is \"%s\"\n", str);
-	sh()->abort_cmd = 1;
-	return (0);
-}
 
 int		sh_check_value(char *str)
 {
