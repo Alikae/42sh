@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 01:32:24 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/17 01:32:25 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/17 22:56:07 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_job	*add_job(unsigned int pid, int index_b,
 		int index_e, const char *status)
 {
 	t_job		*jobs;
-	const char *name;
+	const char	*name;
 
 	name = sh()->cmd;
 	jobs = sh()->jobs;

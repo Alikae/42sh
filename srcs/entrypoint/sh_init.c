@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/17 00:19:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/17 21:00:29 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void					sh_init(t_sh *shell)
 	shell->dir = pwd->pw_dir;
 	shell->bucopy = NULL;
 	shell->cmd = NULL;
-	shell->orig_termios = init_term();
+	if (shell->is_interactive)
+		shell->orig_termios = init_term();
 	shell->last_cmd_result = 0;
 }
