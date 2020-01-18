@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/17 05:45:58 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/18 03:41:41 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,8 @@ void				sh_sub_alias_command(t_toktool *t, char *alias, int in);
 char				*sh_find_alias(t_toktool *t, int i);
 int					sh_check_stack(char **stack, char *alias);
 void				sh_record_alias(char ***stack, char *alias);
+t_token				*expand_and_retokenize(t_sh *p, t_token *stack_argvs);
+void				stack_argvs(t_token **p_argv_stack, t_token *token);
+void				assign_sraa_to_zero(int *nb_assign, int *nb_redirections,
+		t_token **argv_stack, int *cmd_begin);
 #endif
