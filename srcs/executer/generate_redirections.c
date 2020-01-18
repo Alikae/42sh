@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:46:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/18 07:08:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/18 18:34:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,28 @@ int		not_previously_in_the_list(int in, t_redirect_lst *end)
 	return (1);
 }
 
+int		protect_from_cpy_std_fds(t_sh *p, t_redirect_lst *lst)
+{
+	if (lst->out == p->cpy_std_fds[0]
+			|| lst->out == p->cpy_std_fds[1]
+			|| lst->out == p->cpy_std_fds[2])
+	{
+		sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
+				p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
+		close(lst->in);
+		return (1);
+	}
+	else if (lst->in == p->cpy_std_fds[0]
+			|| lst->in == p->cpy_std_fds[1]
+			|| lst->in == p->cpy_std_fds[2])
+	{
+		sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
+				p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
+		return (1);
+	}
+	return (0);
+}
+
 void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 {
 	if (!lst)
@@ -69,32 +91,13 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 	gen_redirections_recursively(p, lst->next);
 	if (not_previously_in_the_list(lst->in, lst))
 	{
-//		printf("%i->%i\n", lst->in, lst->out);
-		if (lst->out == p->cpy_std_fds[0]
-				|| lst->out == p->cpy_std_fds[1]
-				|| lst->out == p->cpy_std_fds[2])
-		{
-			sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
-					p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
-			close(lst->in);
+		if (protect_from_cpy_std_fds(p, lst))
 			return ;
-		}
-		else if (lst->in == p->cpy_std_fds[0]
-				|| lst->in == p->cpy_std_fds[1]
-				|| lst->in == p->cpy_std_fds[2])
-		{
-			sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
-					p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
-			return ;
-		}
 		if (lst->out == -1)
 		{
 			close(lst->in);
 			return ;
 		}
-//		int ret;
-//		if ((ret= fcntl(lst->out, F_GETFD)) < 0)
-//			close(lst->in);
 		if (dup2(lst->out, lst->in) < 0)
 		{
 			if (!(lst->in == p->cpy_std_fds[0]
@@ -102,7 +105,6 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 					|| lst->in == p->cpy_std_fds[2]))
 				close(lst->in);
 		}
-		//printf("%i--\n", ret);
 	}
 }
 

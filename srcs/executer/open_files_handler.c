@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:06:19 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:04:44 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/18 18:43:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		open_with_redirection_flags(char *real_path, t_toktype type)
 	else if (type == SH_DGREAT)
 		return (open(real_path, O_CREAT | O_APPEND | O_WRONLY,
 					S_IRUSR | S_IWUSR));
-	else if (type == SH_LESSGREAT)
+	else if (type == SH_LESSGREAT || type == SH_LESSAND || type == SH_GREATAND)
 		return (open(real_path, O_CREAT | O_APPEND | O_RDWR,
 					S_IRUSR | S_IWUSR));
 		return (-1);
