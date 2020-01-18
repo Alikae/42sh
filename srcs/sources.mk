@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/17 05:36:18 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/18 03:39:26 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -124,6 +124,8 @@ C_FILES_executer = \
 	redirections_utils.c \
 	assigns_handler.c \
 	exec_simple_command.c \
+	exec_simple_command_2.c \
+	exec_simple_command_3.c \
 	redirections_handler.c \
 	open_files_handler.c \
 	sh_exec_script_tools.c \
