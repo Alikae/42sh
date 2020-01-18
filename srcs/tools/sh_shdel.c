@@ -6,7 +6,7 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:17:18 by jerry             #+#    #+#             */
-/*   Updated: 2020/01/18 03:42:27 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/18 03:54:00 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	free_sh_var(t_sh *s)
 	ft_free_tabstr(s->orig_av);
 	free_ast(s->functions);
 	ft_strdel(&(s->cmd));
-	ft_tab_strdel(&(s->av));
 }
 
 void	sh_shdel(t_sh **shell)
