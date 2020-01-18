@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/18 03:43:59 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/18 05:20:36 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int				sh_check_valid_var_name(char *str, int *i)
 	i_cpy = *i;
 	letter = 0;
 	while (str[*i] != '\t' && str[*i] != ' ' && str[*i] != '\n'
-			&& !(sh_all_char_operator(str[*i])) && str[*i] && !letter)
+			&& !(sh_all_char_operator(str[*i])) && str[*i] != ')'
+			&& str[*i] && !letter)
 	{
 		if (str[*i] < '0' || str[*i] > '9')
 			letter++;
@@ -107,7 +108,7 @@ int				sh_check_valid_var_name(char *str, int *i)
 		return (0);
 	*i = i_cpy;
 	while (str[*i] != '\t' && str[*i] != ' ' && str[*i] != '\n'
-			&& !(sh_all_char_operator(str[*i])) && str[*i])
+			&& !(sh_all_char_operator(str[*i])) && str[*i] != ')' &&  str[*i])
 	{
 		if (str[*i] >= '0' && str[*i] <= '9')
 			return (sh_error_not_valide_arth_name(str, i_cpy));
@@ -120,9 +121,11 @@ void			sh_sub_arith_var(char **str)
 {
 	int			i;
 	short int	opt;
+	int			i_cpy;
 
 	i = 0;
 	opt = 0;
+	i_cpy = 0;
 	while ((*str)[i] && !(sh()->abort_cmd))
 	{
 		opt = 0;
@@ -134,12 +137,11 @@ void			sh_sub_arith_var(char **str)
 				opt = 1;
 			else if (i >= 2 && (*str)[i - 1] == '-' && (*str)[i - 2] == '-')
 				opt = -1;
-			printf("1\n");
+			i_cpy = i;
 			if (sh_check_valid_var_name(*str, &i))
-				sh_record_arth(str, i, opt);
-			printf("2\n");
+				sh_record_arth(str, i_cpy, opt);
 		}
-		if (str[i])
+		if ((*str)[i])
 			i++;
 	}
 }
