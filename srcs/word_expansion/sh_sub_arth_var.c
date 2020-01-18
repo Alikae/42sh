@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/18 03:43:59 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/18 04:29:03 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,12 +134,10 @@ void			sh_sub_arith_var(char **str)
 				opt = 1;
 			else if (i >= 2 && (*str)[i - 1] == '-' && (*str)[i - 2] == '-')
 				opt = -1;
-			printf("1\n");
 			if (sh_check_valid_var_name(*str, &i))
 				sh_record_arth(str, i, opt);
-			printf("2\n");
 		}
-		if (str[i])
+		if ((*str)[i])
 			i++;
 	}
 }
