@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/19 01:18:51 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/19 02:27:13 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int				sh_check_valid_var_name(char *str, int *i)
 			&& !(sh_all_char_operator(str[*i])) && str[*i] != ')'
 			&& str[*i] && !letter)
 	{
-		if (str[*i] < '0' || str[*i] > '9')
+		if ((str[*i] < '0' || str[*i] > '9') && str[*i] != ')' && str[*i] != '(')
 			letter++;
 		(*i)++;
 	}
