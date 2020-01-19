@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 17:34:23 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/19 01:28:27 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/19 01:31:42 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	ft_word(char const *s)
 	int		i;
 
 	n = 1;
-	i = 0;
+	i = 1;
 	while (s[i])
 	{
 		if (!(sh_all_char_operator(s[i])) && sh_all_char_operator(s[i - 1]))
