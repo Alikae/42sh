@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 00:31:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/18 02:37:57 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/19 00:34:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,27 @@ void	sh_free_arith_ast(t_arith *arith)
 	if (arith->sub)
 		sh_free_arith_ast(arith->sub);
 	ft_memdel((void**)&arith);
+}
+
+long int	sh_long_atoi(char *str)
+{
+	long int	pw;
+	long int	nb;
+	int			i;
+
+	nb = 0;
+	i = 0;
+	pw = 0;
+	while (str[pw] && str[pw] >= '0' && str[pw] <= '9')
+		pw++;
+	pw = sh_long_power(pw - 1);
+	while (pw)
+	{
+		nb = nb + pw * (str[i] - '0');
+		i++;
+		pw = pw / 10;
+	}
+	return (nb);
 }
 
 int		sh_check_arth(char *name)

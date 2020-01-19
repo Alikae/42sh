@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/18 02:42:43 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/19 00:31:38 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,6 @@ int			sh_valid_operator(char *str, int begin);
 void		sh_record_arithmetic_string(t_exp *exp);
 int			sh_arithmetic_string_size(t_exp *exp);
 int			sh_error_not_valide_arth_name(char *str, int i);
-
+long int	sh_long_atoi(char *str);
+long int	sh_long_power(int pw);
 #endif

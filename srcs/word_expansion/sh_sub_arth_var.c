@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/18 05:20:36 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/19 01:18:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char			*sh_tab_fusion_free(char ***tab)
 
 	i = 0;
 	i_name = 0;
-	if (!(name = malloc(sh_tab_len(*tab))))
+	if (!(name = malloc(sh_tab_len(*tab) + 1)))
 		destructor(-1);
 	while ((*tab)[i])
 	{
@@ -47,16 +47,18 @@ void			sh_add_opt(char **name, short int opt)
 
 	i = 0;
 	tab = sh_strsplit_arth(*name);
+	i = 0;
 	while (tab[i])
 	{
 		if (!(sh_all_char_operator(*tab[i])))
 		{
 			cpy = tab[i];
-			tab[i] = sh_long_itoa(sh_atoi_index(tab[i], 0) + opt);
+			tab[i] = sh_long_itoa(sh_long_atoi(tab[i]) + opt);
 			ft_memdel((void**)&cpy);
 		}
 		i++;
 	}
+	free(*name);
 	*name = sh_tab_fusion_free(&tab);
 }
 
