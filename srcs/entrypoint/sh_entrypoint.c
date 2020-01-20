@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/17 21:06:01 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/20 21:28:16 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ char	**sh_tab_cpy(char **av)
 
 void	sh_entrypoint(int ac, char **av, char **ev)
 {
-	int		i;
 	t_sh	*tsh;
 
 	tsh = sh();
-	i = -1;
 	tsh->ac = ac;
 	tsh->av = sh_tab_cpy(av);
 	tsh->orig_av = tsh->av;
