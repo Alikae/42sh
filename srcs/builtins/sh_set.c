@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/20 22:11:51 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/20 22:34:15 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ int			sh_set(int ac, char **av, t_env **ev)
 	tmp2 = NULL;
 	if (!ev || !*ev)
 		return (1);
-	sh_record_ev_params(av);
-	if (ac <= 1)
+	else if (ac <= 1)
 		sh_print_set(ev);
+	else
+		sh_record_ev_params(av);
 	return (0);
 }
