@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/20 07:13:26 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 23:45:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,25 +62,7 @@ int		sh_parenthesis_counter(char *str, int *i, int s1)
 
 int		sh_check_number(char *str)
 {
-	int		i;
-
-	printf("str = %s\n", str);
-	i = sh_skip_white_space(str, 0);
-	while (str[i] == '(')
-		i++;
-	while (str[i])
-	{
-		while (str[i] >= '0' && str[i] <= '9')
-			i++;
-		if (str[i] && !(sh_all_char_operator(str[i])))
-		{
-			printf("check number = %s\n", str + i);
-			return (1);
-		}
-		while (sh_all_char_operator(str[i]) || str[i] == ' '
-			|| str[i] == '\n' || str[i] == '\t')
-			i++;
-	}
+	(void)str;
 	return (0);
 }
 
@@ -124,7 +106,7 @@ int		sh_valide_arith(char *str)
 			i++;
 		i = sh_skip_white_space(str, i);
 	}
-	if (sh_parenthesis_counter(str, &i, 1) || sh_check_side(str))
+	if (sh_parenthesis_counter(str, &i, 1))// || sh_check_side(str))
 	{
 		printf("la\n");
 		return (sh_arth_syntax_error(str, 0));
