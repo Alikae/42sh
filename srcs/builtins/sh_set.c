@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:45:27 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/20 22:11:51 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/20 22:40:36 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void		sh_record_ev_params(char **av)
 	sh()->av = new_av;
 	i = 0;
 	while (old_av[i])
-		ft_memdel((void**)&(old_av[i++]));
+		ft_memdel((void**)old_av + i++);
 	free(old_av);
 }
 
