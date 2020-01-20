@@ -63,8 +63,9 @@ int			sh_set(int ac, char **av, t_env **ev)
 	tmp2 = NULL;
 	if (!ev || !*ev)
 		return (1);
-	sh_record_ev_params(av);
-	if (ac <= 1)
+	else if (ac <= 1)
 		sh_print_set(ev);
+	else
+		sh_record_ev_params(av);
 	return (0);
 }
