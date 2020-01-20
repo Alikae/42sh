@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 00:18:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 00:29:15 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 06:56:32 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void	sh_write_less_op(char *str, int i, t_arith **arith)
 		(*arith)->next_op = AND;
 	else if (str[i] == '|' && str[i + 1] == '|')
 		(*arith)->next_op = OR_OR;
+	else if (str[i] == '|')
+		(*arith)->next_op = OR;
 	else
 		sh_write_less_op_next(str, i, arith);
 }

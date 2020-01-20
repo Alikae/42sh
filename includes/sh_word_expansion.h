@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/19 00:31:38 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 04:43:48 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void		sh_record_commande_string(t_exp *exp);
 int			sh_error_expression_name(char *str);
 int			sh_check_value(char *str);
 char		*sh_find_arth_var_value(char **str);
-void		sh_sub_var(char *value, char **str, int beg, int ed);
+void		sh_sub_var(char **value, char **str, int beg, int ed);
 int			sh_tab_len(char **tab);
 void		sh_init_exp(t_env **env, t_exp *exp, char *tok_content);
 void		sh_free_exp(t_exp *exp, char **tok_content);
@@ -99,4 +99,5 @@ int			sh_arithmetic_string_size(t_exp *exp);
 int			sh_error_not_valide_arth_name(char *str, int i);
 long int	sh_long_atoi(char *str);
 long int	sh_long_power(int pw);
+int			sh_error_div_by_0(void);
 #endif

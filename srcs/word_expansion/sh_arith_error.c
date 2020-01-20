@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 02:33:58 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/18 03:34:57 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 05:12:02 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ int		sh_arth_error_parenthesis(char *str)
 int		sh_error_not_valide_arth_name(char *str, int i)
 {
 	sh_dprintf(2, "42sh: %s: not a valid name\n", str + i);
+	sh()->abort_cmd = 1;
+	return (0);
+}
+
+int		sh_error_div_by_0(void)
+{
+	sh_dprintf(2, "42sh: error division by 0\n");
 	sh()->abort_cmd = 1;
 	return (0);
 }

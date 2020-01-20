@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 09:31:05 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/19 02:28:35 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 06:51:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ void		sh_arithmetic_expansion(t_exp *exp)
 		arith = sh_creat_arithmetic_ast(exp->name, 0, ft_strlen(exp->name));
 		result = sh_exec_arith(arith);
 		sh_free_arith_ast(arith);
+		if (sh()->abort_cmd)
+			return ;
 		exp->value = sh_long_itoa(result);
 	}
 }

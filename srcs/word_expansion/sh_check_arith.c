@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/19 03:08:30 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 06:06:46 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ int		sh_check_operator(char *str, int i)
 		i++;
 	i = sh_skip_white_space(str, i);
 	if (str[i] == '-' || str[i] == '+')
+	{
 		i++;
+		if (str[i] == '(' || str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+			return (0);
+	}
 	i = sh_skip_white_space(str, i);
 	if (sh_all_char_operator(str[i]))
 		return (0);
@@ -52,7 +56,28 @@ int		sh_parenthesis_counter(char *str, int *i, int s1)
 	}
 	else if (par <= 0 && str[*i] == ')')
 		return (0);
+	(*i) = sh_skip_white_space(str, *i);
 	return (1);
+}
+
+int		sh_check_number(char *str)
+{
+	int		i;
+
+	i = sh_skip_white_space(str, 0);
+	while (str[i])
+	{
+		while (str[i] == '(' || str[i] == ')'
+				|| (str[i] >= '0' && str[i] <= '9'))
+			i++;
+		i = sh_skip_white_space(str, i);
+		if (str[i] && !(sh_all_char_operator(str[i])))
+			return (1);
+		while (sh_all_char_operator(str[i]) || str[i] == ' '
+			|| str[i] == '\n' || str[i] == '\t')
+			i++;
+	}
+	return (0);
 }
 
 int		sh_check_side(char *str)
@@ -66,7 +91,7 @@ int		sh_check_side(char *str)
 	while ((str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 			&& str[i])
 		i--;
-	if (sh_all_char_operator(str[i]))
+	if (sh_all_char_operator(str[i]) || sh_check_number(str))
 		return (1);
 	return (0);
 }
@@ -78,7 +103,6 @@ int		sh_valide_arith(char *str)
 
 	par = 0;
 	i = sh_skip_white_space(str, 0);
-	printf("str = %s\n", str);
 	while (str[i])
 	{
 		if (!(sh_parenthesis_counter(str, &i, 0)))

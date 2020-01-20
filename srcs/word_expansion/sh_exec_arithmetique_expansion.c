@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:59:07 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/10 00:05:28 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 06:56:50 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,27 @@
 
 long int	sh_exec_arith_basic_operator(t_arith *arith)
 {
+	int		nb1;
+	int		nb2;
+
+	nb1 = 0;
+	nb2 = 0;
 	if (arith->next_op == PLUS)
 		return (sh_exec_arith(arith->next) + sh_exec_arith(arith->sub));
 	else if (arith->next_op == MINUS)
 		return (sh_exec_arith(arith->next) - sh_exec_arith(arith->sub));
 	else if (arith->next_op == MULTI)
 		return (sh_exec_arith(arith->next) * sh_exec_arith(arith->sub));
-	else if (arith->next_op == DIV)
-		return (sh_exec_arith(arith->next) / sh_exec_arith(arith->sub));
-	else if (arith->next_op == MODULO)
-		return (sh_exec_arith(arith->next) % sh_exec_arith(arith->sub));
+	else if (arith->next_op == DIV || arith->next_op == MODULO)
+	{
+		nb1 = sh_exec_arith(arith->next);
+		nb2 = sh_exec_arith(arith->sub);
+		if (!nb2)
+			return (sh_error_div_by_0());
+		if (arith->next_op == DIV)
+			return (nb1 / nb2);
+		return (nb1 % nb2);
+	}
 	else
 		return (arith->nb);
 }

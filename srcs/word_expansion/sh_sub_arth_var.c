@@ -6,13 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/19 02:27:13 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 04:43:58 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 
-char			*sh_tab_fusion_free(char ***tab)
+char		*sh_tab_fusion_free(char ***tab)
 {
 	int		j;
 	int		i;
@@ -39,7 +39,7 @@ char			*sh_tab_fusion_free(char ***tab)
 	return (name);
 }
 
-void			sh_add_opt(char **name, short int opt)
+void		sh_add_opt(char **name, short int opt)
 {
 	char	**tab;
 	int		i;
@@ -62,7 +62,7 @@ void			sh_add_opt(char **name, short int opt)
 	*name = sh_tab_fusion_free(&tab);
 }
 
-void			sh_record_arth(char **str, int i, short int opt)
+int			sh_record_arth(char **str, int i, short int opt)
 {
 	int		i_cpy;
 	int		i_sub;
@@ -87,11 +87,11 @@ void			sh_record_arth(char **str, int i, short int opt)
 		sh_add_opt(&name, opt);
 		i_cpy = i_cpy - 2;
 	}
-	sh_sub_var(name, str, i_cpy, i);
-	ft_memdel((void**)&name);
+	sh_sub_var(&name, str, i_cpy, i);
+	return (0);
 }
 
-int				sh_check_valid_var_name(char *str, int *i)
+int			sh_check_valid_var_name(char *str, int *i)
 {
 	int		letter;
 	int		i_cpy;
@@ -102,7 +102,8 @@ int				sh_check_valid_var_name(char *str, int *i)
 			&& !(sh_all_char_operator(str[*i])) && str[*i] != ')'
 			&& str[*i] && !letter)
 	{
-		if ((str[*i] < '0' || str[*i] > '9') && str[*i] != ')' && str[*i] != '(')
+		if ((str[*i] < '0' || str[*i] > '9')
+				&& str[*i] != ')' && str[*i] != '(')
 			letter++;
 		(*i)++;
 	}
@@ -110,7 +111,7 @@ int				sh_check_valid_var_name(char *str, int *i)
 		return (0);
 	*i = i_cpy;
 	while (str[*i] != '\t' && str[*i] != ' ' && str[*i] != '\n'
-			&& !(sh_all_char_operator(str[*i])) && str[*i] != ')' &&  str[*i])
+			&& !(sh_all_char_operator(str[*i])) && str[*i] != ')' && str[*i])
 	{
 		if (str[*i] >= '0' && str[*i] <= '9')
 			return (sh_error_not_valide_arth_name(str, i_cpy));
@@ -119,7 +120,7 @@ int				sh_check_valid_var_name(char *str, int *i)
 	return (1);
 }
 
-void			sh_sub_arith_var(char **str)
+void		sh_sub_arith_var(char **str)
 {
 	int			i;
 	short int	opt;
@@ -141,7 +142,7 @@ void			sh_sub_arith_var(char **str)
 				opt = -1;
 			i_cpy = i;
 			if (sh_check_valid_var_name(*str, &i))
-				sh_record_arth(str, i_cpy, opt);
+				i = sh_record_arth(str, i_cpy, opt);
 		}
 		if ((*str)[i])
 			i++;

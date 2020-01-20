@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:02:19 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/18 02:36:46 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 04:45:23 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*sh_find_arth_var_value(char **str)
 	return (0);
 }
 
-void	sh_sub_var(char *value, char **str, int beg, int ed)
+void	sh_sub_var(char **value, char **str, int beg, int ed)
 {
 	char	*sub;
 	int		i;
@@ -50,7 +50,7 @@ void	sh_sub_var(char *value, char **str, int beg, int ed)
 
 	j = 0;
 	i = 0;
-	if (!(sub = malloc(ft_strlen(value) + (ft_strlen(*str) - (ed - beg)) + 3)))
+	if (!(sub = malloc(ft_strlen(*value) + (ft_strlen(*str) - (ed - beg)) + 3)))
 		destructor(-1);
 	while (i < beg)
 	{
@@ -58,14 +58,15 @@ void	sh_sub_var(char *value, char **str, int beg, int ed)
 		i++;
 	}
 	sub[i++] = '(';
-	while (value[j])
-		sub[i++] = value[j++];
+	while ((*value)[j])
+		sub[i++] = (*value)[j++];
 	sub[i++] = ')';
 	while ((*str)[ed])
 		sub[i++] = (*str)[ed++];
 	sub[i] = '\0';
 	free(*str);
 	*str = sub;
+	ft_memdel((void**)value);
 }
 
 int		sh_tab_len(char **tab)

@@ -6,13 +6,13 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 00:31:46 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/19 00:34:29 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/20 04:47:15 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 
-void	sh_free_arith_ast(t_arith *arith)
+void		sh_free_arith_ast(t_arith *arith)
 {
 	if (arith->next)
 		sh_free_arith_ast(arith->next);
@@ -42,7 +42,7 @@ long int	sh_long_atoi(char *str)
 	return (nb);
 }
 
-int		sh_check_arth(char *name)
+int			sh_check_arth(char *name)
 {
 	int		par;
 	int		i;
@@ -64,7 +64,7 @@ int		sh_check_arth(char *name)
 	return (1);
 }
 
-void	sh_init_ast(long int number, t_arith **arith)
+void		sh_init_ast(long int number, t_arith **arith)
 {
 	(*arith)->next_op = NUMBER;
 	(*arith)->nb = number;
@@ -72,7 +72,7 @@ void	sh_init_ast(long int number, t_arith **arith)
 	(*arith)->sub = NULL;
 }
 
-int		sh_is_number(char *str, int i, int end)
+int			sh_is_number(char *str, int i, int end)
 {
 	int		num;
 	int		op;
