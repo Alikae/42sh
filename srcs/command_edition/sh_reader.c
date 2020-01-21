@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/16 01:02:49 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/22 00:13:28 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int			sh_outc(int c)
 
 void		sh_tty_cbreak(int code, struct termios orig_termios)
 {
-	struct termios	cbreak;
 	char			*res;
 	char			buf[1024];
 	char			*bufptr;
@@ -34,14 +33,12 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 	bufptr = buf;
 	if (code == 1)
 	{
-		cbreak = orig_termios;
-		cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
-		cbreak.c_cc[VMIN] = 1;
-		if (tcsetattr(0, TCSANOW, &cbreak) < 0)
+		if (tcsetattr(0, TCSANOW, &sh()->cbreak) < 0)
 			destructor(1);
+		dprintf(2, "----%lu\n", (unsigned long)(sh()->cbreak.c_lflag) & (unsigned long)ISI);
 	}
 	if (code == 2)
-		tcsetattr(0, TCSANOW, &orig_termios);
+		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
 	bufptr = NULL;
 	res = NULL;
 }
@@ -101,16 +98,19 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	k = 1;
 	j = 1;
 	buf = NULL;
+	//sh_dprintf(2, "%d\n", ft_memcmp(&sh()->orig_termios, &sh()->extern_termios, sizeof(struct termios)) ? 1 : 0);
 	while (k != 0 && *command && j > 0)
 	{
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
 			return (*command);
-		if (tcgetattr(0, &sh()->orig_termios))
-			return (*command);
+//		if (tcgetattr(0, &sh()->orig_termios))
+//			return (*command);
 		sh_tty_cbreak(1, sh()->orig_termios);
 		sh_reprompt(i, command);
 		ft_memdel((void**)&buf);
 		buf = sh_buffer();
+		if (buf)
+			dprintf(2, "[%d][%c][%c][%c]\n", buf[0], buf[1], buf[2], buf[3]);
 		k = loop_keys(command, buf, &i, hist);
 		sh_tty_cbreak(2, sh()->orig_termios);
 	}

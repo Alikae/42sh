@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/18 03:41:41 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 23:35:36 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct		s_sh
 	t_job			*jobs;
 	int				is_interactive;
 	struct termios	orig_termios;
+	struct termios	cbreak;
 	struct termios	extern_termios;
 	int				pid_main_process;
 	int				pgid_current_pipeline;

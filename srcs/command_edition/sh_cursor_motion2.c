@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 08:48:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/09 10:41:35 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/21 22:34:58 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void		sh_cursor_position(t_pos *cursor)
 	int		k;
 
 	k = 0;
+	dprintf(2, "LALA\n");
 	ft_bzero(temp, 20);
 	ft_putstr_fd("\033[6n", 0);
 	while ((ret = read(0, &temp, 10)) < 4 && k == 0)
@@ -72,10 +73,10 @@ void		sh_cursor_position(t_pos *cursor)
 		else
 			continue ;
 	}
-	if (temp + 1 && temp + 2)
+	if (temp[0] == '\033' && temp[1] == '[')
 		cursor->rows = ft_atoi(temp + 2);
 	rows = ft_strchr(temp, ';');
-	if (rows && rows + 1)
+	if (rows && rows[0] == ';')
 		cursor->col = ft_atoi(rows + 1);
 	rows = NULL;
 }

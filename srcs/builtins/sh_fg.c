@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/21 15:09:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 22:45:23 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,17 @@ int	sh_fg(int ac, char **av, char **env)
 	if (!nth_job_exist(job, arg, argcpy, av[1]))
 		return (-1);
 	int ret;
-	if (job->t_mode_setted)
+/*	if (job->t_mode_setted)
 	{
-		ret = tcsetattr(0, TCSADRAIN, &job->t_mode);
+		ret = tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, TCSANOW, &job->t_mode);
 		printf("TCSETAT %i\n", ret);
 	}
-	ret = tcsetpgrp(0, job->pid);
+	else
+	{	
+		ret = tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, TCSANOW, &sh()->orig_termios);
+		printf("TCSETAT %i\n", ret);
+	}*/
+	ret = tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, job->pid);
 	printf("TCSETPG %i\n", ret);
 	if (kill(-1 * job->pid, SIGCONT) < 0)
 		sh_dprintf(2, "kill (SIGCONT) ERROR\n");
