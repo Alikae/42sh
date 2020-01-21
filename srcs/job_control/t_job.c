@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 01:32:24 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/21 15:19:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 23:25:43 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b,
 	ft_bzero(&job->t_mode, sizeof(job->t_mode));
 	job->pid = pid;
 	job->pgid = getpgid(pid);
+	job->t_mode_setted = 0;
 	job->status = "UNKNOW";
 	job->next = 0;
 	return (job);
@@ -61,12 +62,12 @@ void	update_job_termios(int child_pid)
 		job = job->next;
 	if (job)
 	{
-		if (tcgetattr(0, &job->t_mode) < 0)
+		if (tcgetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, &job->t_mode) < 0)
 			sh_dprintf(2, "Fail to store termios struct for job [%i]\n", getpid());
 		else
 		{
 			job->t_mode_setted = 1;
-			sh_dprintf(1, "TERM JOB UPDATED\n");
+			sh_dprintf(2, "TERM JOB UPDATED\n");
 		}
 	}
 }

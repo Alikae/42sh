@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/17 21:00:29 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/21 23:48:26 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@
 #include <ncurses.h>
 #include <termios.h>
 #include <termcap.h>
+
+static struct termios	init_cbreak(void)
+{
+	struct termios	cbreak;
+
+	if (tcgetattr(0, &cbreak))
+		destructor(EXIT_FAILURE);
+	cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
+	cbreak.c_cc[VMIN] = 1;	
+//	cbreak.c_cc[VTIME] = 0;
+	return (cbreak);
+}
 
 static struct termios	init_term(void)
 {
@@ -61,6 +73,9 @@ void					sh_init(t_sh *shell)
 	shell->bucopy = NULL;
 	shell->cmd = NULL;
 	if (shell->is_interactive)
+	{
 		shell->orig_termios = init_term();
+		shell->cbreak = init_cbreak();
+	}
 	shell->last_cmd_result = 0;
 }

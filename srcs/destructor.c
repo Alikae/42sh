@@ -6,7 +6,7 @@
 /*   By: jerry <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 15:01:31 by jerry             #+#    #+#             */
-/*   Updated: 2020/01/17 00:18:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 22:06:24 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	destructor(int status)
 	{
 		push_history(sh()->hist);
 		if (sh()->is_interactive && sh()->pid_main_process == getpid())
-			tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
+			tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, TCSANOW, &sh()->extern_termios);
 		sh_shdel(&s);
 	}
 	exit(status);

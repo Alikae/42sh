@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:14:37 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/21 15:52:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/22 00:48:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 {
 	if (WSTOPSIG(status) == SIGTSTP && (p->process_is_stopped = 1))
 	{
-		kill(-1 * child_pid, SIGTSTP);
 		sh_dprintf(1, "\nChild_process [%i] suspended\n", child_pid);
 		if (!from_fg)
 			add_job(child_pid, p->index_pipeline_begin,
