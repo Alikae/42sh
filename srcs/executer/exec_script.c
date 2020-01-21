@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/17 06:49:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 13:35:25 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ int		fork_process(t_sh *p, int foreground)
 	if (child_pid < 0)
 	{
 		sh_dprintf(2, "[%i]fork error: ressource temporarily unavailable\n\
-Abort %i\n", getpid(), (p->abort_cmd = 1));
-		return (-1);
+Exit %i\n", getpid(), (p->abort_cmd = 1) ? 43 : 0);
+		exit (43);
+		//return (-1);
 	}
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:46:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/18 18:34:32 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 14:48:31 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 	gen_redirections_recursively(p, lst->next);
 	if (not_previously_in_the_list(lst->in, lst))
 	{
+		printf("%i->%i\n", lst->in, lst->out);
 		if (protect_from_cpy_std_fds(p, lst))
 			return ;
 		if (lst->out == -1)

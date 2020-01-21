@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/17 03:33:43 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 14:10:14 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int		sh_jobs(int ac, char **av, char **env)
 		job = *old_next;
 		if (!jobs_print_job_status(job, old_next, &status))
 			continue;
-		sh_dprintf(1, "[%i] %s:		'%s'\n", ++i, job->status, job->name);
+		sh_dprintf(1, "[%i]{%i} %s:		'%s'\n", job->pid, ++i, job->status,
+				job->name);
 		old_next = &((*old_next)->next);
 	}
 	return (0);

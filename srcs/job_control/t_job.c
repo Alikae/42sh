@@ -6,12 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 01:32:24 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/18 19:26:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 15:19:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
+#include "sh_printf.h"
 #include <stdlib.h>
 #include <signal.h>
 
@@ -49,6 +50,25 @@ t_job	*create_job(unsigned int pid, const char *name, int index_b,
 	job->status = "UNKNOW";
 	job->next = 0;
 	return (job);
+}
+
+void	update_job_termios(int child_pid)
+{
+	t_job	*job;
+
+	job = sh()->jobs;
+	while (job && !(job->pid == child_pid))
+		job = job->next;
+	if (job)
+	{
+		if (tcgetattr(0, &job->t_mode) < 0)
+			sh_dprintf(2, "Fail to store termios struct for job [%i]\n", getpid());
+		else
+		{
+			job->t_mode_setted = 1;
+			sh_dprintf(1, "TERM JOB UPDATED\n");
+		}
+	}
 }
 
 t_job	*add_job(unsigned int pid, int index_b,

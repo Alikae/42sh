@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:14:37 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/17 01:30:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 15:03:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 		if (!from_fg)
 			add_job(child_pid, p->index_pipeline_begin,
 					p->index_pipeline_end, "stopped");
+		update_job_termios(child_pid);
 	}
 	if (WSTOPSIG(status) == SIGTTIN)
 	{
