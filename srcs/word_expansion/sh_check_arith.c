@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/20 23:45:27 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/21 01:49:38 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,42 @@ int		sh_parenthesis_counter(char *str, int *i, int s1)
 		return (0);
 	(*i) = sh_skip_white_space(str, *i);
 	return (1);
-}
+} 
 
 int		sh_check_number(char *str)
 {
-	(void)str;
+	int		i;
+	int		opt;
+
+	i = 0;
+	opt = -1;
+	while (str[i])
+	{
+		printf("str = %c\n", str[i]);
+		i = sh_skip_white_space(str, i);
+		printf("str = %c\n", str[i]);
+		if (str[i] == '+' || str[i] == '-')
+		{
+			opt = sh_is_valid_operator(str, i);
+			i++;
+			printf("opt = %i\n", opt);
+		}
+		printf("str = %c\n", str[i]);
+		i = sh_skip_white_space(str, i);
+		printf("str before return 1 = %c\n", str[i]);
+		if (((str[i] > '9' || str[i] < '0') && str[i] != '(') || (opt == 0 &&  str[i] == '('))
+			return (1);
+		printf("str = %c\n", str[i]);
+		i = sh_skip_number_par(str, i);
+		i = sh_skip_white_space(str, i);
+		printf("str = %c\n", str[i]);
+		if (!sh_all_char_operator(str[i]) && str[i])
+			return (1);
+		printf("str = %c\n", str[i]);
+		if (str[i])
+			i++;
+		printf("str = %c\n", str[i]);
+	}
 	return (0);
 }
 
@@ -106,7 +137,7 @@ int		sh_valide_arith(char *str)
 			i++;
 		i = sh_skip_white_space(str, i);
 	}
-	if (sh_parenthesis_counter(str, &i, 1))// || sh_check_side(str))
+	if (sh_parenthesis_counter(str, &i, 1) || sh_check_side(str))
 	{
 		printf("la\n");
 		return (sh_arth_syntax_error(str, 0));
