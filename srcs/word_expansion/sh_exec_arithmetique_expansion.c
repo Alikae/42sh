@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:59:07 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/20 06:56:50 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/21 12:33:07 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ long int	sh_exec_arith(t_arith *arith)
 	else if (arith->next_op == OR)
 		return (sh_exec_arith(arith->next) | sh_exec_arith(arith->sub));
 	else if (arith->next_op == AND_AND)
+	{
+		printf("and and\n");
 		return (sh_exec_arith(arith->next) && sh_exec_arith(arith->sub));
+	}
 	else if (arith->next_op == OR_OR)
 		return (sh_exec_arith(arith->next) || sh_exec_arith(arith->sub));
 	else if (arith->next_op == DIFFERENT)
