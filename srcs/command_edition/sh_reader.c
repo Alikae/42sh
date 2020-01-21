@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/22 00:13:28 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/22 00:14:45 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 	{
 		if (tcsetattr(0, TCSANOW, &sh()->cbreak) < 0)
 			destructor(1);
-		dprintf(2, "----%lu\n", (unsigned long)(sh()->cbreak.c_lflag) & (unsigned long)ISI);
+		dprintf(2, "----%lu\n", (unsigned long)(sh()->cbreak.c_lflag) & (unsigned long)ISIG);
 	}
 	if (code == 2)
 		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
