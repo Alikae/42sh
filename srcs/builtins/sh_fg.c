@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/21 15:09:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/21 16:25:44 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	sh_fg(int ac, char **av, char **env)
 	int			arg;
 	int			argcpy;
 
+	printf("FG\n");
 	(void)env;
 	if (!jobs_exist(&job))
 		return (0);
@@ -70,9 +71,14 @@ int	sh_fg(int ac, char **av, char **env)
 	if (job->t_mode_setted)
 	{
 		ret = tcsetattr(0, TCSADRAIN, &job->t_mode);
-		printf("TCSETAT %i\n", ret);
+		printf("TCSETAT JOB %i\n", ret);
 	}
-	ret = tcsetpgrp(0, job->pid);
+	else
+	{
+		ret = tcsetattr(0, TCSADRAIN, &sh()->extern_termios);
+		printf("TCSETAT SH %i\n", ret);
+	}
+	ret = tcsetpgrp(0, job->pgid);
 	printf("TCSETPG %i\n", ret);
 	if (kill(-1 * job->pid, SIGCONT) < 0)
 		sh_dprintf(2, "kill (SIGCONT) ERROR\n");
