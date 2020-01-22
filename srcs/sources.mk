@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/18 03:50:07 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/22 04:05:49 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -130,7 +130,8 @@ C_FILES_executer = \
 	open_files_handler.c \
 	sh_exec_script_tools.c \
 	sh_exec_script_tools_2.c \
-	sh_exec_script_tools_3.c
+	sh_exec_script_tools_3.c \
+	sh_redirection_tools.c
 
 C_FILES_builtins = \
 		   sh_echo.c \
