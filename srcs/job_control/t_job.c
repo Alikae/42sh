@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 01:32:24 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/21 23:25:43 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/22 02:06:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	update_job_termios(int child_pid)
 		else
 		{
 			job->t_mode_setted = 1;
-			sh_dprintf(2, "TERM JOB UPDATED\n");
+//			sh_dprintf(2, "TERM JOB UPDATED\n");
 		}
 	}
 }
