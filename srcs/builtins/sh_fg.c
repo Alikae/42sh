@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/22 00:48:15 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/22 02:05:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ int	sh_fg(int ac, char **av, char **env)
 		printf("TCSETAT %i\n", ret);
 	}*/
 	ret = tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, job->pid);
-	printf("TCSETPG %i\n", ret);
+	//printf("TCSETPG %i\n", ret);
+	(void)ret;
 	if (kill(-1 * job->pid, SIGCONT) < 0)
 		sh_dprintf(2, "kill (SIGCONT) ERROR\n");
 	else

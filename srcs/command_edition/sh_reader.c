@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/22 00:14:45 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/22 02:04:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 	{
 		if (tcsetattr(0, TCSANOW, &sh()->cbreak) < 0)
 			destructor(1);
-		dprintf(2, "----%lu\n", (unsigned long)(sh()->cbreak.c_lflag) & (unsigned long)ISIG);
+	//	dprintf(2, "----%lu\n", (unsigned long)(sh()->cbreak.c_lflag) & (unsigned long)ISIG);
 	}
-	if (code == 2)
-		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
+	(void)orig_termios;
+//	if (code == 2)
+//		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
 	bufptr = NULL;
 	res = NULL;
 }
@@ -106,11 +107,14 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 //		if (tcgetattr(0, &sh()->orig_termios))
 //			return (*command);
 		sh_tty_cbreak(1, sh()->orig_termios);
+	struct termios t;
+	tcgetattr(0, &t);
+//	dprintf(2, "%lu<-\n", (unsigned long)t.c_lflag & (unsigned long)ISIG);
 		sh_reprompt(i, command);
 		ft_memdel((void**)&buf);
 		buf = sh_buffer();
-		if (buf)
-			dprintf(2, "[%d][%c][%c][%c]\n", buf[0], buf[1], buf[2], buf[3]);
+//		if (buf)
+//			dprintf(2, "[%d][%c][%c][%c]\n", buf[0], buf[1], buf[2], buf[3]);
 		k = loop_keys(command, buf, &i, hist);
 		sh_tty_cbreak(2, sh()->orig_termios);
 	}
