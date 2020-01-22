@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:14:37 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/22 02:05:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/22 05:52:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 {
 	if (WSTOPSIG(status) == SIGTSTP && (p->process_is_stopped = 1))
 	{
-		sh_dprintf(1, "\nChild_process [%i] suspended\n", child_pid);
+		sh_dprintf(2, "\nChild_process [%i] suspended\n", child_pid);
 		if (!from_fg)
 			add_job(child_pid, p->index_pipeline_begin,
 					p->index_pipeline_end, "stopped");
@@ -41,8 +41,9 @@ void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 	{
 		sh_dprintf(1, "\nChild_process [%i] SIGTTOU\n", child_pid);
 		p->process_is_stopped = 1;
-		add_job(child_pid, p->index_pipeline_begin,
-				p->index_pipeline_end, "SIGTTOU");
+		if (!from_fg)
+			add_job(child_pid, p->index_pipeline_begin,
+					p->index_pipeline_end, "SIGTTOU");
 	}
 }
 
@@ -68,6 +69,7 @@ int		block_wait(t_sh *p, int child_pid, int from_fg)
 	int			status;
 
 	p->process_is_stopped = 0;
+	delete_close_all_pipe_lst(p->pipe_lst);
 	//printf("WAIT\n");
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{

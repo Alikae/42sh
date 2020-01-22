@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/17 06:49:19 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/22 03:23:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "sh_env.h"
 #include "sh_job_control.h"
 #include "sh_builtins.h"
+#include "sh_command_edition.h"
 
 static t_hist	*init_history(void)
 {
@@ -39,6 +40,7 @@ static t_hist	*init_history(void)
 
 int				sh_in_loop(char **input, t_sh *p, char **ln_buff)
 {
+		sh_tty_cbreak(1, sh()->orig_termios);
 	fflush(0);
 	if (!(*ln_buff = sh_arguments(p->hist)))
 		return (1);

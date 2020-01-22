@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:46:14 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/22 03:53:23 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/22 05:52:27 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int		protect_from_cpy_std_fds(t_sh *p, t_redirect_lst *lst)
 			|| lst->out == p->cpy_std_fds[1]
 			|| lst->out == p->cpy_std_fds[2])
 	{
+		dprintf(2, "[%i]BAD FD %i\n", getpid(), lst->out);
 		sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
 				p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
 		close(lst->in);
@@ -65,6 +66,7 @@ int		protect_from_cpy_std_fds(t_sh *p, t_redirect_lst *lst)
 			|| lst->in == p->cpy_std_fds[1]
 			|| lst->in == p->cpy_std_fds[2])
 	{
+		dprintf(2, "[%i]BAD FD %i\n", getpid(), lst->in);
 		sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
 				p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
 		return (1);
@@ -79,7 +81,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 	gen_redirections_recursively(p, lst->next);
 	if (not_previously_in_the_list(lst->in, lst))
 	{
-		printf("%i->%i\n", lst->in, lst->out);
+		dprintf(2, "[%i]%i->%i\n", getpid(), lst->in, lst->out);
 		if (protect_from_cpy_std_fds(p, lst))
 			return ;
 		if (lst->out == -1)
