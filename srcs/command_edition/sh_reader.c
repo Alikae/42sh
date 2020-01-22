@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/22 02:04:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/22 02:07:47 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 	//	dprintf(2, "----%lu\n", (unsigned long)(sh()->cbreak.c_lflag) & (unsigned long)ISIG);
 	}
 	(void)orig_termios;
-//	if (code == 2)
-//		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
+	if (code == 2)
+		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
 	bufptr = NULL;
 	res = NULL;
 }
