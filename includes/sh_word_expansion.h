@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 06:44:44 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/21 01:29:45 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/23 10:42:28 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,5 @@ long int	sh_long_power(int pw);
 int			sh_error_div_by_0(void);
 int			sh_skip_number_par(char *str, int i);
 int			sh_is_valid_operator(char *str, int i);
+int			sh_parenthesis_counter(char *str, int *i, int s1);
 #endif
