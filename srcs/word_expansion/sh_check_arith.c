@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 19:48:01 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/23 09:59:42 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/23 10:44:31 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,15 @@ int		sh_check_operator(char *str, int i)
 
 int		sh_parenthesis_counter(char *str, int *i, int s1)
 {
-	static int	par;
+	static int	par = 0;
+	int			cpy;
 
+	cpy = par;
 	if (s1)
-		return (par);
+	{
+		par = 0;
+		return (cpy);
+	}
 	if (str[*i] == '(')
 	{
 		par = par + 1;

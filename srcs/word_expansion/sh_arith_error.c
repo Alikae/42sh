@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 02:33:58 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/20 05:12:02 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/23 10:44:33 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		sh_arth_syntax_error(char *str, int i)
 {
 	sh_dprintf(2, "42sh: %s: bad math expression: %s\n", str, str + i);
 	sh()->abort_cmd = 1;
+	sh_parenthesis_counter(str, &i, 1);
 	return (0);
 }
 
