@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 21:46:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/21 13:09:46 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/23 09:54:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,32 @@ int		sh_skip_number(char *str, int i)
 	return (i);
 }
 
+int		sh_skip_parenthesis(char *str, int i)
+{
+	while (str[i] == ')')
+	{
+		i++;
+		i = sh_skip_white_space(str, i);
+	}
+	return (i);
+}
+
 int		sh_skip_number_par(char *str, int i)
 {
 	int		opt;
 
 	opt = 0;
-	if (str[i] >= '0' && str[i] <= '9')
-		opt = 1;
-	if (opt == 0)
-		i++;
-	while ((str[i] >= '0' && str[i] <= '9' && opt)
-		|| (str[i] && str[i] != ')' && !opt))
+	if (str[i] < '0' || str[i] > '9')
 	{
-		if (opt == 1 && str[i] == '(')
-			return (i);
 		i++;
+		i = sh_skip_white_space(str, i);
+		if (str[i] == '-' || str[i] == '+')
+			i++;
 	}
-	if (opt == 0)
+	while (str[i] >= '0' && str[i] <= '9')
 		i++;
+	i = sh_skip_white_space(str, i);
+	if (str[i] == ')')
+		i = sh_skip_parenthesis(str, i);
 	return (i);
 }

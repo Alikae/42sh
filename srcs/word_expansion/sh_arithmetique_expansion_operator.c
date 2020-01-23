@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 00:18:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/21 12:34:12 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/23 10:09:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		sh_special_char_operator(char *str, int i)
 void	sh_count_priority(char *c, int i, int count, int *less_count)
 {
 	if (c[i] == '*' || c[i] == '/' || c[i] == '%')
-		*less_count = count + 2;
+		*less_count = count + 3;
 	else if (c[i] == '>' || c[i] == '<' || c[i] == '&'
 		|| c[i] == '|' || c[i] == '!' || c[i] == '=')
 		*less_count = count + 1;

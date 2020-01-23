@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 00:44:07 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/21 00:42:06 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/23 09:03:42 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int		sh_is_valid_operator(char *str, int begin)
 void	sh_check_parenthesis(char *str, int begin, int *par)
 {
 	if (str[begin] == '(')
-		*par = *par + 3;
+		*par = *par + 4;
 	else if (*par && str[begin] == ')')
-		*par = *par - 3;
+		*par = *par - 4;
 }
 
 void	sh_init_arith_var(int *actual, int *old, int *par, int *less_op)

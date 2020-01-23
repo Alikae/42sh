@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:00:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/20 04:43:58 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/23 10:06:52 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,7 @@ void		sh_sub_arith_var(char **str)
 	while ((*str)[i] && !(sh()->abort_cmd))
 	{
 		opt = 0;
-		while ((*str)[i] == ' ' || (*str)[i] == '\t' || (*str)[i] == '\n')
-			i++;
+		i = sh_skip_white_space(*str, i);
 		if (!(sh_all_char_operator((*str)[i])))
 		{
 			if (i >= 2 && (*str)[i - 1] == '+' && (*str)[i - 2] == '+')
