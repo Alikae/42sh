@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/22 03:23:48 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 03:02:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_hist	*init_history(void)
 
 int				sh_in_loop(char **input, t_sh *p, char **ln_buff)
 {
-		sh_tty_cbreak(1, sh()->orig_termios);
+	sh_tty_cbreak(1, sh()->orig_termios);
 	fflush(0);
 	if (!(*ln_buff = sh_arguments(p->hist)))
 		return (1);

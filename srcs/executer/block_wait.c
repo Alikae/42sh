@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:14:37 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/22 05:52:30 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 03:04:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@ void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 					p->index_pipeline_end, "stopped");
 		update_job_termios(child_pid);
 	}
-	if (WSTOPSIG(status) == SIGTTIN)
+	if (WSTOPSIG(status) == SIGTTIN && (p->process_is_stopped = 1))
 	{
-		p->process_is_stopped = 1;
 		sh_dprintf(1, "\nChild_process [%i] SIGTTIN\n", child_pid);
 		if (!from_fg)
 			add_job(child_pid, p->index_pipeline_begin,
@@ -70,13 +69,11 @@ int		block_wait(t_sh *p, int child_pid, int from_fg)
 
 	p->process_is_stopped = 0;
 	delete_close_all_pipe_lst(p->pipe_lst);
-	//printf("WAIT\n");
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		sh_dprintf(2, "WAIT ERROR\n");
 		return (-1);
 	}
-	//printf("WAITED\n");
 	if (WIFSTOPPED(status))
 		block_wait_stopped(p, child_pid, from_fg, status);
 	else if (WIFSIGNALED(status))

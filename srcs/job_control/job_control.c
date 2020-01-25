@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 05:22:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/17 01:34:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 03:22:45 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,47 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <signal.h>
 
-#include <errno.h>
+void	treat_stopped(int status, t_job *job)
+{
+	if (WSTOPSIG(status) == SIGTTIN)
+	{
+		job->reported = 0;
+		job->status = "SIGTTIN";
+	}
+	if (WSTOPSIG(status) == SIGTTOU)
+	{
+		job->reported = 0;
+		job->status = "SIGTTOU";
+	}
+}
+
+int		treat_status(int status, t_job *job, t_job **old_next)
+{
+	if (WIFSTOPPED(status))
+		treat_stopped(status, job);
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGKILL)
+			job->status = "Killed";
+		job->reported = 0;
+	}
+	else if (WIFEXITED(status))
+	{
+		sh_dprintf(1, "[%i] Done	'%s'\n", job->pid, job->name);
+		*old_next = job->next;
+		delete_job(job);
+		return (1);
+	}
+	if (!job->reported)
+	{
+		sh_dprintf(1, "---[%i] %s	'%s'\n", job->pid,
+				job->status, job->name);
+		job->reported = 1;
+	}
+	return (0);
+}
 
 void	check_jobs_status(t_sh *p)
 {
@@ -26,11 +65,9 @@ void	check_jobs_status(t_sh *p)
 	int		ret;
 
 	old_next = &p->jobs;
-	status = -1;
 	while (*old_next)
 	{
 		job = *old_next;
-		errno = 0;
 		if ((ret = waitpid(-job->pid, &status, WNOHANG | WUNTRACED)) < 0)
 		{
 			sh_dprintf(1, "[%i] Done: %s\n", job->pid, job->name);
@@ -43,38 +80,22 @@ void	check_jobs_status(t_sh *p)
 			old_next = &job->next;
 			continue;
 		}
-		if (WIFSTOPPED(status))
-		{
-			if (WSTOPSIG(status) == SIGTTIN)
-			{
-				job->reported = 0;
-				job->status = "SIGTTIN";
-			}
-			if (WSTOPSIG(status) == SIGTTOU)
-			{
-				job->reported = 0;
-				job->status = "SIGTTOU";
-			}
-		}
-		else if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) == SIGKILL)
-				job->status = "Killed";
-			job->reported = 0;
-		}
-		else if (WIFEXITED(status))
-		{
-			sh_dprintf(1, "[%i] Done	'%s'\n", job->pid, job->name);
-			*old_next = job->next;
-			delete_job(job);
+		if (treat_status(status, job, old_next))
 			continue;
-		}
-		if (!job->reported)
-		{
-			sh_dprintf(1, "---[%i] %s	'%s'\n", job->pid,
-					job->status, job->name);
-			job->reported = 1;
-		}
 		old_next = &((*old_next)->next);
+	}
+}
+
+void	signal_all_jobs(int sig)
+{
+	t_job	*jobs;
+
+	jobs = sh()->jobs;
+	sh_dprintf(1, "[%i] send sig %i to jobs:\n", getpid(), sig);
+	while (jobs)
+	{
+		sh_dprintf(1, "--> {[%i]%s}\n", jobs->pid, jobs->name);
+		kill(jobs->pid, sig);
+		jobs = jobs->next;
 	}
 }

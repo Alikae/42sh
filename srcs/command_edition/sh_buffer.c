@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 18:15:43 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/22 04:09:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 03:15:17 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ char			*sh_buffer(void)
 	ft_bzero(buf, BUFFER);
 	struct termios t;
        ret = tcgetattr(0, &t);
-//    dprintf(2, "111%lu    ret %i<-\n", (unsigned long)t.c_lflag & (unsigned long)ICANON, ret);
-  //  dprintf(2, "111ECHO%lu<-\n", (unsigned long)t.c_lflag & (unsigned long)ECHO);
-    //dprintf(2, "111ECHONL%lu<-\n", (unsigned long)t.c_lflag & (unsigned long)ECHONL);
 	if ((ret = read(0, buf, BUFFER)) <= 0)
 		return (NULL);
 //	ret = sh_byteswaiting();

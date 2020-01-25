@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 00:20:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/22 04:44:36 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 03:06:35 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,14 @@ void		del_n_redirect_lst(t_redirect_lst **p_origin, int n)
 			if ((*p_origin)->out != sh()->cpy_std_fds[0]
 					&& (*p_origin)->out != sh()->cpy_std_fds[1]
 					&& (*p_origin)->out != sh()->cpy_std_fds[2])
-			{
-				dprintf(2, "[%i]close %i\n", getpid(), (*p_origin)->out);
 				close((*p_origin)->out);
-			}
 		}
 		if ((*p_origin)->in > 2)
 		{
 			if ((*p_origin)->in != sh()->cpy_std_fds[0]
 					&& (*p_origin)->in != sh()->cpy_std_fds[1]
 					&& (*p_origin)->in != sh()->cpy_std_fds[2])
-			{
-				dprintf(2, "[%i]close %i\n", getpid(), (*p_origin)->in);
 				close((*p_origin)->in);
-			}
 		}
 		tmp = *p_origin;
 		*p_origin = (*p_origin)->next;
@@ -64,7 +58,6 @@ void		delete_close_all_pipe_lst(t_pipe_lst *lst)
 
 	while (lst)
 	{
-		dprintf(2, "[%i]close pipe [%i %i]\n", getpid(), lst->pipe[0], lst->pipe[1]);
 		close(lst->pipe[0]);
 		close(lst->pipe[1]);
 		old = lst;

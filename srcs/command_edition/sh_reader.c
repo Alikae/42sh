@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_reader.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/19 08:58:55 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/22 04:08:43 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/25 03:23:00 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/25 03:23:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int			sh_outc(int c)
 
 void		sh_tty_cbreak(int code, struct termios orig_termios)
 {
-	char			*res;
 	char			buf[1024];
 	char			*bufptr;
 
@@ -35,13 +34,11 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 	{
 		if (tcsetattr(0, TCSANOW, &sh()->cbreak) < 0)
 			destructor(1);
-//		dprintf(2, "----%lu\n", (unsigned long)(sh()->cbreak.c_lflag) & (unsigned long)ICANON);
 	}
 	(void)orig_termios;
 	if (code == 2)
 		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
-	bufptr = NULL;
-	res = NULL;
+			destructor(1);
 }
 
 /*
@@ -99,28 +96,17 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	k = 1;
 	j = 1;
 	buf = NULL;
-	//sh_dprintf(2, "%d\n", ft_memcmp(&sh()->orig_termios, &sh()->extern_termios, sizeof(struct termios)) ? 1 : 0);
-		sh_tty_cbreak(1, sh()->orig_termios);
+	sh_tty_cbreak(1, sh()->orig_termios);
 	while (k != 0 && *command && j > 0)
 	{
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
 			return (*command);
-//		if (tcgetattr(0, &sh()->orig_termios))
-//			return (*command);
-	struct termios t;
-	tcgetattr(0, &t);
-//	dprintf(2, "%lu<-\n", (unsigned long)t.c_lflag & (unsigned long)ISIG);
 		sh_reprompt(i, command);
 		ft_memdel((void**)&buf);
-//	printf("LILI\n");
 		buf = sh_buffer();
-//		if (buf)
-//			dprintf(2, "[%d][%c][%c][%c]\n", buf[0], buf[1], buf[2], buf[3]);
-//	printf("LOLO\n");
 		k = loop_keys(command, buf, &i, hist);
-//	printf("LULU\n");
 	}
-		sh_tty_cbreak(2, sh()->orig_termios);
+	sh_tty_cbreak(2, sh()->orig_termios);
 	return (*command);
 }
 

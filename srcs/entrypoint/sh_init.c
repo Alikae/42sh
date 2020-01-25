@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/21 23:48:26 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/25 03:02:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ static struct termios	init_cbreak(void)
 	if (tcgetattr(0, &cbreak))
 		destructor(EXIT_FAILURE);
 	cbreak.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
-	cbreak.c_cc[VMIN] = 1;	
-//	cbreak.c_cc[VTIME] = 0;
+	cbreak.c_cc[VMIN] = 1;
 	return (cbreak);
 }
 

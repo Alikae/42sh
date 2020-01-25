@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 01:32:24 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/22 02:06:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 03:22:22 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,12 @@ void	update_job_termios(int child_pid)
 		job = job->next;
 	if (job)
 	{
-		if (tcgetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, &job->t_mode) < 0)
-			sh_dprintf(2, "Fail to store termios struct for job [%i]\n", getpid());
+		if (tcgetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
+					&job->t_mode) < 0)
+			sh_dprintf(2, "Fail to store termios struct for job [%i]\n",
+					getpid());
 		else
-		{
 			job->t_mode_setted = 1;
-//			sh_dprintf(2, "TERM JOB UPDATED\n");
-		}
 	}
 }
 
@@ -86,18 +85,4 @@ t_job	*add_job(unsigned int pid, int index_b,
 	sh()->jobs->reported = 1;
 	sh_dprintf(1, "[%i] %s\n", sh()->jobs->pid, sh()->jobs->name);
 	return (jobs);
-}
-
-void	signal_all_jobs(int sig)
-{
-	t_job	*jobs;
-
-	jobs = sh()->jobs;
-	sh_dprintf(1, "[%i] send sig %i to jobs:\n", getpid(), sig);
-	while (jobs)
-	{
-		sh_dprintf(1, "--> {[%i]%s}\n", jobs->pid, jobs->name);
-		kill(jobs->pid, sig);
-		jobs = jobs->next;
-	}
 }
