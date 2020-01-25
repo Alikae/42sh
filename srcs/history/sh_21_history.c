@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/07 12:33:55 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/25 17:03:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void		command_hist_read(int fd, char ***history, t_hist *hist)
 	rest = NULL;
 	while (get_next_line(fd, &line, &rest) > 0)
 	{
-		if (hist->size_r < hist->size_l - 1)
+		if (hist->size_r < hist->size_l)
 			*history = tab_realloc(*history, line);
 		else
 			*history = tab_insert(*history, line);
