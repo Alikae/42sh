@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:56:39 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/10 23:09:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 17:03:45 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ int	sh_exec_stdin(void)
 		ft_bzero(buff, 1024);
 	}
 	ft_memdel((void**)&buff);
+	ret = ft_strconv_w(ret);
 	sh_init_cmd(ret);
 	if (ret && *ret && (sh()->ast = tokenize_input(ret)))
 	{
-		print_all_tokens(sh(), sh()->ast, 0);
+		ft_memdel((void**)&ret);
 		exec_script(sh(), sh()->ast);
+		free_ast(sh()->ast);
 	}
 	else
 		sh_dprintf(2, "Tokenize Error\n");

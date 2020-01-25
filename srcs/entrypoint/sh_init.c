@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/25 03:02:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 17:17:10 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 #include "libft.h"
 #include "sh_env.h"
 #include "sh_entrypoint.h"
-
 #include <fcntl.h>
-#include <signal.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <signal.h>
@@ -55,6 +53,7 @@ void					sh_init(t_sh *shell)
 	struct passwd	*pwd;
 
 	sh_init_opts(shell);
+	shell->is_interactive = (isatty(0) && shell->ac < 2);
 	sh_init_env();
 	shell->pid_main_process = getpid();
 	shell->script_separators[0] = SH_SEMI;

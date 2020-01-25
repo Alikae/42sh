@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 20:28:49 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/20 22:46:35 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/25 17:16:31 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,8 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tsh->av = sh_tab_cpy(av);
 	tsh->ev = ev;
 	tcgetattr(0, &tsh->extern_termios);
-	tsh->is_interactive = isatty(0);
 	sh_init(tsh);
-	signal(SIGTTOU, SIG_IGN);
+//	signal(SIGTTOU, SIG_IGN);
 	if (ft_fetch_opt("c", 1, tsh->opt))
 		sh_exec_arg();
 	else if (tsh->ac > 1)
