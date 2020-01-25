@@ -13,7 +13,7 @@
 #include "sh_command_edition.h"
 #include "sh.h"
 
-/*static */int		sh_byteswaiting(void)
+static int		sh_byteswaiting(void)
 {
 	int		byteswaiting;
 
@@ -35,21 +35,18 @@ char			*sh_buffer(void)
        ret = tcgetattr(0, &t);
 	if ((ret = read(0, buf, BUFFER)) <= 0)
 		return (NULL);
-//	ret = sh_byteswaiting();
-//	printf("BYTES: %i\n", ret);
-/*	if (ret)
+	ret = sh_byteswaiting();
+	if (ret)
 	{
 		if (!(temp = (char*)ft_memalloc(ret + 1)))
 			return (NULL);
-       tcgetattr(0, &t);
-    dprintf(2, "222%lu<-\n", (unsigned long)t.c_lflag & (unsigned long)ICANON);
 		if (read(0, temp, ret) < 0)
 		{
 			ft_memdel((void**)&temp);
 			return (NULL);
 		}
 	}
-*/	str = ft_strconv_w(ft_strjoin((const char*)buf, temp));
+	str = ft_strconv_w(ft_strjoin((const char*)buf, temp));
 	ft_memdel((void**)&temp);
 	return (str);
 }
