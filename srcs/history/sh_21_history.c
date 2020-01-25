@@ -32,9 +32,7 @@ static void		init_history(t_hist *hist, char **history)
 {
 	if (hist->size_r > hist->size_l)
 		hist->size_r = hist->size_l;
-	hist->topush = 0;
 	hist->prev = ft_reverse_tab(history);
-	hist->index = -1;
 }
 
 static void		command_hist_read(int fd, char ***history, t_hist *hist)
