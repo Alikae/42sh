@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/15 01:12:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 17:03:30 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int		sh_script(const char *path)
 	sh_init_cmd(input);
 	if (input && *input && (ast = tokenize_input(input)))
 	{
-		p->abort_cmd = 0;
 		ft_memdel((void**)&input);
 		exec_script(p, ast);
 		free_ast(ast);

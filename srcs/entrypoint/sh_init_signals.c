@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:44:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/17 00:25:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 16:54:37 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ void			sh_handle_signal(int sig)
 
 void			sh_init_signals(void)
 {
-	signal(SIGINT, &sh_handle_signal);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGCONT, SIG_IGN);
+	if (sh()->is_interactive)
+	{
+		signal(SIGINT, &sh_handle_signal);
+		signal(SIGTSTP, SIG_IGN);
+		signal(SIGCONT, SIG_IGN);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/25 03:05:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 17:16:36 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int		exec_script(t_sh *p, t_token *token_begin)
 {
 	t_token	*next_separator;
 
+	printf("%i\n", p->is_interactive);
 	generate_redirections(p);
 	del_n_redirect_lst(&p->redirect_lst, -1);
 	while (token_begin && !p->abort_cmd)
