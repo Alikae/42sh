@@ -23,7 +23,6 @@ C_FILES_entrypoint = \
 	sh_loop.c \
 	sh_init_debug.c \
 	sh_init_cmd.c \
-	sh_init_opts.c \
 	sh_init_env.c \
 	sh_init_signals.c \
 	sh_set_shlvl.c \

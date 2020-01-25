@@ -50,12 +50,8 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tcgetattr(0, &tsh->extern_termios);
 	sh_init(tsh);
 //	signal(SIGTTOU, SIG_IGN);
-	if (ft_fetch_opt("c", 1, tsh->opt))
-		sh_exec_arg();
-	else if (tsh->ac > 1)
-		sh_exec_file();
-	else if (!tsh->is_interactive)
-		sh_exec_stdin();
+	if (ft_fetch_opt("c", 1, tsh->opt) || tsh->ac > 1 || !tsh->is_interactive)
+		sh_dprintf(2, "No longer support non-interactive mode\n");
 	else
 		sh_exec_default();
 }

@@ -52,7 +52,6 @@ void					sh_init(t_sh *shell)
 {
 	struct passwd	*pwd;
 
-	sh_init_opts(shell);
 	shell->is_interactive = (isatty(0) && shell->ac < 2);
 	sh_init_env();
 	shell->pid_main_process = getpid();
