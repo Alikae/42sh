@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:32:52 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/25 03:02:23 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 17:14:13 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@ static t_hist	*init_history(void)
 {
 	t_hist	*hist;
 	t_env	*tmp;
+	int		size;
 
 	hist = malloc(sizeof(t_hist));
 	hist->current = NULL;
 	hist->path = find_path_dir();
 	tmp = sh_getev("HISTSIZE");
-	hist->size_l = (!tmp ? 200 : ft_atoi(tmp->value));
+	size = tmp ? ft_atoi(tmp->value) : 200;
+	hist->size_l = (size > 0 ? size : 0);
 	hist = command_history(hist);
 	tmp = NULL;
 	return (hist);
