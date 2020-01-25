@@ -28,8 +28,11 @@ static t_hist	*init_history(void)
 	t_hist	*hist;
 	t_env	*tmp;
 	int		size;
-
+	
 	hist = malloc(sizeof(t_hist));
+	hist->topush = 0;
+	hist->index = -1;
+	hist->prev = NULL;
 	hist->current = NULL;
 	hist->path = find_path_dir();
 	tmp = sh_getev("HISTSIZE");
