@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:56:39 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/25 17:03:45 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/26 17:41:52 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,14 @@
 #include "sh_entrypoint.h"
 #include <fcntl.h>
 
-int	sh_exec_stdin(void)
+static void		sh_aux(char **ret)
+{
+	ft_memdel((void**)ret);
+	exec_script(sh(), sh()->ast);
+	free_ast(sh()->ast);
+}
+
+int				sh_exec_stdin(void)
 {
 	char *buff;
 	char *ret;
@@ -35,11 +42,7 @@ int	sh_exec_stdin(void)
 	ret = ft_strconv_w(ret);
 	sh_init_cmd(ret);
 	if (ret && *ret && (sh()->ast = tokenize_input(ret)))
-	{
-		ft_memdel((void**)&ret);
-		exec_script(sh(), sh()->ast);
-		free_ast(sh()->ast);
-	}
+		sh_aux(&ret);
 	else
 		sh_dprintf(2, "Tokenize Error\n");
 	ft_memdel((void**)&ret);
