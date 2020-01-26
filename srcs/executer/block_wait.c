@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:14:37 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/25 03:04:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/26 17:38:33 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,7 @@ int		block_wait(t_sh *p, int child_pid, int from_fg)
 				: 0, TCSANOW, &p->orig_termios);
 		signal(SIGTTOU, SIG_DFL);
 	}
+	printf("[%i]-[%i]ret : %i\n", p->pid_main_process,
+			getpid(), WEXITSTATUS(status));
 	return (WEXITSTATUS(status));
 }

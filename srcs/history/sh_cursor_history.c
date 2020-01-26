@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 07:30:23 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/14 12:51:33 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/25 16:53:00 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int			cursor_history(char **command, char *buf, int i, t_hist *hist)
 
 	temp = hist->index;
 	j = i;
+	if (!hist->prev)
+		return (i);
 	if (buf[2] == 'A')
 		i = history_up(command, hist, hist->current);
 	else if (buf[2] == 'B' && hist->index >= 0)

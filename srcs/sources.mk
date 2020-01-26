@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/22 04:05:49 by tcillard         ###   ########.fr        #
+#    Updated: 2020/01/25 17:00:25 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,8 @@ C_FILES_entrypoint = \
 	sh_loop.c \
 	sh_init_debug.c \
 	sh_init_cmd.c \
-	sh_init_opts.c \
 	sh_init_env.c \
 	sh_init_signals.c \
-	sh_init_history.c \
 	sh_set_shlvl.c \
 	sh_init_path.c \
 	sh_init.c

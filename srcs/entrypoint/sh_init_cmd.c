@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/03 23:36:58 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/18 19:25:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/25 17:01:48 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	sh_init_cmd(char *input)
 
 	(void)input;
 	p = sh();
+	p->abort_cmd = 0;
 	p->unfinished_cmd = 0;
 	p->invalid_cmd = 0;
 	p->extern_pipe = -1;

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 13:54:38 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/17 05:59:31 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/26 17:49:45 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,7 @@ int		exec_pipeline_recursively(t_sh *p, t_token *token_begin,
 		t_token *token_end, int prev_pipe);
 void	setup_pipeline_handle_bang(t_sh *p, t_token **p_token_begin,
 		t_token *token_end, int *bang);
-int		find_next_pipe(t_sh *p);
-int		find_previous_pipe(t_sh *p);
+int		find_pipe(t_sh *p, int code);
 int		exec_pipeline_core(t_token *token_begin, t_token *token_end);
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end);
 void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end);
