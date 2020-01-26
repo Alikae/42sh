@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 21:46:40 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/23 09:54:51 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/25 12:01:36 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ int		sh_skip_number_par(char *str, int i)
 	{
 		i++;
 		i = sh_skip_white_space(str, i);
+		while (str[i] == '(')
+		{
+			i++;
+			i = sh_skip_white_space(str, i);
+		}
 		if (str[i] == '-' || str[i] == '+')
 			i++;
 	}
