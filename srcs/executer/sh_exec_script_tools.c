@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 04:43:41 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/22 05:29:53 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/26 17:11:35 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 	pipe_lst = sh()->pipe_lst;
 	(void)pipe1;
 	(void)pipe2;
-	exec_command(p, token_begin, token_end);
-	destructor(1);
+	sh()->last_cmd_result = exec_command(p, token_begin, token_end);
+	destructor(sh()->last_cmd_result);
 	return (0);
 }
 

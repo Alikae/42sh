@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 04:55:17 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/25 03:08:21 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/26 17:11:38 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int		exec_pipeline_recursively(t_sh *p, t_token *token_begin,
 	{
 		toggle_redirect_pipe(1, prev_pipe, p->extern_pipe);
 		p->force_setpgrp_setattr = 1;
+printf("[%i]%s\n", getpid(), token_begin->content);
 		p->pgid_current_pipeline = exec_command_in_background_closing_pipe(
 				token_begin, token_end, prev_pipe, p->extern_pipe);
 		toggle_redirect_pipe(0, prev_pipe, p->extern_pipe);
@@ -111,6 +112,7 @@ int		exec_pipeline_core(t_token *token_begin, t_token *token_end)
 	p->last_background_pipeline_pgid = p->pgid_current_pipeline;
 	p->pgid_current_pipeline = 0;
 	p->last_cmd_result = block_wait(p, tmp2, 0);
+printf("----->%i\n", sh()->last_cmd_result);
 	if (!p->process_is_stopped)
 		kill(-1 * tmp2, SIGKILL);
 	p->extern_pipe = tmp;

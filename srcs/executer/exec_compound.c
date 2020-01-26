@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/23 20:37:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/26 15:56:56 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 	if (!pid)
 	{
 		exec_script(p, tok->sub);
-		destructor(1);
+		destructor(p->last_cmd_result);
 	}
 	sh_pipe_lst_del(&p->pipe_lst);
 	return (block_wait(p, pid, 0));

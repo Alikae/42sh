@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 05:04:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/17 05:06:31 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/26 16:37:23 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
 		signal(SIGTTOU, SIG_IGN);
 		tcsetpgrp((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0, pid);
 		tcsetattr((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0,
-				TCSADRAIN, &p->extern_termios);
+				TCSANOW, &p->extern_termios);
 		signal(SIGTTOU, SIG_DFL);
 	}
 }
