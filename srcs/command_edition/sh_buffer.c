@@ -31,8 +31,6 @@ char			*sh_buffer(void)
 	str = NULL;
 	temp = NULL;
 	ft_bzero(buf, BUFFER);
-	struct termios t;
-       ret = tcgetattr(0, &t);
 	if ((ret = read(0, buf, BUFFER)) <= 0)
 		return (NULL);
 	ret = sh_byteswaiting();

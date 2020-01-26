@@ -43,9 +43,9 @@ static t_hist	*init_history(void)
 	return (hist);
 }
 
-int				sh_in_loop(char **input, t_sh *p, char **ln_buff)
+static int			sh_in_loop(char **input, t_sh *p, char **ln_buff)
 {
-	sh_tty_cbreak(1, sh()->orig_termios);
+//	sh_tty_cbreak(1, sh()->orig_termios);
 	fflush(0);
 	if (!(*ln_buff = sh_arguments(p->hist)))
 		return (1);
@@ -69,7 +69,7 @@ int				sh_in_loop(char **input, t_sh *p, char **ln_buff)
 	return (0);
 }
 
-void			sh_loop_init_cmd(char **ln_buff, char **input, int *complete)
+static void			sh_loop_init_cmd(char **ln_buff, char **input, int *complete)
 {
 	sh_prompt();
 	*ln_buff = NULL;
@@ -78,7 +78,7 @@ void			sh_loop_init_cmd(char **ln_buff, char **input, int *complete)
 	sh()->print_syntax_errors = 1;
 }
 
-int				sh_loop(void)
+int					sh_loop(void)
 {
 	char	*ln_buff;
 	t_sh	*p;
