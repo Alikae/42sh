@@ -106,4 +106,6 @@ void	sh_word_opt(t_exp *exp)
 		exp->value = ft_strdup(exp->find->value);
 	else
 		sh_special_parameters(exp, 0);
+	if (ft_strchr(exp->value, '$'))
+		ft_memdel((void**)&exp->value);
 }

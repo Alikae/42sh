@@ -30,4 +30,6 @@ void	sh_simple_expansion(t_exp *exp)
 	else
 		sh_special_parameters(exp, 1);
 	ft_memdel((void**)&exp->name);
+	if (ft_strchr(exp->value, '$'))
+		ft_memdel((void**)&exp->value);
 }

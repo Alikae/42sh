@@ -34,6 +34,7 @@ void	sh_init_exp(t_env **env, t_exp *exp, char *tok_content)
 
 void	sh_free_exp(t_exp *exp, char **tok_content)
 {
+	exp->quote = 0;
 	ft_memdel((void**)&exp->value);
 	ft_memdel((void**)&exp->content);
 	ft_memdel((void**)&exp->name);
