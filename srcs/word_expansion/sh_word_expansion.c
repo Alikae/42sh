@@ -6,16 +6,15 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/17 21:06:37 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/26 18:44:14 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
 #include "sh_env.h"
 #include "sh_tokens.h"
-
+#include <stdio.h>
 int		sh_in_expansion(t_exp *exp, int i)
 {
 	if (exp->content[exp->i] == '{')
@@ -36,10 +35,11 @@ int		sh_in_expansion(t_exp *exp, int i)
 	if (sh()->exp_rec == 1)
 	{
 		exp->first_i = i;
+		printf("exp->value = %s\n", exp->value);
 		sh_sub_token(exp);
 		free(exp->content);
 		exp->content = ft_strdup(exp->tok->content);
-		exp->i = exp->first_i - 1;
+		exp->i = exp->first_i + ft_strlen(exp->value);
 		ft_memdel((void**)&exp->value);
 	}
 	return (0);
@@ -101,6 +101,7 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 	t_exp	exp;
 	t_token	*new_tok;
 
+	printf("str = %s\n", tok_content);
 	tok_content = ft_strdup(tok_content);
 	sh_tilde_expansion(&tok_content, sh()->params);
 	sh_init_exp(env, &exp, tok_content);
@@ -115,5 +116,6 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 		new_tok = NULL;
 	}
 	sh_free_exp(&exp, &tok_content);
+	printf("str end = %s\n", new_tok->content);
 	return (new_tok);
 }
