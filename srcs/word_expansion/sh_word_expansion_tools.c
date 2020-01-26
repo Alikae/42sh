@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 23:34:32 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/16 01:10:23 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/26 19:47:36 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,5 @@ void	sh_sub_token(t_exp *exp)
 	while (cpy[j + exp->special_params])
 		exp->tok->content[exp->first_i++] = cpy[(j++) + exp->special_params];
 	exp->tok->content[exp->first_i] = '\0';
-	exp->first_i = ft_strlen(exp->value);
 	ft_memdel((void**)&cpy);
 }

@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 02:40:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/13 01:09:18 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/26 19:34:54 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,4 @@ void	sh_simple_expansion(t_exp *exp)
 	else
 		sh_special_parameters(exp, 1);
 	ft_memdel((void**)&exp->name);
-	if (ft_strchr(exp->value, '$'))
-		ft_memdel((void**)&exp->value);
 }

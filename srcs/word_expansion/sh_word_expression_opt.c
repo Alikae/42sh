@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 20:18:54 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/17 01:48:41 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/26 19:34:42 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,4 @@ void	sh_word_opt(t_exp *exp)
 		exp->value = ft_strdup(exp->find->value);
 	else
 		sh_special_parameters(exp, 0);
-	if (ft_strchr(exp->value, '$'))
-		ft_memdel((void**)&exp->value);
 }
