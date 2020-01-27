@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:10:22 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/25 17:03:30 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/26 20:12:26 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 #include "sh_executer.h"
 #include <fcntl.h>
 #include <stdlib.h>
-
-#include <stdio.h>
 
 int		read_script(char **buff, int *fd, const char *path)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_alias_substitution_3.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/10 22:41:32 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:06:37 by jerry            ###   ########.fr       */
+/*   Created: 2020/01/26 20:20:19 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/26 20:20:21 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void			sh_print_alias_loop_error(char **stack, int loop)
 
 	max = sh_find_max_len(stack);
 	i = 0;
-	printf("42sh: recursive alias error: %s\n", stack[0]);
+	sh_dprintf(2, "42sh: recursive alias error: %s\n", stack[0]);
 	while (stack[i + 1])
 	{
 		ft_putstr(stack[i]);
@@ -63,7 +63,7 @@ void			sh_print_alias_loop_error(char **stack, int loop)
 		}
 		i++;
 	}
-	dprintf(1, "%s<--", stack[i]);
+	sh_dprintf(2, "%s<--", stack[i]);
 	sh_print_ident_size(max, ft_strlen(stack[i++]), '-');
 	ft_putstr("|\n\n");
 }

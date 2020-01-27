@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_compound.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/08 05:02:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/26 15:56:56 by tmeyer           ###   ########.fr       */
+/*   Created: 2020/01/26 20:33:34 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/26 20:34:00 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "sh_executer.h"
 #include "sh_word_expansion.h"
 #include "sh_exitpoint.h"
-#include <stdio.h>
 
 int		exec_compound_subsh(t_sh *p, t_token *tok)
 {

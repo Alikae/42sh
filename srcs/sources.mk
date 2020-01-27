@@ -6,7 +6,7 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/13 19:40:02 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/25 17:00:25 by tmeyer           ###   ########.fr        #
+#    Updated: 2020/01/26 19:45:08 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -167,11 +167,8 @@ C_FILES_tools = \
 		sh_env_del.c \
 		sh_tab_fusion.c \
 		sh_are_you_sur.c \
-		sh_check_path.c \
-		sh_error_path.c \
 		ft_join_with_char.c \
 		sh_pattern_matching.c
-#sh_find_law.c \
 
 C_FILES_word_expansion = \
 			 sh_arithmetic_expansion.c \

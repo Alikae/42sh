@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   opening_chars_handling.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/13 02:38:16 by ede-ram           #+#    #+#             */
-/*   Updated: 2019/12/23 00:54:13 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/26 20:21:44 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/26 20:21:45 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_tokenizer.h"
 #include "libft.h"
-#include "stdio.h"
 #include "sh.h"
 
 int			sub_opening_is_compatible(t_toktype type, t_toktype mia)

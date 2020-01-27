@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 10:49:15 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/25 17:03:59 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/26 20:11:55 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 #include <termcap.h>
 #include <sys/ioctl.h>
 #include <sgtty.h>
-#include <stdio.h>
 #include <signal.h>
 #include <pwd.h>
 #include "sh.h"

@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   sh_word_expression.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/05 08:16:56 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/16 01:10:11 by jerry            ###   ########.fr       */
+/*   Created: 2019/08/05 08:16:56 by thdelmas          #+#    #+#             */
+/*   Updated: 2020/01/26 20:14:46 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "sh_word_expansion.h"
 #include "sh_tokens.h"
 #include "sh_tokenizer.h"

@@ -6,13 +6,13 @@
 #    By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 17:18:13 by thdelmas          #+#    #+#              #
-#    Updated: 2020/01/17 00:26:28 by ede-ram          ###   ########.fr        #
+#    Updated: 2020/01/26 19:46:48 by tmeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := 42sh
-PROJECT := 42SH
-AUTHORS := Ede-ram Tcillard Thdelmas Tmeyer
+NAME := 21sh
+PROJECT := 21SH
+AUTHORS := Thdelmas Tmeyer
 
 RM = /bin/rm
 

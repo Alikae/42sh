@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_exec_script_tools_3.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/17 05:04:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/26 16:37:23 by tmeyer           ###   ########.fr       */
+/*   Created: 2020/01/17 05:04:28 by thdelmas          #+#    #+#             */
+/*   Updated: 2020/01/26 19:29:18 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 #include "sh_executer.h"
 #include "sh_redirections.h"
 #include "sh.h"
-#include "errno.h"
 #include <signal.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include "sh_exitpoint.h"
 

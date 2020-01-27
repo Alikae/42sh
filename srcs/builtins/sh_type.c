@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 12:05:02 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/13 14:16:48 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/26 20:40:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int		sh_type_keyword(char *str)
 	i = -1;
 	while (keyword[++i])
 	{
-		if (!strcmp(keyword[i], str))
+		if (!ft_strcmp(keyword[i], str))
 		{
 			ft_putstr(str);
 			ft_putendl(" is a shell keyword");
@@ -57,7 +57,7 @@ static int		sh_type_alias(char *str)
 		while (*tmp)
 		{
 			len = ft_strclen(str, '=');
-			if (!strncmp(str, *tmp, len))
+			if (!ft_strncmp(str, *tmp, len))
 			{
 				write(STDOUT_FILENO, *tmp, len);
 				ft_putstr(" is aliased to `");

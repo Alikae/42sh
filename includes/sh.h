@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 16:49:08 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/21 23:35:36 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/26 20:08:12 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include "sh_history.h"
 # include "sh_printf.h"
 # include <curses.h>
-# include <stdio.h>
 
 # define SH_NESTED_TOKENIZED_COMPOUND_LIMIT 1000
 # define SH_NESTED_COMPOUND_LIMIT 1000

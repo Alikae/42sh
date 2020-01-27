@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 08:47:35 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/01/25 17:17:10 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/26 19:27:49 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <pwd.h>
-#include <errno.h>
 #include <ncurses.h>
 #include <termios.h>
 #include <termcap.h>

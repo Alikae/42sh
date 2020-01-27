@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compound_tokenizer.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/14 02:44:30 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/10 22:19:57 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/26 20:23:12 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/26 20:23:13 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "sh_error.h"
 #include "sh.h"
 #include "sh_executer.h"
-#include <stdio.h>
 
 t_token	*tokenize_while(t_toktool *t, t_toktype type, int word_begin)
 {

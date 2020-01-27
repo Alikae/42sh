@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_script.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/09 07:24:48 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/26 16:51:02 by tmeyer           ###   ########.fr       */
+/*   Created: 2020/01/26 20:33:26 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/26 20:33:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 #include "sh_executer.h"
 #include "sh_redirections.h"
 #include "sh.h"
-#include "errno.h"
 #include <signal.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include "sh_exitpoint.h"
 

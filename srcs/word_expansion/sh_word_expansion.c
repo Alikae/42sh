@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   sh_word_expansion.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/05 08:17:02 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/17 21:06:37 by jerry            ###   ########.fr       */
+/*   Created: 2019/08/05 08:17:02 by thdelmas          #+#    #+#             */
+/*   Updated: 2020/01/26 20:14:33 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
 #include "sh_env.h"
@@ -38,8 +37,8 @@ int		sh_in_expansion(t_exp *exp, int i)
 		exp->first_i = i;
 		sh_sub_token(exp);
 		free(exp->content);
+		exp->i = i + ft_strlen(exp->value) - 1;
 		exp->content = ft_strdup(exp->tok->content);
-		exp->i = exp->first_i - 1;
 		ft_memdel((void**)&exp->value);
 	}
 	return (0);
@@ -90,7 +89,8 @@ int		sh_word_expansion(t_exp *exp)
 			if (sh_in_expansion(exp, i))
 				return (1);
 		}
-		exp->i++;
+		if (exp->content[exp->i])
+			exp->i++;
 	}
 	sh()->exp_rec--;
 	return (0);

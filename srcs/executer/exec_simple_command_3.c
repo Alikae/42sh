@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command_3.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/18 03:36:57 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/18 03:39:06 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/26 20:34:52 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/26 20:34:54 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "sh_builtins.h"
 #include "sh_executer.h"
 #include <fcntl.h>
-#include <stdio.h>
 #include "sh_tokenizer.h"
 #include "sh_redirections.h"
 #include <sys/wait.h>

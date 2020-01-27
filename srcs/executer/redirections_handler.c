@@ -6,13 +6,12 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 00:20:16 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/25 03:06:35 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/26 20:11:45 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_executer.h"
-#include <stdio.h>
 
 void		push_redirect_lst(t_redirect_lst **p_origin, int in, int out)
 {

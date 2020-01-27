@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 16:23:59 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/14 09:03:57 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/26 20:13:34 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "sh_env.h"
 #include "libft.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 static t_env	*print_err(char *str)
 {

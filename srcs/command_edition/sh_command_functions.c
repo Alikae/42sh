@@ -6,14 +6,13 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 14:05:50 by tmeyer            #+#    #+#             */
-/*   Updated: 2019/11/01 15:34:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/26 20:09:55 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "sh_command_edition.h"
-#include <stdio.h>
 #include <sgtty.h>
 #include <sys/ioctl.h>
 

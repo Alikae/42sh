@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   sh_quote_removal.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/26 01:04:13 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/16 01:09:40 by jerry            ###   ########.fr       */
+/*   Created: 2019/08/26 01:04:13 by thdelmas          #+#    #+#             */
+/*   Updated: 2020/01/26 20:14:11 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
 #include "sh_tokenizer.h"
-#include <stdio.h>
 #include "sh_tokens.h"
 
 void	sh_next_token(t_token **new)

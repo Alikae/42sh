@@ -6,14 +6,13 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 18:24:01 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/18 19:25:00 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/26 20:14:59 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_tokenizer.h"
 #include "libft.h"
 #include "sh.h"
-#include <stdio.h>
 
 t_toktype	tokenize_reserved_word(t_toktool *t, t_token **p_actual,
 		t_toktype type, int word_begin)

@@ -6,7 +6,7 @@
 /*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 22:44:57 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/01/25 16:54:37 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/01/26 19:28:23 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "sh_exitpoint.h"
 
 #include <signal.h>
-#include <errno.h>
 #include <unistd.h>
 
 static void		sh_handle_sigstp(void)
@@ -23,8 +22,7 @@ static void		sh_handle_sigstp(void)
 	int ret;
 
 	ret = tcsetpgrp(0, getpgid(0));
-	errno = 0;
-	sh_dprintf(1, "handle SIGTSTP: tcsetpgrp ret = %i errno %i\n", ret, errno);
+	sh_dprintf(1, "handle SIGTSTP: tcsetpgrp ret = %i\n", ret);
 	sh_dprintf(1, "SIGTSTP detected\n");
 	sh_loop();
 }

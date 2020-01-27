@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   job_control.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/10 05:22:36 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/25 03:22:45 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/26 20:28:42 by tmeyer            #+#    #+#             */
+/*   Updated: 2020/01/26 20:28:43 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_job_control.h"
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
