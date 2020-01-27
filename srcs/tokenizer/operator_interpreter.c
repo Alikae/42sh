@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 18:23:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 21:14:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ t_toktype	handle_redirections_operators(t_toktool *t, t_toktype type,
 		return (fill_redirection(t, p_actual, type));
 	if (type == SH_OR || type == SH_AND_IF || type == SH_OR_IF)
 	{
-		//IF == NEWLINE
-		//  WHILE stack_HEREDOC
-		//      record_here_doc (LIFO)
+		if (sh_record_here_doc(t, sh()->here) == SH_SYNTAX_ERROR)
+			return (SH_SYNTAX_ERROR);
+		forward_blanks_newline(t);
 		if (!t->input[t->i])
 		{
 			sh()->unfinished_cmd = 1;

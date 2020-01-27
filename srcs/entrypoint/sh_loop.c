@@ -6,12 +6,13 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 21:41:25 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_tokenizer.h"
+#include "sh_tokens.h"
 #include "tmp.h"
 #include "libft.h"
 #include "sh_executer.h"
@@ -56,6 +57,7 @@ static int			sh_in_loop(char **input, t_sh *p, char **ln_buff)
 	sh_init_cmd(*input);
 	if ((p->ast = tokenize_input(*input)))
 	{
+	//	print_all_tokens(p, p->ast ,0);
 		p->abort_cmd = 0;
 		if (!p->unfinished_cmd)
 			exec_script(p, p->ast);

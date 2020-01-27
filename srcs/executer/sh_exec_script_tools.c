@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 22:45:31 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 		t_token *token_end, int pipe1, int pipe2)
 {
 	int				child_pid;
-	t_pipe_lst		*pipe_lst;
+//	t_pipe_lst		*pipe_lst;
 	t_sh			*p;
 
 	p = sh();
@@ -84,9 +84,11 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 		destructor(1);
 	if (child_pid)
 		return (child_pid);
-	pipe_lst = sh()->pipe_lst;
-	(void)pipe1;
-	(void)pipe2;
+	delete_close_all_pipe_lst_except(pipe1, pipe2);
+//	p->pipe_lst = 0;
+//	pipe_lst = sh()->pipe_lst;
+//	(void)pipe1;
+//	(void)pipe2;
 	sh()->last_cmd_result = exec_command(p, token_begin, token_end);
 	destructor(sh()->last_cmd_result);
 	return (0);
