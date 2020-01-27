@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_jobs.c                                          :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/25 02:58:12 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_job_control.h"
 #include "sh_tokenizer.h"
-#include <stdio.h>
 #include <signal.h>
 
 int	nth_job_exist(t_job *job, int arg, int argcpy, const char *av1)

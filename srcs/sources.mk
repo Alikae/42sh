@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    sources.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ede-ram <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/05/13 19:40:02 by ede-ram          #+#    #+#              #
-#    Updated: 2020/01/25 17:00:25 by tcillard           ###   ########.fr        #
+#    Created: 2020/01/27 13:33:06 by ede-ram           #+#    #+#              #
+#    Updated: 2020/01/27 13:33:09 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -167,11 +167,8 @@ C_FILES_tools = \
 		sh_env_del.c \
 		sh_tab_fusion.c \
 		sh_are_you_sur.c \
-		sh_check_path.c \
-		sh_error_path.c \
 		ft_join_with_char.c \
 		sh_pattern_matching.c
-#sh_find_law.c \
 
 C_FILES_word_expansion = \
 			 sh_arithmetic_expansion.c \

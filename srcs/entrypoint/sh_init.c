@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_init.c                                          :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/14 08:47:35 by tcillard            #+#    #+#             */
-/*   Updated: 2020/01/25 17:17:10 by ede-ram         ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <pwd.h>
-#include <errno.h>
 #include <ncurses.h>
 #include <termios.h>
 #include <termcap.h>

@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_functions.c                                :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/24 14:05:50 by tcillard            #+#    #+#             */
-/*   Updated: 2019/11/01 15:34:03 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "libft.h"
 #include "sh_command_edition.h"
-#include <stdio.h>
 #include <sgtty.h>
 #include <sys/ioctl.h>
 

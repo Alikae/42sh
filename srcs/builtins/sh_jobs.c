@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_jobs.c                                          :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/10 06:26:35 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/21 14:10:14 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_job_control.h"
 #include <sys/wait.h>
-#include <stdio.h>
 
 void	jobs_print_signaled_job(t_job *job, int status)
 {

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_exec_script_tools_2.c                           :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/17 04:55:17 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/26 17:55:25 by tcillard           ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static int	sh_aux(t_token *token_begin, t_sh *p,
 {
 	toggle_redirect_pipe(1, prev_pipe, p->extern_pipe);
 	p->force_setpgrp_setattr = 1;
-	printf("[%i]%s\n", getpid(), token_begin->content);
 	p->pgid_current_pipeline = exec_command_in_background_closing_pipe(
 			token_begin, token_end, prev_pipe, p->extern_pipe);
 	toggle_redirect_pipe(0, prev_pipe, p->extern_pipe);
@@ -41,7 +40,6 @@ int			exec_pipeline_recursively(t_sh *p, t_token *token_begin,
 		return (sh_aux(token_begin, p, token_end, prev_pipe));
 	if (pipe(next_pipe) < 0)
 		return (-1);
-	push_pipe_lst(&p->pipe_lst, next_pipe);
 	if (exec_pipeline_recursively(p, next_separator->next, token_end,
 				next_pipe[0]) < 0)
 		return (-1);
@@ -114,7 +112,6 @@ int			exec_pipeline_core(t_token *token_begin, t_token *token_end)
 	p->last_background_pipeline_pgid = p->pgid_current_pipeline;
 	p->pgid_current_pipeline = 0;
 	p->last_cmd_result = block_wait(p, tmp2, 0);
-	printf("----->%i\n", sh()->last_cmd_result);
 	if (!p->process_is_stopped)
 		kill(-1 * tmp2, SIGKILL);
 	p->extern_pipe = tmp;

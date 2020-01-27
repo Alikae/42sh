@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_type.c                                          :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/13 12:05:02 by tcillard            #+#    #+#             */
-/*   Updated: 2020/01/13 14:16:48 by tcillard           ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int		sh_type_keyword(char *str)
 	i = -1;
 	while (keyword[++i])
 	{
-		if (!strcmp(keyword[i], str))
+		if (!ft_strcmp(keyword[i], str))
 		{
 			ft_putstr(str);
 			ft_putendl(" is a shell keyword");
@@ -57,7 +57,7 @@ static int		sh_type_alias(char *str)
 		while (*tmp)
 		{
 			len = ft_strclen(str, '=');
-			if (!strncmp(str, *tmp, len))
+			if (!ft_strncmp(str, *tmp, len))
 			{
 				write(STDOUT_FILENO, *tmp, len);
 				ft_putstr(" is aliased to `");

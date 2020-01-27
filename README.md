@@ -1,14 +1,14 @@
-# 21sh
----
-Made by: Ede-Ram Tcillard Tmeyer Thdelmas
----
-	
-- sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  [script [arg...]]
-- sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  -c [command_name [arg...]]
-- sh  [-abCefhimnuvx]  [-o option]...  [+abCefhimnuvx]  [+o option]...  -s [arg...]
-
-# MAN
-- http://pubs.opengroup.org/onlinepubs/9699919799/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   header.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 ### BUGS
 
@@ -247,7 +247,7 @@ echo '"`ls`"'
 |		:cyclone:		|	zcat	|
 
 ---
-Made by: Ede-Ram Tcillard Tmeyer Thdelmas
+Made by: Ede-Ram Tcillard tcillard ede-ram
 ---
 
 ### **GIT BRANCHING TUTO:**

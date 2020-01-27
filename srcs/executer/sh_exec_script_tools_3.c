@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_exec_script_tools_3.c                           :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/17 05:04:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/26 16:37:23 by tcillard           ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 #include "sh_executer.h"
 #include "sh_redirections.h"
 #include "sh.h"
-#include "errno.h"
 #include <signal.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include "sh_exitpoint.h"
 

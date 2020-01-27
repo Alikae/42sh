@@ -1,8 +1,11 @@
-* [**moulitest**](https://github.com/yyang42/moulitest)
-* [**libft-unit-test**](https://github.com/alelievr/libft-unit-test)
-* [**Maintest**](https://github.com/QuentinPerez/Maintest)
-* [**42ShellTester**](https://github.com/we-sh/42ShellTester)
-* [**42FileChecker**](https://github.com/jgigault/42FileChecker)
-* [**Libftest**](https://github.com/jtoty/Libftest)
-* [**libft-pwner**](https://github.com/StToupin/libft-pwner)
-* [**libft-checker**](https://github.com/olehsamoilenko/libft-checker)
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   header.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */

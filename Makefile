@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ede-ram <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/06/05 17:18:13 by ede-ram          #+#    #+#              #
-#    Updated: 2020/01/17 00:26:28 by ede-ram          ###   ########.fr        #
+#    Created: 2020/01/27 13:32:50 by ede-ram           #+#    #+#              #
+#    Updated: 2020/01/27 13:32:52 by ede-ram          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := 42sh
-PROJECT := 42SH
-AUTHORS := Ede-ram Tcillard Thdelmas Tmeyer
+NAME := 21sh
+PROJECT := 21SH
+AUTHORS := ede-ram tcillard
 
 RM = /bin/rm
 

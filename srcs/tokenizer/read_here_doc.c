@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_here_doc.c                                    :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/07 04:11:49 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:06:20 by jerry            ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 18:04:38 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ t_toktype	read_here_doc(t_toktool *t, t_token **p_actual)
 		return (SH_SYNTAX_ERROR);
 	word_len = t->i - word_begin;
 	forward_blanks_newline(t);
+	//push stack
+	//store_heredoc_if_needed
+	/**/
 	here_doc_begin = t->i;
 	if (read_here_doc_content(t, word_begin, word_len) == SH_SYNTAX_ERROR)
 		return (SH_SYNTAX_ERROR);

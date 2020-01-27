@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_exec_arthmetique_expansion.c                    :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/09 23:59:07 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/21 12:33:07 by tcillard         ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,7 @@ long int	sh_exec_arith(t_arith *arith)
 	else if (arith->next_op == OR)
 		return (sh_exec_arith(arith->next) | sh_exec_arith(arith->sub));
 	else if (arith->next_op == AND_AND)
-	{
-		printf("and and\n");
 		return (sh_exec_arith(arith->next) && sh_exec_arith(arith->sub));
-	}
 	else if (arith->next_op == OR_OR)
 		return (sh_exec_arith(arith->next) || sh_exec_arith(arith->sub));
 	else if (arith->next_op == DIFFERENT)

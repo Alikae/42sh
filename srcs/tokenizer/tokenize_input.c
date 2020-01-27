@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenize_input.c                                   :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-ram <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 18:24:01 by ede-ram          #+#    #+#             */
-/*   Updated: 2020/01/18 19:25:00 by ede-ram          ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/01/27 18:03:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_tokenizer.h"
 #include "libft.h"
 #include "sh.h"
-#include <stdio.h>
 
 t_toktype	tokenize_reserved_word(t_toktool *t, t_token **p_actual,
 		t_toktype type, int word_begin)
@@ -41,6 +40,9 @@ void		treat_input(t_toktool *t, t_toktype actual_compound,
 		t->i++;
 		t->word_nb = 1;
 	}
+	//IF == NEWLINE
+	//	WHILE stack_HEREDOC
+	//		read_here_doc (LIFO)
 	if (!(*terminator = treat_operator(t, p_actual, actual_compound)))
 		*terminator = treat_word(t, p_actual, actual_compound);
 }
@@ -56,6 +58,8 @@ t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
 	*terminator = 0;
 	while (!*terminator && t->input[t->i])
 		treat_input(t, actual_compound, terminator, &actual);
+	//if stack here doc
+	//	unfinished
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
 		free_ast(origin);
