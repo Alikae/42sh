@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 18:04:38 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 18:21:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,24 @@ t_toktype	read_here_doc_content(t_toktool *t, int word_begin, int word_len)
 	}
 	return (SH_NULL);
 }
+//STRUCT
+//	char *eof
+//	t_token *redirection_token
+//	next
+
+//record_here_doc
+//skip blanks
+//if newline
+//while stack
+//	here_doc_begin = t->i;
+//	if (read_here_doc_content(t, word_begin, word_len) == SH_SYNTAX_ERROR)
+//		return (SH_SYNTAX_ERROR);
+//	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i
+//					- here_doc_begin)))
+//		destructor(ERROR_MALLOC);
+//	read_n_skip_word(t);//skip last eof + skip 1\n
+//	if (sh()->alias_end)
+//		sh()->alias_end--;
 
 t_toktype	read_here_doc(t_toktool *t, t_token **p_actual)
 {
@@ -48,19 +66,8 @@ t_toktype	read_here_doc(t_toktool *t, t_token **p_actual)
 	if (word_begin == t->i)
 		return (SH_SYNTAX_ERROR);
 	word_len = t->i - word_begin;
-	forward_blanks_newline(t);
 	//push stack
-	//store_heredoc_if_needed
+	//record_heredoc_if_needed
 	/**/
-	here_doc_begin = t->i;
-	if (read_here_doc_content(t, word_begin, word_len) == SH_SYNTAX_ERROR)
-		return (SH_SYNTAX_ERROR);
-	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i
-					- here_doc_begin)))
-		destructor(ERROR_MALLOC);
-	read_n_skip_word(t);
-	if (sh()->alias_end)
-		sh()->alias_end--;
-	forward_blanks_newline(t);
 	return (0);
 }
