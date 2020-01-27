@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 02:47:34 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/16 01:17:10 by jerry            ###   ########.fr       */
+/*   Updated: 2020/01/27 12:06:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <errno.h>
 
 int		sh_find_error(char *path, char c, int *error)
 {

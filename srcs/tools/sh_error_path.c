@@ -6,12 +6,11 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 02:49:50 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/13 02:28:51 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/27 12:06:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <errno.h>
 
 int		sh_error_path(char *cmd, char *path, int error)
 {
