@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 18:03:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 20:42:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,19 @@ void		treat_input(t_toktool *t, t_toktype actual_compound,
 	forward_blanks(t);
 	while (t->input[t->i] == '\n')
 	{
+		if (sh()->here)
+		{
+			if (sh_record_here_doc(t, sh()->here) == SH_SYNTAX_ERROR)
+			{
+				*terminator = SH_SYNTAX_ERROR;
+				return ;
+			}
+		}
 		(*p_actual)->next = create_token(SH_NEWLINE, t->i, 0);
 		*p_actual = (*p_actual)->next;
 		t->i++;
 		t->word_nb = 1;
 	}
-	//IF == NEWLINE
-	//	WHILE stack_HEREDOC
-	//		read_here_doc (LIFO)
 	if (!(*terminator = treat_operator(t, p_actual, actual_compound)))
 		*terminator = treat_word(t, p_actual, actual_compound);
 }
@@ -58,8 +63,12 @@ t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
 	*terminator = 0;
 	while (!*terminator && t->input[t->i])
 		treat_input(t, actual_compound, terminator, &actual);
-	//if stack here doc
-	//	unfinished
+	if (sh()->here)
+	{
+		while (sh()->here)
+			sh_del_here_stack(&(sh()->here));
+		sh()->unfinished_cmd = 1;
+	}
 	if (*terminator == SH_SYNTAX_ERROR)
 	{
 		free_ast(origin);

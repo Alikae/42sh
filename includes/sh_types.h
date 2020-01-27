@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 19:03:06 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,5 +193,12 @@ typedef struct	s_arith
 	struct s_arith	*next;
 	struct s_arith	*sub;
 }				t_arith;
+
+typedef struct	s_here_stack
+{
+	char				*terminator;
+	t_token				*token;
+	struct s_here_stack	*next;
+}				t_here_stack;
 
 #endif

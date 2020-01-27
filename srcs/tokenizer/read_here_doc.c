@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 18:21:07 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 20:51:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "sh_error.h"
 #include "sh_tokenizer.h"
 
-t_toktype	read_here_doc_content(t_toktool *t, int word_begin, int word_len)
+t_toktype	read_here_doc_content(t_toktool *t, char *here)
 {
-	while (ft_strncmp(t->input + word_begin, t->input + t->i, word_len)
-			|| word_len > (int)ft_strlen(t->input + t->i) || t->input[t->i
-			+ word_len] != '\n')
+	while (ft_strncmp(here, t->input + t->i, ft_strlen(here))
+			|| ft_strlen(here) > ft_strlen(t->input + t->i) || t->input[t->i
+			+ ft_strlen(here)] != '\n')
 	{
 		t->i = (int)ft_strchr(t->input + t->i, '\n');
 		if (!t->i)
@@ -32,30 +32,75 @@ t_toktype	read_here_doc_content(t_toktool *t, int word_begin, int word_len)
 	}
 	return (SH_NULL);
 }
-//STRUCT
-//	char *eof
-//	t_token *redirection_token
-//	next
 
-//record_here_doc
-//skip blanks
-//if newline
-//while stack
-//	here_doc_begin = t->i;
-//	if (read_here_doc_content(t, word_begin, word_len) == SH_SYNTAX_ERROR)
-//		return (SH_SYNTAX_ERROR);
-//	if (!((*p_actual)->content = ft_strndup(t->input + here_doc_begin, t->i
-//					- here_doc_begin)))
-//		destructor(ERROR_MALLOC);
-//	read_n_skip_word(t);//skip last eof + skip 1\n
-//	if (sh()->alias_end)
-//		sh()->alias_end--;
+void		push_here_doc(t_toktool *t, t_token *p_actual, int word_begin, int word_len)
+{
+	t_here_stack	*origin;
+	t_here_stack	*here;
+
+	origin = sh()->here;
+	here = origin;
+	if (!origin)
+	{
+		if (!(origin = malloc(sizeof(t_here_stack))))
+			destructor(-1);
+		origin->terminator = ft_strndup(t->input + word_begin, word_len);
+		origin->token = p_actual;
+		origin->next = NULL;
+	}
+	else
+	{
+		while (here->next)
+			here = here->next;
+		if (!(here->next = malloc(sizeof(t_here_stack))))
+			destructor(-1);
+		(here->next->terminator) = ft_strndup(t->input + word_begin, word_len);
+		(here->next->token) = p_actual;
+		(here->next->next) = NULL;
+	}
+	sh()->here = origin;
+}
+
+void		sh_del_here_stack(t_here_stack **here)
+{
+	t_here_stack	*cpy;
+
+	cpy = (*here)->next;
+	free((*here)->terminator);
+	free((*here));
+	*here = cpy;
+}
+
+t_toktype	sh_record_here_doc(t_toktool *t, t_here_stack *here)
+{
+	int		here_doc_begin;
+
+	forward_blanks(t);
+	if (t->input[t->i] == '\n')
+	{
+		while (here)
+		{
+			here_doc_begin = t->i;
+			if (read_here_doc_content(t, here->terminator) == SH_SYNTAX_ERROR)
+				return (SH_SYNTAX_ERROR);
+			if (!(here->token->content = ft_strndup(t->input + here_doc_begin, t->i
+				- here_doc_begin)))
+			destructor(ERROR_MALLOC);
+			read_n_skip_word(t);
+			t->i++;
+			if (sh()->alias_end)
+				sh()->alias_end--;
+			sh_del_here_stack(&here);
+			sh()->here = here;
+		}
+	}
+	return (SH_NULL);
+}
 
 t_toktype	read_here_doc(t_toktool *t, t_token **p_actual)
 {
 	int	word_begin;
 	int	word_len;
-	int	here_doc_begin;
 
 	forward_blanks(t);
 	word_begin = t->i;
@@ -66,8 +111,6 @@ t_toktype	read_here_doc(t_toktool *t, t_token **p_actual)
 	if (word_begin == t->i)
 		return (SH_SYNTAX_ERROR);
 	word_len = t->i - word_begin;
-	//push stack
-	//record_heredoc_if_needed
-	/**/
-	return (0);
+	push_here_doc(t, *p_actual, word_begin, word_len);
+	return (sh_record_here_doc(t, sh()->here));
 }

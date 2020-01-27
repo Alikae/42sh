@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 18:49:45 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void					sh_init(t_sh *shell)
 	shell->dir = pwd->pw_dir;
 	shell->bucopy = NULL;
 	shell->cmd = NULL;
+	shell->here = NULL;
 	if (shell->is_interactive)
 	{
 		shell->orig_termios = init_term();

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 20:01:50 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct		s_sh
 	int				alias_end;
 	char			**alias_stack;
 	t_hist			*hist;
+	t_here_stack	*here;
 }					t_sh;
 
 t_sh				*sh(void);
@@ -103,4 +104,6 @@ t_token				*expand_and_retokenize(t_sh *p, t_token *stack_argvs);
 void				stack_argvs(t_token **p_argv_stack, t_token *token);
 void				assign_sraa_to_zero(int *nb_assign, int *nb_redirections,
 		t_token **argv_stack, int *cmd_begin);
+t_toktype			sh_record_here_doc(t_toktool *t, t_here_stack *here);
+void				sh_del_here_stack(t_here_stack **here);
 #endif
