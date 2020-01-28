@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 21:07:10 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/28 15:38:47 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ t_toktype	sh_record_here_doc(t_toktool *t, t_here_stack *here)
 	forward_blanks(t);
 	if (t->input[t->i] == '\n')
 	{
+		t->i++;
 		while (here)
 		{
 			here_doc_begin = t->i;

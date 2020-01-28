@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 20:01:50 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/27 22:28:32 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,5 @@ void				assign_sraa_to_zero(int *nb_assign, int *nb_redirections,
 		t_token **argv_stack, int *cmd_begin);
 t_toktype			sh_record_here_doc(t_toktool *t, t_here_stack *here);
 void				sh_del_here_stack(t_here_stack **here);
+void				delete_close_all_pipe_lst_except(int pipe1, int pipe2);
 #endif
