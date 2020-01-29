@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 21:43:18 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/29 00:43:44 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,13 @@ int		block_wait(t_sh *p, int child_pid, int from_fg)
 
 	p->process_is_stopped = 0;
 	delete_close_all_pipe_lst(p->pipe_lst);
-	printf("[%i]BLWAIT\n", getpid());
+	dprintf(2, "%*%[%i]BLWAIT\n",(sh()->pid_main_process - getpid()) * 4, getpid());
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		sh_dprintf(2, "WAIT ERROR\n");
 		return (-1);
 	}
-	printf("[%i]BLWAITEND\n", getpid());
-	
+	dprintf(2, "%*%[%i]BLWAITEND\n",(sh()->pid_main_process - getpid())*4, getpid());
 	if (WIFSTOPPED(status))
 		block_wait_stopped(p, child_pid, from_fg, status);
 	else if (WIFSIGNALED(status))

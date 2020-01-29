@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/28 16:50:14 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/29 00:19:26 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,7 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
 {
 	if (toggle_on)
-	{
-		push_pipe_lst(&(sh()->pipe_lst), fd_in, fd_out);
+	{	
 		if (fd_in != -1)
 			push_redirect_lst(&sh()->redirect_lst, 0, fd_in);
 		if (fd_out != -1)

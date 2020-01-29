@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 21:38:49 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/29 00:44:08 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@ int		fork_process(t_sh *p, int foreground)
 	if (p->pid_main_process == getpid() && p->is_interactive)
 		create_pgrp = 1;
 	child_pid = fork();
+	//
+	t_pipe_lst *lst;
+	lst = sh()->pipe_lst;
+	while (lst)
+	{
+		dprintf(2, "%*%[%i]pipe lst = [%i] [%i]\n",(sh()->pid_main_process - getpid()) * 4, getpid(), lst->pipe[0], lst->pipe[1]);
+		lst = lst->next;
+	}
+	dprintf(2, "%*%[%i]->[%i]\n",(sh()->pid_main_process - getpid()) * 4, getpid(), child_pid);
 	if (child_pid < 0)
 	{
 		sh_dprintf(2, "[%i]fork error: ressource temporarily unavailable\n\

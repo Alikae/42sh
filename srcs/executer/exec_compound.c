@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/29 00:58:08 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 		exec_script(p, tok->sub);
 		destructor(p->last_cmd_result);
 	}
-	sh_pipe_lst_del(&p->pipe_lst);
+	delete_close_all_pipe_lst(p->pipe_lst);
+	p->pipe_lst = 0;
 	return (block_wait(p, pid, 0));
 }
 

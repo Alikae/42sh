@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/28 16:03:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/29 00:20:05 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int			exec_pipeline_recursively(t_sh *p, t_token *token_begin,
 		return (sh_aux(token_begin, p, token_end, prev_pipe));
 	if (pipe(next_pipe) < 0)
 		return (-1);
+	push_pipe_lst(&(sh()->pipe_lst), next_pipe[0], -1);
+	push_pipe_lst(&(sh()->pipe_lst), -1, next_pipe[1]);
 	if (exec_pipeline_recursively(p, next_separator->next, token_end,
 				next_pipe[0]) < 0)
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/29 00:44:23 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 			close(lst->in);
 			return ;
 		}
+		dprintf(2, "%*%[%i]%i->%i\n", (sh()->pid_main_process - getpid()) * 4, getpid(), lst->in, lst->out);
 		if (dup2(lst->out, lst->in) < 0)
 		{
 			if (!(lst->in == p->cpy_std_fds[0]
