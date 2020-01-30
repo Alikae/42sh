@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 22:28:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/30 01:39:24 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct		s_sh
 	t_env			*tmp_assign_lst;
 	int				pipein;
 	int				pipeout;
+	char			*end_of_here_doc;
 	t_toktype		pipeline_separators[2];
 	t_toktype		script_separators[2];
 	t_toktype		and_or_separators[2];
