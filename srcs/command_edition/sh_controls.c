@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/30 02:18:32 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,61 @@
 #include "signal.h"
 #include "sh_exitpoint.h"
 
-int			sh_controls(char **command, char *buf, t_hist *hist, int *i)
+static int	control_c(char **command, char *buf, t_hist *hist, int *i)
 {
 	pid_t	id;
-	char	c;
 
-	c = buf[0];
 	ft_memdel((void**)&sh()->buselect);
 	ft_memdel((void**)&buf);
 	sh_cursor_motion(command, "\033[F", *i, hist);
 	write(0, "\n", 1);
-	if (c == '\n')
-		return (0);
-	sh_tty_cbreak(2, sh()->orig_termios);
-	ft_memdel((void**)&(*command));
-	if (c == 3)
+	*i = -1;
+	id = getpid();
+	kill(id, SIGINT);
+	return (3);
+}
+
+static int	control_d(char **command, char *buf, t_hist *hist, int *i)
+{
+	
+	if (!ft_strcmp(*command, ""))
 	{
-		*i = -1;
-		id = getpid();
-		kill(id, SIGINT);
-		return (3);
+		if (sh()->unfinished_cmd && !sh()->end_of_here_doc)
+			return (control_c(command, buf, hist, i));
+		ft_memdel((void**)&sh()->buselect);
+		ft_memdel((void**)&buf);
+		sh_cursor_motion(command, "\033[F", *i, hist);
+		write(0, "\n", 1);
+		if (!sh()->unfinished_cmd)
+			destructor(0);
+		else if (sh()->end_of_here_doc)
+		{ 
+			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);	
+			return (0);
+		}
 	}
+	return (1);
+}
+
+static int	sh_newline(char **command, char *buf, t_hist *hist, int *i)
+{
+	ft_memdel((void**)&sh()->buselect);
+	ft_memdel((void**)&buf);
+	sh_cursor_motion(command, "\033[F", *i, hist);
+	write(0, "\n", 1);
+	return (0);
+}
+
+int			sh_controls(char **command, char *buf, t_hist *hist, int *i)
+{
+	char	c;
+
+	c = buf[0];
 	if (c == 4)
-		destructor(0);
+		return (control_d(command, buf, hist, i));
+	if (c == '\n')
+		return(sh_newline(command, buf, hist, i));
+	if (c == 3)
+		return (control_c(command, buf, hist, i));
 	return (1);
 }

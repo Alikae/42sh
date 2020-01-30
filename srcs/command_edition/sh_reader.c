@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/30 00:23:37 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int			sh_reader(char **command, t_hist *hist)
 
 	term = getenv("TERM");
 	hist->index = -1;
+	sh()->control_d = 0;
 	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
 	*command = (char*)ft_memalloc(1);
