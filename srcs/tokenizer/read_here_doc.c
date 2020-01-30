@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/28 15:38:47 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/30 01:41:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_toktype	read_here_doc_content(t_toktool *t, char *here)
 		t->i = (int)ft_strchr(t->input + t->i, '\n');
 		if (!t->i)
 		{
+			ft_memdel((void**)&sh()->end_of_here_doc);
+			sh()->end_of_here_doc = ft_strdup(here);
 			sh()->unfinished_cmd = 1;
 			return (SH_SYNTAX_ERROR);
 		}
