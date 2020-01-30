@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 22:28:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/30 00:20:52 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct		s_sh
 	int				process_is_stopped;
 	int				alias_end;
 	char			**alias_stack;
+	int				control_d;
 	t_hist			*hist;
 	t_here_stack	*here;
 }					t_sh;
