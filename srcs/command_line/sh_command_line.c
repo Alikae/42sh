@@ -52,6 +52,7 @@ static int		sh_parse_line_escape(char **line)
 	if (line[0][i] == '\\' && (i == 0 || !sh_ice(*line, i)))
 	{
 		line[0][i] = 0;
+		sh()->control_d = 1;
 		return (0);
 	}
 	return (1);
@@ -71,6 +72,7 @@ char			*sh_arguments(t_hist *hist)
 	ret = 0;
 	while (!ret && sh_reader(&line, hist))
 	{
+		sh()->control_d = 0;
 		tmp = ft_strdup(str);
 		free(str);
 		ret = sh_parse_line_escape(&line);

@@ -93,6 +93,7 @@ int					sh_loop(void)
 	while (!p->exit)
 	{
 		sh_loop_init_cmd(&ln_buff, &input, &complete);
+		sh()->unfinished_cmd = 0;
 		while (!complete)
 		{
 			if (sh_in_loop(&input, p, &ln_buff))

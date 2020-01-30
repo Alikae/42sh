@@ -23,34 +23,13 @@ static int	control_c(char **command, char *buf, t_hist *hist, int *i)
 
 	ft_memdel((void**)&sh()->buselect);
 	ft_memdel((void**)&buf);
+	ft_memdel((void**)command);
 	sh_cursor_motion(command, "\033[F", *i, hist);
 	write(0, "\n", 1);
 	*i = -1;
 	id = getpid();
 	kill(id, SIGINT);
 	return (3);
-}
-
-static int	control_d(char **command, char *buf, t_hist *hist, int *i)
-{
-	
-	if (!ft_strcmp(*command, ""))
-	{
-		if (sh()->unfinished_cmd && !sh()->end_of_here_doc)
-			return (control_c(command, buf, hist, i));
-		ft_memdel((void**)&sh()->buselect);
-		ft_memdel((void**)&buf);
-		sh_cursor_motion(command, "\033[F", *i, hist);
-		write(0, "\n", 1);
-		if (!sh()->unfinished_cmd)
-			destructor(0);
-		else if (sh()->end_of_here_doc)
-		{ 
-			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);	
-			return (0);
-		}
-	}
-	return (1);
 }
 
 static int	sh_newline(char **command, char *buf, t_hist *hist, int *i)
@@ -60,6 +39,32 @@ static int	sh_newline(char **command, char *buf, t_hist *hist, int *i)
 	sh_cursor_motion(command, "\033[F", *i, hist);
 	write(0, "\n", 1);
 	return (0);
+}
+
+static int	control_d(char **command, char *buf, t_hist *hist, int *i)
+{
+	if (!ft_strcmp(*command, ""))
+	{
+		if (sh()->unfinished_cmd && !sh()->end_of_here_doc)
+			return (control_c(command, buf, hist, i));
+		ft_memdel((void**)&sh()->buselect);
+		ft_memdel((void**)&buf);
+		sh_cursor_motion(command, "\033[F", *i, hist);
+		if (sh()->end_of_here_doc)
+		{ 
+			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);	
+			return (0);
+		}
+		write(0, "\n", 1);
+		if (!sh()->unfinished_cmd && !sh()->control_d)
+		{
+			ft_memdel((void**)command);
+			destructor(0);
+		}
+		else if (sh()->control_d)
+			return (0);
+	}
+	return (1);
 }
 
 int			sh_controls(char **command, char *buf, t_hist *hist, int *i)

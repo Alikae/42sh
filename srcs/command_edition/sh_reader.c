@@ -102,7 +102,8 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 		if (tgetent(NULL, term ? term : "vt100") == ERR)
 			return (*command);
 		sh_reprompt(i, command);
-		ft_memdel((void**)&buf);
+		if (k == 1)
+			ft_memdel((void**)&buf);
 		buf = sh_buffer();
 		k = loop_keys(command, buf, &i, hist);
 	}
@@ -116,7 +117,6 @@ int			sh_reader(char **command, t_hist *hist)
 
 	term = getenv("TERM");
 	hist->index = -1;
-	sh()->control_d = 0;
 	sh()->buselect = ft_strdup("");
 	hist->current = ft_strdup("");
 	*command = (char*)ft_memalloc(1);
