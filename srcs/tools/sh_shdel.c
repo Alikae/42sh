@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/29 01:33:20 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/30 03:23:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ void	free_sh_var(t_sh *s)
 	ft_strdel(&(s->bucopy));
 	ft_strdel(&(s->buselect));
 	sh_job_del(&(s->jobs));
+	del_all_group_processes(s->existing_process_groups);
 	sh_hist_del(&(s->hist));
 	ft_free_tabstr(s->av);
 	free_ast(s->functions);
 	ft_strdel(&(s->cmd));
+	ft_memdel((void**)&s->end_of_here_doc);
 }
 
 void	sh_shdel(t_sh **shell)

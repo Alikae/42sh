@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/30 01:51:20 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/01/30 03:54:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@
 
 extern	char		**g_aliases;
 
+typedef struct		s_process_group
+{
+	pid_t					pgid;
+	struct s_process_group	*next;
+}					t_process_group;
+
 typedef struct		s_sh
 {
 	int				ac;
@@ -37,6 +43,7 @@ typedef struct		s_sh
 	int				last_cmd_result;
 	int				last_child_pid;
 	int				last_background_pipeline_pgid;
+	t_process_group	*existing_process_groups;
 	t_env			*params;
 	t_ln			*ln_history;
 	int				exp_rec;
@@ -109,4 +116,7 @@ void				assign_sraa_to_zero(int *nb_assign, int *nb_redirections,
 t_toktype			sh_record_here_doc(t_toktool *t, t_here_stack *here);
 void				sh_del_here_stack(t_here_stack **here);
 void				delete_close_all_pipe_lst_except(int pipe1, int pipe2);
+void				del_all_group_processes(t_process_group *tmp);
+void				wait_for_zombies(void);
+
 #endif
