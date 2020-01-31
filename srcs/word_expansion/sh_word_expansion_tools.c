@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/30 01:24:14 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	sh_free_exp(t_exp *exp, char **tok_content)
 	ft_memdel((void**)&exp->name);
 	ft_memdel((void**)&(exp->tok->content));
 	ft_memdel((void**)&exp->tok);
-	ft_memdel((void**)tok_content);
+	if (tok_content)
+		ft_memdel((void**)tok_content);
 }
 
 int		sh_word_error(t_exp *exp)

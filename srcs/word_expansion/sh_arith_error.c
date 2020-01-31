@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/31 01:45:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		sh_arth_syntax_error(char *str, int i)
 
 int		sh_error_expression_name(char *str)
 {
-	sh_dprintf(2, "42sh: bad math expression: error is \"%s\"\n", str);
+	sh_dprintf(2, "42sh: bad value expression: \"%s\"\n", str);
 	sh()->abort_cmd = 1;
 	return (0);
 }

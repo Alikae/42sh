@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/31 02:33:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int			sh_commande_string_size(t_exp *exp, char c);
 void		sh_record_commande_string(t_exp *exp);
 int			sh_error_expression_name(char *str);
 int			sh_check_value(char *str);
-char		*sh_find_arth_var_value(char **str);
+char		*sh_find_arth_var_value(char **str, int opt);
 void		sh_sub_var(char **value, char **str, int beg, int ed);
 int			sh_tab_len(char **tab);
 void		sh_init_exp(t_env **env, t_exp *exp, char *tok_content);
@@ -103,4 +103,8 @@ int			sh_error_div_by_0(void);
 int			sh_skip_number_par(char *str, int i);
 int			sh_is_valid_operator(char *str, int i);
 int			sh_parenthesis_counter(char *str, int *i, int s1);
+char		*sh_inc_dec_with_env(t_env *env, short int opt);
+char		*sh_inc_dec_create_env(short int opt, char *str);
+int			sh_check_valid_var_name(char *str, int *i);
+int			sh_record_arth(char **str, int i, short int opt);
 #endif

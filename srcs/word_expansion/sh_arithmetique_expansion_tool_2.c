@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/31 02:30:00 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,17 @@ long int	sh_long_atoi(char *str)
 	long int	pw;
 	long int	nb;
 	int			i;
+	int			opt;
 
+	opt = 1;
 	nb = 0;
 	i = 0;
 	pw = 0;
-	while (str[pw] && str[pw] >= '0' && str[pw] <= '9')
+	if (str[i] == '-')
+		opt = -1 && ++i;
+	else if (str[i] == '+')
+		++i;
+	while (str[pw + i] && str[pw + i] >= '0' && str[pw + i] <= '9')
 		pw++;
 	pw = sh_long_power(pw - 1);
 	while (pw)
@@ -39,7 +45,7 @@ long int	sh_long_atoi(char *str)
 		i++;
 		pw = pw / 10;
 	}
-	return (nb);
+	return (nb * opt);
 }
 
 int			sh_check_arth(char *name)

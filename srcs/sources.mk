@@ -6,7 +6,7 @@
 #    By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/27 13:33:06 by ede-ram           #+#    #+#              #
-#    Updated: 2020/01/27 13:33:09 by ede-ram          ###   ########.fr        #
+#    Updated: 2020/01/31 02:15:41 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -197,7 +197,8 @@ C_FILES_word_expansion = \
 			 sh_arithmetique_expansion_operator.c \
 			 sh_arithmetique_expansion_tool_2.c \
 			 sh_next_less_operator.c \
-			 sh_arith_error.c
+			 sh_arith_error.c \
+			 sh_treat_arth_var_inc_dec.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

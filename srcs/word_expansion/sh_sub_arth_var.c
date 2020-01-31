@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/31 03:02:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,15 @@ void		sh_add_opt(char **name, short int opt)
 	*name = sh_tab_fusion_free(&tab);
 }
 
-int			sh_record_arth(char **str, int i, short int opt)
+void		sh_find_begin_end(short int opt, int *beg, int *end)
+{
+	if ((opt & 1) == 1 || (opt & 2))
+		*beg = *beg - 2;
+	if ((opt & 4) == 4 || (opt & 8) == 8)
+		*end = *end + 2;
+}
+
+int			sh_record_arth(char **s, int i, short int opt)
 {
 	int		i_cpy;
 	int		i_sub;
@@ -70,24 +78,24 @@ int			sh_record_arth(char **str, int i, short int opt)
 
 	i_cpy = i;
 	i_sub = 0;
-	while ((*str)[i_cpy] && (*str)[i_cpy] != ' ' && (*str)[i_cpy] != '\n'
-			&& (*str)[i_cpy] != '\t' && !(sh_all_char_operator((*str)[i_cpy])))
+	while ((*s)[i_cpy] && (*s)[i_cpy] != ' ' && (*s)[i_cpy] != '\n'
+			&& (*s)[i_cpy] != '\t' && !(sh_all_char_operator((*s)[i_cpy])))
 		i_cpy++;
 	if (!(name = malloc(i_cpy - i + 1)))
 		destructor(-1);
 	i_cpy = i;
-	while ((*str)[i] && (*str)[i] != '\t' && (*str)[i] != ' '
-			&& (*str)[i] != '\n' && !(sh_all_char_operator((*str)[i])))
-		name[i_sub++] = (*str)[i++];
+	while ((*s)[i] && (*s)[i] != '\t' && (*s)[i] != ' '
+			&& (*s)[i] != '\n' && !(sh_all_char_operator((*s)[i])))
+		name[i_sub++] = (*s)[i++];
 	name[i_sub] = '\0';
-	if (!(name = sh_find_arth_var_value(&name)))
-		name = ft_strdup("0");
-	if (opt)
-	{
-		sh_add_opt(&name, opt);
-		i_cpy = i_cpy - 2;
-	}
-	sh_sub_var(&name, str, i_cpy, i);
+	if ((*s)[i] && (*s)[i + 1] && (*s)[i] == '+' && (*s)[i + 1] == '+')
+		opt = opt + 4;
+	else if ((*s)[i] && (*s)[i + 1] && (*s)[i] == '-' && (*s)[i + 1] == '-')
+		opt = opt + 8;
+	if (!(name = sh_find_arth_var_value(&name, opt)))
+		return (0);
+	sh_find_begin_end(opt, &i_cpy, &i);
+	sh_sub_var(&name, s, i_cpy, i);
 	return (0);
 }
 
@@ -118,32 +126,4 @@ int			sh_check_valid_var_name(char *str, int *i)
 		(*i)++;
 	}
 	return (1);
-}
-
-void		sh_sub_arith_var(char **str)
-{
-	int			i;
-	short int	opt;
-	int			i_cpy;
-
-	i = 0;
-	opt = 0;
-	i_cpy = 0;
-	while ((*str)[i] && !(sh()->abort_cmd))
-	{
-		opt = 0;
-		i = sh_skip_white_space(*str, i);
-		if (!(sh_all_char_operator((*str)[i])))
-		{
-			if (i >= 2 && (*str)[i - 1] == '+' && (*str)[i - 2] == '+')
-				opt = 1;
-			else if (i >= 2 && (*str)[i - 1] == '-' && (*str)[i - 2] == '-')
-				opt = -1;
-			i_cpy = i;
-			if (sh_check_valid_var_name(*str, &i))
-				i = sh_record_arth(str, i_cpy, opt);
-		}
-		if ((*str)[i])
-			i++;
-	}
 }
