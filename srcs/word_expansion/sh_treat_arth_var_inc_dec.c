@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 01:59:27 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/31 02:59:39 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/01/31 03:34:17 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,28 @@
 char	*sh_inc_dec_with_env(t_env *env, short int opt)
 {
 	char	*cpy;
+	char	*del;
 
+	del = env->value;
 	cpy = ft_strdup(env->value);
 	if ((opt & 1) == 1)
+	{
+		ft_memdel((void**)&del);
 		env->value = sh_long_itoa(sh_long_atoi(cpy) + 1);
+	}
 	else if ((opt & 2) == 2)
+	{
+		ft_memdel((void**)&del);
 		env->value = sh_long_itoa(sh_long_atoi(cpy) - 1);
+	}
 	if ((opt & 4) == 4 || (opt & 8) == 8)
 	{
+		del = env->value;
 		if ((opt & 4) == 4)
 			env->value = sh_long_itoa(sh_long_atoi(cpy) + 1);
 		else if ((opt & 8) == 8)
 			env->value = sh_long_itoa(sh_long_atoi(cpy) - 1);
+		ft_memdel((void**)&del);
 		return (cpy);
 	}
 	ft_memdel((void**)&cpy);
@@ -36,19 +46,25 @@ char	*sh_inc_dec_with_env(t_env *env, short int opt)
 char	*sh_inc_dec_create_env(short int opt, char *str)
 {
 	char	*cpy;
+	char	*del;
 
+	del = NULL;
 	cpy = NULL;
 	if ((opt & 1) == 1)
 		cpy = sh_long_itoa(1);
 	else if ((opt & 2) == 2)
 		cpy = sh_long_itoa(-1);
-	if ((opt & 4) == 4)
-		sh_setev(str, sh_long_itoa(sh_long_atoi(cpy) + 1));
-	else if ((opt & 8) == 8)
-		sh_setev(str, sh_long_itoa(sh_long_atoi(cpy) - 1));
 	else
-		sh_setev(str, sh_long_itoa(sh_long_atoi(cpy)));
-	return (cpy ? cpy : ft_strdup("0"));
+		cpy = ft_strdup("0");
+	if ((opt & 4) == 4)
+		del = sh_long_itoa(sh_long_atoi(cpy) + 1);
+	else if ((opt & 8) == 8)
+		del = sh_long_itoa(sh_long_atoi(cpy) - 1);
+	else
+		del = sh_long_itoa(sh_long_atoi(cpy));
+	sh_setev(str, del);
+	ft_memdel((void**)&del);
+	return (cpy);
 }
 
 void	sh_sub_arith_var(char **str)

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/31 03:37:13 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		sh_special_char_operator(char *str, int i)
 {
 	if (str[i] == '&' && str[i + 1] == '&')
 		return (1);
-	else if (str[i] == '|' && str[i + i] == '|')
+	else if (str[i] == '|' && str[i + 1] == '|')
 		return (1);
 	else if ((str[i] == '>' || str[i] == '<'
 		|| str[i] == '=' || str[i] == '!') && str[i + 1] == '=')
