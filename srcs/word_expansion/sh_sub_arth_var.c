@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/31 03:02:27 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/02 00:32:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void		sh_add_opt(char **name, short int opt)
 
 void		sh_find_begin_end(short int opt, int *beg, int *end)
 {
-	if ((opt & 1) == 1 || (opt & 2))
+	if ((opt & 1) == 1 || (opt & 2) == 2)
 		*beg = *beg - 2;
 	if ((opt & 4) == 4 || (opt & 8) == 8)
 		*end = *end + 2;

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/31 03:02:56 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/02 00:32:55 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*sh_find_arth_var_value(char **str, int opt)
 	{
 		cpy = sh_find_expansion(*str);
 		ft_memdel((void**)str);
-		return (sh_find_expansion(*str));
+		return (cpy);
 	}
 	else
 	{
