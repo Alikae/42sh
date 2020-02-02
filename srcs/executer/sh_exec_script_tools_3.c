@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "sh_exitpoint.h"
+#include <sys/wait.h>
 
 void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 {
@@ -95,7 +96,6 @@ void	del_existing_process_group(t_sh *p, pid_t pgid)
 	{
 		tmp = *pgroup;
 		p->existing_process_groups = tmp->next;
-		printf("del pgrp %i\n", tmp->pgid);
 		free(tmp);
 		return ;
 	}
@@ -105,7 +105,6 @@ void	del_existing_process_group(t_sh *p, pid_t pgid)
 	{
 		tmp = (*pgroup)->next;
 		(*pgroup)->next = tmp->next;
-		printf("del pgrp %i\n", tmp->pgid);
 		free(tmp);
 	}
 }
@@ -134,7 +133,6 @@ void	store_existing_group_process(t_sh *p, pid_t pgid)
 		destructor(43);
 	(*pgroup)->pgid = pgid;
 	(*pgroup)->next = 0;
-	printf("CREATE PGRP %i\n", pgid);
 }
 
 void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,

@@ -21,6 +21,7 @@ t_token	*create_token(t_toktype type, int index, const char *content)
 
 	if (!(tok = (t_token*)malloc(sizeof(t_token))))
 		destructor(ERROR_MALLOC);
+		printf("%s %i %p\n", content, type, tok);
 	tok->content = dupfilsdup(content);
 	dprintf(2, "o %p\nFROM %p (%i)\n", tok->content, tok, type);
 	tok->type = type;

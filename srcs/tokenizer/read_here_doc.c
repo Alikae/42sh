@@ -89,9 +89,10 @@ t_toktype	sh_record_here_doc(t_toktool *t, t_here_stack *here)
 			ft_memdel((void**)&(here->token->content));
 			if (!(here->token->content = ft_strndup(t->input + here_doc_begin, t->i
 				- here_doc_begin)))
-			destructor(ERROR_MALLOC);
+				destructor(ERROR_MALLOC);
 			read_n_skip_word(t);
-			t->i++;
+			if (t->input[t->i])
+				t->i++;
 			if (sh()->alias_end)
 				sh()->alias_end--;
 			sh_del_here_stack(&here);

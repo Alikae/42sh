@@ -50,6 +50,10 @@ static int	control_d(char **command, char *buf, t_hist *hist, int *i)
 		ft_memdel((void**)&sh()->buselect);
 		ft_memdel((void**)&buf);
 		sh_cursor_motion(command, "\033[F", *i, hist);
+		int z = 0;
+		while (command[0][z] != 0)
+			z++;
+		printf("SORTIS\n");
 		if (sh()->end_of_here_doc)
 		{ 
 			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);	

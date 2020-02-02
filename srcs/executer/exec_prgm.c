@@ -26,7 +26,6 @@ int	exec_path(t_sh *p, char *path, char **child_argv)
 	else
 	{
 		//
-		dprintf(2, "%*%[%i]execve [%s]\n",(sh()->pid_main_process - getpid()) * 4, getpid(), path);
 		if (!(child_env = transform_env_for_child(p->params)))
 			destructor(-1);
 		execve(path, child_argv, transform_env_for_child(p->params));

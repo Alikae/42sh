@@ -86,7 +86,6 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 			close(lst->in);
 			return ;
 		}
-		dprintf(2, "%*%[%i]%i->%i\n", (sh()->pid_main_process - getpid()) * 4, getpid(), lst->in, lst->out);
 		if (dup2(lst->out, lst->in) < 0)
 		{
 			if (!(lst->in == p->cpy_std_fds[0]

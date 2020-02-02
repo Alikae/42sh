@@ -69,13 +69,11 @@ int		block_wait(t_sh *p, int child_pid, int from_fg)
 
 	p->process_is_stopped = 0;
 	delete_close_all_pipe_lst(p->pipe_lst);
-	dprintf(2, "%*%[%i]BLWAIT\n",(sh()->pid_main_process - getpid()) * 4, getpid());
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		sh_dprintf(2, "WAIT ERROR\n");
 		return (-1);
 	}
-	dprintf(2, "%*%[%i]BLWAITEND\n",(sh()->pid_main_process - getpid())*4, getpid());
 	if (WIFSTOPPED(status))
 		block_wait_stopped(p, child_pid, from_fg, status);
 	else if (WIFSIGNALED(status))
