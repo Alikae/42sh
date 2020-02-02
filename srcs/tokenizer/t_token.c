@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/02 03:40:37 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_token	*create_token(t_toktype type, int index, const char *content)
 	if (!(tok = (t_token*)malloc(sizeof(t_token))))
 		destructor(ERROR_MALLOC);
 	tok->content = dupfilsdup(content);
+	dprintf(2, "o %p\nFROM %p (%i)\n", tok->content, tok, type);
 	tok->type = type;
 	tok->index = index;
 	tok->sub = 0;
@@ -37,6 +38,7 @@ t_token	*create_token_n(t_toktype type, int index, const char *content, int n)
 		destructor(ERROR_MALLOC);
 	if (!(tok->content = ft_strndup(content, n)))
 		destructor(ERROR_MALLOC);
+	dprintf(2, "o %p\nFROM %p (%i)\n", tok->content, tok, type);
 	tok->type = type;
 	tok->index = index;
 	tok->sub = 0;
@@ -57,6 +59,7 @@ t_token	*dup_token_with_sub(t_token *origin)
 
 void	delete_token(t_token *tok)
 {
+	dprintf(2, "x %p\nFROM %p (x %i)\n", tok->content, tok, tok->type);
 	ft_memdel((void**)&(tok->content));
 	ft_memdel((void**)&tok);
 }
