@@ -6,12 +6,36 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/02 05:39:39 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_command_edition.h"
 #include "sh.h"
+
+
+static void		convert_str_spaces(char **str, int *k)
+{
+	int i;
+
+	i = 0;
+	if (str[0][0] != '\033' && str[0][1] != 0 && *k == 0)
+	{
+		sh_dprintf(1, "21sh: warning: all new-lines and tabs will be converted"
+			" into spaces\n");
+		*k += 1;
+	}
+	else
+		return ;
+	sh_prompt();
+	while (str[0][i])
+	{
+		if (str[0][i] == '\t' || str[0][i] == '\n' || str[0][i] == '\r'
+				|| str[0][i] == '\v' || str[0][i] == '\f')
+			str[0][i] = ' ';
+		i++;
+	}
+}
 
 static int		sh_byteswaiting(void)
 {
@@ -21,7 +45,7 @@ static int		sh_byteswaiting(void)
 	return (byteswaiting);
 }
 
-char			*sh_buffer(void)
+char			*sh_buffer(int *k)
 {
 	char	*str;
 	char	*buf[BUFFER];
@@ -31,7 +55,7 @@ char			*sh_buffer(void)
 	str = NULL;
 	temp = NULL;
 	ft_bzero(buf, BUFFER);
-	if ((ret = read(0, buf, BUFFER)) <= 0)
+	if ((ret = read(0, buf, BUFFER - 1)) <= 0)
 		return (NULL);
 	ret = sh_byteswaiting();
 	if (ret)
@@ -46,5 +70,6 @@ char			*sh_buffer(void)
 	}
 	str = ft_strconv_w(ft_strjoin((const char*)buf, temp));
 	ft_memdel((void**)&temp);
+	convert_str_spaces(&str, k);
 	return (str);
 }

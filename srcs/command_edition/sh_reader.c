@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/30 00:23:37 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/02 05:37:28 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,13 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 	int		i;
 	int		k;
 	int		j;
+	int		z;
 	char	*buf;
 
 	i = -1;
 	k = 1;
 	j = 1;
+	z = 0;
 	buf = NULL;
 	sh_tty_cbreak(1, sh()->orig_termios);
 	while (k != 0 && *command && j > 0)
@@ -104,7 +106,7 @@ static char	*getcommand(char **command, char *term, t_hist *hist)
 		sh_reprompt(i, command);
 		if (k == 1)
 			ft_memdel((void**)&buf);
-		buf = sh_buffer();
+		buf = sh_buffer(&z);
 		k = loop_keys(command, buf, &i, hist);
 	}
 	sh_tty_cbreak(2, sh()->orig_termios);
