@@ -43,10 +43,8 @@ int		fork_process(t_sh *p, int foreground)
 	lst = sh()->pipe_lst;
 	while (lst)
 	{
-		dprintf(2, "%*%[%i]pipe lst = [%i] [%i]\n",(sh()->pid_main_process - getpid()) * 4, getpid(), lst->pipe[0], lst->pipe[1]);
 		lst = lst->next;
 	}
-	dprintf(2, "%*%[%i]->[%i]\n",(sh()->pid_main_process - getpid()) * 4, getpid(), child_pid);
 	if (child_pid < 0)
 	{
 		sh_dprintf(2, "[%i]fork error: ressource temporarily unavailable\n\
