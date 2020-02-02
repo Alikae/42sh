@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/29 01:47:44 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/02 03:47:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	destructor(int status)
 {
 	t_sh	*s;
 
-dprintf(2, "%*%[%i]Suicide_begin\n", (sh()->pid_main_process - getpid()) * 10, getpid());
 	if ((s = sh()))
 	{
 		if (sh()->is_interactive && sh()->pid_main_process == getpid())
@@ -29,6 +28,5 @@ dprintf(2, "%*%[%i]Suicide_begin\n", (sh()->pid_main_process - getpid()) * 10, g
 		}
 		sh_shdel(&s);
 	}
-dprintf(2, "%*%[%i]Suicide\n", (sh()->pid_main_process - getpid()) * 10, getpid());
 	exit(status);
 }
