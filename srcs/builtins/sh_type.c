@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 00:47:32 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static int		sh_type_keyword(char *str)
 {
 	int			i;
 	static char *keyword[] = {	"if", "then", "else", "elif", "fi", "case",
-								"esac", "for", "select", "while", "until", "do",
-								"done", "in", "function", "time", "{", "}", "!",
-								"[[", "]]", NULL };
+		"esac", "for", "select", "while", "until", "do",
+		"done", "in", "function", "time", "{", "}", "!",
+		"[[", "]]", NULL };
 
 	i = -1;
 	while (keyword[++i])
@@ -57,7 +57,8 @@ static int		sh_type_alias(char *str)
 		while (*tmp)
 		{
 			len = ft_strclen(str, '=');
-			if (!ft_strncmp(str, *tmp, len))
+			if (!ft_strncmp(str, *tmp, len)
+					&& (tmp[0][len] == '=' || !tmp[0][len]))
 			{
 				write(STDOUT_FILENO, *tmp, len);
 				ft_putstr(" is aliased to `");
