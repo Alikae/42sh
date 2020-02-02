@@ -69,7 +69,6 @@ void		delete_close_all_pipe_lst_except(int pipe1, int pipe2)
 		if (((lst->pipe[0] != pipe1 && lst->pipe[0] != pipe2) || lst->pipe[0] == -1) 
 			&& ((lst->pipe[1] != pipe1 && lst->pipe[1] != pipe2) || lst->pipe[1] == -1))
 		{
-			dprintf(2, "%*%[%i]del %i %i\n",(sh()->pid_main_process - getpid()) * 4, getpid(), lst->pipe[0], lst->pipe[1]);
 			close(lst->pipe[0]);
 			close(lst->pipe[1]);
 			lst = lst->next;
@@ -93,10 +92,7 @@ void		delete_close_all_pipe_lst_except(int pipe1, int pipe2)
 	new->next = NULL;
 	new = or;
 	while (new)
-	{
-		dprintf(2, "%*%[%i]save %i %i\n",(sh()->pid_main_process - getpid()) * 4, getpid(), new->pipe[0], new->pipe[1]);
 			new = new->next;
-		}
 	sh()->pipe_lst = or;
 
 }
@@ -107,7 +103,6 @@ void		delete_close_all_pipe_lst(t_pipe_lst *lst)
 
 	while (lst)
 	{
-		dprintf(2, "%*%[%i]del %i %i\n",(sh()->pid_main_process - getpid()) * 4 ,getpid(), lst->pipe[0], lst->pipe[1]);
 		close(lst->pipe[0]);
 		close(lst->pipe[1]);
 		old = lst;
