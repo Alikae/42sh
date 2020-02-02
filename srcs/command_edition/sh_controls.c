@@ -53,7 +53,6 @@ static int	control_d(char **command, char *buf, t_hist *hist, int *i)
 		int z = 0;
 		while (command[0][z] != 0)
 			z++;
-		printf("SORTIS\n");
 		if (sh()->end_of_here_doc)
 		{ 
 			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);	

@@ -71,6 +71,7 @@ void					sh_init(t_sh *shell)
 	shell->here = NULL;
 	shell->control_d = 0;
 	shell->end_of_here_doc = NULL;
+	shell->existing_process_groups = NULL;
 	if (shell->is_interactive)
 	{
 		shell->orig_termios = init_term();

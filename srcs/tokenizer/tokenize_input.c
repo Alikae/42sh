@@ -45,7 +45,8 @@ void		treat_input(t_toktool *t, t_toktype actual_compound,
 		}
 		(*p_actual)->next = create_token(SH_NEWLINE, t->i, 0);
 		*p_actual = (*p_actual)->next;
-		t->i++;
+		if (t->input[t->i])
+			t->i++;
 		t->word_nb = 1;
 	}
 	if (!(*terminator = treat_operator(t, p_actual, actual_compound)))

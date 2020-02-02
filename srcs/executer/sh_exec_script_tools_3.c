@@ -99,7 +99,7 @@ void	del_existing_process_group(t_sh *p, pid_t pgid)
 		free(tmp);
 		return ;
 	}
-	while (*pgroup && (*pgroup)->next->pgid != pgid)
+	while (*pgroup && (*pgroup)->next && (*pgroup)->next->pgid != pgid)
 		pgroup = &((*pgroup)->next);
 	if (*pgroup && (*pgroup)->next->pgid == pgid)
 	{
@@ -112,13 +112,19 @@ void	del_existing_process_group(t_sh *p, pid_t pgid)
 void	wait_for_zombies(void)
 {
 	t_process_group	*pgroup;
+	t_process_group	*tmp;
 
 	pgroup = sh()->existing_process_groups;
 	while (pgroup)
 	{
 		if (waitpid(-pgroup->pgid, 0, WNOHANG) < 0)
-			del_existing_process_group(sh(), pgroup->pgid);
-		pgroup = pgroup->next;
+		{
+			tmp = pgroup;
+			pgroup = pgroup->next;
+			del_existing_process_group(sh(), tmp->pgid);
+		}
+		else
+			pgroup = pgroup->next;
 	}
 }
 
