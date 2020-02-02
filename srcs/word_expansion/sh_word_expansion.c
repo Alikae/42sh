@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/02 02:07:44 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/02 03:09:50 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ int		sh_in_expansion(t_exp *exp, int i)
 		exp->first_i = i;
 		sh_sub_token(exp);
 		free(exp->content);
-		exp->i = i + ft_strlen(exp->value);
-		if (exp->i)
-			exp->i = exp->i - 1;
+		exp->i = sh_calcul_exp_i(i, ft_strlen(exp->value));
 		exp->content = ft_strdup(exp->tok->content);
 		ft_memdel((void**)&exp->value);
 	}

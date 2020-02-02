@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/31 02:33:29 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/02 03:08:05 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,5 @@ char		*sh_inc_dec_with_env(t_env *env, short int opt);
 char		*sh_inc_dec_create_env(short int opt, char *str);
 int			sh_check_valid_var_name(char *str, int *i);
 int			sh_record_arth(char **str, int i, short int opt);
+int			sh_calcul_exp_i(int i, int size);
 #endif
