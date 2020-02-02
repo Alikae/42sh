@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/02 03:25:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	sh_record_arithmetic_string(t_exp *exp)
 
 	size = sh_arithmetic_string_size(exp);
 	exp->i = exp->i - size + 1;
+	ft_memdel((void**)&(exp->name));
 	if (!(exp->name = (char*)malloc(size + 1)))
 		destructor(-1);
 	sh_str_start_end(&(exp->name), exp->content, exp->i, exp->i + size - 1);
