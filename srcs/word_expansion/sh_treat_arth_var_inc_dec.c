@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 01:59:27 by tcillard          #+#    #+#             */
-/*   Updated: 2020/01/31 03:45:53 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/02 02:32:22 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,13 @@ char	*sh_inc_dec_with_env(t_env *env, short int opt)
 
 	del = env->value;
 	cpy = ft_strdup(env->value);
-	if ((opt & 1) == 1)
+	if ((opt & 1) == 1 || (opt & 2) == 2)
 	{
+		if ((opt & 1) == 1)
+			env->value = sh_long_itoa(sh_long_atoi(cpy) + 1);
+		if ((opt & 2) == 2)
+			env->value = sh_long_itoa(sh_long_atoi(cpy) - 1);
 		ft_memdel((void**)&del);
-		env->value = sh_long_itoa(sh_long_atoi(cpy) + 1);
-	}
-	else if ((opt & 2) == 2)
-	{
-		ft_memdel((void**)&del);
-		env->value = sh_long_itoa(sh_long_atoi(cpy) - 1);
 	}
 	if ((opt & 4) == 4 || (opt & 8) == 8)
 	{

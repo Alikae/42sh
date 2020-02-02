@@ -6,11 +6,19 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/02 03:09:48 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_word_expansion.h"
+
+int		sh_calcul_exp_i(int i, int size)
+{
+	if (i + size)
+		return (i + size - 1);
+	else
+		return (0);
+}
 
 void	sh_simple_expansion(t_exp *exp)
 {

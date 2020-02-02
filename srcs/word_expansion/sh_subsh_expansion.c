@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/02 02:07:33 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void	sh_subsh_expansion(t_exp *exp)
 {
 	t_token	*tok;
 	int		pipe_fd[2];
+	int		exp_rec;
 
+	exp_rec = sh()->exp_rec;
+	sh()->exp_rec = 0;
 	sh_record_commande_string(exp);
 	tok = create_token(SH_SUBSH, 0, NULL);
 	if ((tok->sub = tokenize_input(exp->name)))
@@ -85,4 +88,5 @@ void	sh_subsh_expansion(t_exp *exp)
 	}
 	else
 		sh()->abort_cmd = 1;
+	sh()->exp_rec = exp_rec;
 }
