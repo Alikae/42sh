@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 22:02:20 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	sh_test_unary_sub(char *s1, char *s2)
 			&& pstat.st_size > 0)
 		return (0);
 	else
-		return (1);
+		return (2);
 }
 
 int			sh_test_unary(char *s1, char *s2)
@@ -59,6 +59,9 @@ int			sh_test_unary(char *s1, char *s2)
 		return (0);
 	else if (!ft_strcmp(s1, "-d") && !lstat(s2, &pstat)
 			&& (pstat.st_mode & S_IFMT) == S_IFDIR)
+		return (0);
+	else if (!ft_strcmp(s1, "-L") && !lstat(s2, &pstat)
+			&& (pstat.st_mode & S_IFMT) == S_IFLNK)
 		return (0);
 	else
 		return (sh_test_unary_sub(s1, s2));
