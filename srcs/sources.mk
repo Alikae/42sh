@@ -6,7 +6,7 @@
 #    By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/27 13:33:06 by ede-ram           #+#    #+#              #
-#    Updated: 2020/01/31 02:15:41 by tcillard         ###   ########.fr        #
+#    Updated: 2020/02/04 00:44:24 by tcillard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -129,7 +129,8 @@ C_FILES_executer = \
 	sh_exec_script_tools.c \
 	sh_exec_script_tools_2.c \
 	sh_exec_script_tools_3.c \
-	sh_redirection_tools.c
+	sh_redirection_tools.c \
+	delete_close_all_pipe_lst_except.c
 
 C_FILES_builtins = \
 		   sh_echo.c \
