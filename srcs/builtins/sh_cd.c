@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 00:53:34 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/03 21:21:00 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 #include "libft.h"
 #include "limits.h"
 
-#define F_L 1
-#define F_P 2
+#define F_P 1
 
 static int	cd_go_to(char *path)
 {
@@ -90,15 +89,9 @@ static int	check_flags(char *from, char *to)
 	while (from[++i])
 	{
 		if (from[i] == 'L')
-		{
-			*to ^= F_P;
-			*to |= F_L;
-		}
+			*to &= ~(F_P);
 		else if (from[i] == 'P')
-		{
-			*to ^= F_L;
 			*to |= F_P;
-		}
 		else if (from[i] != '\0')
 		{
 			*to = flag;
@@ -114,7 +107,6 @@ int			sh_cd(int ac, char **av, t_env **ev)
 	int		i;
 
 	flag = '\0';
-	flag = F_L;
 	i = 1;
 	(void)ev;
 	if (ac <= 1)

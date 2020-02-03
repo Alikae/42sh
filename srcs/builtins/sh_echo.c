@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 21:19:21 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static int		check_flags(char *from, char *to)
 		else if (from[i] == 'e')
 			*to |= F_E;
 		else if (from[i] == 'E')
-			*to ^= F_E;
+			*to &= ~(F_E);
 		else if (from[i] != '\0')
 		{
 			*to = flag;
