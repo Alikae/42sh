@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 02:47:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_assigns(t_sh *p)
 			p->tmp_assign_lst->value = ft_strdup(sh_getev_value(assign->key));
 			p->tmp_assign_lst->next = tmp;
 		}
-		sh_setev(assign->key, assign->value);
+		sh_setev(assign->key, assign->value)->exported = 1;
 		assign = assign->next;
 	}
 }

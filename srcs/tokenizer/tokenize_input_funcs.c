@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 03:07:53 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_toktype	handle_function_error(t_toktool *t, t_toktype *type)
 	{
 		(t->input[t->i]) ? sh()->invalid_cmd = 1 : 0;
 		(!t->input[t->i]) ? (sh()->unfinished_cmd = 1) : 0;
-		(t->input[t->i]) ? sh_dprintf(1, "SYNTAX ERROR: Function block \
+		(t->input[t->i]) ? sh_dprintf(2, "SYNTAX ERROR: Function block \
 need to be a compound at %s\n", t->input + word_begin) : 0;
 		return (SH_SYNTAX_ERROR);
 	}
@@ -79,6 +79,15 @@ t_toktype	tokenize_function(t_toktool *t, t_token **p_actual,
 	return (0);
 }
 
+t_token		*get_last_token()
+{
+	t_token	*tok = sh()->tmp_ast;
+
+	while (tok->next)
+		tok = tok->next;
+	return (tok);
+}
+
 t_toktype	handle_functions_n_terminator(t_toktool *t,
 		t_token **p_actual, t_toktype actual_compound, int word_begin)
 {
@@ -96,6 +105,16 @@ t_toktype	handle_functions_n_terminator(t_toktool *t,
 					- word_begin, actual_compound)) && (t->word_nb == 1
 					|| type == SH_SUBSH_END))
 	{
+		if (type == SH_SUBSH_END && t->word_nb == 1)
+		{
+			if (get_last_token() && (get_last_token()->type == SH_OR
+				|| get_last_token()->type == SH_OR_IF
+				|| get_last_token()->type == SH_AND_IF))
+			{
+				printf("SYNTAX ERROR: Unexpected ')'\n");
+				return (SH_SYNTAX_ERROR);
+			}
+		}
 		if (sh()->alias_end)
 			sh()->alias_end--;
 		return (type);

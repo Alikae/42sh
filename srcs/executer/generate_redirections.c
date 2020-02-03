@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/29 00:44:23 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/02 23:13:36 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int		protect_from_cpy_std_fds(t_sh *p, t_redirect_lst *lst)
 		sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
 				p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
 		close(lst->in);
+		p->abort_cmd = 1;
 		return (1);
 	}
 	else if (lst->in == p->cpy_std_fds[0]
@@ -67,6 +68,7 @@ int		protect_from_cpy_std_fds(t_sh *p, t_redirect_lst *lst)
 	{
 		sh_dprintf(2, "FDS %i, %i and %i are reserved by 42sh\n",
 				p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
+		p->abort_cmd = 1;
 		return (1);
 	}
 	return (0);
@@ -88,6 +90,8 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 		}
 		if (dup2(lst->out, lst->in) < 0)
 		{
+			sh_dprintf(2, "Redirection failed\nAbort\n");
+			p->abort_cmd = 1;
 			if (!(lst->in == p->cpy_std_fds[0]
 					|| lst->in == p->cpy_std_fds[1]
 					|| lst->in == p->cpy_std_fds[2]))

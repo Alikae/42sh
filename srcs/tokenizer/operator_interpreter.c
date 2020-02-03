@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 21:14:39 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 01:18:31 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,14 @@ t_toktype	handle_redirections_operators(t_toktool *t, t_toktype type,
 	if (type == SH_OR || type == SH_AND_IF || type == SH_OR_IF)
 	{
 		if (sh_record_here_doc(t, sh()->here) == SH_SYNTAX_ERROR)
+		{
+			sh_dprintf(2, "parse error\n");
 			return (SH_SYNTAX_ERROR);
+		}
 		forward_blanks_newline(t);
 		if (!t->input[t->i])
 		{
+//			sh_dprintf(2, "need End Of Command\n");
 			sh()->unfinished_cmd = 1;
 			return (SH_SYNTAX_ERROR);
 		}
@@ -90,7 +94,13 @@ t_toktype	treat_operator(t_toktool *t, t_token **p_actual,
 				return (SH_DSEMI);
 			type = SH_SEMI;
 		}
-		(*p_actual)->next = create_token(type, op_begin, 0);
+/*		if (type == SH_OR)
+		{
+			forward_blanks(t);
+			if (!t->input[t->i])
+
+		}
+*/		(*p_actual)->next = create_token(type, op_begin, 0);
 		*p_actual = (*p_actual)->next;
 		return (handle_redirections_operators(t, type, p_actual));
 	}

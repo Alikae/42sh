@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 21:41:11 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 03:01:34 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int		exec_simple_command_2(t_sh *p, char **child_argv, t_token *tmp,
 	handle_assigns(p);
 	save_std_fds(p);
 	generate_redirections(p);
+	if (p->abort_cmd)
+		return (-1);
 	if ((tmp = is_defined_function(child_argv[0])))
 		return (exec_function(p, tmp, child_argv));
 	else if ((f = sh_is_builtin(child_argv[0])))

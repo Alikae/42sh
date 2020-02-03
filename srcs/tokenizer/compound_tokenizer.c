@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 02:54:40 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,12 @@ t_token	*tokenize_subshell(t_toktool *t, int word_begin)
 	compound = create_token(SH_SUBSH, word_begin, 0);
 	if (!(compound->sub = recursive_tokenizer(t, SH_SUBSH, &terminator)))
 	{
-		if (!t->input[t->i])
+		if (!t->input[t->i] || sh()->unfinished_cmd)
+		{
 			sh()->unfinished_cmd = 1;
-		if (!t->input[t->i])
+			free_ast(compound);
 			return (0);
+		}
 		sh()->invalid_cmd = 1;
 		return (handle_syntax_error(t, "missing exec block in SUBSHELL",
 					compound));
@@ -116,6 +118,7 @@ t_token	*tokenize_subshell(t_toktool *t, int word_begin)
 	{
 		if (!t->input[t->i])
 		{
+			free_ast(compound);
 			sh()->unfinished_cmd = 1;
 			return (0);
 		}

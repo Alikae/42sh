@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/29 00:19:26 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 02:51:07 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,13 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
 			return (-121);
 		p->nb_nested_compounds++;
+		save_std_fds(p);
 		nb_assign = 0;
 		nb_redirections = stock_redirections_assignements_compound(p,
 				token_begin, token_end, &nb_assign);
 		tok = (t_token*)(uint64_t)((!p->abort_cmd) ? exec_compound_command(p,
 					tok, tok->type) : -125);
+		restore_std_fds(p);
 		del_n_redirect_lst(&p->redirect_lst, nb_redirections);
 		del_n_assign_lst(p, nb_assign);
 		p->nb_nested_compounds--;

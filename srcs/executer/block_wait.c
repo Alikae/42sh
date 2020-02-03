@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/29 00:43:44 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 00:59:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	block_wait_signaled(t_sh *p, int child_pid, int status)
 		sh_dprintf(1, "\n[%i] aborted: Bus Error\n", child_pid);
 	if (WTERMSIG(status) == SIGKILL)
 		sh_dprintf(1, "\nChild_process [%i] KILLED (SIGKILL)\n", child_pid);
+	if (WTERMSIG(status) == SIGQUIT)
+		sh_dprintf(1, "\nChild_process [%i] QUITTED (SIGQUIT)\n", child_pid);
 	if (WTERMSIG(status) == SIGSTOP)
 		sh_dprintf(1, "\nChild_process [%i] KILLED (SIGSTOP)\n", child_pid);
 }

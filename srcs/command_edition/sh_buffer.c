@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/02 05:39:39 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/02 22:48:52 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,7 @@ static void		convert_str_spaces(char **str, int *k)
 
 	i = 0;
 	if (str[0][0] != '\033' && str[0][1] != 0 && *k == 0)
-	{
-		sh_dprintf(1, "21sh: warning: all new-lines and tabs will be converted"
-			" into spaces\n");
 		*k += 1;
-	}
 	else
 		return ;
 	sh_prompt();
