@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 03:07:53 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 23:58:08 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,11 @@ t_toktype	tokenize_function(t_toktool *t, t_token **p_actual,
 	return (0);
 }
 
-t_token		*get_last_token()
+t_token		*get_last_token(void)
 {
-	t_token	*tok = sh()->tmp_ast;
+	t_token	*tok;
 
+	tok = sh()->tmp_ast;
 	while (tok->next)
 		tok = tok->next;
 	return (tok);

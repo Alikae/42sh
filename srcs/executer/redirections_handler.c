@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/29 00:44:58 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 23:48:06 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ void		delete_close_all_pipe_lst_except(int pipe1, int pipe2)
 	new = NULL;
 	or = NULL;
 	lst = sh()->pipe_lst;
-	//
 	while (lst)
 	{
 		old = lst;
-		if (((lst->pipe[0] != pipe1 && lst->pipe[0] != pipe2) || lst->pipe[0] == -1) 
-			&& ((lst->pipe[1] != pipe1 && lst->pipe[1] != pipe2) || lst->pipe[1] == -1))
+		if (((lst->pipe[0] != pipe1 && lst->pipe[0] != pipe2) || lst->pipe[0]
+			== -1) && ((lst->pipe[1] != pipe1 && lst->pipe[1] != pipe2)
+			|| lst->pipe[1] == -1))
 		{
 			close(lst->pipe[0]);
 			close(lst->pipe[1]);
@@ -92,9 +92,8 @@ void		delete_close_all_pipe_lst_except(int pipe1, int pipe2)
 	new->next = NULL;
 	new = or;
 	while (new)
-			new = new->next;
+		new = new->next;
 	sh()->pipe_lst = or;
-
 }
 
 void		delete_close_all_pipe_lst(t_pipe_lst *lst)

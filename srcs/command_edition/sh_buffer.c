@@ -6,13 +6,12 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 21:00:03 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/03 23:42:47 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_command_edition.h"
 #include "sh.h"
-
 
 static void		convert_str_spaces(char **str, int *k)
 {

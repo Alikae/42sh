@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 03:04:46 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 23:56:17 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
 {
 	t_token	*origin;
 	t_token	*actual;
+	t_token *tmp;
 
-t_token *tmp;
 	origin = create_token(0, 0, 0);
 	tmp = sh()->tmp_ast;
 	sh()->tmp_ast = origin;

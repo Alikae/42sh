@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 23:40:10 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,17 @@ int		contain_equal_not_first_no_expansions(const char *str)
 	int	i;
 	int	exp_type;
 
-	i = -1;
+	i = 0;
 	if (!str || !*str || str[0] == '=')
 		return (0);
-	while (str[++i])
+	while (str[i])
 	{
 		if (str[i] == '=' && i)
 			return (1);
 		if (is_exp_begin(str + i, &exp_type))
 			goto_exp_end(str, &i, exp_type);
+		if (str[i])
+			i++;
 	}
 	return (0);
 }

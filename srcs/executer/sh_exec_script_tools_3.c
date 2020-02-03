@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/30 04:45:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 23:49:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 		if (next_separator == token_end)
 			return ;
 		token_begin = (next_separator) ? next_separator->next : 0;
-		while (token_begin && token_begin->type == SH_NEWLINE && token_begin != token_end)
+		while (token_begin && token_begin->type == SH_NEWLINE && token_begin
+			!= token_end)
 			token_begin = token_begin->next;
 	}
 }

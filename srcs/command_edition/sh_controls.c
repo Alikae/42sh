@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/02 05:39:35 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/03 23:43:45 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ static int	control_d(char **command, char *buf, t_hist *hist, int *i)
 		ft_memdel((void**)&buf);
 		sh_cursor_motion(command, "\033[F", *i, hist);
 		if (sh()->end_of_here_doc)
-		{ 
-			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);	
+		{
+			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);
 			return (0);
 		}
 		write(0, "\n", 1);
@@ -75,7 +75,7 @@ int			sh_controls(char **command, char *buf, t_hist *hist, int *i)
 	if (c == 4)
 		return (control_d(command, buf, hist, i));
 	if (c == '\n')
-		return(sh_newline(command, buf, hist, i));
+		return (sh_newline(command, buf, hist, i));
 	if (c == 3)
 		return (control_c(command, buf, hist, i));
 	return (1);

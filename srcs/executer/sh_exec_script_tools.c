@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 02:51:07 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 23:49:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 		t_token *token_end, int pipe1, int pipe2)
 {
 	int				child_pid;
-//	t_pipe_lst		*pipe_lst;
 	t_sh			*p;
 
 	p = sh();
@@ -87,10 +86,6 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 	if (child_pid)
 		return (child_pid);
 	delete_close_all_pipe_lst_except(pipe1, pipe2);
-//	p->pipe_lst = 0;
-//	pipe_lst = sh()->pipe_lst;
-//	(void)pipe1;
-//	(void)pipe2;
 	sh()->last_cmd_result = exec_command(p, token_begin, token_end);
 	destructor(sh()->last_cmd_result);
 	return (0);
@@ -99,7 +94,7 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
 {
 	if (toggle_on)
-	{	
+	{
 		if (fd_in != -1)
 			push_redirect_lst(&sh()->redirect_lst, 0, fd_in);
 		if (fd_out != -1)

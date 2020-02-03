@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 02:44:32 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 23:46:41 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,12 @@ int		fork_process(t_sh *p, int foreground)
 	if (p->pid_main_process == getpid() && p->is_interactive)
 		create_pgrp = 1;
 	child_pid = fork();
-	//zombies
 	if (child_pid && p->pid_main_process == getpid())
 		wait_for_zombies();
 	else
 	{
 		del_all_group_processes(p->existing_process_groups);
 		p->existing_process_groups = 0;
-	}
-	//
-	t_pipe_lst *lst;
-	lst = sh()->pipe_lst;
-	while (lst)
-	{
-		lst = lst->next;
 	}
 	if (child_pid < 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/02 03:45:10 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 23:53:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ t_toktype	read_here_doc_content(t_toktool *t, char *here)
 	return (SH_NULL);
 }
 
-void		push_here_doc(t_toktool *t, t_token *p_actual, int word_begin, int word_len)
+void		push_here_doc(t_toktool *t, t_token *p_actual, int word_begin,
+		int word_len)
 {
 	t_here_stack	*origin;
 	t_here_stack	*here;
@@ -87,8 +88,8 @@ t_toktype	sh_record_here_doc(t_toktool *t, t_here_stack *here)
 			if (read_here_doc_content(t, here->terminator) == SH_SYNTAX_ERROR)
 				return (SH_SYNTAX_ERROR);
 			ft_memdel((void**)&(here->token->content));
-			if (!(here->token->content = ft_strndup(t->input + here_doc_begin, t->i
-				- here_doc_begin)))
+			if (!(here->token->content = ft_strndup(t->input + here_doc_begin,
+				t->i - here_doc_begin)))
 				destructor(ERROR_MALLOC);
 			read_n_skip_word(t);
 			if (t->input[t->i])

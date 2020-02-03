@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/30 01:40:28 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 23:45:08 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static int			sh_in_loop(char **input, t_sh *p, char **ln_buff)
 	sh_init_cmd(*input);
 	if ((p->ast = tokenize_input(*input)))
 	{
-	//	print_all_tokens(p, p->ast ,0);
 		p->abort_cmd = 0;
 		if (!p->unfinished_cmd)
 			exec_script(p, p->ast);
