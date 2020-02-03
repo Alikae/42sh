@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/02 22:48:52 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/03 20:59:37 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ static void		convert_str_spaces(char **str, int *k)
 		*k += 1;
 	else
 		return ;
-	sh_prompt();
-	while (str[0][i])
+	While (str[0][i])
 	{
 		if (str[0][i] == '\t' || str[0][i] == '\n' || str[0][i] == '\r'
 				|| str[0][i] == '\v' || str[0][i] == '\f')
