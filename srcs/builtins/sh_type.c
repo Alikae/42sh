@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 00:47:32 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/03 22:10:53 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int				sh_type(int ac, char **av, t_env **ev)
 			ft_putstr_fd("sh: type: ", 2);
 			ft_putstr_fd(av[i], 2);
 			ft_putendl_fd(": not found\n", 2);
+			return (1);
 		}
 	}
 	return (0);
