@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/04 00:25:31 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,10 @@ int		sh_check_side(char *str)
 	i = sh_skip_white_space(str, 0);
 	if (sh_all_char_operator(str[i]) && str[i] != '-' && str[i] != '+')
 		return (1);
-	i = ft_strlen(str) - 1;
+	if (ft_strlen(str))
+		i = ft_strlen(str) - 1;
+	else
+		i = 0;
 	while ((str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 			&& str[i])
 		i--;
