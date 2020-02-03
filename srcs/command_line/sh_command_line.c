@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 20:37:49 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,49 @@ static int		sh_ice(const char *str, int index)
 		return (0);
 }
 
+int				sh_quote_checking(short int quote, char c)
+{
+	if (c == '"')
+	{
+		if (quote != 1 && quote != 2)
+			quote = 2;
+		else if (quote == 2)
+			quote = 0;
+	}
+	else if (c == '\'')
+	{
+		if (quote != 2 && quote != 1)
+			quote = 1;
+		else if (quote == 1)
+			quote = 0;
+	}
+	return (quote);
+}
+
+static int		sh_check_escape_quote(char *line)
+{
+	static short int	quote = 0;
+	int					i;
+
+	i = 0;
+	if (!(sh()->unfinished_cmd))
+		quote = 0;
+	while (line[i])
+	{
+		quote = sh_quote_checking(quote, line[i]);
+		i++;
+	}
+	if (quote == 1)
+		return (0);
+	else
+		return (1);
+}
+
 static int		sh_parse_line_escape(char **line)
 {
 	int	i;
 
-	if (!line[0])
+	if (!line[0] || !(sh_check_escape_quote(*line)))
 		return (1);
 	i = 0;
 	while (line[0][i] != '\0')
