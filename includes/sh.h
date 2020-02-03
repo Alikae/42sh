@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/30 03:54:54 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 03:03:26 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct		s_sh
 	t_toktype		script_separators[2];
 	t_toktype		and_or_separators[2];
 	t_token			*ast;
+	t_token			*tmp_ast;
 	t_token			*functions;
 	int				child_ac;
 	t_open_file		*opened_files;
@@ -96,6 +97,7 @@ typedef struct		s_sh
 	int				control_d;
 	t_hist			*hist;
 	t_here_stack	*here;
+	int				come_from_braces;
 }					t_sh;
 
 t_sh				*sh(void);
