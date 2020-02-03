@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/03 20:53:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ int			sh_cursor_motion(char **command, char *buf, int i, t_hist *hist)
 		i = sh_cursor_forward(1, i, c.cursor, c.term);
 	else if ((buf[0] == 127 || buf[0] == 8) || buf[2] == '3' || buf[0] == '\b')
 	{
-		if (buf[0] == 127 || buf[0] == 8)
+		if ((buf[0] == 127 || buf[0] == 8)) 
 			i = sh_backspace(command, i, c.cursor, c.term);
-		else if (command[0][i] != '\0' && command[0][i + 1] != '\0')
-			i = sh_delete(command, i);
+		else if (buf[2] == '3' && command[0][i + 1] != '\0')
+			sh_delete(command, i);
 		if (buf[0] != '\b')
 			sh_switch_history(hist, command);
 	}

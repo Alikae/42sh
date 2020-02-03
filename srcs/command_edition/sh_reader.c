@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/02 05:37:28 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/03 20:46:54 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	loop_keys(char **command, char *buf, int *i, t_hist *hist)
 				|| buf[1] == '<' || buf[1] == '>'))
 		*i = sh_copy_option(command, buf, *i, hist);
 	else if (buf[0] == '\t')
-		;
+		;	
 	else if (buf[0] == 3 || buf[0] == 4 || buf[0] == '\n')
 		return (sh_controls(command, buf, hist, i));
 	else if (!ft_strchr(buf, '\033') && buf[0] >= 32)
