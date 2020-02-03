@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 21:58:51 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/03 22:02:20 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	sh_test_unary_sub(char *s1, char *s2)
 int			sh_test_unary(char *s1, char *s2)
 {
 	struct stat	pstat;
-	
+
 	if (!s1 && s2 && *s2)
 		return (0);
 	else if (!s1)

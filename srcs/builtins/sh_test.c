@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 21:50:05 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/03 22:01:17 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		sh_test_binary(char *s1, char *s2, char *s3)
 	else if (!ft_strcmp(s2, "-le") && ft_atoi(s1) <= ft_atoi(s3))
 		return (0);
 	else
-		return(2);
+		return (2);
 }
 
 int		sh_test_and_or(int ac, char **av, t_env **ev)
