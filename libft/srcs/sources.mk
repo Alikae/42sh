@@ -89,7 +89,8 @@ C_FILES_str = \
 	ft_strncmp_n.c \
 	ft_strlen_w.c \
 	ft_strconv.c \
-	ft_to_lower.c
+	ft_to_lower.c \
+	ft_isdigitstr.c
 
 C_FILES_tab_str = \
 	ft_tab_strdel.c \

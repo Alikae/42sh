@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/04 13:46:29 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int		sh_test_binary(char *s1, char *s2, char *s3)
 		return (0);
 	else if (!ft_strcmp(s2, "!=") && ft_strcmp(s1, s3))
 		return (0);
+	else if (!ft_isdigitstr(s1))
+		ft_putendl_fd("integer expression expected", 2);
 	else if (!ft_strcmp(s2, "-eq") && ft_atoi(s1) == ft_atoi(s3))
 		return (0);
 	else if (!ft_strcmp(s2, "-ne") && ft_atoi(s1) != ft_atoi(s3))
@@ -44,8 +46,7 @@ int		sh_test_binary(char *s1, char *s2, char *s3)
 		return (0);
 	else if (!ft_strcmp(s2, "-le") && ft_atoi(s1) <= ft_atoi(s3))
 		return (0);
-	else
-		return (2);
+	return (2);
 }
 
 int		sh_test_and_or(int ac, char **av, t_env **ev)
@@ -86,7 +87,7 @@ int		sh_test_braces(int ac, char **av, int i, int ret)
 		;
 	if (i >= ac)
 	{
-		ft_putendl("Missing )");
+		ft_putendl_fd("Missing )", 2);
 		return (1);
 	}
 	else if (i == ac - 1)
