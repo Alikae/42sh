@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 23:49:27 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/04 00:22:40 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,16 @@ t_token	*find_cmd_name(t_token *tok)
 	return (tok);
 }
 
+int		protect_compound_stack(t_sh *p)
+{
+	if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
+		sh_dprintf(2, "NEST_COMPOUND_LIMIT\nAbort %i\n", p->abort_cmd = 1);
+	if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
+		return (-121);
+	p->nb_nested_compounds++;
+	return (0);
+}
+
 int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 {
 	int				nb_redirections;
@@ -51,11 +61,8 @@ int		exec_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	tok = find_cmd_name(token_begin);
 	if (tok && is_compound(tok->type))
 	{
-		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
-			sh_dprintf(2, "NEST_COMPOUND_LIMIT\nAbort %i\n", p->abort_cmd = 1);
-		if (p->nb_nested_compounds >= SH_NESTED_COMPOUND_LIMIT)
+		if (protect_compound_stack(p))
 			return (-121);
-		p->nb_nested_compounds++;
 		save_std_fds(p);
 		nb_assign = 0;
 		nb_redirections = stock_redirections_assignements_compound(p,
@@ -89,17 +96,4 @@ int		exec_command_in_background_closing_pipe(t_token *token_begin,
 	sh()->last_cmd_result = exec_command(p, token_begin, token_end);
 	destructor(sh()->last_cmd_result);
 	return (0);
-}
-
-void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
-{
-	if (toggle_on)
-	{
-		if (fd_in != -1)
-			push_redirect_lst(&sh()->redirect_lst, 0, fd_in);
-		if (fd_out != -1)
-			push_redirect_lst(&sh()->redirect_lst, 1, fd_out);
-	}
-	else
-		del_n_redirect_lst(&sh()->redirect_lst, (fd_in != -1) + (fd_out != -1));
 }

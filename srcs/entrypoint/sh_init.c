@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/30 00:24:06 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/04 00:09:02 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ static struct termios	init_term(void)
 	return (termios);
 }
 
+void					sh_init_2(t_sh *shell)
+{
+	if (shell->is_interactive)
+	{
+		shell->orig_termios = init_term();
+		shell->cbreak = init_cbreak();
+	}
+	shell->last_cmd_result = 0;
+}
+
 void					sh_init(t_sh *shell)
 {
 	struct passwd	*pwd;
@@ -72,10 +82,5 @@ void					sh_init(t_sh *shell)
 	shell->control_d = 0;
 	shell->end_of_here_doc = NULL;
 	shell->existing_process_groups = NULL;
-	if (shell->is_interactive)
-	{
-		shell->orig_termios = init_term();
-		shell->cbreak = init_cbreak();
-	}
-	shell->last_cmd_result = 0;
+	sh_init_2(shell);
 }

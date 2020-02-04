@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 23:56:17 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/04 00:38:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,9 @@ void		treat_input(t_toktool *t, t_toktype actual_compound,
 		*terminator = treat_word(t, p_actual, actual_compound);
 }
 
-t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
-		t_toktype *terminator)
+int			protect_tokenizer(t_toktype *terminator, t_token *origin,
+		t_toktype actual_compound)
 {
-	t_token	*origin;
-	t_token	*actual;
-	t_token *tmp;
-
-	origin = create_token(0, 0, 0);
-	tmp = sh()->tmp_ast;
-	sh()->tmp_ast = origin;
-	actual = origin;
-	*terminator = 0;
-	while (!*terminator && t->input[t->i])
-		treat_input(t, actual_compound, terminator, &actual);
 	if (sh()->here)
 	{
 		while (sh()->here)
@@ -84,6 +73,25 @@ t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
 		free_ast(origin);
 		return (0);
 	}
+	return (1);
+}
+
+t_token		*recursive_tokenizer(t_toktool *t, t_toktype actual_compound,
+		t_toktype *terminator)
+{
+	t_token	*origin;
+	t_token	*actual;
+	t_token *tmp;
+
+	origin = create_token(0, 0, 0);
+	tmp = sh()->tmp_ast;
+	sh()->tmp_ast = origin;
+	actual = origin;
+	*terminator = 0;
+	while (!*terminator && t->input[t->i])
+		treat_input(t, actual_compound, terminator, &actual);
+	if (!protect_tokenizer(terminator, origin, actual_compound))
+		return (0);
 	actual = origin->next;
 	delete_token(origin);
 	ft_free_tabstr(sh()->alias_stack);

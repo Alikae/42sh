@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/03 23:46:41 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/04 00:46:28 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,34 @@
 #include <fcntl.h>
 #include "sh_exitpoint.h"
 
-int		fork_process(t_sh *p, int foreground)
+void	fork_n_protect_zombies(t_sh *p, int *create_pgrp, int *child_pid)
 {
-	int		child_pid;
-	int		create_pgrp;
-	pid_t	pid;
-
-	create_pgrp = 0;
+	*create_pgrp = 0;
 	if (p->pid_main_process == getpid() && p->is_interactive)
-		create_pgrp = 1;
-	child_pid = fork();
-	if (child_pid && p->pid_main_process == getpid())
+		*create_pgrp = 1;
+	*child_pid = fork();
+	if (*child_pid && p->pid_main_process == getpid())
 		wait_for_zombies();
 	else
 	{
 		del_all_group_processes(p->existing_process_groups);
 		p->existing_process_groups = 0;
 	}
-	if (child_pid < 0)
+	if (*child_pid < 0)
 	{
 		sh_dprintf(2, "[%i]fork error: ressource temporarily unavailable\n\
-Exit %i\n", getpid(), (p->abort_cmd = 1) ? 43 : 0);
+Exiting%s\n", getpid(), (p->abort_cmd = 1) ? "" : "");
 		destructor(43);
 	}
+}
+
+int		fork_process(t_sh *p, int foreground)
+{
+	int		child_pid;
+	int		create_pgrp;
+	pid_t	pid;
+
+	fork_n_protect_zombies(p, &create_pgrp, &child_pid);
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 		create_process_group_give_terminal_access(p, pid, foreground);
