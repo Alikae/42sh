@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 02:02:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_token	*find_token_by_key_until(t_token *tok_begin, t_token *tok_end,
 	return ((tok_begin) ? tok_begin : 0);
 }
 
-t_token		*get_last_token(void)
+t_token	*get_last_token(void)
 {
 	t_token	*tok;
 
