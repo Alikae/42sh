@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 13:46:29 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/02/04 13:52:33 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define UN_OP "-b -c -d -e -f -n -p -S -s -z -L"
+#define UN_OP "-b -c -d -e -f -n -p -S -s -z -L -r"
 #define BI_OP "= != -eq -ne -gt -ge -lt -le"
 
 int		sh_test_binary(char *s1, char *s2, char *s3)
