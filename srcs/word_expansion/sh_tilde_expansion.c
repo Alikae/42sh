@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/04 20:38:40 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		sh_find_env(t_env **env_cpy, char *find)
 {
 	while (*env_cpy && ft_strcmp((*env_cpy)->key, find) != 0)
 		*env_cpy = (*env_cpy)->next;
-	if (env_cpy)
+	if (*env_cpy)
 		return (1);
 	else
 		return (0);
