@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/04 02:37:35 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ static int	cd_go_to(char *path)
 	if ((ev = sh_setev("OLDPWD", dir)))
 		ev->exported = 1;
 	ft_bzero(dir, PATH_MAX + 1);
+	path = getcwd(0, PATH_MAX);
 	if ((ev = sh_setev("PWD", path)))
 		ev->exported = 1;
+	free(path);
 	return (0);
 }
 
