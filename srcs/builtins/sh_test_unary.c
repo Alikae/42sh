@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 13:53:55 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/02/04 14:03:11 by thdelmas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,23 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+static int	sh_test_permissions(char *s1, char *s2)
+{
+	struct stat	pstat;
+
+	if (!ft_strcmp(s1, "-r") && !lstat(s2, &pstat)
+			&& (pstat.st_mode & S_IRUSR))
+		return (0);
+	else if (!ft_strcmp(s1, "-w") && !lstat(s2, &pstat)
+			&& (pstat.st_mode & S_IWUSR))
+		return (0);
+	else if (!ft_strcmp(s1, "-x") && !lstat(s2, &pstat)
+			&& (pstat.st_mode & S_IXUSR))
+		return (0);
+	else
+		return (2);
+}
 
 static int	sh_test_unary_sub(char *s1, char *s2)
 {
@@ -35,11 +52,8 @@ static int	sh_test_unary_sub(char *s1, char *s2)
 	else if (!ft_strcmp(s1, "-s") && !lstat(s2, &pstat)
 			&& pstat.st_size > 0)
 		return (0);
-	else if (!ft_strcmp(s1, "-r") && !lstat(s2, &pstat)
-			&& (pstat.st_mode & S_IRUSR))
-		return (0);
 	else
-		return (2);
+		return (sh_test_permissions(s1, s2));
 }
 
 int			sh_test_unary(char *s1, char *s2)
