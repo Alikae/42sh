@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/05 18:59:35 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_env	*sh_setev_next(const char *key, const char *value, t_env *env)
 	if (!ft_strcmp(env->key, key) && env->readonly)
 	{
 		ft_putstr_fd(env->key, 2);
-		ft_putendl_fd(": readonly variable", 2);
+		ft_putendl_fd("42sh: readonly variable", 2);
 		return (env);
 	}
 	else if (ft_strcmp(env->key, key))
@@ -47,7 +47,7 @@ t_env			*sh_setev(const char *key, const char *value)
 	t_env	*env;
 
 	if (!key || (!ft_isalpha(*key) && *key != '_'))
-		return (print_err(": Bad identifier: Must begin with a letter"));
+		return (print_err("42sh: Bad identifier: Must begin with a letter"));
 	if (!(env = sh()->params))
 	{
 		sh()->params = sh_create_param(key);
