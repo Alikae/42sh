@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/05 03:03:56 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/05 03:53:44 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int			sh_export(int ac, char **av, t_env **ev)
 	int		i;
 
 	i = 0;
-	printf("%s\n", av[1]);
 	if (ac == 1 || (ac == 2 && !ft_strcmp(av[1], "-p")))
 		sh_print_export(ev);
 	else

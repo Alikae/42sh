@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/05 02:54:26 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/05 03:52:21 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 		free(new_tok);
 		new_tok = NULL;
 	}
-	printf("exp = %s\n", new_tok->content);
 	sh_free_exp(&exp, &tok_content);
 	return (new_tok);
 }

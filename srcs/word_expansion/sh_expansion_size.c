@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/05 03:51:12 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		sh_simple_word(char *content, int i)
 			&& content[i] != '"' && content[i] != '-'
 			&& content[i] != '$' && content[i] != '\''
 			&& content[i] != ':' && content[i] != '\\'
-			&& content[i])
+			&& content[i] != '=' && content[i])
 		++i;
 	return (i);
 }
