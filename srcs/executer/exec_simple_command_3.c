@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/05 03:21:00 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,11 @@ int		stock_redirections_assignements_argvs(t_token *token_begin,
 	while (token_begin)
 	{
 		if (is_redirection_operator(token_begin->type))
+		{
 			stock_redirection(p, token_begin, &nb_redirections);
+			if (p->abort_cmd)
+				return (nb_redirections);
+		}
 		else if (!cmd_begin && contain_equal_not_first_no_expansions(
 					token_begin->content))
 			stock_assign(p, token_begin, nb_assign);

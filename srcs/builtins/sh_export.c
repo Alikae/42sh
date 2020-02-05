@@ -6,13 +6,15 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/05 03:03:56 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "sh.h"
 #include "sh_builtins.h"
+#include "sh_tokenizer.h"
+#include "sh_word_expansion.h"
 
 static void	sh_print_export(t_env **ev)
 {
@@ -41,6 +43,7 @@ static int	sh_sub_export(char *s)
 {
 	char	*tmp;
 	t_env	*tmp2;
+	char *expanded_tilde;
 
 	if (!ft_isalpha(s[0]) || s[0] == '_')
 	{
@@ -51,8 +54,12 @@ static int	sh_sub_export(char *s)
 	if ((tmp = ft_strchr(s, '=')))
 	{
 		tmp = ft_strndup(s, tmp - s);
-		sh_setev(tmp, ft_strchr(s, '=') + 1)->exported = 1;
+		//
+		expanded_tilde = dupfilsdup(ft_strchr(s, '=') + 1);
+		sh_tilde_expansion(&expanded_tilde, sh()->params);
+		sh_setev(tmp, expanded_tilde)->exported = 1;
 		ft_memdel((void**)&tmp);
+		ft_memdel((void**)&expanded_tilde);
 	}
 	else if ((tmp2 = sh_getev(s)))
 		tmp2->exported = 1;
@@ -64,6 +71,7 @@ int			sh_export(int ac, char **av, t_env **ev)
 	int		i;
 
 	i = 0;
+	printf("%s\n", av[1]);
 	if (ac == 1 || (ac == 2 && !ft_strcmp(av[1], "-p")))
 		sh_print_export(ev);
 	else

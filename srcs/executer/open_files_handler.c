@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/05 03:15:24 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ int		file_is_already_open(t_sh *p, char *name)
 
 int		open_with_redirection_flags(char *real_path, t_toktype type)
 {
+//	if (!have rights)
+//	print "Error"
+//	abort_cmd
 	if (type == SH_GREAT)
 		return (open(real_path, O_CREAT | O_TRUNC | O_WRONLY,
 					S_IRUSR | S_IWUSR));
@@ -94,6 +97,7 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
 		sh_dprintf(2, "OPEN ERROR -> '%s'\n", real_path);
+		p->abort_cmd = 1;
 		(was_malloc) ? ft_memdel((void**)&real_path) : 0;
 		return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/05 02:52:12 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_toktype	protect_subsh_end(t_toktype type, t_toktool *t)
 			|| get_last_token()->type == SH_OR_IF
 			|| get_last_token()->type == SH_AND_IF))
 		{
-			printf("SYNTAX ERROR: Unexpected ')'\n");
+			sh_dprintf(2, "SYNTAX ERROR: Unexpected ')'\n");
 			return (SH_SYNTAX_ERROR);
 		}
 	}
