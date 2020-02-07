@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/07 21:23:24 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void		sh_tty_cbreak(int code, struct termios orig_termios)
 		if (tcsetattr(0, TCSANOW, &sh()->cbreak) < 0)
 			destructor(1);
 	}
-	(void)orig_termios;
 	if (code == 2)
 		if (tcsetattr(0, TCSANOW, &orig_termios) < 0)
 			destructor(1);

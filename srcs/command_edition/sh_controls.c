@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/07 20:49:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static int	control_d(char **command, char *buf, t_hist *hist, int *i)
 		if (sh()->end_of_here_doc)
 		{
 			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);
+			write(0, "\n", 1);
 			return (0);
 		}
 		write(0, "\n", 1);
@@ -64,6 +65,8 @@ static int	control_d(char **command, char *buf, t_hist *hist, int *i)
 		else if (sh()->control_d)
 			return (0);
 	}
+	else
+		sh_cursor_motion(command, "\033[3~", *i, hist);
 	return (1);
 }
 

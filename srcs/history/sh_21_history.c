@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/07 21:30:48 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "sh.h"
 #include "libft.h"
 #include "sh_history.h"
+#include "sh_command_edition.h"
 
 static void		init_history(t_hist *hist, char **history)
 {
@@ -43,6 +44,8 @@ static void		command_hist_read(int fd, char ***history, t_hist *hist)
 	rest = NULL;
 	while (get_next_line(fd, &line, &rest) > 0)
 	{
+		line = ft_strconv_w(line);
+		sh_strclean(&line);
 		if (hist->size_r < hist->size_l)
 			*history = tab_realloc(*history, line);
 		else

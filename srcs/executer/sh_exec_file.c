@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/07 21:45:52 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,22 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-int		read_script(char **buff, int *fd, const char *path)
+static void		clean_input(char **str)
+{
+	int i;
+
+	i = 0;
+	if (!str || !*str)
+		return ;
+	while (str[0][i])
+	{
+		if ((str[0][i] < 32 || str[0][i] == 127) && str[0][i] != '\n')
+			str[0][i] = 32;
+		i++;
+	}
+}
+
+int				read_script(char **buff, int *fd, const char *path)
 {
 	if (!(*buff = ft_strnew(4096)))
 		return (-1);
@@ -37,7 +52,7 @@ int		read_script(char **buff, int *fd, const char *path)
 	return (*fd);
 }
 
-int		read_script_2(int fd, char **input, char **buff)
+int				read_script_2(int fd, char **input, char **buff)
 {
 	while (read(fd, *buff, 4096) > 0)
 	{
@@ -52,7 +67,7 @@ int		read_script_2(int fd, char **input, char **buff)
 	return (1);
 }
 
-int		sh_script(const char *path)
+int				sh_script(const char *path)
 {
 	t_sh	*p;
 	char	*buff;
@@ -67,6 +82,7 @@ int		sh_script(const char *path)
 	if ((fd = read_script_2(fd, &input, &buff)) < 1)
 		return (fd);
 	input = ft_strconv_w(input);
+	clean_input(&input);
 	sh_init_cmd(input);
 	if (input && *input && (ast = tokenize_input(input)))
 	{
@@ -80,7 +96,7 @@ int		sh_script(const char *path)
 	return (1);
 }
 
-int		sh_exec_file(void)
+int				sh_exec_file(void)
 {
 	t_sh	*p;
 	int		i;

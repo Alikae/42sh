@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/07 21:29:36 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ int				sh_paste(char **command, char *buf, int i, t_hist *hist);
 void			sh_tty_cbreak(int code, struct termios orig_termios);
 void			reset_selection(char **commmand, int i, t_hist *hist);
 void			sh_reprompt(int i, char **command);
+void			sh_strclean(char **str);
 char			*sh_delete_last(char *command, int i);
 char			*sh_insert_char(char *command, char *buf, int i);
 char			*sh_buffer(int *k);
+
 #endif

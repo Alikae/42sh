@@ -158,7 +158,8 @@ C_FILES_tools = \
 		sh_tab_fusion.c \
 		sh_are_you_sur.c \
 		ft_join_with_char.c \
-		sh_pattern_matching.c
+		sh_pattern_matching.c \
+		sh_strclean.c
 
 C_FILES_word_expansion = \
 			 sh_arithmetic_expansion.c \
