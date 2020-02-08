@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/05 03:15:24 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/08 03:21:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 	}
 	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
-		sh_dprintf(2, "OPEN ERROR -> '%s'\n", real_path);
+		sh_dprintf(2, "42sh: OPEN ERROR - '%s'\n", real_path);
 		p->abort_cmd = 1;
 		(was_malloc) ? ft_memdel((void**)&real_path) : 0;
 		return (-1);

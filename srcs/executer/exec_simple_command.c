@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/08 03:21:07 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int		exec_simple_command(t_sh *p, t_token *token_begin, t_token *token_end)
 	char	**child_argv;
 
 	f = 0;
+	child_argv = 0;
 	if ((tmp = is_function_definition(token_begin, token_end)))
 		return (store_func(p, tmp));
 	nb_redirections = stock_redirections_assignements_argvs(token_begin,
