@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/08 03:39:59 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,16 @@ int		sh_alias_value_len(char *alias, int *ind)
 	return (i - j);
 }
 
-int		sh_cmd_len(t_toktool *t, int in)
+int		sh_cmd_len(const char *c, int in)
 {
 	int		i;
 
 	i = in;
-	while (t->input[i] && t->input[i] != ' ')
+	while (c[i] && (c[i] == '\n' || c[i] == '<'
+			|| c[i] == '>' || c[i] == '&'
+			|| c[i] == '|' || c[i] == ' '
+			|| c[i] == '\t' || c[i] == ';'
+			|| c[i] == '(' || c[i] == ')'))
 		i++;
 	return (i - in);
 }
@@ -49,10 +53,11 @@ void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 	char	*cmd;
 
 	j = 0;
-	len = sh_alias_value_len(alias, &j) - sh_cmd_len(t, in);
+	len = sh_alias_value_len(alias, &j) - sh_cmd_len(t->input, in);
 	i = 0;
 	if (!(cmd = (char*)malloc(len + ft_strlen(t->input) + 2)))
 		destructor(-1);
+	printf("len = %lu\n", len + ft_strlen(t->input) + 2);
 	while (i < in)
 	{
 		cmd[i] = t->input[i];
@@ -62,9 +67,13 @@ void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 		cmd[i++] = alias[j++];
 	j = t->i;
 	t->i = in;
+	printf("i = %i\n", i);
 	while (t->input[j])
 		cmd[i++] = t->input[j++];
 	cmd[i] = '\0';
+	
+	printf("i = %i\n", i);
+
 	ft_memdel((void**)&(t->input));
 	t->input = cmd;
 }
