@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/08 04:12:06 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,23 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 	t_env	*tmp;
 	char	*equal;
 	t_token	*tmpt;
+	t_token	*tmpt_name;
 
 	(*nb_assign)++;
 	tmp = p->assign_lst;
 	equal = ft_strchr(token->content, '=');
 	*equal = 0;
-	p->assign_lst = sh_create_param(token->content);
+	if ((tmpt_name = sh_expansion(token->content, &(p->params), 0)))
+	{
+		p->assign_lst = sh_create_param(tmpt_name->content);
+		free_ast(tmpt_name);
+	}
+	else
+	{
+		sh_dprintf(2, "42sh: Invalid name '' for assignement\n");
+		(*nb_assign)--;
+		return ;
+	}
 	*equal = '=';
 	p->assign_lst->value = ft_strdup(equal + 1);
 	if ((tmpt = sh_expansion(p->assign_lst->value, &(p->params), 0)))
