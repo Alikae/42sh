@@ -34,7 +34,7 @@ void			ft_free_tabstr(char **tab_tofree);
 char			**ft_tab_strdup(char **tabl);
 char			**tab_realloc(char **tabl, char *line);
 
-char			*ft_strconv_w(const char *str);
+char			*ft_strconv_w(char *str);
 size_t			ft_strlen_w(const char *str);
 size_t			ft_strlen(const char *s);
 char			*ft_to_lower(char *str);
