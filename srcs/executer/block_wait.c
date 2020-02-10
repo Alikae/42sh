@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/10 23:20:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 {
-	if (WSTOPSIG(status) == SIGTSTP && (p->process_is_stopped = 1))
+	if ((WSTOPSIG(status) == SIGSTOP || WSTOPSIG(status) == SIGTSTP)
+			&& (p->process_is_stopped = 1))
 	{
 		sh_dprintf(2, "\nChild_process [%i] suspended\n", child_pid);
 		if (!from_fg)
@@ -63,6 +64,10 @@ void	block_wait_signaled(t_sh *p, int child_pid, int status)
 		sh_dprintf(1, "\nChild_process [%i] QUITTED (SIGQUIT)\n", child_pid);
 	if (WTERMSIG(status) == SIGSTOP)
 		sh_dprintf(1, "\nChild_process [%i] KILLED (SIGSTOP)\n", child_pid);
+	if (WTERMSIG(status) == SIGABRT)
+		sh_dprintf(1, "\nChild_process [%i] ABORTED (SIGABRT)\n", child_pid);
+	if (WTERMSIG(status) == SIGFPE)
+		sh_dprintf(1, "\nChild_process [%i] RAISE EXCEPTION (SIGFPE)\n", child_pid);
 }
 
 int		block_wait(t_sh *p, int child_pid, int from_fg)
