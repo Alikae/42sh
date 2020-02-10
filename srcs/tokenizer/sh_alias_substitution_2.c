@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/08 03:39:59 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/10 21:50:07 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 	i = 0;
 	if (!(cmd = (char*)malloc(len + ft_strlen(t->input) + 2)))
 		destructor(-1);
-	printf("len = %lu\n", len + ft_strlen(t->input) + 2);
 	while (i < in)
 	{
 		cmd[i] = t->input[i];
@@ -67,13 +66,9 @@ void	sh_sub_alias_command(t_toktool *t, char *alias, int in)
 		cmd[i++] = alias[j++];
 	j = t->i;
 	t->i = in;
-	printf("i = %i\n", i);
 	while (t->input[j])
 		cmd[i++] = t->input[j++];
 	cmd[i] = '\0';
-	
-	printf("i = %i\n", i);
-
 	ft_memdel((void**)&(t->input));
 	t->input = cmd;
 }

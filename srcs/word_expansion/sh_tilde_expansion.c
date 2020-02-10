@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 20:38:40 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/10 22:06:42 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,7 @@ void	sh_find_home(t_env *env, char **content)
 	else
 	{
 		env_cpy = env;
-		if (!(sh_find_env(&env_cpy, "LOGNAME")))
-			return ;
-		data = getpwnam(env_cpy->value);
+		data = getpwnam(getlogin());
 		if (data)
 			home = ft_strdup(data->pw_dir);
 	}
