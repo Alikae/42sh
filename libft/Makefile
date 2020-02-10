@@ -65,10 +65,10 @@ $(OBJ_DIR): mkdir_msg
 
 ### Compilation ###
 .ONESHELL:
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) Makefile | compil_msg
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
+	@echo "$(RCURSOR)$(ERASEL)\c"
 	@echo "$(SCURSOR)$(@F) \c"
 	@$(CC) $(LFlAGS) $(CFLAGS) -o $@ -c $<
-	@echo "$(RCURSOR)$(ERASEL)\c"
 
 ### Link ###
 .ONESHELL:
