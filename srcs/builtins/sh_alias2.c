@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 00:02:04 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	is_char_forbidden(char c)
 	return (0);
 }
 
-int		check_alias(char *alias)
+int			check_alias(char *alias)
 {
 	int		i;
 	int		j;
@@ -47,7 +47,7 @@ int		check_alias(char *alias)
 	return (1);
 }
 
-int		replace_alias(char **aliases, char *key)
+int			replace_alias(char **aliases, char *key)
 {
 	int		i;
 	int		j;

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 00:01:30 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ static int		process(int i, char **av, char flag)
 			if (!replace_alias(sh()->aliases, av[i]))
 				if (!(sh()->aliases = tab_realloc(sh()->aliases, av[i])))
 					return (0);
-				if (flag & F_PRINT)
-					print_alias(flag, av[i]);
+			if (flag & F_PRINT)
+				print_alias(flag, av[i]);
 			test = NULL;
 		}
 		else if (!(list_aliases(flag, av[i])))
