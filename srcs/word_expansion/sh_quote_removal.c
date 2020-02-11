@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/10 21:55:03 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/11 04:46:07 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	sh_find_quote(t_split *splt, short quote)
 				return ;
 		}
 		if (splt->tok->content[splt->i] && ((splt->tok->content[splt->i] != '\''
-			&& splt->tok->content[splt->i] != '"') || quote != 0))
+			&& splt->tok->content[splt->i] != '"') || quote != 0 || bquote))
 			splt->i++;
 	}
 	if (!quote)
