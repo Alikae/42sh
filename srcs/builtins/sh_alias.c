@@ -61,20 +61,23 @@ static int		process(int i, char **av, char flag)
 
 	k = 1;
 	j = 0;
-	while (av[i])
+	if (flag & F_PRINT)
+		list_aliases(flag, NULL);
+	while (av[++i])
 	{
+		if (!check_alias(av[i]))
+			continue ;
 		if ((test = ft_strchr(av[i], '=')) && av[i][0] != '=')
 		{
 			if (!replace_alias(sh()->aliases, av[i]))
 				if (!(sh()->aliases = tab_realloc(sh()->aliases, av[i])))
 					return (0);
-			if (flag & F_PRINT)
-				print_alias(flag, av[i]);
+				if (flag & F_PRINT)
+					print_alias(flag, av[i]);
 			test = NULL;
 		}
 		else if (!(list_aliases(flag, av[i])))
 			k = 0;
-		i++;
 	}
 	return (k);
 }
@@ -113,7 +116,7 @@ int				sh_alias(int ac, char **av, t_env **ev)
 		if (av[i][0] == '-' && av[i][1] != 0)
 		{
 			if (!check_flags(av[i] + 1, &flag))
-				return (0);
+				return (1);
 		}
 		else
 			break ;
@@ -122,6 +125,6 @@ int				sh_alias(int ac, char **av, t_env **ev)
 	(void)ac;
 	(void)ev;
 	if (!av[i])
-		return (list_aliases(flag, NULL));
-	return (process(i, av, flag));
+		return (!list_aliases(flag, NULL));
+	return (!process(i - 1, av, flag));
 }
