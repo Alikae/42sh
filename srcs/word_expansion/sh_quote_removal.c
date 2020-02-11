@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 04:46:07 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/11 04:50:45 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 
 	splt.tok = tok;
 	if (split && ifs)
-		splt.split = split;
+		splt.split = ft_strdup(split);
 	else if (ifs)
 		splt.split = ft_strdup(" \t\n");
 	else
@@ -95,5 +95,6 @@ t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
 	splt.sub = NULL;
 	if (splt.tok && (splt.tok->content))
 		sh_find_quote(&splt, 0);
+	ft_memdel((void**)&(splt.split));
 	return (splt.sub);
 }
