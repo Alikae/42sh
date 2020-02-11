@@ -15,6 +15,7 @@
 #include "sh_executer.h"
 #include "sh_redirections.h"
 #include "sh.h"
+#include <sys/wait.h>
 
 void	toggle_redirect_pipe(int toggle_on, int fd_in, int fd_out)
 {

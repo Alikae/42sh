@@ -12,16 +12,18 @@
 
 #include "libft.h"
 
-char		*ft_strconv_w(const char *str)
+char		*ft_strconv_w(char *str)
 {
 	size_t	len;
 	size_t	i;
 	char	*dest;
 
-	if (!(len = ft_strlen_w(str)))
-		return (NULL);
+	len = ft_strlen_w(str);
 	if (!(dest = (char*)malloc(sizeof(char) * (len + 1))))
+	{
+		ft_memdel((void**)&str);
 		return (NULL);
+	}
 	len = 0;
 	i = 0;
 	while (str[i] != '\0')

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/05 03:43:55 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/10 23:12:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 	int	fd_in;
 	int	fd_out;
 
+	if (token->sub && token->sub->content)
+		token->sub = expand_and_retokenize(p, token->sub);
 	if (handle_dless_n_ands_redirections(p, token, nb_redirections))
 		return ;
 	if (p->abort_cmd)
