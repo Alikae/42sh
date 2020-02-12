@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/11 01:38:11 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int			sh_in_loop(char **input, t_sh *p, char **ln_buff)
 		if (!p->unfinished_cmd)
 			exec_script(p, p->ast);
 	}
+	wait_for_zombies();
 	(*input)[ft_strlen(*input) - 1] = 0;
 	free_ast(p->ast);
 	p->ast = 0;

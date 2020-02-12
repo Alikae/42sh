@@ -1,5 +1,5 @@
-NAME := 21sh
-PROJECT := 21SH
+NAME := 42sh
+PROJECT := 42SH
 AUTHORS := ede-ram tcillard
 
 RM = /bin/rm
