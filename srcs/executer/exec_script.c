@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 04:07:49 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ void	fork_n_protect_zombies(t_sh *p, int *create_pgrp, int *child_pid)
 	if (p->pid_main_process == getpid() && p->is_interactive)
 		*create_pgrp = 1;
 	*child_pid = fork();
+	while (1);
+	//	GET PROBLEMS IN PIPE
 	if (*child_pid && p->pid_main_process == getpid())
-		wait_for_zombies();
+		;//		wait_for_zombies();
 	else
 	{
 		del_all_group_processes(p->existing_process_groups);

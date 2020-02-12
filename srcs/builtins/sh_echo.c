@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/11 01:02:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ static int		check_flags(char *from, char *to)
 
 	i = -1;
 	flag = *to;
+	if (!from[0])
+		return (0);
 	while (from[++i])
 	{
 		if (from[i] == 'n')
@@ -126,9 +128,7 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	(void)ev;
 	if (!av || ac < 2)
 		return (0);
-	if (ft_strcmp(av[i], "-") == 0)
-		return (echo_process(ac, av, flag, ++i));
-	while (av[i][0] == '-' && check_flags(av[i] + 1, &flag))
+	while (av[i] && av[i][0] == '-' && check_flags(av[i] + 1, &flag))
 		i++;
 	return (echo_process(ac, av, flag, i));
 }

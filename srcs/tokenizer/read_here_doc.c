@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/11 01:49:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,11 @@ t_toktype	read_here_doc(t_toktool *t, t_token **p_actual)
 	if (read_n_skip_word(t) == -1)
 		return (SH_SYNTAX_ERROR);
 	if (word_begin == t->i)
-		sh()->unfinished_cmd = 1;
-	if (word_begin == t->i)
+	{
+		sh_dprintf(2, "42sh: HEREDOC terminator needed\n");
+		sh()->invalid_cmd = 1;
 		return (SH_SYNTAX_ERROR);
+	}
 	word_len = t->i - word_begin;
 	push_here_doc(t, *p_actual, word_begin, word_len);
 	return (sh_record_here_doc(t, sh()->here));

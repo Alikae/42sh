@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/10 23:20:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/11 03:08:29 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	block_wait_signaled(t_sh *p, int child_pid, int status)
 		sh_dprintf(1, "\nChild_process [%i] ABORTED (SIGABRT)\n", child_pid);
 	if (WTERMSIG(status) == SIGFPE)
 		sh_dprintf(1, "\nChild_process [%i] RAISE EXCEPTION (SIGFPE)\n", child_pid);
+	if (WTERMSIG(status) == SIGILL)
+		sh_dprintf(1, "\nChild_process [%i] ILLEGAL INSTRUCTION (SIGILL)\n", child_pid);
 }
 
 int		block_wait(t_sh *p, int child_pid, int from_fg)

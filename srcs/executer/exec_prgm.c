@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/08 03:25:06 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/11 01:10:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int	exec_prgm(t_sh *p, char **child_argv)
 		return (127);
 	if (!can_exec(&st))
 	{
-		sh_dprintf(1, "cant exec '%s'\n", child_argv[0]);
+		sh_dprintf(2, "cant exec '%s'\n", child_argv[0]);
+		ft_memdel((void**)&real_path);
 		return (127);
 	}
 	ret = exec_path(p, real_path, child_argv);
