@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 04:50:45 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/13 00:48:20 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,32 +52,33 @@ void	sh_treat_token(t_split *splt, short quote)
 		sh_delete_last_ifs(splt);
 }
 
-void	sh_find_quote(t_split *splt, short quote)
+void	sh_find_quote(t_split *sp, short quote)
 {
 	int		bquote;
 
 	bquote = 0;
-	while (splt->tok->content[splt->i])
+	while (sp->tok->content[sp->i])
 	{
 		if (bquote)
 			bquote--;
-		if (!bquote && quote != SH_QUOTE && splt->tok->content[splt->i] == '\\')
+		if (!bquote && quote != SH_QUOTE && sp->tok->content[sp->i] == '\\')
 		{
-			sh_remove_char(&(splt->tok->content), &splt->i);
+			if (quote != SH_DQUOTE || sh_bq_exc(sp->tok->content[sp->i + 1]))
+				sh_remove_char(&(sp->tok->content), &sp->i);
 			bquote = 1;
 		}
 		if (!bquote)
 		{
-			sh_treat_token(splt, quote);
-			if (sh_check_quote(splt, quote))
+			sh_treat_token(sp, quote);
+			if (sh_check_quote(sp, quote))
 				return ;
 		}
-		if (splt->tok->content[splt->i] && ((splt->tok->content[splt->i] != '\''
-			&& splt->tok->content[splt->i] != '"') || quote != 0 || bquote))
-			splt->i++;
+		if (sp->tok->content[sp->i] && ((sp->tok->content[sp->i] != '\''
+			&& sp->tok->content[sp->i] != '"') || quote != 0 || bquote))
+			sp->i++;
 	}
 	if (!quote)
-		sh_token_spliting(splt, 1);
+		sh_token_spliting(sp, 1);
 }
 
 t_token	*sh_quote_removal(t_token *tok, const char *split, short ifs)
