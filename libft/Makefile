@@ -21,10 +21,8 @@ SUB_DIRS := \
 
 ### INCLUDE SRC MAKEFILE ###
 include $(SRC_DIR)/sources.mk
-
 ### INCLUDE INC MAKEFILE ###
 include $(INC_DIR)/includes.mk
-
 
 
 ### ALL SUB DIRS ###
@@ -44,11 +42,18 @@ INC = $(addprefix $(INC_DIR)/,$(H_FILES))
 
 
 ###  CC && FLAGS ###
-CC = clang
-DEBUG_FLAGS= -g3
-CFLAGS = $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS)) \
-		 $(DEBUG_FLAGS) \
+CC=clang
+DEBUG_FLAGS = -g3
+NO_WARNING ?= false
+ifeq ($(NO_WARNING), false)
+CFLAGS = \
+		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS)) \
 		 -Wall -Werror -Wextra
+else
+CFLAGS = \
+		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS)) \
+		 $(DEBUG_FLAGS)
+endif
 
 
 LFLAGS = \
@@ -86,7 +91,8 @@ clean: clean_msg
 	$(RM) -rf $(OBJ_DIR)
 
 .ONESHELL:
-fclean: clean fclean_msg
+fclean: fclean_msg
+	$(RM) -rf $(OBJ_DIR)
 	$(RM) -rf $(NAME)
 
 re: fclean all

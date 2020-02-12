@@ -1,6 +1,6 @@
 ##################################### Tools ####################################
 
-AUTHORS ?= ede-ram tcillard
+AUTHORS ?= ede-ram tcillard thdelmas tmeyer
 
 ### Escape Sequences ###
 SCURSOR = \033[s
@@ -56,6 +56,7 @@ lib_msg: | hey_msg
 
 compil_msg: | hey_msg
 	@printf "$(BRED)$(PROJECT): $(CLEAR)$(WHITE)COMPIL$(CLEAR)\n"
+	@echo "$(SCURSOR)\c"
 
 link_msg: | hey_msg
 	@printf "\n$(BRED)$(PROJECT): $(CLEAR)$(WHITE)LINK$(CLEAR)\n"
