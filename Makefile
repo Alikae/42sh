@@ -78,11 +78,13 @@ LFLAGS = -ltermcap \
 
 
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re $(FT)
 
 all: $(FT) $(NAME) bye_msg
 
 ### Lib compil ###
+$(FT_DIR)/lib$(FT).a: $(FT)
+
 $(FT): | lib_msg
 	@make -C $(FT_DIR)
 
@@ -92,14 +94,14 @@ $(OBJ_DIR): | mkdir_msg
 
 ### Compilation ###
 .ONESHELL:
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) | compil_msg
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC) $(MAKEFILE_LIST) $(FT_DIR)/lib$(FT).a | compil_msg
+	@echo "$(RCURSOR)$(ERASEL)\c"
 	@echo "$(SCURSOR)$(@F) \c"
 	@$(CC) $(CFLAGS) -o $@ -c $<
-	@echo "$(RCURSOR)$(ERASEL)\c"
 
 ### Link ###
 .ONESHELL:
-$(NAME): $(OBJ_DIR) $(OBJ) $(INC) $(MAKEFILE_LIST) $(FT_DIR)/libft.a | link_msg init
+$(NAME): $(OBJ_DIR) $(OBJ) | link_msg init
 	@$(CC) $(OBJ) $(LFLAGS) -o $(NAME)
 	@printf "$@: Done !\n"
 

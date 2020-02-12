@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 01:41:22 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 03:57:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 void	free_sh_var(t_sh *s)
 {
+	free(s->input);
 	ft_free_opts(s->opt);
 	sh_env_del(&(s->params));
 	sh_ln_del(&(s->ln_history));

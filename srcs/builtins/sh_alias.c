@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 00:01:30 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,12 @@ static int		process(int i, char **av, char flag)
 
 	k = 1;
 	j = 0;
-	while (av[i])
+	if (flag & F_PRINT)
+		list_aliases(flag, NULL);
+	while (av[++i])
 	{
+		if (!check_alias(av[i]))
+			continue ;
 		if ((test = ft_strchr(av[i], '=')) && av[i][0] != '=')
 		{
 			if (!replace_alias(sh()->aliases, av[i]))
@@ -74,7 +78,6 @@ static int		process(int i, char **av, char flag)
 		}
 		else if (!(list_aliases(flag, av[i])))
 			k = 0;
-		i++;
 	}
 	return (k);
 }
@@ -113,7 +116,7 @@ int				sh_alias(int ac, char **av, t_env **ev)
 		if (av[i][0] == '-' && av[i][1] != 0)
 		{
 			if (!check_flags(av[i] + 1, &flag))
-				return (0);
+				return (1);
 		}
 		else
 			break ;
@@ -122,6 +125,6 @@ int				sh_alias(int ac, char **av, t_env **ev)
 	(void)ac;
 	(void)ev;
 	if (!av[i])
-		return (list_aliases(flag, NULL));
-	return (process(i, av, flag));
+		return (!list_aliases(flag, NULL));
+	return (!process(i - 1, av, flag));
 }

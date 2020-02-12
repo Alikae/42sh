@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 01:38:11 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 03:57:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int					sh_loop(void)
 				ft_putstr("$->");
 		}
 		ft_memdel((void**)&input);
+		sh()->input = 0;
 		check_jobs_status(p);
 	}
 	return (1);

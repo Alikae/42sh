@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/10 04:32:26 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/11 04:40:27 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	sh_read_pipe(t_exp *exp, int fd)
 		buff[ret] = '\0';
 		sh_subshdup(buff, exp);
 	}
-	if (exp->value[ft_strlen(exp->value) - 1] == '\n')
+	if (ft_strlen(exp->value) && exp->value[ft_strlen(exp->value) - 1] == '\n')
 		exp->value[ft_strlen(exp->value) - 1] = '\0';
 }
 

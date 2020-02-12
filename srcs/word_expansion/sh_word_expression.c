@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/11 04:56:15 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,5 @@ void	sh_parameter_expansion(t_exp *exp)
 		exp->value = sh_long_itoa(ft_strlen(exp->value));
 		ft_memdel((void**)&cpy);
 	}
+	ft_memdel((void**)&(exp->name));
 }
