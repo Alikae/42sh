@@ -84,15 +84,15 @@ int				sh_script(const char *path)
 	input = ft_strconv_w(input);
 	clean_input(&input);
 	sh_init_cmd(input);
-	if (input && *input && (ast = tokenize_input(input)))
+	if (p->input && *p->input && (ast = tokenize_input(p->input)))
 	{
-		ft_memdel((void**)&input);
+		ft_memdel((void**)&p->input);
 		exec_script(p, ast);
 		free_ast(ast);
 	}
-	else if (input && *input)
+	else if (p->input && *p->input)
 		sh_dprintf(2, "Tokenize Error-\n");
-	ft_memdel((void**)&input);
+	ft_memdel((void**)&p->input);
 	return (1);
 }
 
