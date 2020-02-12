@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 14:02:10 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/02/12 20:15:27 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		sh_test_binary(char *s1, char *s2, char *s3)
 	else if (!ft_strcmp(s2, "!=") && ft_strcmp(s1, s3))
 		return (0);
 	else if (!ft_isdigitstr(s1))
-		ft_putendl_fd("integer expression expected", 2);
+		;
 	else if (!ft_strcmp(s2, "-eq") && ft_atoi(s1) == ft_atoi(s3))
 		return (0);
 	else if (!ft_strcmp(s2, "-ne") && ft_atoi(s1) != ft_atoi(s3))
@@ -138,5 +138,7 @@ int		sh_test(int ac, char **av, t_env **ev)
 		ret = (sh_test_binary(av[i], av[i + 1], av[i + 2]));
 	else
 		ret = sh_test_sub(ac, av, i, ret);
+	if (ret == 2)
+		ft_putendl_fd("42sh: test: bad usage", 2);
 	return (ret);
 }
