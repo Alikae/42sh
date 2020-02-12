@@ -17,7 +17,6 @@
 #include "sh_builtins.h"
 
 #define F_N 1
-#define F_E 2
 #define F_C 4
 
 static int		sh_print(char tmp, char *flag)
@@ -33,7 +32,7 @@ static int		sh_print(char tmp, char *flag)
 	else if (tmp == 'n')
 		i = write(1, "\n", 1);
 	else if (tmp == 'r')
-		i = write(1, "\n", 1);
+		i = write(1, "\r", 1);
 	else if (tmp == 'v')
 		i = write(1, "\v", 1);
 	else if (tmp == 't')
@@ -52,7 +51,7 @@ static int		sh_echo_print(char *tmp, char **handle, char *flag)
 {
 	int i;
 
-	while ((tmp = ft_strchr(*handle, '\\')) && (*flag & F_E))
+	while ((tmp = ft_strchr(*handle, '\\')))
 	{
 		if (write(1, *handle, tmp - *handle) < 0)
 			return (0);
@@ -105,10 +104,6 @@ static int		check_flags(char *from, char *to)
 	{
 		if (from[i] == 'n')
 			*to |= F_N;
-		else if (from[i] == 'e')
-			*to |= F_E;
-		else if (from[i] == 'E')
-			*to &= ~(F_E);
 		else if (from[i] != '\0')
 		{
 			*to = flag;
@@ -126,7 +121,7 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	i = 1;
 	flag = '\0';
 	(void)ev;
-	if (!av || ac < 2)
+	if (!av)
 		return (0);
 	while (av[i] && av[i][0] == '-' && check_flags(av[i] + 1, &flag))
 		i++;
