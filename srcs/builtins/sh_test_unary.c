@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 14:03:11 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/02/13 22:21:33 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	sh_test_permissions(char *s1, char *s2)
 			&& (pstat.st_mode & S_IXUSR))
 		return (0);
 	else
-		return (2);
+		return (1);
 }
 
 static int	sh_test_unary_sub(char *s1, char *s2)

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 13:42:38 by thdelmas         ###   ########.fr       */
+/*   Updated: 2020/02/13 23:11:54 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int				ft_strcmp(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 int				ft_isalnumstr(char *str);
 int				ft_isdigitstr(const char *str);
+int				ft_isxstr(const char *set, const char *str);
 char			*ft_strnew(size_t size);
 void			ft_strdel(char **as);
 void			ft_strclr(char *s);
@@ -80,6 +81,7 @@ int				ft_isalnum(int c);
 int				ft_isascii(int c);
 int				ft_isprint(int c);
 int				ft_isblank(int c);
+int				ft_isx(const char *set, int c);
 int				ft_toupper(int c);
 int				ft_tolower(int c);
 

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/12 20:15:27 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/13 23:09:20 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@
 
 #define UN_OP "-b -c -d -e -f -n -p -S -s -z -L -r -w -x"
 #define BI_OP "= != -eq -ne -gt -ge -lt -le"
+#define NUM_SET "+-0123456789"
 
 int		sh_test_binary(char *s1, char *s2, char *s3)
 {
-	if (!s1)
-		return (1);
-	else if (!ft_strcmp(s1, "!"))
+	if (!ft_strcmp(s1, "!"))
 		return (!sh_test_unary(s2, s3));
 	else if (!ft_strcmp(s1, "(") && !ft_strcmp(s3, ")"))
 		return (sh_test_unary(NULL, s2));
@@ -32,8 +31,9 @@ int		sh_test_binary(char *s1, char *s2, char *s3)
 		return (0);
 	else if (!ft_strcmp(s2, "!=") && ft_strcmp(s1, s3))
 		return (0);
-	else if (!ft_isdigitstr(s1))
-		;
+	else if ((!ft_isxstr(NUM_SET, s1) || !ft_isxstr(NUM_SET, s3))
+			&& ft_strcmp(s2, "!=") && ft_strcmp(s2, "="))
+		return (2);
 	else if (!ft_strcmp(s2, "-eq") && ft_atoi(s1) == ft_atoi(s3))
 		return (0);
 	else if (!ft_strcmp(s2, "-ne") && ft_atoi(s1) != ft_atoi(s3))
@@ -46,7 +46,7 @@ int		sh_test_binary(char *s1, char *s2, char *s3)
 		return (0);
 	else if (!ft_strcmp(s2, "-le") && ft_atoi(s1) <= ft_atoi(s3))
 		return (0);
-	return (2);
+	return (1);
 }
 
 int		sh_test_and_or(int ac, char **av, t_env **ev)
