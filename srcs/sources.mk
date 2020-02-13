@@ -132,7 +132,6 @@ C_FILES_builtins = \
 		   sh_set.c \
 		   sh_test.c \
 		   sh_test_unary.c \
-		   sh_source.c \
 		   sh_type.c \
 		   sh_type2.c \
 		   sh_true.c \
