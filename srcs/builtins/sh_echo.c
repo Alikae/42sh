@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 01:02:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/13 21:16:37 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,12 @@ static int		sh_echo_print(char *tmp, char **handle, char *flag)
 	{
 		if (write(1, *handle, tmp - *handle) < 0)
 			return (0);
-		*handle = tmp + 1 + (tmp[1] != '\0');
+		if (tmp[1] == 'a' || tmp[1] == 'b' || tmp[1] == 'f' || tmp[1] == 'n'
+				|| tmp[1] == 'r' || tmp[1] == 'v' || tmp[1] == 't'
+				|| tmp[1] == '\\')
+			*handle = tmp + (tmp[1] != '\0') + 1;
+		else
+			*handle = tmp + (tmp[1] != '\0');
 		if ((i = sh_print(tmp[1], flag)) == 0)
 			break ;
 		else if (i < 0)
@@ -122,7 +127,7 @@ int				sh_echo(int ac, char **av, t_env **ev)
 	flag = '\0';
 	(void)ev;
 	if (!av)
-		return (0);
+		return (1);
 	while (av[i] && av[i][0] == '-' && check_flags(av[i] + 1, &flag))
 		i++;
 	return (echo_process(ac, av, flag, i));
