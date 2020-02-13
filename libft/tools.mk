@@ -1,6 +1,6 @@
 ##################################### Tools ####################################
 
-AUTHORS ?= ede-ram
+AUTHORS ?= ede-ram tcillard thdelmas tmeyer
 
 ### Escape Sequences ###
 SCURSOR = \033[s
@@ -50,6 +50,7 @@ lib_msg:
 
 compil_msg:
 	@printf "\n$(BRED)\t COMPIL$(CLEAR)\n"
+	@echo "$(SCURSOR)\c"
 
 link_msg:
 	@printf "\n$(BRED)\t LINK$(CLEAR)\n"

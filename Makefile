@@ -32,7 +32,6 @@ SUB_DIRS := \
 
 ### INCLUDE SRC MAKEFILE ###
 include $(SRC_DIR)/sources.mk
-
 ### INCLUDE INC MAKEFILE ###
 include $(INC_DIR)/includes.mk
 
@@ -60,7 +59,7 @@ FT_INC_DIR = $(FT_DIR)/includes
 FT_LNK = -L$(FT_DIR) -l$(FT)
 
 ###  CC && FLAGS ###
-CC = clang -g
+CC=clang
 DEBUG_FLAGS = -g3
 NO_WARNING ?= false
 ifeq ($(NO_WARNING), false)
@@ -69,12 +68,13 @@ CFLAGS = \
 		 -Wall -Werror -Wextra
 else
 CFLAGS = \
-		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR))
+		 $(addprefix -I ,$(INC_DIR) $(INC_SUB_DIRS) $(FT_INC_DIR)) \
+		 $(DEBUG_FLAGS)
 endif
 
 LFLAGS = -ltermcap \
 		 -lncurses \
-		 $(FT_LNK) \
+		 $(FT_LNK)
 
 
 
@@ -90,7 +90,7 @@ $(FT): | lib_msg
 
 ### Mkdir obj ###
 $(OBJ_DIR): | mkdir_msg
-	@mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
+	mkdir -p $(OBJ_DIR) $(OBJ_SUB_DIRS)
 
 ### Compilation ###
 .ONESHELL:
