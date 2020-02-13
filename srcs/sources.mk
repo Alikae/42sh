@@ -189,7 +189,8 @@ C_FILES_word_expansion = \
 			 sh_arithmetique_expansion_tool_2.c \
 			 sh_next_less_operator.c \
 			 sh_arith_error.c \
-			 sh_treat_arth_var_inc_dec.c
+			 sh_treat_arth_var_inc_dec.c \
+			 sh_quote_removal_exc.c
 
 # SUPPA concat loop
 C_FILES += $(foreach SUB_DIR,$(SUB_DIRS),$(addprefix $(SUB_DIR)/,$(C_FILES_$(SUB_DIR))))

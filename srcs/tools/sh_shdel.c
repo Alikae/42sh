@@ -18,7 +18,7 @@
 
 void	free_sh_var(t_sh *s)
 {
-	free(s->input);
+	ft_memdel((void**)&s->input);
 	ft_free_opts(s->opt);
 	sh_env_del(&(s->params));
 	sh_ln_del(&(s->ln_history));

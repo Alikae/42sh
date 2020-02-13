@@ -41,15 +41,28 @@ static int	sh_newline(char **command, char *buf, t_hist *hist, int *i)
 	return (0);
 }
 
+static int	kill_control_d(char **command, char *buf)
+{
+	pid_t	id;
+
+	sh_dprintf(2, "42sh: syntax error: unexpected EOF while parsing command\n");
+	ft_memdel((void**)&sh()->buselect);
+	ft_memdel((void**)&buf);
+	id = getpid();
+	kill(id, SIGINT);
+	sh()->last_cmd_result = 2;
+	ft_memdel((void**)command);
+	return (3);
+}
+
 static int	control_d(char **command, char *buf, t_hist *hist, int *i)
 {
 	if (!ft_strcmp(*command, ""))
 	{
 		if (sh()->unfinished_cmd && !sh()->end_of_here_doc)
-			return (control_c(command, buf, hist, i));
+			return (kill_control_d(command, buf));
 		ft_memdel((void**)&sh()->buselect);
 		ft_memdel((void**)&buf);
-		sh_cursor_motion(command, "\033[F", *i, hist);
 		if (sh()->end_of_here_doc)
 		{
 			*i = sh_paste(command, sh()->end_of_here_doc, *i, hist);

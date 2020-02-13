@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/12 04:39:08 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 23:57:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,9 @@ int		exec_script(t_sh *p, t_token *token_begin)
 		del_n_redirect_lst(&p->redirect_lst, -1);
 	}
 	p->come_from_braces = 0;
-	while (token_begin && !p->abort_cmd)
+	while (token_begin)
 	{
+		p->abort_cmd = 0;
 		while (token_begin && token_begin->type == SH_NEWLINE)
 			token_begin = token_begin->next;
 		next_separator = find_next_script_separator(token_begin, 0);

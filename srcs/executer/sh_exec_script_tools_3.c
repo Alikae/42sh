@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/12 23:59:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	exec_pipeline(t_sh *p, t_token *token_begin, t_token *token_end)
 	}
 	else
 		p->last_cmd_result = exec_command(p, token_begin, token_end);
+	if (p->abort_cmd)
+		p->last_cmd_result = 130;
 	if (bang)
 		p->last_cmd_result = !p->last_cmd_result;
 }
