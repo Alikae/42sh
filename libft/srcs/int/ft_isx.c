@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigitstr.c                                    :+:      :+:    :+:   */
+/*   header.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thdelmas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/04 13:40:14 by thdelmas          #+#    #+#             */
-/*   Updated: 2020/02/13 23:03:15 by jerry            ###   ########.fr       */
+/*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
+/*   Updated: 2020/02/13 23:13:07 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_isdigitstr(const char *str)
+int		ft_isx(const char *set, int c)
 {
-	if (!str)
-		return (-1);
-	while (*str)
-		if (!ft_isdigit((int)*str))
-			return (0);
-		else
-			str++;
-	return (1);
+	if (!set || !set)
+		return (0);
+	while (*set)
+	{
+		if ((int)*set == c)
+			return (1);
+		set++;
+	}
+	return (0);
 }

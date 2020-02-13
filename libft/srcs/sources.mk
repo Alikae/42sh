@@ -15,6 +15,7 @@ C_FILES_int = \
 	ft_isprint.c \
 	ft_isspace.c \
 	ft_isxdigit.c \
+	ft_isx.c \
 	ft_tolower.c \
 	ft_toupper.c
 
@@ -90,7 +91,8 @@ C_FILES_str = \
 	ft_strlen_w.c \
 	ft_strconv.c \
 	ft_to_lower.c \
-	ft_isdigitstr.c
+	ft_isdigitstr.c \
+	ft_isxstr.c
 
 C_FILES_tab_str = \
 	ft_tab_strdel.c \
