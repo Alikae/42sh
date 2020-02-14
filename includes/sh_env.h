@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 20:46:04 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_env		*sh_getev(const char *key);
 t_env		*sh_init_var(const char *key, const char *value);
 t_env		*sh_setev(const char *key, const char *value);
 const char	*sh_get_value(const char *key);
-void		sh_unsetev(const char *key, t_env **env);
+int			sh_unsetev(const char *key, t_env **env);
 t_env		*sh_create_param(const char *key);
 t_env		*sh_env_params(char **env);
 void		sh_putparams(t_env *params);
