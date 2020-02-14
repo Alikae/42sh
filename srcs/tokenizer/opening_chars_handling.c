@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/13 00:14:54 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_toktype	fcknrm1(t_toktool *t, t_toktype *type, int max, const char *end)
 	{
 		if (esc)
 			esc--;
-		if (!esc && t->input[t->i] == '\\')
+		if (!esc && t->input[t->i] == '\\' && !(*type == SH_QUOTE))
 			esc = 2;
 		if (!esc && !ft_strncmp(end, t->input + t->i, len) && (t->i += len))
 			return (1);
