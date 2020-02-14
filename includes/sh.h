@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 05:28:56 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/13 23:16:51 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ typedef struct		s_sh
 	t_hist			*hist;
 	t_here_stack	*here;
 	int				come_from_braces;
+	char			*pwd;
 }					t_sh;
 
 t_sh				*sh(void);
@@ -121,5 +122,6 @@ void				sh_del_here_stack(t_here_stack **here);
 void				delete_close_all_pipe_lst_except(int pipe1, int pipe2);
 void				del_all_group_processes(t_process_group *tmp);
 void				wait_for_zombies(void);
+void				sh_generate_path(char *path);
 
 #endif

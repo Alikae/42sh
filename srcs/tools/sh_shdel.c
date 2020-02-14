@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/12 03:57:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 01:24:29 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	free_sh_var(t_sh *s)
 	free_ast(s->functions);
 	ft_strdel(&(s->cmd));
 	ft_memdel((void**)&s->end_of_here_doc);
+	ft_memdel((void**)&(s->pwd));
 }
 
 void	sh_shdel(t_sh **shell)

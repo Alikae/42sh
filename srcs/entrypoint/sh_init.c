@@ -6,11 +6,12 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 00:48:45 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
+#include "limits.h"
 #include "libft.h"
 #include "sh_env.h"
 #include "sh_entrypoint.h"
@@ -49,10 +50,19 @@ static struct termios	init_term(void)
 
 void					sh_init_2(t_sh *shell)
 {
+	char	dir[PATH_MAX + 1];
+
 	if (shell->is_interactive)
 	{
 		shell->orig_termios = init_term();
 		shell->cbreak = init_cbreak();
+	}
+	if ((shell->pwd = sh_getev_value("PWD")))
+		shell->pwd = ft_strdup(shell->pwd);
+	else
+	{
+		getcwd(dir, PATH_MAX);
+		shell->pwd = ft_strdup(dir);
 	}
 	shell->last_cmd_result = 0;
 }
