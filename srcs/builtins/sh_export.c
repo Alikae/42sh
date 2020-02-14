@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/05 03:53:44 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/14 00:11:06 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ static int	sh_sub_export(char *s)
 		ft_memdel((void**)&tmp);
 		ft_memdel((void**)&expanded_tilde);
 	}
-	else if ((tmp2 = sh_getev(s)))
+	else if ((tmp2 = sh_getev(s)) && tmp2->readonly)
+		return (1);
+	else if ((tmp2 = sh_getev(s)) && !tmp2->readonly)
 		tmp2->exported = 1;
 	return (0);
 }
