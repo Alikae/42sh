@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 20:50:35 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/14 23:03:01 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		sh_unsetev(const char *key, t_env **env)
 	env = &(sh()->params);
 	tmp = NULL;
 	if (!(tgt = sh_getev(key)))
-		return (0);
+		return (1);
 	else if (tgt->readonly)
 	{
 		sh_dprintf(2, "42sh: unset: %s: readonly variable\n", key);
