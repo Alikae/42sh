@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 20:28:12 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	sh_fg(int ac, char **av, char **env)
 
 	(void)env;
 	if (!jobs_exist(&job))
-		return (0);
+		return (1);
 	arg = (ac > 1) ? ft_atoi(av[1]) : -10;
 	argcpy = arg;
 	while (arg-- > 0 && job)
