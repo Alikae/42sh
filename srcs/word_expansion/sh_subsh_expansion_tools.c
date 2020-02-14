@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 23:07:48 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,28 @@ void	sh_subsh_quote(t_exp *exp, short *quote)
 
 int		sh_commande_string_size(t_exp *exp, char c)
 {
-	int		size;
-	short	quote;
+	int			size;
+	short		quote;
+	static	int bquote = 0;
 
 	size = exp->i;
 	quote = 0;
 	exp->i++;
-	while ((exp->content[exp->i] != c || quote) && exp->content[exp->i])
+	while ((exp->content[exp->i] != c || quote || bquote) && exp->content[exp->i])
 	{
-		sh_subsh_quote(exp, &quote);
-		if (!quote && exp->content[exp->i] == '(')
-			sh_commande_string_size(exp, ')');
+		if (exp->content[exp->i] == '\\' && !bquote && quote != SH_QUOTE)
+			bquote++;
+		else if (bquote)
+			bquote = 0;
+		else
+		{
+			sh_subsh_quote(exp, &quote);
+			if (!quote && exp->content[exp->i] == '(')
+				sh_commande_string_size(exp, ')');
+		}
 		exp->i++;
 	}
+	bquote = 0;
 	return (exp->i - size);
 }
 
