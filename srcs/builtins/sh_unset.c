@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 20:45:35 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int			sh_unset(int ac, char **av, t_env **env)
 
 	i = 0;
 	while (++i < ac)
-		sh_unsetev(av[i], env);
+		if (!sh_unsetev(av[i], env))
+			return (1);
 	return (0);
 }

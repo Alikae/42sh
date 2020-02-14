@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 20:50:35 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,20 @@
 #include "libft.h"
 #include <stdlib.h>
 
-void	sh_unsetev(const char *key, t_env **env)
+int		sh_unsetev(const char *key, t_env **env)
 {
 	t_env	*tgt;
 	t_env	*tmp;
 
 	env = &(sh()->params);
-	tgt = NULL;
 	tmp = NULL;
 	if (!(tgt = sh_getev(key)))
-		return ;
+		return (0);
+	else if (tgt->readonly)
+	{
+		sh_dprintf(2, "42sh: unset: %s: readonly variable\n", key);
+		return (0);
+	}
 	if (tgt == *env)
 		*env = tgt->next;
 	else
@@ -38,4 +42,5 @@ void	sh_unsetev(const char *key, t_env **env)
 	ft_strdel(&(tgt->key));
 	ft_strdel(&(tgt->value));
 	ft_memdel((void**)&tgt);
+	return (1);
 }
