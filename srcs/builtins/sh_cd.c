@@ -17,69 +17,83 @@
 
 #define F_P 1
 
-static int	cd_go_to(char *path)
+static char *test_path(char *real, char *path, char flag)
 {
-	char	dir[PATH_MAX + 1];
-	t_env	*ev;
+	char	buf[PATH_MAX + 1];
+	char	*test;
 
-	ft_bzero(dir, PATH_MAX + 1);
-	getcwd(dir, PATH_MAX);
-	if (chdir(path))
+	test = ft_strjoin(real, path);
+	if (access(test, F_OK))
 	{
-		ft_putstr_fd("cd: can't access: ", 2);
-		ft_putendl_fd(path, 2);
-		return (1);
+		ft_memdel((void**)&real);
+		ft_memdel((void**)&test);
+		return (NULL);
 	}
-	if ((ev = sh_setev("OLDPWD", dir)))
-		ev->exported = 1;
-	ft_bzero(dir, PATH_MAX + 1);
-	path = getcwd(0, PATH_MAX);
-	if ((ev = sh_setev("PWD", path)))
-		ev->exported = 1;
-	free(path);
-	return (0);
-}
-
-static int	cd_go_homeold(int code)
-{
-	char *pwd;
-
-	if (code == 1)
+	ft_bzero(buf, PATH_MAX + 1);
+	if ((flag & F_P) && readlink(test, buf, PATH_MAX) && buf[0])
 	{
-		if ((pwd = sh_getev_value("HOME")))
-			return (cd_go_to(pwd));
-		else
-			ft_putendl_fd("HOME is not set", 2);
-	}
-	else if ((pwd = ft_strdup(sh_getev_value("OLDPWD"))))
-	{
-		if (!cd_go_to(pwd))
-		{
-			ft_putendl(pwd);
-			ft_memdel((void**)&pwd);
-			return (0);
-		}
-		ft_memdel((void**)&pwd);
+		if (buf[0] == '/')
+			ft_memdel((void**)&real);
+		real = ft_strjoin_free(real, buf, real);
+		printf("buf: [%d]\n", buf[0]);
 	}
 	else
-		ft_putendl_fd("OLDPWD is not set", 2);
-	return (1);
+		real = ft_strjoin_free(real, path, real);
+	ft_memdel((void**)&test);
+	return (real);
 }
 
-static int	cd_physical(char *path)
+static char	*path_process(char *arg, char **path, char flag)
 {
+	char	*real;
 	int		i;
-	char	buff[PATH_MAX + 1];
 
-	ft_bzero(buff, PATH_MAX + 1);
-	if (!path)
-		return (-1);
-	if ((i = readlink(path, buff, PATH_MAX)) == -1)
-		i = cd_go_to(path);
-	else
-		i = cd_go_to(buff);
-	return (i);
+	real = NULL;
+	i = 0;
+	if (arg && arg[0] == '/' && path[1])
+		path[0] = ft_strjoin_free("/", path[0], path[0]);
+	while (path && path[i])
+	{
+		if (i != 0)
+			real = ft_strjoin_free(real, "/", real);
+		if (!(real = test_path(real, path[i], flag)))
+			return (NULL);
+		i++;
+	}
+	return (real);
 }
+
+static char	*process(char *arg, char flag)
+{
+	char	*tmp;
+	char	*real;
+	char	**path;
+
+	tmp = NULL;
+	real = NULL;
+	path = NULL;
+	if (!strcmp(arg, "-"))
+	{
+		if (!(tmp = sh_getev_value("OLDPWD")))
+			sh_dprintf(2, "cd: OLDPWD not set\n");
+		return (NULL);
+	}
+	if (!(path = ft_strsplit((tmp ? tmp : arg), '/')) || !path[0] || !path[1])
+	{
+		ft_tab_strdel(&path);
+		path = tab_realloc(path, (tmp ? tmp : arg));
+	}
+	if (!(real = path_process(tmp ? tmp : arg, path, flag)))
+	{
+		//		tmp = ft_strjoin(sh_getev_value("CDPATH"), (tmp ? tmp : arg));
+		//		ft_free_tabstr(path);
+		//		path = ft_strsplit(tmp, '/');
+		//		real = path_process(tmp, path, flag);
+		ft_memdel((void**)&tmp);
+	}
+	ft_free_tabstr(path);
+	return (real);
+}	
 
 static int	check_flags(char *from, char *to)
 {
@@ -106,25 +120,28 @@ static int	check_flags(char *from, char *to)
 int			sh_cd(int ac, char **av, t_env **ev)
 {
 	char	flag;
+	char	*path;
 	int		i;
 
 	flag = '\0';
 	i = 1;
 	(void)ev;
-	if (ac <= 1)
-		return (cd_go_homeold(1));
-	while (av[i][0] == '-' && av[i][1] != 0
+	while (av[i] && av[i][0] == '-' && av[i][1] != 0
 			&& check_flags(av[i] + 1, &flag))
 		i++;
-	if (flag & F_P)
-		return (cd_physical(av[i]));
-	else if (!av[i + 1])
+	if (ac >= i + 2)
 	{
-		if (!ft_strcmp(av[i], "-"))
-			return (cd_go_homeold(2));
-		return (cd_go_to(av[i]));
+		ft_putendl_fd("42sh: cd: usage: cd [-LP] [path]", 2);
+		return (1);
 	}
-	else
-		ft_putendl_fd("42sh cd: usage: cd [-LP] [path]", 2);
-	return (0);
+	path = process((av[i] ? av[i] : sh_getev_value("HOME")), flag);
+	printf("CD: PATH: [%s]\n", path);
+		if (path && !chdir(path))
+		{
+			sh_generate_path(path);
+			ft_memdel((void**)&path);
+			return (0);
+		}
+	ft_memdel((void**)&path);
+	return (1);
 }
