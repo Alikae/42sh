@@ -35,7 +35,6 @@ static char *test_path(char *real, char *path, char flag)
 		if (buf[0] == '/')
 			ft_memdel((void**)&real);
 		real = ft_strjoin_free(real, buf, real);
-		printf("buf: [%d]\n", buf[0]);
 	}
 	else
 		real = ft_strjoin_free(real, path, real);
@@ -43,7 +42,7 @@ static char *test_path(char *real, char *path, char flag)
 	return (real);
 }
 
-static char	*path_process(char *arg, char **path, char flag)
+char		*path_process(char *arg, char **path, char flag)
 {
 	char	*real;
 	int		i;
@@ -74,9 +73,11 @@ static char	*process(char *arg, char flag)
 	path = NULL;
 	if (!strcmp(arg, "-"))
 	{
-		if (!(tmp = sh_getev_value("OLDPWD")))
+		if (!(tmp = sh_getev_value("OLDPWD"))) //A VERIFIER
+		{
 			sh_dprintf(2, "cd: OLDPWD not set\n");
-		return (NULL);
+			return (NULL);
+		}
 	}
 	if (!(path = ft_strsplit((tmp ? tmp : arg), '/')) || !path[0] || !path[1])
 	{
@@ -84,13 +85,7 @@ static char	*process(char *arg, char flag)
 		path = tab_realloc(path, (tmp ? tmp : arg));
 	}
 	if (!(real = path_process(tmp ? tmp : arg, path, flag)))
-	{
-		//		tmp = ft_strjoin(sh_getev_value("CDPATH"), (tmp ? tmp : arg));
-		//		ft_free_tabstr(path);
-		//		path = ft_strsplit(tmp, '/');
-		//		real = path_process(tmp, path, flag);
-		ft_memdel((void**)&tmp);
-	}
+		real = sh_try_cd_path(tmp ? tmp : arg, flag);
 	ft_free_tabstr(path);
 	return (real);
 }	
@@ -135,13 +130,13 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		return (1);
 	}
 	path = process((av[i] ? av[i] : sh_getev_value("HOME")), flag);
-	printf("CD: PATH: [%s]\n", path);
-		if (path && !chdir(path))
-		{
-			sh_generate_path(path);
-			ft_memdel((void**)&path);
-			return (0);
-		}
+	if (path && !chdir(path))
+	{
+		sh_generate_path(path);
+		ft_memdel((void**)&path);
+		return (0);
+	}
+	sh_dprintf(2, "42sh: cd: can't acces: %s\n", path);
 	ft_memdel((void**)&path);
 	return (1);
 }
