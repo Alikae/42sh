@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 23:05:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/02/14 23:47:50 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/15 01:01:44 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	sh_add_one_dir(char **new, char *path, int *i_pa)
 		j++;
 	}
 	(*new)[j++] = '/';
-	while (path[*i_pa] && path[*i_pa] != '/' )
+	while (path[*i_pa] && path[*i_pa] != '/')
 		(*new)[j++] = path[(*i_pa)++];
 	(*new)[j] = '\0';
 	ft_memdel((void**)&cpy);

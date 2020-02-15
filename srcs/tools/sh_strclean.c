@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 21:25:09 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/02/07 21:51:52 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/15 00:57:37 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	sh_strclean(char **str)
 	int	i;
 
 	i = 0;
-	if (!str || !*str) 
+	if (!str || !*str)
 		return ;
 	while (str[0][i])
 	{
