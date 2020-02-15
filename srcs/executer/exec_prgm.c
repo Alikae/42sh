@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 01:10:13 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/15 00:40:22 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	exec_path(t_sh *p, char *path, char **child_argv)
 	child_pid = fork_process(p, 1);
 	ret = 0;
 	if (child_pid)
-		ret = block_wait(p, child_pid, 0);
+		ret = block_wait(p, child_pid, 0, 0);
 	else
 	{
 		if (!(child_env = transform_env_for_child(p->params)))

@@ -6,13 +6,14 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 20:28:12 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/15 00:45:01 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 #include "sh_job_control.h"
 #include "sh_tokenizer.h"
+#include "sh_executer.h"
 #include <signal.h>
 
 int	nth_job_exist(t_job *job, int arg, int argcpy, const char *av1)
@@ -73,7 +74,7 @@ int	sh_fg(int ac, char **av, char **env)
 	if (kill(-1 * job->pid, SIGCONT) < 0)
 		sh_dprintf(2, "kill (SIGCONT) ERROR\n");
 	else
-		block_wait(sh(), job->pid, 1);
+		block_wait(sh(), job->pid, 1, 0);
 	return (0);
 }
 

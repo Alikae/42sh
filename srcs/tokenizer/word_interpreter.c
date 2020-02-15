@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 22:53:06 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_toktype	word_terminator_2(const char *word, int len, t_toktype cur_com)
 		if (!ft_strncmp(word, "esac", len) && len == 4)
 			return (SH_ESAC);
 	}
-	if (cur_com == SH_SUBSH)
+	if (cur_com == SH_SUBSH || cur_com == SH_SUBSH_EXP)
 	{
 		if (!ft_strncmp(word, ")", len) && len == 1)
 			return (SH_SUBSH_END);

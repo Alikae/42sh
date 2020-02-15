@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/12 23:57:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 23:48:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int		fork_process(t_sh *p, int foreground)
 		p->jobs = 0;
 		close_cpy_std_fds(p);
 	}
+	else
+		dprintf(2, "[%i]F->%i\n",  getpid(), child_pid);
 	return (child_pid);
 }
 

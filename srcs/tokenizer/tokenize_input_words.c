@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 22:51:32 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,14 @@ t_toktype	handle_reserved_and_normals_word(t_toktool *t,
 	int			tmp;
 
 	tmp = 0;
-	if (t->word_nb == 1 && (type = word_is_reserved(t->input + word_begin,
-					t->i - word_begin)))
+	if ((type = word_is_reserved(t->input + word_begin,
+					t->i - word_begin)) && (t->word_nb == 1 || type == SH_SUBSH_END))
 	{
 		if (word_out_of_context(type) || (type == SH_BANG && (tmp =
 						bang_unfollowed_by_word(t))))
 		{
 			if (!(tmp == -1) && (sh()->invalid_cmd = 1))
-				sh_dprintf(2, "Unexpected token at -%s\n",
+				sh_dprintf(2, "42sh: Unexpected token at -%s\n",
 						t->input + word_begin);
 			return (SH_SYNTAX_ERROR);
 		}

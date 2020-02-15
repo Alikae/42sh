@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/15 00:42:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void	remove_old_function(const char *name);
 int		exec_prgm(t_sh *p, char **child_argv);
 int		can_exec(struct stat *st);
 int		exec_path(t_sh *p, char *path, char **child_argv);
-int		block_wait(t_sh *p, int child_pid, int from_fg);
 char	**transform_env_for_child(t_env *env);
 int		create_open_file(t_sh *p, char *path, t_toktype type);
 int		open_with_redirection_flags(char *real_path, t_toktype type);
@@ -99,7 +98,7 @@ int		handle_no_cmd_name(t_sh *p, char **child_argv, int nb_redirections);
 void	restore_before_assigns(t_sh *p);
 void	stock_assign(t_sh *p, t_token *token, int *nb_assign);
 void	del_n_assign_lst(t_sh *p, int n);
-int		block_wait(t_sh *p, int child_pid, int from_fg);
+int		block_wait(t_sh *p, int child_pid, int from_fg, int from_subshexp);
 int		exec_compound_command(t_sh *p,
 		t_token *token_compound, int type);
 t_token	*find_cmd_name(t_token *tok);

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/15 01:01:24 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 #include "sh_executer.h"
 #include "sh_word_expansion.h"
 #include "sh_exitpoint.h"
+#include "sh_redirections.h"
 
-int		exec_compound_subsh(t_sh *p, t_token *tok)
+int		exec_compound_subsh(t_sh *p, t_token *tok, int from_subshexp)
 {
 	int	pid;
 
@@ -31,9 +32,8 @@ int		exec_compound_subsh(t_sh *p, t_token *tok)
 		exec_script(p, tok->sub);
 		destructor(p->last_cmd_result);
 	}
-	delete_close_all_pipe_lst(p->pipe_lst);
-	p->pipe_lst = 0;
-	return (block_wait(p, pid, 0));
+
+	return (block_wait(p, pid, 0, from_subshexp));
 }
 
 int		exec_compound_case(t_sh *p, t_token *tok)

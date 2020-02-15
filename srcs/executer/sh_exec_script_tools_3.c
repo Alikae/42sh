@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/12 23:59:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/14 23:36:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	exec_and_or(t_sh *p, t_token *token_begin, t_token *token_end)
 
 void	close_cpy_std_fds(t_sh *p)
 {
+	dprintf(2, "[%i]CLOSE [%i %i %i]\n", getpid(),  p->cpy_std_fds[0], p->cpy_std_fds[1], p->cpy_std_fds[2]);
 	close(p->cpy_std_fds[0]);
 	close(p->cpy_std_fds[1]);
 	close(p->cpy_std_fds[2]);

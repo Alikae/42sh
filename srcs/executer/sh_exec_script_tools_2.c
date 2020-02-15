@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/15 00:42:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int			exec_pipeline_core(t_token *token_begin, t_token *token_end)
 	tmp2 = p->pgid_current_pipeline;
 	p->last_background_pipeline_pgid = p->pgid_current_pipeline;
 	p->pgid_current_pipeline = 0;
-	p->last_cmd_result = block_wait(p, tmp2, 0);
+	p->last_cmd_result = block_wait(p, tmp2, 0, 0);
 	if (!p->process_is_stopped)
 		kill(-1 * tmp2, SIGKILL);
 	p->extern_pipe = tmp;

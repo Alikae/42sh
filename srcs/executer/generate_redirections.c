@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/05 03:09:55 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/15 01:01:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 	gen_redirections_recursively(p, lst->next);
 	if (not_previously_in_the_list(lst->in, lst))
 	{
+		dprintf(2, "[%i]	%i->%i\n",  getpid(), lst->in, lst->out);
 		if (protect_from_cpy_std_fds(p, lst))
 			return ;
 		if (lst->out == -1)
@@ -104,6 +105,8 @@ void	generate_redirections(t_sh *p)
 {
 	t_redirect_lst	*lst;
 
+	print_redirections(p, p->redirect_lst);
+	dprintf(2,  "[%i %i %i]\n", sh()->cpy_std_fds[0], sh()->cpy_std_fds[    1], sh()->cpy_std_fds[2]);
 	lst = p->redirect_lst;
 	gen_redirections_recursively(p, lst);
 	delete_close_all_pipe_lst(p->pipe_lst);

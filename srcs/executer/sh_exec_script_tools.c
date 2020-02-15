@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/05 03:21:59 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/15 00:44:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		exec_compound_command(t_sh *p, t_token *token_compound, int type)
 	else if (type == SH_FOR)
 		return (exec_compound_for(p, token_compound));
 	else if (type == SH_SUBSH)
-		return (exec_compound_subsh(p, token_compound));
+		return (exec_compound_subsh(p, token_compound, 0));
 	return (exec_script(p, token_compound->sub));
 }
 

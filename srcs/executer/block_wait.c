@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 03:08:29 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/15 00:42:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,16 @@ void	block_wait_signaled(t_sh *p, int child_pid, int status)
 		sh_dprintf(1, "\nChild_process [%i] ILLEGAL INSTRUCTION (SIGILL)\n", child_pid);
 }
 
-int		block_wait(t_sh *p, int child_pid, int from_fg)
+int		block_wait(t_sh *p, int child_pid, int from_fg, int from_subshexp)
 {
 	int			status;
 
 	p->process_is_stopped = 0;
-	delete_close_all_pipe_lst(p->pipe_lst);
+	if (!from_subshexp)
+	{
+		delete_close_all_pipe_lst(p->pipe_lst);
+		p->pipe_lst = 0;
+	}
 	if (waitpid(child_pid, &status, WUNTRACED) < 0)
 	{
 		sh_dprintf(2, "WAIT ERROR\n");

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/07 20:49:41 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/13 00:04:50 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	kill_control_d(char **command, char *buf)
 	ft_memdel((void**)&buf);
 	id = getpid();
 	kill(id, SIGINT);
-	sh()->last_cmd_result = 2;
+	sh()->last_cmd_result = 258;
 	ft_memdel((void**)command);
 	return (3);
 }

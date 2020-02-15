@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/15 00:01:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void		delete_close_all_pipe_lst(t_pipe_lst *lst)
 
 	while (lst)
 	{
+		dprintf(2, "[%i][CLOSE]%i %i\n", getpid(), lst->pipe[0], lst->pipe[1]);
 		close(lst->pipe[0]);
 		close(lst->pipe[1]);
 		old = lst;
