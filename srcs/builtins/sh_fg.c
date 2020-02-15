@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/15 00:45:01 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/15 03:45:58 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,25 @@ int	sh_fg(int ac, char **av, char **env)
 				TCSANOW, &sh()->orig_termios);
 	tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, job->pid);
 	if (kill(-1 * job->pid, SIGCONT) < 0)
-		sh_dprintf(2, "kill (SIGCONT) ERROR\n");
+	{
+		signal(SIGTTOU, SIG_IGN);
+		sh_dprintf(2, "42sh: kill (SIGCONT) ERROR -%s\n", job->name);
+		tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
+				TCSANOW, &sh()->orig_termios);
+		tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, getpid());
+		signal(SIGTTOU, SIG_DFL);
+	}
 	else
 		block_wait(sh(), job->pid, 1, 0);
 	return (0);
 }
 
-int	sh_bg(int ac, char **av, char **env)
+int	sh_bg(int ac, char **av, __attribute__((unused)) char **env)
 {
 	t_job		*job;
 	int			arg;
 	int			argcpy;
 
-	(void)env;
 	if (!jobs_exist(&job))
 		return (0);
 	arg = (ac > 1) ? ft_atoi(av[1]) : -10;
