@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/13 21:16:37 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/15 00:41:43 by jerry            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static int		sh_echo_print(char *tmp, char **handle, char *flag)
 	{
 		if (write(1, *handle, tmp - *handle) < 0)
 			return (0);
+		if (!tmp[1])
+			break ;
 		if (tmp[1] == 'a' || tmp[1] == 'b' || tmp[1] == 'f' || tmp[1] == 'n'
 				|| tmp[1] == 'r' || tmp[1] == 'v' || tmp[1] == 't'
 				|| tmp[1] == '\\')

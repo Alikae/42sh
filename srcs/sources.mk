@@ -141,6 +141,7 @@ C_FILES_builtins = \
 		   sh_jobs.c \
 		   sh_fg.c \
 		   sh_cd.c \
+		   sh_cd2.c \
 		   sh_unalias.c \
 		   sh_generate_path.c
 

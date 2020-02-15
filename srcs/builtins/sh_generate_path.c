@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 23:05:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/02/14 01:26:04 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/15 02:27:20 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	sh_del_one_dir(char **new)
 		i--;
 	while (cpy[i] != '/')
 		i--;
-	if (!(*new = malloc(i)))
+	if (!(*new = malloc(i + 1)))
 		destructor(-1);
 	while (j < i)
 	{
@@ -50,13 +50,13 @@ void	sh_add_one_dir(char **new, char *path, int *i_pa)
 		i++;
 	if (!(*new = malloc(i - *i_pa + ft_strlen(cpy) + 2)))
 		destructor(-1);
-	while (cpy[j])
+	while (cpy && cpy[j])
 	{
 		(*new)[j] = cpy[j];
 		j++;
 	}
 	(*new)[j++] = '/';
-	while (path[*i_pa])
+	while (path[*i_pa] && path[*i_pa] != '/')
 		(*new)[j++] = path[(*i_pa)++];
 	(*new)[j] = '\0';
 	ft_memdel((void**)&cpy);
@@ -97,13 +97,10 @@ void	sh_generate_path(char *path)
 		return ;
 	sh_setev("OLDPWD", cpy);
 	if (path[0] == '/')
-		new = ft_strdup(path);
+		new = NULL;
 	else
-	{
 		new = ft_strdup(cpy);
-		sh_find_new_path(path, &new);
-	}
-	sh_setev("PWD", new);
+	sh_find_new_path(path, &new);
 	ft_memdel((void**)&cpy);
 	sh()->pwd = new;
 }

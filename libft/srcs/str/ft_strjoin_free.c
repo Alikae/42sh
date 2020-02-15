@@ -18,6 +18,6 @@ char	*ft_strjoin_free(const char *s1, const char *s2, char *tofree)
 
 	dest = ft_strjoin(s1, s2);
 	if (tofree)
-		free(tofree);
+		ft_memdel((void**)&tofree);
 	return (dest);
 }
