@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 23:05:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/02/16 22:20:40 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/16 22:46:15 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@ void	sh_del_one_dir(char **new)
 	cpy = *new;
 	j = 0;
 	i = ft_strlen(cpy) - 1;
+	if (i == 0)
+		return ;
 	if (cpy[i] == '/')
 		i--;
 	while (cpy[i] != '/')
 		i--;
 	if (!(*new = malloc(i + 1)))
 		destructor(-1);
-	while (j < i)
+	while ((i == 0 && j <= i) || (i > 1 && j < i))
 	{
 		(*new)[j] = cpy[j];
 		j++;
@@ -46,8 +48,6 @@ void	sh_add_one_dir(char **new, char *path, int *i_pa)
 	i = *i_pa;
 	j = 0;
 	cpy = *new;
-	while (path[i] && path[i] != '/')
-		i++;
 	if (!(*new = malloc(i - *i_pa + ft_strlen(cpy) + 2)))
 		destructor(-1);
 	while (cpy && cpy[j])
