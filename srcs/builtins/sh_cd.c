@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/16 22:07:41 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/16 23:19:03 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #define F_P 1
 
-static char *test_path(char *real, char *path, char flag)
+static char	*test_path(char *real, char *path, char flag)
 {
 	char	buf[PATH_MAX + 1];
 	char	*test;
@@ -65,11 +65,12 @@ static char	*process(char *arg, char flag)
 	tmp = NULL;
 	real = NULL;
 	path = NULL;
-	if (!strcmp(arg, "-"))
+	if (!arg || !strcmp(arg, "-"))
 	{
-		if (!(tmp = sh_getev_value("OLDPWD"))) //A VERIFIER
+		if (!arg || !(tmp = sh_getev_value("OLDPWD")))
 		{
-			sh_dprintf(2, "cd: OLDPWD not set\n");
+			if (!tmp)
+				sh_dprintf(2, "cd: OLDPWD not set\n");
 			return (NULL);
 		}
 	}
@@ -82,7 +83,7 @@ static char	*process(char *arg, char flag)
 		real = sh_try_cd_path(tmp ? tmp : arg, flag);
 	ft_free_tabstr(path);
 	return (real);
-}	
+}
 
 static int	check_flags(char *from, char *to)
 {
@@ -91,6 +92,9 @@ static int	check_flags(char *from, char *to)
 
 	i = -1;
 	flag = *to;
+
+	if (!from[0])
+		return (0);
 	while (from[++i])
 	{
 		if (from[i] == 'L')
@@ -115,17 +119,16 @@ int			sh_cd(int ac, char **av, t_env **ev)
 	flag = '\0';
 	i = 1;
 	(void)ev;
-	while (av[i] && av[i][0] == '-' && av[i][1] != 0
-			&& check_flags(av[i] + 1, &flag))
+	while (av[i] && av[i][0] == '-' && check_flags(av[i] + 1, &flag))
 		i++;
 	if (ac >= i + 2)
 	{
 		ft_putendl_fd("42sh: cd: usage: cd [-LP] [path]", 2);
 		return (1);
 	}
-	path = process((av[i] ? av[i] : sh_getev_value("HOME")), flag);
-	sh_generate_path(path, 0);
-	if (sh()->potential_pwd && !chdir(sh()->potential_pwd))
+	sh_generate_path((av[i] ? av[i] : sh_getev_value("HOME")), 0);
+	path = process(sh()->potential_pwd, flag);
+	if (path && !chdir(path))
 	{
 		sh_generate_path(path, 1);
 		ft_memdel((void**)&path);
