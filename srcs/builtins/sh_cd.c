@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/16 22:01:54 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/16 22:07:41 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@ static char *test_path(char *real, char *path, char flag)
 	char	*test;
 
 	test = ft_strjoin(real, path);
-	if (access(test, F_OK))
-	{
-		ft_memdel((void**)&real);
-		ft_memdel((void**)&test);
-		return (NULL);
-	}
 	ft_bzero(buf, PATH_MAX + 1);
 	if ((flag & F_P) && readlink(test, buf, PATH_MAX) && buf[0])
 	{
@@ -130,7 +124,8 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		return (1);
 	}
 	path = process((av[i] ? av[i] : sh_getev_value("HOME")), flag);
-	if (path && !chdir(path))
+	sh_generate_path(path, 0);
+	if (sh()->potential_pwd && !chdir(sh()->potential_pwd))
 	{
 		sh_generate_path(path, 1);
 		ft_memdel((void**)&path);
