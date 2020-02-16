@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 23:05:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/02/16 22:01:22 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/16 22:20:40 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ void	sh_generate_path(char *path, int s1)
 	cpy = sh()->pwd;
 	if (path == NULL)
 		return ;
-	if (s1)
-		sh_setev("OLDPWD", cpy);
 	if (path[0] == '/')
 		new = NULL;
 	else
@@ -106,11 +104,13 @@ void	sh_generate_path(char *path, int s1)
 	{
 		sh()->pwd = new;
 		sh_setev("PWD", new);
+		sh_setev("OLDPWD", cpy);
+		ft_memdel((void**)&cpy);
 	}
 	else
 	{
 		ft_memdel((void**)&(sh()->potential_pwd));
 		sh()->potential_pwd = new;
+		printf("new = %s\n", new);
 	}
-	ft_memdel((void**)&cpy);
 }
