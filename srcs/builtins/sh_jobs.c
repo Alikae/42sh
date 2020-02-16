@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/16 03:13:19 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,10 @@ int		sh_jobs(int ac, char **av, char **env)
 	i = -1;
 	old_next = &(sh()->jobs);
 	if (!*old_next)
+	{
 		sh_dprintf(1, "Currently no job\n");
+		return (1);
+	}
 	while (*old_next)
 	{
 		job = *old_next;
