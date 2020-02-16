@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 23:05:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/02/16 22:46:15 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/16 22:51:48 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	sh_add_one_dir(char **new, char *path, int *i_pa)
 	i = *i_pa;
 	j = 0;
 	cpy = *new;
+	while (path[i] && path[i] != '/')
+		i++;
 	if (!(*new = malloc(i - *i_pa + ft_strlen(cpy) + 2)))
 		destructor(-1);
 	while (cpy && cpy[j])
