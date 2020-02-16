@@ -6,7 +6,7 @@
 /*   By: tcillard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 23:05:28 by tcillard          #+#    #+#             */
-/*   Updated: 2020/02/16 22:51:48 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/16 22:57:16 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,5 @@ void	sh_generate_path(char *path, int s1)
 	{
 		ft_memdel((void**)&(sh()->potential_pwd));
 		sh()->potential_pwd = new;
-		printf("new = %s\n", new);
 	}
 }
