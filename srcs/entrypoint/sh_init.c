@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 00:48:45 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/16 22:00:10 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void					sh_init_2(t_sh *shell)
 		getcwd(dir, PATH_MAX);
 		shell->pwd = ft_strdup(dir);
 	}
+	shell->potential_pwd = NULL;
 	shell->last_cmd_result = 0;
 }
 

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 01:24:29 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/16 22:01:05 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	sh_shdel(t_sh **shell)
 		s->dir = NULL;
 	wait_for_zombies();
 	free_sh_var(s);
+	ft_memdel((void**)&((*shell)->potential_pwd));
 	s->user = NULL;
 	free(*shell);
 	*shell = NULL;

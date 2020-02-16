@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/16 19:52:56 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/16 22:01:54 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int			sh_cd(int ac, char **av, t_env **ev)
 	path = process((av[i] ? av[i] : sh_getev_value("HOME")), flag);
 	if (path && !chdir(path))
 	{
-		sh_generate_path(path);
+		sh_generate_path(path, 1);
 		ft_memdel((void**)&path);
 		return (0);
 	}
