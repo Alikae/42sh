@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/04 02:37:35 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/16 19:52:56 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ char		*path_process(char *arg, char **path, char flag)
 
 	real = NULL;
 	i = 0;
-	if (arg && arg[0] == '/' && path[1])
-		real = ft_strjoin_free("/", real);
+	if (arg && arg[0] == '/')
+		real = ft_strjoin_free("/", real, real);
 	while (path && path[i])
 	{
 		if (i != 0)
@@ -136,7 +136,7 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		ft_memdel((void**)&path);
 		return (0);
 	}
-	sh_dprintf(2, "42sh: cd: can't acces: %s\n", path);
+	sh_dprintf(2, "42sh: cd: can't acces: %s\n", (path ? path : av[i]));
 	ft_memdel((void**)&path);
 	return (1);
 }
