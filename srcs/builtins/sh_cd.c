@@ -50,7 +50,7 @@ char		*path_process(char *arg, char **path, char flag)
 	real = NULL;
 	i = 0;
 	if (arg && arg[0] == '/' && path[1])
-		path[0] = ft_strjoin_free("/", path[0], path[0]);
+		real = ft_strjoin_free("/", real);
 	while (path && path[i])
 	{
 		if (i != 0)
