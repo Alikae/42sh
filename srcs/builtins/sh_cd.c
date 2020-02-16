@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/16 23:19:03 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/16 23:42:27 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,15 @@ static char	*process(char *arg, char flag)
 	tmp = NULL;
 	real = NULL;
 	path = NULL;
-	if (!arg || !strcmp(arg, "-"))
-	{
-		if (!arg || !(tmp = sh_getev_value("OLDPWD")))
-		{
-			if (!tmp)
-				sh_dprintf(2, "cd: OLDPWD not set\n");
-			return (NULL);
-		}
-	}
-	if (!(path = ft_strsplit((tmp ? tmp : arg), '/')) || !path[0] || !path[1])
+	if (!arg)
+		return (NULL);
+	if (!(path = ft_strsplit(arg, '/')) || !path[0] || !path[1])
 	{
 		ft_tab_strdel(&path);
-		path = tab_realloc(path, (tmp ? tmp : arg));
+		path = tab_realloc(path, arg);
 	}
-	if (!(real = path_process(tmp ? tmp : arg, path, flag)))
-		real = sh_try_cd_path(tmp ? tmp : arg, flag);
+	if (!(real = path_process(arg, path, flag)))
+		real = sh_try_cd_path(arg, flag);
 	ft_free_tabstr(path);
 	return (real);
 }
