@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 00:52:07 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/17 01:40:26 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	sh_read_pipe(t_exp *exp, int fd)
 	}
 	if (ft_strlen(exp->value) && exp->value[ft_strlen(exp->value) - 1] == '\n')
 		exp->value[ft_strlen(exp->value) - 1] = '\0';
-	dprintf(2, "[%i]subssh -> |%s|-\n", getpid(), exp->value);
 }
 
 void	sh_subsh_expansion(t_exp *exp)
@@ -80,22 +79,15 @@ void	sh_subsh_expansion(t_exp *exp)
 	tok = create_token(SH_SUBSH, 0, NULL);
 	if ((tok->sub = tokenize_input(exp->name)))
 	{
-		dprintf(2, "EXPAND:\n");
-//		t_redirect_lst *tmp = sh()->redirect_lst;//free
-//		sh()->redirect_lst = 0;
-		dprintf(2,  "[%i %i %i]\n", sh()->cpy_std_fds[0], sh()->cpy_std_fds[1], sh()->cpy_std_fds[2]);
 		if (pipe(pipe_fd) == -1)
 			destructor(-1);
 		print_redirections(sh(), sh()->redirect_lst);
-		dprintf(2, "p[%i, %i]\n", pipe_fd[0], pipe_fd[1]);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
 		exec_compound_subsh(sh(), tok, 1);
 		free_ast(tok);
 		del_n_redirect_lst(&(sh()->redirect_lst), 1);
 		sh_read_pipe(exp, pipe_fd[0]);
 		close(pipe_fd[0]);
-//		sh()->redirect_lst = tmp;
-		dprintf(2,  "EXPANDED:\n");
 	}
 	else
 		sh()->abort_cmd = 1;

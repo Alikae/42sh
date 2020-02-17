@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 01:02:21 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/17 01:38:00 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ void	fork_n_protect_zombies(t_sh *p, int *create_pgrp, int *child_pid)
 	if (p->pid_main_process == getpid() && p->is_interactive)
 		*create_pgrp = 1;
 	*child_pid = fork();
-	//	GET PROBLEMS IN PIPE
-	if (*child_pid && p->pid_main_process == getpid())
-		;//		wait_for_zombies();
 	else
 	{
 		del_all_group_processes(p->existing_process_groups);
@@ -52,7 +49,6 @@ int		fork_process(t_sh *p, int foreground)
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 		create_process_group_give_terminal_access(p, pid, foreground);
-		dprintf(2, "create pgrp %i\n", create_pgrp);
 	if (!child_pid)
 	{
 		sig_default();
@@ -60,8 +56,6 @@ int		fork_process(t_sh *p, int foreground)
 		p->jobs = 0;
 		close_cpy_std_fds(p);
 	}
-	else
-		dprintf(2, "[%i]F->%i\n",  getpid(), child_pid);
 	return (child_pid);
 }
 
