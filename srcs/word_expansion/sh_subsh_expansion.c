@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 01:40:26 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/17 01:43:49 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	sh_subsh_expansion(t_exp *exp)
 	{
 		if (pipe(pipe_fd) == -1)
 			destructor(-1);
-		print_redirections(sh(), sh()->redirect_lst);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
 		exec_compound_subsh(sh(), tok, 1);
 		free_ast(tok);

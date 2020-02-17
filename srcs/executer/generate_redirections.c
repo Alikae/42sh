@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 01:38:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/17 01:43:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void	generate_redirections(t_sh *p)
 {
 	t_redirect_lst	*lst;
 
-	print_redirections(p, p->redirect_lst);
 	lst = p->redirect_lst;
 	gen_redirections_recursively(p, lst);
 	delete_close_all_pipe_lst(p->pipe_lst);
