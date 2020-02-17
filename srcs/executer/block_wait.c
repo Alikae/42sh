@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 00:44:36 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/17 01:35:12 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 			add_job(child_pid, p->index_pipeline_begin,
 					p->index_pipeline_end, "SIGTTOU");
 	}
+	p->sig_ret = 128 + WSTOPSIG(status);
 }
 
 void	block_wait_signaled(t_sh *p, int child_pid, int status)
@@ -70,6 +71,7 @@ void	block_wait_signaled(t_sh *p, int child_pid, int status)
 		sh_dprintf(1, "\nChild_process [%i] RAISE EXCEPTION (SIGFPE)\n", child_pid);
 	if (WTERMSIG(status) == SIGILL)
 		sh_dprintf(1, "\nChild_process [%i] ILLEGAL INSTRUCTION (SIGILL)\n", child_pid);
+	p->sig_ret = 128 + WTERMSIG(status);
 }
 
 int		block_wait(t_sh *p, int child_pid, int from_fg, int from_subshexp)
@@ -77,6 +79,7 @@ int		block_wait(t_sh *p, int child_pid, int from_fg, int from_subshexp)
 	int			status;
 
 	p->process_is_stopped = 0;
+	p->sig_ret = -1;
 	if (!from_subshexp)
 	{
 		delete_close_all_pipe_lst(p->pipe_lst);
@@ -99,5 +102,7 @@ int		block_wait(t_sh *p, int child_pid, int from_fg, int from_subshexp)
 				: 0, TCSANOW, &p->orig_termios);
 		signal(SIGTTOU, SIG_DFL);
 	}
-	return (WEXITSTATUS(status));
+	if (p->sig_ret == -1)
+		p->sig_ret = WEXITSTATUS(status);
+	return (p->sig_ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/16 21:55:57 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/17 01:28:05 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct		s_sh
 	int				last_child_pid;
 	int				last_background_pipeline_pgid;
 	char			*input;
+	int				sig_ret;
 	t_process_group	*existing_process_groups;
 	t_env			*params;
 	t_ln			*ln_history;
