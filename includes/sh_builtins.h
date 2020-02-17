@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/17 00:01:08 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int		sh_test_unary(char *s1, char *s2);
 int		sh_echo(int ac, char **av, t_env **ev);
 char	*sh_try_cd_path(char *arg, char flag);
 char	*path_process(char *arg, char **path, char flag);
+char	*check_av(char *av);
 void	sh_debug_builtin(int ac, char **av, t_env **env);
 
 #endif

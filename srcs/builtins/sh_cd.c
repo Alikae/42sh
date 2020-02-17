@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/16 23:42:27 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/17 00:23:38 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ static int	check_flags(char *from, char *to)
 
 	i = -1;
 	flag = *to;
-
 	if (!from[0])
 		return (0);
 	while (from[++i])
@@ -119,15 +118,15 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		ft_putendl_fd("42sh: cd: usage: cd [-LP] [path]", 2);
 		return (1);
 	}
-	sh_generate_path((av[i] ? av[i] : sh_getev_value("HOME")), 0);
+	sh_generate_path(check_av(av[i]), 0);
 	path = process(sh()->potential_pwd, flag);
-	if (path && !chdir(path))
+	if (path && chdir(path))
 	{
-		sh_generate_path(path, 1);
+		sh_dprintf(2, "42sh: cd: can't acces: %s\n", (av[i]));
 		ft_memdel((void**)&path);
-		return (0);
+		return (1);
 	}
-	sh_dprintf(2, "42sh: cd: can't acces: %s\n", (path ? path : av[i]));
+	sh_generate_path(path, 1);
 	ft_memdel((void**)&path);
-	return (1);
+	return (0);
 }
