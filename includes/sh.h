@@ -102,6 +102,7 @@ typedef struct		s_sh
 	int				come_from_braces;
 	char			*pwd;
 	char			*potential_pwd;
+	int				chdir_result;
 }					t_sh;
 
 t_sh				*sh(void);

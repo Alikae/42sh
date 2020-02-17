@@ -16,6 +16,7 @@
 #include "limits.h"
 
 #define F_P 1
+#define F_K 2
 
 static char	*test_path(char *real, char *path, char flag)
 {
@@ -28,7 +29,7 @@ static char	*test_path(char *real, char *path, char flag)
 	{
 		if (buf[0] == '/')
 			ft_memdel((void**)&real);
-		real = ft_strjoin_free(real, buf, real);
+		real = ft_strdup(buf);
 	}
 	else
 		real = ft_strjoin_free(real, path, real);
@@ -36,7 +37,7 @@ static char	*test_path(char *real, char *path, char flag)
 	return (real);
 }
 
-char		*path_process(char *arg, char **path, char flag)
+static char		*path_process(char *arg, char **path, char flag)
 {
 	char	*real;
 	int		i;
@@ -56,13 +57,11 @@ char		*path_process(char *arg, char **path, char flag)
 	return (real);
 }
 
-static char	*process(char *arg, char flag)
+char		*process_cd(char *arg, char flag)
 {
-	char	*tmp;
 	char	*real;
 	char	**path;
 
-	tmp = NULL;
 	real = NULL;
 	path = NULL;
 	if (!arg)
@@ -72,8 +71,7 @@ static char	*process(char *arg, char flag)
 		ft_tab_strdel(&path);
 		path = tab_realloc(path, arg);
 	}
-	if (!(real = path_process(arg, path, flag)))
-		real = sh_try_cd_path(arg, flag);
+	real = path_process(arg, path, flag);
 	ft_free_tabstr(path);
 	return (real);
 }
@@ -118,9 +116,9 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		ft_putendl_fd("42sh: cd: usage: cd [-LP] [path]", 2);
 		return (1);
 	}
-	sh_generate_path(check_av(av[i]), 0);
-	path = process(sh()->potential_pwd, flag);
-	if (path && chdir(path))
+	path = sh_real_cd(check_av(av[i]), flag);
+	printf("1: [%s]\n", path); 
+	if (path && (flag |= F_K) && sh()->chdir_result)
 	{
 		sh_dprintf(2, "42sh: cd: can't acces: %s\n", (av[i]));
 		ft_memdel((void**)&path);
@@ -128,5 +126,5 @@ int			sh_cd(int ac, char **av, t_env **ev)
 	}
 	sh_generate_path(path, 1);
 	ft_memdel((void**)&path);
-	return (0);
+	return ((flag & F_K) && !sh()->chdir_result);
 }
