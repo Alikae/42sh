@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 03:51:53 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/17 03:54:28 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void	sh_subshdup(char *buff, t_exp *exp)
 void	sh_read_pipe(t_exp *exp, int fd)
 {
 	int		ret;
-	char	buff[500];
+	char	buff[4096];
 
 	ret = 0;
-	while ((ret = read(fd, &buff, 499)) > 0 && !sh()->abort_cmd)
+	while ((ret = read(fd, &buff, 4095)) > 0 && !sh()->abort_cmd)
 	{
 		buff[ret] = '\0';
 		sh_subshdup(buff, exp);
