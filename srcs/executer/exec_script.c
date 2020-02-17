@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 23:48:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/17 01:02:21 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int		fork_process(t_sh *p, int foreground)
 	pid = (child_pid) ? child_pid : getpid();
 	if (create_pgrp)
 		create_process_group_give_terminal_access(p, pid, foreground);
+		dprintf(2, "create pgrp %i\n", create_pgrp);
 	if (!child_pid)
 	{
 		sig_default();
