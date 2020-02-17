@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 00:31:32 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/02/17 00:31:49 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/17 23:40:24 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,8 @@ static char		*sh_try_cd_path(char *arg, char flag)
 		av = ft_strjoin(cd_path[i], "/");
 		av = ft_strjoin_free(av, arg, av);
 		sh_generate_path(av, 0);
-		printf("AV: [%s]\n", sh()->potential_pwd);
 		ft_memdel((void**)&real);
 		real = process_cd(sh()->potential_pwd, flag);
-		printf("i: %d\n:", i);
 		if (!(sh()->chdir_result = chdir(real)))
 			i = -2;
 		ft_memdel((void**)&av);
@@ -91,5 +89,5 @@ char			*sh_real_cd(char *arg, char flag)
 		return (real);
 	}
 	else
-		return (sh_try_cd_path(arg, flag));	
+		return (sh_try_cd_path(arg, flag));
 }

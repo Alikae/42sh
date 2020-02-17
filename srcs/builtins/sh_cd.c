@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 00:23:38 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/17 23:39:55 by tmeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*test_path(char *real, char *path, char flag)
 	return (real);
 }
 
-static char		*path_process(char *arg, char **path, char flag)
+static char	*path_process(char *arg, char **path, char flag)
 {
 	char	*real;
 	int		i;
@@ -117,7 +117,6 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		return (1);
 	}
 	path = sh_real_cd(check_av(av[i]), flag);
-	printf("1: [%s]\n", path); 
 	if (path && (flag |= F_K) && sh()->chdir_result)
 	{
 		sh_dprintf(2, "42sh: cd: can't acces: %s\n", (av[i]));
