@@ -94,5 +94,6 @@ void					sh_init(t_sh *shell)
 	shell->control_d = 0;
 	shell->end_of_here_doc = NULL;
 	shell->existing_process_groups = NULL;
+	shell->chdir_result = 0;
 	sh_init_2(shell);
 }
