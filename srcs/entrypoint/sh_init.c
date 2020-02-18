@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/16 22:12:04 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/18 00:35:14 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static struct termios	init_term(void)
 		destructor(EXIT_FAILURE);
 	if (tcgetattr(0, &termios))
 		destructor(EXIT_FAILURE);
+	termios.c_lflag &= ~(ISIG);
 	return (termios);
 }
 
