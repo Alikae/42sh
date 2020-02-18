@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 00:56:11 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/18 01:38:21 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	store_existing_group_process(t_sh *p, pid_t pgid)
 void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
 		int foreground)
 {
-	pid_t	new_pgid;
+	pid_t			new_pgid;
 
 	if (p->pgid_current_pipeline)
 		new_pgid = p->pgid_current_pipeline;
@@ -101,8 +101,10 @@ void	create_process_group_give_terminal_access(t_sh *p, pid_t pid,
 	{
 		signal(SIGTTOU, SIG_IGN);
 		tcsetpgrp((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0, pid);
+		p->extern_termios.c_lflag |= ISIG;
 		tcsetattr((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0,
 				TCSANOW, &p->extern_termios);
+		p->extern_termios.c_lflag &= ~ISIG;
 		signal(SIGTTOU, SIG_DFL);
 	}
 }

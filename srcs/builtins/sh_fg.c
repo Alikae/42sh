@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/15 03:51:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/18 01:37:57 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,12 @@ int	sh_fg(int ac, char **av, char **env)
 		tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
 				TCSANOW, &job->t_mode);
 	else
+	{
+		sh()->orig_termios.c_lflag |= ISIG;
 		tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
 				TCSANOW, &sh()->orig_termios);
+		sh()->orig_termios.c_lflag &= ~ISIG;
+	}
 	tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, job->pid);
 	if (kill(-1 * job->pid, SIGCONT) < 0)
 	{

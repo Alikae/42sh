@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 01:02:01 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/18 01:49:39 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		exec_compound_subsh(t_sh *p, t_token *tok, int from_subshexp)
 {
 	int	pid;
 
-	if ((pid = fork_process(p, !from_subshexp)) < 0)
+	if ((pid = fork_process(p, 1/*!from_subshexp*/)) < 0)
 	{
 		sh_dprintf(1, "fork error\n");
 		destructor(43);

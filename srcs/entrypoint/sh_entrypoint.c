@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/18 00:25:03 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	sh_entrypoint(int ac, char **av, char **ev)
 	tsh->av = sh_tab_cpy(av);
 	tsh->ev = ev;
 	tcgetattr(0, &tsh->extern_termios);
+	tsh->extern_termios.c_lflag &= ~ISIG;
+	tcsetattr(0, TCSANOW, &tsh->extern_termios);
 	tsh->here = NULL;
 	sh_init(tsh);
 	if (ft_fetch_opt("c", 1, tsh->opt) || tsh->ac > 1 || !tsh->is_interactive)

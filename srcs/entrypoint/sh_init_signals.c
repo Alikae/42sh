@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 03:50:46 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/18 00:32:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,6 @@
 
 #include <signal.h>
 #include <unistd.h>
-
-static void		sh_handle_sigstp(void)
-{
-	int ret;
-
-	ret = tcsetpgrp(0, getpgid(0));
-	sh_dprintf(1, "handle SIGTSTP: tcsetpgrp ret = %i\n", ret);
-	sh_dprintf(1, "SIGTSTP detected\n");
-	sh_loop();
-}
 
 static void		sh_handle_sigint(void)
 {
@@ -43,18 +33,12 @@ static void		sh_handle_sigint(void)
 
 void			sh_handle_signal(int sig)
 {
-	if (sig == SIGTSTP)
-		sh_handle_sigstp();
-	else if (sig == SIGINT)
+	if (sig == SIGINT)
 		sh_handle_sigint();
 }
 
 void			sh_init_signals(void)
 {
 	if (sh()->is_interactive)
-	{
 		signal(SIGINT, &sh_handle_signal);
-		signal(SIGTSTP, SIG_IGN);
-		signal(SIGCONT, SIG_IGN);
-	}
 }
