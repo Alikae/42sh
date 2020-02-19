@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 23:07:48 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/19 00:18:16 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int		sh_commande_string_size(t_exp *exp, char c)
 	size = exp->i;
 	quote = 0;
 	exp->i++;
-	while ((exp->content[exp->i] != c || quote || bquote) && exp->content[exp->i])
+	while ((exp->content[exp->i] != c || quote || bquote)
+			&& exp->content[exp->i])
 	{
 		if (exp->content[exp->i] == '\\' && !bquote && quote != SH_QUOTE)
 			bquote++;

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/11 03:25:31 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 00:15:53 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_toktype	handle_redirections_operators(t_toktool *t, t_toktype type,
 	if (type == SH_OR || type == SH_AND_IF || type == SH_OR_IF)
 	{
 		if (type == SH_OR && protect_pipe(t) == SH_SYNTAX_ERROR)
-				return (SH_SYNTAX_ERROR);
+			return (SH_SYNTAX_ERROR);
 		if (sh_record_here_doc(t, sh()->here) == SH_SYNTAX_ERROR)
 		{
 			sh_dprintf(2, "parse error\n");

@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/08 03:21:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 03:42:48 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 		tmp = ft_strjoin(real_path, "/");
 		ft_memdel((void**)&real_path);
 		real_path = ft_strjoin(tmp, path);
-		ft_memdel((void**)&tmp);
-		was_malloc = 1;
+		(was_malloc = 1) ? ft_memdel((void**)&tmp) : 0;
 	}
+	sh_dprintf(2, "open\n");
 	if ((fd = open_with_redirection_flags(real_path, type)) < 0)
 	{
 		sh_dprintf(2, "42sh: OPEN ERROR - '%s'\n", real_path);
@@ -101,6 +101,7 @@ int		create_open_file(t_sh *p, char *path, t_toktype type)
 		(was_malloc) ? ft_memdel((void**)&real_path) : 0;
 		return (-1);
 	}
+	sh_dprintf(2, "opened\n");
 	push_to_opened_files(p, real_path, fd);
 	(was_malloc) ? ft_memdel((void**)&real_path) : 0;
 	return (fd);

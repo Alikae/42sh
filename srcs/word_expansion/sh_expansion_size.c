@@ -6,10 +6,12 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/15 02:15:17 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/19 00:25:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdio.h>
+
 int		sh_complex_word(char *content, int i, int bq)
 {
 	int		bquote;
@@ -19,8 +21,7 @@ int		sh_complex_word(char *content, int i, int bq)
 	quote = 0;
 	while (content[i])
 	{
-		if (bquote)
-			bquote--;
+		bquote -= (bquote) ? 1 : 0;
 		if (content[i] == '\'' && !quote)
 			quote = 1;
 		else if (content[i] == '\'' && quote)

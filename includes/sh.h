@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 01:28:05 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 03:13:56 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,6 @@ void				delete_close_all_pipe_lst_except(int pipe1, int pipe2);
 void				del_all_group_processes(t_process_group *tmp);
 void				wait_for_zombies(void);
 void				sh_generate_path(char *path, int s1);
+int					is_only_digits(const char *str);
 
 #endif

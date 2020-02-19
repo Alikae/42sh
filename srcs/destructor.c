@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/08 03:22:14 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 04:02:23 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	destructor(int status)
 		if (sh()->is_interactive && sh()->pid_main_process == getpid())
 		{
 			push_history(sh()->hist);
+			sh()->extern_termios.c_lflag |= ISIG;
 			tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
 					TCSANOW, &sh()->extern_termios);
 		}

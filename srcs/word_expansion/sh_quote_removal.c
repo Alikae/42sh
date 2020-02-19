@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/13 01:55:22 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/19 00:23:46 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ void	sh_find_quote(t_split *sp, short quote)
 	bquote = 0;
 	while (sp->tok->content[sp->i])
 	{
-		if (bquote)
-			bquote--;
+		bquote -= (bquote) ? 1 : 0;
 		if (!bquote && quote != SH_QUOTE && sp->tok->content[sp->i] == '\\')
 		{
 			if (quote != SH_DQUOTE || sh_bq_exc(sp->tok->content[sp->i + 1]))

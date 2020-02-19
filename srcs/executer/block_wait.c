@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 03:51:07 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 01:30:44 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+
+void	block_wait_stopped2(t_sh *p, int child_pid, int from_fg, int status)
+{
+	if (WSTOPSIG(status) == SIGTTOU)
+	{
+		sh_dprintf(1, "\nChild_process [%i] SIGTTOU\n", child_pid);
+		p->process_is_stopped = 1;
+		if (!from_fg)
+			add_job(child_pid, p->index_pipeline_begin,
+					p->index_pipeline_end, "SIGTTOU");
+	}
+	p->sig_ret = 128 + WSTOPSIG(status);
+}
 
 void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 {
@@ -37,15 +50,7 @@ void	block_wait_stopped(t_sh *p, int child_pid, int from_fg, int status)
 	}
 	if (WSTOPSIG(status) == SIGKILL)
 		sh_dprintf(1, "\nChild_process [%i] KILLED\n", child_pid);
-	if (WSTOPSIG(status) == SIGTTOU)
-	{
-		sh_dprintf(1, "\nChild_process [%i] SIGTTOU\n", child_pid);
-		p->process_is_stopped = 1;
-		if (!from_fg)
-			add_job(child_pid, p->index_pipeline_begin,
-					p->index_pipeline_end, "SIGTTOU");
-	}
-	p->sig_ret = 128 + WSTOPSIG(status);
+	block_wait_stopped2(p, child_pid, from_fg, status);
 }
 
 void	block_wait_signaled(t_sh *p, int child_pid, int status)
@@ -68,10 +73,26 @@ void	block_wait_signaled(t_sh *p, int child_pid, int status)
 	if (WTERMSIG(status) == SIGABRT)
 		sh_dprintf(1, "\nChild_process [%i] ABORTED (SIGABRT)\n", child_pid);
 	if (WTERMSIG(status) == SIGFPE)
-		sh_dprintf(1, "\nChild_process [%i] RAISE EXCEPTION (SIGFPE)\n", child_pid);
+		sh_dprintf(1, "\nChild_process [%i] RAISE EXCEPTION (SIGFPE)\n",
+				child_pid);
 	if (WTERMSIG(status) == SIGILL)
-		sh_dprintf(1, "\nChild_process [%i] ILLEGAL INSTRUCTION (SIGILL)\n", child_pid);
+		sh_dprintf(1, "\nChild_process [%i] ILLEGAL INSTRUCTION (SIGILL)\n",
+				child_pid);
 	p->sig_ret = 128 + WTERMSIG(status);
+}
+
+void	block_wait2(t_sh *p, int status)
+{
+	if (p->is_interactive && p->pid_main_process == getpid())
+	{
+		signal(SIGTTOU, SIG_IGN);
+		tcsetpgrp((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0, getpgid(0));
+		tcsetattr((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0]
+				: 0, TCSANOW, &p->orig_termios);
+		signal(SIGTTOU, SIG_DFL);
+	}
+	if (p->sig_ret == -1)
+		p->sig_ret = WEXITSTATUS(status);
 }
 
 int		block_wait(t_sh *p, int child_pid, int from_fg, int from_subshexp)
@@ -94,15 +115,6 @@ int		block_wait(t_sh *p, int child_pid, int from_fg, int from_subshexp)
 		block_wait_stopped(p, child_pid, from_fg, status);
 	else if (WIFSIGNALED(status))
 		block_wait_signaled(p, child_pid, status);
-	if (p->is_interactive && p->pid_main_process == getpid())
-	{
-		signal(SIGTTOU, SIG_IGN);
-		tcsetpgrp((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0] : 0, getpgid(0));
-		tcsetattr((p->cpy_std_fds[0] > -1) ? p->cpy_std_fds[0]
-				: 0, TCSANOW, &p->orig_termios);
-		signal(SIGTTOU, SIG_DFL);
-	}
-	if (p->sig_ret == -1)
-		p->sig_ret = WEXITSTATUS(status);
+	block_wait2(p, status);
 	return (p->sig_ret);
 }

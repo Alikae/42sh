@@ -143,8 +143,7 @@ C_FILES_builtins = \
 		   sh_fg.c \
 		   sh_cd.c \
 		   sh_cd2.c \
-		   sh_unalias.c \
-		   sh_generate_path.c
+		   sh_unalias.c
 
 C_FILES_tools = \
 		sh_print_all_token.c \

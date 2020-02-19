@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/10 23:12:33 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 03:14:12 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,6 @@
 #include "libft.h"
 #include "sh_executer.h"
 #include "sh_redirections.h"
-
-int		is_only_digits(const char *str)
-{
-	int	i;
-
-	i = -1;
-	if (!str)
-		return (0);
-	while (str[++i])
-		if (!ft_isdigit(str[i]))
-			return (0);
-	return (1);
-}
 
 void	handle_close_and_push(t_token *token, int fd_in, int fd_out,
 		int *nb_redirections)
@@ -85,6 +72,19 @@ int		handle_dless_n_ands_redirections(t_sh *p, t_token *token,
 	return (0);
 }
 
+void	parse_fd_in(t_token *token, int *fd_in)
+{
+	if (!token->content || !*token->content || token->content[0] == '&')
+	{
+		if (token->type == SH_LESS)
+			*fd_in = 0;
+		else
+			*fd_in = (token->content && token->content[0] == '&') ? -1 : 1;
+	}
+	else
+		*fd_in = ft_atoi(token->content);
+}
+
 void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 {
 	int	fd_in;
@@ -96,15 +96,7 @@ void	stock_redirection(t_sh *p, t_token *token, int *nb_redirections)
 		return ;
 	if (p->abort_cmd)
 		return ;
-	if (!token->content || !*token->content || token->content[0] == '&')
-	{
-		if (token->type == SH_LESS)
-			fd_in = 0;
-		else
-			fd_in = (token->content && token->content[0] == '&') ? -1 : 1;
-	}
-	else
-		fd_in = ft_atoi(token->content);
+	parse_fd_in(token, &fd_in);
 	if (!((fd_out = create_open_file(p, token->sub->content,
 						token->type)) > -1))
 	{

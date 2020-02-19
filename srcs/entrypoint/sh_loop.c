@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/12 03:57:58 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 00:37:13 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,7 @@ int					sh_loop(void)
 	char	*input;
 	int		complete;
 
-	p = sh();
-	sh_parse_rc();
+	(p = sh()) ? sh_parse_rc() : sh_parse_rc();
 	p->hist = init_history();
 	while (!p->exit)
 	{
@@ -101,7 +100,7 @@ int					sh_loop(void)
 			if (!p->unfinished_cmd)
 				complete = 1;
 			else
-				ft_putstr("$->");
+				sh_dprintf(2, "$->");
 		}
 		ft_memdel((void**)&input);
 		sh()->input = 0;

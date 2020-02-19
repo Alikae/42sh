@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 00:11:06 by jerry            ###   ########.fr       */
+/*   Updated: 2020/02/19 00:09:04 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	sh_sub_export(char *s)
 {
 	char	*tmp;
 	t_env	*tmp2;
-	char *expanded_tilde;
+	char	*expanded_tilde;
 
 	if (!ft_isalpha(s[0]) || s[0] == '_')
 	{
@@ -54,7 +54,6 @@ static int	sh_sub_export(char *s)
 	if ((tmp = ft_strchr(s, '=')))
 	{
 		tmp = ft_strndup(s, tmp - s);
-		//
 		expanded_tilde = dupfilsdup(ft_strchr(s, '=') + 1);
 		sh_tilde_expansion(&expanded_tilde, sh()->params);
 		sh_setev(tmp, expanded_tilde)->exported = 1;

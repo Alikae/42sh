@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/18 01:37:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 00:12:30 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "sh_executer.h"
 #include <signal.h>
 
-int	nth_job_exist(t_job *job, int arg, int argcpy, const char *av1)
+int		nth_job_exist(t_job *job, int arg, int argcpy, const char *av1)
 {
 	const char	*argsuffix;
 
@@ -34,7 +34,7 @@ int	nth_job_exist(t_job *job, int arg, int argcpy, const char *av1)
 	return (1);
 }
 
-int	jobs_exist(t_job **pjob)
+int		jobs_exist(t_job **pjob)
 {
 	if (sh()->pid_main_process != getpid() || !sh()->is_interactive)
 	{
@@ -49,7 +49,24 @@ int	jobs_exist(t_job **pjob)
 	return (1);
 }
 
-int	sh_fg(int ac, char **av, char **env)
+void	sh_fg2(t_job *job)
+{
+	tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, job->pid);
+	if (kill(-1 * job->pid, SIGCONT) < 0)
+	{
+		signal(SIGTTOU, SIG_IGN);
+		sh_dprintf(2, "42sh: kill (SIGCONT) ERROR -%s\n", job->name);
+		tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
+				TCSANOW, &sh()->orig_termios);
+		tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
+				getpid());
+		signal(SIGTTOU, SIG_DFL);
+	}
+	else
+		block_wait(sh(), job->pid, 1, 0);
+}
+
+int		sh_fg(int ac, char **av, char **env)
 {
 	t_job		*job;
 	int			arg;
@@ -74,22 +91,11 @@ int	sh_fg(int ac, char **av, char **env)
 				TCSANOW, &sh()->orig_termios);
 		sh()->orig_termios.c_lflag &= ~ISIG;
 	}
-	tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, job->pid);
-	if (kill(-1 * job->pid, SIGCONT) < 0)
-	{
-		signal(SIGTTOU, SIG_IGN);
-		sh_dprintf(2, "42sh: kill (SIGCONT) ERROR -%s\n", job->name);
-		tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
-				TCSANOW, &sh()->orig_termios);
-		tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, getpid());
-		signal(SIGTTOU, SIG_DFL);
-	}
-	else
-		block_wait(sh(), job->pid, 1, 0);
+	sh_fg2(job);
 	return (0);
 }
 
-int	sh_bg(int ac, char **av, __attribute__((unused)) char **env)
+int		sh_bg(int ac, char **av, __attribute__((unused)) char **env)
 {
 	t_job		*job;
 	int			arg;
