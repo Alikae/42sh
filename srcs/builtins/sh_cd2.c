@@ -42,7 +42,7 @@ static char		*sh_del_one_dir(char **cpy)
 		i--;
 	while (cpy[0][i] != '/')
 		i--;
-	if (!(new = malloc(i + 1)))
+	if (!(new = malloc((i > 0 ? i : 1) + 1)))
 		destructor(-1);
 	while ((i == 0 && j <= i) || (i > 1 && j < i))
 	{
@@ -80,7 +80,7 @@ static char		*cd_loop(char flag, char **path)
 	i = -1;
 	while (path[++i])
 	{
-		if ((!real || (ft_strcmp(path[i], ".") && ft_strcmp(path[i], "..")))
+		if ((!real || (real[0] && real[ft_strlen(real) - 1] != '/'))
 				&& ft_strcmp(path[i], "/"))
 			real = ft_strjoin_free(real, "/", real);
 		if (!strcmp(path[i], ".."))
