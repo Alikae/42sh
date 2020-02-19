@@ -42,9 +42,8 @@ int		sh_type(int ac, char **av, t_env **ev);
 int		sh_type_exec(char *str, char *real);
 int		sh_test_unary(char *s1, char *s2);
 int		sh_echo(int ac, char **av, t_env **ev);
-char	*process_cd(char *arg, char flag);
-char	*check_av(char *av);
-char	*sh_real_cd(char *arg, char flag);
+int		process_cd(char *arg, char flag);
+int		checkav(char *arg, char *tmp);
 void	sh_debug_builtin(int ac, char **av, t_env **env);
 
 #endif
