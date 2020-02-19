@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/10 23:07:03 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 03:02:15 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,48 +68,42 @@ int		contain_equal_not_first_no_expansions(const char *str)
 	return (0);
 }
 
+int		streasar2(t_token *token_begin, int *nb_redirections,
+		t_token *argv_stack)
+{
+	stock_redirection(sh(), token_begin, nb_redirections);
+	if (sh()->abort_cmd)
+	{
+		free_ast(argv_stack);
+		return (1);
+	}
+	return (0);
+}
+
 int		stock_redirections_assignements_argvs(t_token *token_begin,
 		t_token *token_end, int *nb_assign, char ***child_argv)
 {
 	t_token	*argv_stack;
 	int		nb_redirections;
 	int		cmd_begin;
-	t_sh	*p;
 
-	p = sh();
 	assign_sraa_to_zero(nb_assign, &nb_redirections, &argv_stack, &cmd_begin);
 	while (token_begin)
 	{
 		if (is_redirection_operator(token_begin->type))
 		{
-			stock_redirection(p, token_begin, &nb_redirections);
-			if (p->abort_cmd)
-			{
-				free_ast(argv_stack);
+			if (streasar2(token_begin, &nb_redirections, argv_stack))
 				return (nb_redirections);
-			}
 		}
 		else if (!cmd_begin && contain_equal_not_first_no_expansions(
 					token_begin->content))
-			stock_assign(p, token_begin, nb_assign);
-		else if (token_begin->type == SH_WORD)
-		{
+			stock_assign(sh(), token_begin, nb_assign);
+		else if (token_begin->type == SH_WORD && (cmd_begin = 1))
 			stack_argvs(&argv_stack, token_begin);
-			cmd_begin = 1;
-		}
 		token_begin = (token_begin->next == token_end) ? 0 : token_begin->next;
 	}
-	argv_stack = expand_and_retokenize(p, argv_stack);
+	argv_stack = expand_and_retokenize(sh(), argv_stack);
 	*child_argv = build_child_argvs(argv_stack);
 	free_ast(argv_stack);
 	return (nb_redirections);
-}
-
-int		exec_builtin(t_sh *p, int (*f)(int, char **, t_env **),
-		char **child_argv)
-{
-	int ret;
-
-	ret = f(p->child_ac, child_argv, &(p->params));
-	return (ret);
 }

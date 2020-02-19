@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/08 04:12:06 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/19 02:59:20 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,28 +81,36 @@ int		handle_no_cmd_name(t_sh *p, char **child_argv, int nb_redirections)
 	return (0);
 }
 
-void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
+int		stock_assign2(t_token *token, int *nb_assign)
 {
-	t_env	*tmp;
-	char	*equal;
-	t_token	*tmpt;
 	t_token	*tmpt_name;
 
-	(*nb_assign)++;
-	tmp = p->assign_lst;
-	equal = ft_strchr(token->content, '=');
-	*equal = 0;
-	if ((tmpt_name = sh_expansion(token->content, &(p->params), 0)))
+	if ((tmpt_name = sh_expansion(token->content, &(sh()->params), 0)))
 	{
-		p->assign_lst = sh_create_param(tmpt_name->content);
+		sh()->assign_lst = sh_create_param(tmpt_name->content);
 		free_ast(tmpt_name);
 	}
 	else
 	{
 		sh_dprintf(2, "42sh: Invalid name '' for assignement\n");
 		(*nb_assign)--;
-		return ;
+		return (1);
 	}
+	return (0);
+}
+
+void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
+{
+	t_env	*tmp;
+	char	*equal;
+	t_token	*tmpt;
+
+	(*nb_assign)++;
+	tmp = p->assign_lst;
+	equal = ft_strchr(token->content, '=');
+	*equal = 0;
+	if (stock_assign2(token, nb_assign))
+		return ;
 	*equal = '=';
 	p->assign_lst->value = ft_strdup(equal + 1);
 	if ((tmpt = sh_expansion(p->assign_lst->value, &(p->params), 0)))
@@ -117,18 +125,4 @@ void	stock_assign(t_sh *p, t_token *token, int *nb_assign)
 		p->assign_lst->value = ft_strdup("");
 	}
 	p->assign_lst->next = tmp;
-}
-
-void	del_n_assign_lst(t_sh *p, int n)
-{
-	t_env	*tmp;
-
-	while (n-- && p->assign_lst)
-	{
-		ft_memdel((void**)&(p->assign_lst->key));
-		ft_memdel((void**)&(p->assign_lst->value));
-		tmp = p->assign_lst->next;
-		ft_memdel((void**)&p->assign_lst);
-		p->assign_lst = tmp;
-	}
 }

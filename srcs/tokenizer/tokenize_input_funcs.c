@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/14 22:50:57 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 00:16:33 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,6 @@ t_toktype	handle_functions_n_terminator(t_toktool *t,
 
 	(void)len;
 	(void)p_actual;
-/*	if (t->word_nb == 1 && (len = next_is_parenthesis(t)))
-	{
-		t->i += len;
-		if (sh()->alias_end)
-			sh()->alias_end--;
-		return (tokenize_function(t, p_actual, word_begin));
-	}*/
 	if ((type = word_is_actual_term(t->input + word_begin, t->i
 					- word_begin, actual_compound)) && (t->word_nb == 1
 					|| type == SH_SUBSH_END))

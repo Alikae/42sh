@@ -95,6 +95,7 @@ C_FILES_tokenizer = \
 
 C_FILES_executer = \
 	sh_exec_file.c \
+	utils.c \
 	sh_exec_stdin.c \
 	sh_exec_arg.c \
 	sh_exec_default.c \
