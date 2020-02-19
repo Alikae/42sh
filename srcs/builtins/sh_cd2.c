@@ -13,81 +13,105 @@
 #include "sh_tools.h"
 #include "sh_builtins.h"
 #include "libft.h"
+#include <limits.h>
 
-char			*check_av(char *av)
+#define F_P 1
+
+int				checkav(char *arg, char *tmp)
 {
-	char	*tmp;
-
-	tmp = NULL;
-	if (!av && !(tmp = sh_getev_value("HOME")))
-	{
-		sh_dprintf(2, "NO HOME SET\n");
-		return (NULL);
-	}
-	else if (av && !strcmp(av, "-") && !(tmp = sh_getev_value("OLDPWD")))
-	{
-		sh_dprintf(2, "NO OLDPWD SET\n");
-		return (NULL);
-	}
-	else if (!tmp)
-		return (av);
-	return (tmp);
+	if (!arg[0] || arg[0] == '/')
+		return (0);
+	if (arg[0] == '.' && (!arg[1] || arg[1] == '.' || arg[1] == '/'))
+		return (0);
+	if (!strcmp(tmp, ":"))
+		return (0);
+	return (1);	
 }
 
-static char		**init_tab(void)
-{
-	char **cd_path;
-	char *tmp;
-
-	if (!(tmp = sh_getev_value("CDPATH")))
-		return (NULL);
-	cd_path = ft_strsplit(tmp, ':');
-	if (!cd_path)
-		cd_path = tab_realloc(cd_path, tmp);
-	return (cd_path);
-}
-
-static char		*sh_try_cd_path(char *arg, char flag)
+static char		*sh_del_one_dir(char **cpy)
 {
 	int		i;
-	char	*av;
-	char	**cd_path;
-	char	*real;
+	int		j;
+	char	*new;
 
-	i = -1;
-	real = NULL;
-	cd_path = init_tab();
-	av = NULL;
-	while (i != -2 && cd_path && cd_path[++i])
+	j = 0;
+	i = ft_strlen(*cpy) - 1;
+	if (i == 0 || !ft_strcmp(*cpy, "/"))
+		return (*cpy);
+	if (cpy[0][i] == '/')
+		i--;
+	while (cpy[0][i] != '/')
+		i--;
+	if (!(new = malloc(i + 1)))
+		destructor(-1);
+	while ((i == 0 && j <= i) || (i > 1 && j < i))
 	{
-		av = ft_strjoin(cd_path[i], "/");
-		av = ft_strjoin_free(av, arg, av);
-		sh_generate_path(av, 0);
-		ft_memdel((void**)&real);
-		real = process_cd(sh()->potential_pwd, flag);
-		if (!(sh()->chdir_result = chdir(real)))
-			i = -2;
-		ft_memdel((void**)&av);
+		new[j] = cpy[0][j];
+		j++;
 	}
-	ft_tab_strdel(&cd_path);
+	new[j] = '\0';
+	ft_memdel((void**)cpy);
+	return (new);
+}
+
+static char		*check_links(char *real, char flag, char *path, char *test)
+{
+	char	buf[PATH_MAX + 1];
+
+	ft_bzero(buf, PATH_MAX + 1);
+	if ((flag & F_P) && readlink(test, buf, PATH_MAX) && buf[0])
+	{
+		if (buf[0] == '/')
+			ft_memdel((void**)&real);
+		return (ft_strjoin_free(real, buf, real));
+	}
+	else
+		return (ft_strjoin_free(real, path, real));
+}
+
+static char		*cd_loop(char flag, char **path)
+{
+	char	*real;
+	char	*test;
+	int		i;
+
+	test = NULL;
+	real = NULL;
+	i = -1;
+	while (path[++i])
+	{
+		if ((!real || (ft_strcmp(path[i], ".") && ft_strcmp(path[i], "..")))
+				&& ft_strcmp(path[i], "/"))
+			real = ft_strjoin_free(real, "/", real);
+		if (!strcmp(path[i], ".."))
+			real = sh_del_one_dir(&real);
+		if (!strcmp(path[i], "..") || !strcmp(path[i], "."))
+			continue ;
+		test = ft_strjoin_free(real, path[i], test);
+		real = check_links(real, flag, path[i], test);	
+	}
+	ft_memdel((void**)&test);
 	return (real);
 }
 
-char			*sh_real_cd(char *arg, char flag)
+int			process_cd(char *arg, char flag)
 {
-	char *real;
+	int		ret;
+	char	*real;
+	char	**path;
 
-	real = NULL;
-	if (!arg)
-		return (NULL);
-	if ((arg && (arg[0] == '/' || arg[0] == '.')) || !sh_getev_value("CDPATH"))
+	if (!(path = ft_strsplit(arg, '/')) || !path[0])
+		path = tab_realloc(path, arg);
+	real = cd_loop(flag, path);
+	if ((ret = chdir(real)) == 0)
 	{
-		sh_generate_path(arg, 0);
-		real = process_cd(sh()->potential_pwd, flag);
-		if ((sh()->chdir_result = chdir(real)))
-			ft_memdel((void**)&real);
-		return (real);
+		sh_setev("OLDPWD", sh()->pwd);
+		ft_memdel((void**)&sh()->pwd);
+		sh_setev("PWD", real);
+		sh()->pwd = real;
 	}
 	else
-		return (sh_try_cd_path(arg, flag));
+		ft_memdel((void**)&real);
+	ft_tab_strdel(&path);
+	return (ret == 0 ? 0 : 1);
 }

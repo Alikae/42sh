@@ -16,64 +16,73 @@
 #include "limits.h"
 
 #define F_P 1
-#define F_K 2
 
-static char	*test_path(char *real, char *path, char flag)
+static char		**init_tab(char *cdpath)
 {
-	char	buf[PATH_MAX + 1];
+	char **cd_path;
+
+	cd_path = ft_strsplit(cdpath, ':');
+	if (!cd_path || !cd_path[0])
+		cd_path = tab_realloc(cd_path, cdpath);
+	return (cd_path);
+}
+
+static int	cd_path(char *arg, char *cdpath, char flag)
+{
+	int		i;
+	int		ret;
+	char	*av;
+	char	**cd_path;
 	char	*test;
 
-	test = ft_strjoin(real, path);
-	ft_bzero(buf, PATH_MAX + 1);
-	if ((flag & F_P) && readlink(test, buf, PATH_MAX) && buf[0])
+	i = -1;
+	av = ft_strjoin("/", arg);
+	cd_path = init_tab(cdpath);
+	test = NULL;
+	while (i != -2 && cd_path && cd_path[++i])
 	{
-		if (buf[0] == '/')
-			ft_memdel((void**)&real);
-		real = ft_strdup(buf);
+		if (cd_path[i][0] != '/')
+			test = ft_strjoin(sh()->pwd, "/");
+		test = ft_strjoin_free(test, cd_path[i], test);
+		test = ft_strjoin_free(test, av, test);
+		if ((ret = process_cd(test, flag)) == 0)
+			i = -2;
+		ft_memdel((void**)&test);
 	}
-	else
-		real = ft_strjoin_free(real, path, real);
-	ft_memdel((void**)&test);
-	return (real);
+	ft_memdel((void**)&av);
+	ft_tab_strdel(&cd_path);
+	if (ret != 0)
+		sh_dprintf(2, "42sh: cd: can't access: %s\n", arg);
+	return (ret == 0 ? 0 : 1);
 }
 
-static char	*path_process(char *arg, char **path, char flag)
+static int	cd_tree(char *arg, char flag)
 {
-	char	*real;
-	int		i;
+	char	*av;
+	char	*tmp;
+	int		ret;
 
-	real = NULL;
-	i = 0;
-	if (arg && arg[0] == '/')
-		real = ft_strjoin_free("/", real, real);
-	while (path && path[i])
+	ret = 1;
+	if (!arg || !strcmp(arg, "-"))
 	{
-		if (i != 0)
-			real = ft_strjoin_free(real, "/", real);
-		if (!(real = test_path(real, path[i], flag)))
-			return (NULL);
-		i++;
+		if (!(av = ft_strdup(sh_getev_value((!arg ? "HOME" : "OLDPWD")))))
+			sh_dprintf(2, "NO [%s] SET\n", (!arg ? "HOME" : "OLDPWD"));
+		if (!av)
+			return (1);
 	}
-	return (real);
-}
-
-char		*process_cd(char *arg, char flag)
-{
-	char	*real;
-	char	**path;
-
-	real = NULL;
-	path = NULL;
-	if (!arg)
-		return (NULL);
-	if (!(path = ft_strsplit(arg, '/')) || !path[0] || !path[1])
+	else if (arg[0] == '/')
+		av = ft_strdup(arg);
+	else if ((tmp = sh_getev_value("CDPATH")) && checkav(arg, tmp))
+		return (cd_path(arg, tmp, flag));
+	else if (arg[0] != 0)
 	{
-		ft_tab_strdel(&path);
-		path = tab_realloc(path, arg);
+		av = ft_strjoin(sh()->pwd, "/");
+		av = ft_strjoin_free(av, arg, av);
 	}
-	real = path_process(arg, path, flag);
-	ft_free_tabstr(path);
-	return (real);
+	if (((arg && !arg[0]) || (ret = process_cd(av, flag))) && arg)
+		sh_dprintf(2, "42sh: cd: can't access: %s\n", arg);
+	ft_memdel((void**)&av);
+	return (ret == 0 ? 0 : 1);
 }
 
 static int	check_flags(char *from, char *to)
@@ -103,7 +112,6 @@ static int	check_flags(char *from, char *to)
 int			sh_cd(int ac, char **av, t_env **ev)
 {
 	char	flag;
-	char	*path;
 	int		i;
 
 	flag = '\0';
@@ -116,14 +124,5 @@ int			sh_cd(int ac, char **av, t_env **ev)
 		ft_putendl_fd("42sh: cd: usage: cd [-LP] [path]", 2);
 		return (1);
 	}
-	path = sh_real_cd(check_av(av[i]), flag);
-	if (path && (flag |= F_K) && sh()->chdir_result)
-	{
-		sh_dprintf(2, "42sh: cd: can't acces: %s\n", (av[i]));
-		ft_memdel((void**)&path);
-		return (1);
-	}
-	sh_generate_path(path, 1);
-	ft_memdel((void**)&path);
-	return ((flag & F_K) && !sh()->chdir_result);
+	return (cd_tree(av[i], flag));
 }

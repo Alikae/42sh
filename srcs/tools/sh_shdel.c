@@ -53,7 +53,6 @@ void	sh_shdel(t_sh **shell)
 		s->dir = NULL;
 	wait_for_zombies();
 	free_sh_var(s);
-	ft_memdel((void**)&((*shell)->potential_pwd));
 	s->user = NULL;
 	free(*shell);
 	*shell = NULL;

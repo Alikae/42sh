@@ -62,10 +62,10 @@ void					sh_init_2(t_sh *shell)
 		shell->pwd = ft_strdup(shell->pwd);
 	else
 	{
+		ft_bzero(dir, PATH_MAX + 1);
 		getcwd(dir, PATH_MAX);
 		shell->pwd = ft_strdup(dir);
 	}
-	shell->potential_pwd = NULL;
 	shell->last_cmd_result = 0;
 }
 
@@ -94,6 +94,5 @@ void					sh_init(t_sh *shell)
 	shell->control_d = 0;
 	shell->end_of_here_doc = NULL;
 	shell->existing_process_groups = NULL;
-	shell->chdir_result = 0;
 	sh_init_2(shell);
 }
