@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/18 01:51:25 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 00:22:22 by ede-ram          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,19 @@ void	sh_read_pipe(t_exp *exp, int fd)
 		exp->value[ft_strlen(exp->value) - 1] = '\0';
 }
 
+void	subsh_set_termios(void)
+{
+	if (getpid() == sh()->pid_main_process)
+	{
+		signal(SIGTTOU, SIG_IGN);
+		tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
+				getpid());
+		tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
+				TCSANOW, &sh()->extern_termios);
+		signal(SIGTTOU, SIG_DFL);
+	}
+}
+
 void	sh_subsh_expansion(t_exp *exp)
 {
 	t_token	*tok;
@@ -82,22 +95,11 @@ void	sh_subsh_expansion(t_exp *exp)
 		if (pipe(pipe_fd) == -1)
 			destructor(-1);
 		push_redirect_lst(&(sh()->redirect_lst), 1, pipe_fd[1]);
-		//
-		//
 		exec_compound_subsh(sh(), tok, 1);
 		free_ast(tok);
 		del_n_redirect_lst(&(sh()->redirect_lst), 1);
 		sh_read_pipe(exp, pipe_fd[0]);
-		//
-		if (getpid() == sh()->pid_main_process)
-		{
-			signal(SIGTTOU, SIG_IGN);
-			tcsetpgrp((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0, getpid());
-			tcsetattr((sh()->cpy_std_fds[0] > -1) ? sh()->cpy_std_fds[0] : 0,
-					TCSANOW, &sh()->extern_termios);
-			signal(SIGTTOU, SIG_DFL);
-		}
-		//
+		subsh_set_termios();
 		close(pipe_fd[0]);
 	}
 	else
