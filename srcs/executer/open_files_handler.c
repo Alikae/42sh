@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/08 03:21:50 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/19 04:07:50 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,25 @@ int		file_is_already_open(t_sh *p, char *name)
 	return (-1);
 }
 
-int		open_with_redirection_flags(char *real_path, t_toktype type)
+int		open_with_redirection_flags(char *path, t_toktype type)
 {
-//	if (!have rights)
-//	print "Error"
-//	abort_cmd
+	struct stat st;
+
+	if (stat(path, &st) == -1)
+		return (-1);
+	if ((st.st_mode & S_IFIFO) && sh()->pid_main_process == getpid())
+	{
+		sh_dprintf(2, "42sh: can't redirect fifo file in main process\n");
+		return (-1);
+	}
 	if (type == SH_GREAT)
-		return (open(real_path, O_CREAT | O_TRUNC | O_WRONLY,
-					S_IRUSR | S_IWUSR));
+		return (open(path, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR));
 	else if (type == SH_LESS)
-		return (open(real_path, O_CREAT | O_RDONLY,
-					S_IRUSR | S_IWUSR));
+		return (open(path, O_CREAT | O_RDONLY, S_IRUSR | S_IWUSR));
 	else if (type == SH_DGREAT)
-		return (open(real_path, O_CREAT | O_APPEND | O_WRONLY,
-					S_IRUSR | S_IWUSR));
+		return (open(path, O_CREAT | O_APPEND | O_WRONLY, S_IRUSR | S_IWUSR));
 	else if (type == SH_LESSGREAT || type == SH_LESSAND || type == SH_GREATAND)
-		return (open(real_path, O_CREAT | O_APPEND | O_RDWR,
+		return (open(path, O_CREAT | O_APPEND | O_RDWR,
 					S_IRUSR | S_IWUSR));
 		return (-1);
 }
