@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/20 02:24:36 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/20 02:40:30 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	cd_tree(char *arg, char flag)
 	int		ret;
 
 	ret = 1;
-	if (!arg || !strcmp(arg, "-"))
+	if (!arg || !ft_strcmp(arg, "-"))
 	{
 		if (!(av = ft_strdup(sh_getev_value((!arg ? "HOME" : "OLDPWD")))))
 			sh_dprintf(2, "NO [%s] SET\n", (!arg ? "HOME" : "OLDPWD"));

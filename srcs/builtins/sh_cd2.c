@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 00:31:32 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/02/20 02:08:36 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/20 02:41:22 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int				checkav(char *arg, char *tmp)
 		return (0);
 	if (arg[0] == '.' && (!arg[1] || arg[1] == '.' || arg[1] == '/'))
 		return (0);
-	if (!strcmp(tmp, ":"))
+	if (!ft_strcmp(tmp, ":"))
 		return (0);
 	return (1);
 }
@@ -83,9 +83,9 @@ static char		*cd_loop(char flag, char **path)
 		if ((!real || (real[0] && real[ft_strlen(real) - 1] != '/'))
 				&& ft_strcmp(path[i], "/"))
 			real = ft_strjoin_free(real, "/", real);
-		if (!strcmp(path[i], ".."))
+		if (!ft_strcmp(path[i], ".."))
 			real = sh_del_one_dir(&real);
-		if (!strcmp(path[i], "..") || !strcmp(path[i], "."))
+		if (!ft_strcmp(path[i], "..") || !strcmp(path[i], "."))
 			continue ;
 		test = ft_strjoin_free(real, path[i], test);
 		real = check_links(real, flag, path[i], test);
