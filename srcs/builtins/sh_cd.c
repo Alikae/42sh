@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 23:39:55 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/20 02:24:36 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #define F_P 1
 
-static char		**init_tab(char *cdpath)
+static char	**init_tab(char *cdpath)
 {
 	char **cd_path;
 

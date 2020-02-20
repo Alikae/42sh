@@ -6,7 +6,7 @@
 /*   By: tmeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 00:31:32 by tmeyer            #+#    #+#             */
-/*   Updated: 2020/02/17 23:40:24 by tmeyer           ###   ########.fr       */
+/*   Updated: 2020/02/20 02:08:36 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int				checkav(char *arg, char *tmp)
 		return (0);
 	if (!strcmp(tmp, ":"))
 		return (0);
-	return (1);	
+	return (1);
 }
 
 static char		*sh_del_one_dir(char **cpy)
@@ -88,13 +88,13 @@ static char		*cd_loop(char flag, char **path)
 		if (!strcmp(path[i], "..") || !strcmp(path[i], "."))
 			continue ;
 		test = ft_strjoin_free(real, path[i], test);
-		real = check_links(real, flag, path[i], test);	
+		real = check_links(real, flag, path[i], test);
 	}
 	ft_memdel((void**)&test);
 	return (real);
 }
 
-int			process_cd(char *arg, char flag)
+int				process_cd(char *arg, char flag)
 {
 	int		ret;
 	char	*real;

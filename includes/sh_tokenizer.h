@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/15 00:44:45 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/20 02:22:39 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,4 +120,7 @@ int			tokenize_for_name(t_toktool *t, t_token *compound_token);
 t_token		*tokenize_for_do_group(t_toktool *t, t_token *compound);
 t_token		*tokenize_for_wordlist(t_toktool *t);
 t_token		*get_last_token(void);
+int			is_newline_separator(t_toktype type);
+int			operator_cant_be_first(t_toktype type);
+t_toktype	input_finish_cmd(t_toktool *t);
 #endif

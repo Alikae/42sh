@@ -91,7 +91,8 @@ C_FILES_tokenizer = \
 	assign_patend.c \
 	sh_alias_substitution.c \
 	sh_alias_substitution_2.c \
-	sh_alias_substitution_3.c
+	sh_alias_substitution_3.c \
+	operator_type.c
 
 C_FILES_executer = \
 	sh_exec_file.c \
