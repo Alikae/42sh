@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/20 01:58:20 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char		**tab_realloc(char **tabl, char *line)
 	while (tabl && tabl[i])
 		i++;
 	if (!(new = (char**)malloc(sizeof(char*) * (i + 2))))
-		return (tabl);
+		exit(-1);
 	else
 	{
 		i = 0;

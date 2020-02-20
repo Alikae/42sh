@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/20 01:57:43 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**ft_tab_strdup(char **tab)
 		while (tab[i])
 			i++;
 		if (!(ret = (char **)malloc(sizeof(char *) * (i + 1))))
-			return (NULL);
+			exit(-1);
 		i = -1;
 		while (tab[++i])
 			ret[i] = ft_strdup(tab[i]);

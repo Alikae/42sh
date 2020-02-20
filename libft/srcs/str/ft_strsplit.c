@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/01/27 13:17:09 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/20 01:56:14 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char		**ft_strsplit(const char *str, char c)
 		return (NULL);
 	mot = ft_split_count(0, str, 0, c);
 	if (!(tab = (char**)malloc(sizeof(char*) * (mot + 1))))
-		return (NULL);
+		exit(-1);
 	tab[mot] = NULL;
 	while (i <= mot)
 	{
