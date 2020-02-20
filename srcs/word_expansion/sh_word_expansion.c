@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/15 02:08:21 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/20 05:09:11 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,20 @@ int		sh_word_expansion(t_exp *exp)
 	return (0);
 }
 
+void	sh_del_all_blank_tok(t_token **tok)
+{
+	t_token		*cpy;
+
+	cpy = *tok;
+	while (*tok && (*tok)->content && !(*tok)->content[0])
+	{
+		cpy = *tok;
+		(*tok) = (*tok)->next;
+		ft_memdel((void**)&(cpy->content));
+		free(cpy);
+	}
+}
+
 t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 {
 	t_exp	exp;
@@ -108,12 +122,7 @@ t_token	*sh_expansion(char *tok_content, t_env **env, short ifs)
 	exp.tok->next = NULL;
 	sh_word_expansion(&exp);
 	new_tok = sh_quote_removal(exp.tok, sh_getev_value("IFS"), ifs);
-	if (!(new_tok->content[0]))
-	{
-		ft_memdel((void**)&new_tok->content);
-		free(new_tok);
-		new_tok = NULL;
-	}
+	sh_del_all_blank_tok(&new_tok);
 	sh_free_exp(&exp, &tok_content);
 	return (new_tok);
 }

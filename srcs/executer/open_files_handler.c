@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/19 04:14:09 by tcillard         ###   ########.fr       */
+/*   Updated: 2020/02/20 05:30:25 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,8 @@ int		open_with_redirection_flags(char *path, t_toktype type)
 {
 	struct stat st;
 
-	if (stat(path, &st) == -1)
-		return (-1);
-	if ((st.st_mode & S_IFIFO) && sh()->pid_main_process == getpid())
+	if (stat(path, &st) != -1 && (st.st_mode & S_IFIFO)
+		&& sh()->pid_main_process == getpid())
 	{
 		sh_dprintf(2, "42sh: can't redirect fifo file in main process\n");
 		return (-1);

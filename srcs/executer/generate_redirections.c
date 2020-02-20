@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/17 01:43:39 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/20 03:49:02 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	gen_redirections_recursively(t_sh *p, t_redirect_lst *lst)
 		}
 		if (dup2(lst->out, lst->in) < 0)
 		{
-			sh_dprintf(2, "Redirection failed\nAbort\n");
+			sh_dprintf(2, "42sh: not a valide file descriptor\n");
 			p->abort_cmd = 1;
 			if (!(lst->in == p->cpy_std_fds[0]
 					|| lst->in == p->cpy_std_fds[1]
