@@ -6,7 +6,7 @@
 /*   By: ede-ram <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 13:17:07 by ede-ram           #+#    #+#             */
-/*   Updated: 2020/02/19 00:09:04 by ede-ram          ###   ########.fr       */
+/*   Updated: 2020/02/20 06:30:13 by tcillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,33 @@ static int	sh_sub_export(char *s)
 	return (0);
 }
 
+int			sh_remove_export_var(char **av, t_env **ev)
+{
+	int		i;
+	t_env	*env;
+
+	env = NULL;
+	i = 2;
+	if (!av[i])
+	{
+		sh_print_export(ev);
+		return (0);
+	}
+	while (av[i])
+	{
+		if ((env = sh_getev(av[i])))
+			env->exported = 0;
+		i++;
+	}
+	return (0);
+}
+
+int			sh_function_not_supported(void)
+{
+	sh_dprintf(2, "42sh: functions are not supported\n");
+	return (0);
+}
+
 int			sh_export(int ac, char **av, t_env **ev)
 {
 	int		i;
@@ -74,6 +101,10 @@ int			sh_export(int ac, char **av, t_env **ev)
 	i = 0;
 	if (ac == 1 || (ac == 2 && !ft_strcmp(av[1], "-p")))
 		sh_print_export(ev);
+	else if (ac >= 2 && !ft_strcmp(av[1], "-n"))
+		return (sh_remove_export_var(av, ev));
+	else if (ac >= 2 && !ft_strcmp(av[1], "-f"))
+		return (sh_function_not_supported());
 	else
 		while (++i < ac)
 			if (sh_sub_export(av[i]))
